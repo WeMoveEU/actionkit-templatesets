@@ -1,0 +1,151 @@
+{% extends "./wrapper.html" %}
+{% block content %}
+
+<div class="raction" id="rtweet" style="">
+	<div class="raction-content">
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="advice-container">
+					<div class="lead">{{ page.title }}</div>
+
+					{% if page.custom_fields.featured_image %}
+						<img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
+					{% endif %}
+
+					<div>
+						<div class="ak-text-expander">
+							{% include_tmpl form.introduction_text %}
+						</div>
+						<a href="#" class="ak-read-more ak-mobile">Read more</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="action-form-container member-is-known">
+
+                    {% if page.custom_fields.call_page_mode == 'tweet' %}
+					<h2>Send a tweet</h2>
+                    {% endif %}
+
+					<legend class="accessiblyHidden">Form to send tweet</legend>
+					<div id="aria_live_errors" aria-live="assertive" role="alert" class="accessiblyHidden"></div>
+					
+          {% include "./progress_meter.html" %}
+
+					<form class="ak-form ak-styled-fields" name="act" method="POST" action="/act/" accept-charset="utf-8">
+						<input type="hidden" name="page" value="{{ page.name }}">
+
+
+          <div id="call-form" class="ak-styled-fields {{templateset.custom_fields.field_labels_class|default:"ak-labels-overlaid"}} {{templateset.custom_fields.field_errors_class|default:"ak-errs-below"}}">
+
+              <div id="ak-need-contact-info"></div>
+              <script type="text/ak-template" for="ak-need-contact-info">
+                  [% if (incomplete) { %]
+                      <div class="ak-instructions ak-faded-text">
+                          {% filter ak_text:"call_needs_contact_info" %}
+                              Fill out the form below so we can find the number for you to call.
+                          {% endfilter %}
+                      </div>
+                  [% } %]
+              </script>
+
+              {% include "./user_form_wrapper.html" %}
+
+          </div>
+
+                  {% if page.custom_fields.call_page_mode == 'tweet' %}
+          
+					<div class="js-character-counter">
+						<div class="form-group floating-label" style="margin-bottom: 5px;"><label for="rtweet_body" class="control-label floated" style="left: 13px; width: 488px;">Tweet text: </label>
+							<div class="">
+								<textarea name="rtweet[body]" id="rtweet_body" rows="3" required="required" placeholder="Write your text tweet here." class="form-control" aria-required="true">.@BrunoLeMaire choose to serve your citizens' and the planet's interest, not the fossil fuel industry. We need a European solution through an EU withdrawal from the toxic fossil fuel treaty. Vote down the modernised ECT! #VoteDownTheECT</textarea>
+							</div>
+						</div>
+						<div class="js-character-count-value">236</div>
+					</div>
+                    {% endif %}
+
+					<div>
+                      {% if page.custom_fields.call_page_mode == 'tweet' %}
+						<button class="btn btn-primary js-track-action js-submit" data-js-event-category="tweet" data-js-event-action="action" disabled="">Tweet</button>
+                        {% else %}
+                        <button class="btn btn-lg btn-primary btn-block js-track-action js-dial-representative" data-js-event-category="call" data-js-event-action="action" data-decision-id="105346" data-campaign-id="3562"> 
+                            <i style="position: relative; top: -1px" class="fa fa-phone call-icon"></i> 
+                            <i class="fa fa-spinner fa-pulse fa-fw hidden call-in-progress-icon"></i>CONNECTION TO <strong>SIMON CAVALLETTO</strong><br>FREE SERVICE
+                        </button>
+                        <script>
+                            $('.js-dial-representative').on('click', function(evt) {
+                                evt.preventDefault();
+                                $.post( 
+                            'https://act.not-a2.eu/twilio/api/call/start', {
+                                    'decision_id': '51724',
+                                    'campaign_id': '1395',
+                                    'rcall_id': '',
+                                    'use_known_member_data': 'true',
+                                    'known_member_data': '',
+                                    'email': 'simonm@me.com',
+                                    'firstname': 'Simon',
+                                    'lastname': 'Cavalletto',
+                                    'phone': '%2B19175027795',
+                                    'country': 'us',
+                                    'postcode': '10025',
+                                    'source_id': '1199831'
+                                }, function (response) {
+                                    console.log('Response', response)
+                                } )
+                            } );
+                        </script>
+                                                
+                        {% endif %}
+						<a href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>
+
+</div>
+
+<div class="action-feedback-bar">
+	<div class="fade in alert alert-success alert-dismissable feedback-alert">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+		Thanks for tweeting!
+	</div>
+</div>
+
+</form>
+
+{% endblock %}
+
+{% block script_additions %}
+<script type="text/javascript">
+$(window).load(function() {
+    $('#target_checkboxes').appendTo('div#who_called');
+
+    var $window = $(window);
+    function call_page_steps_mobile() {
+        var windowSize = $window.width();
+        if (windowSize < 480) {
+               $('.ak-steps-area h3').addClass('clickable');
+        } else {
+            $('.ak-steps-area h3').removeClass('clickable');
+            $('.ak-steps-area h3').each( function () {
+              $(this).siblings('div').show();
+            });
+        }
+
+    }
+       $('.ak-steps-area').on('click', 'h3.clickable', function(e) {
+        e.stopPropagation();
+        $(this).toggleClass('active');
+        $(this).siblings('div').stop().slideToggle('fast');
+    });
+
+    $(window).on('resize', call_page_steps_mobile);
+    call_page_steps_mobile();
+
+});
+</script>
+{% endblock %}

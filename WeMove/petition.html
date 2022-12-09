@@ -1,0 +1,265 @@
+{% extends "./wrapper.html" %}
+
+{% block content %}
+
+<form class="ak-form" name="act" method="POST" action="/act/" accept-charset="utf-8">
+	<input type="hidden" name="page" value="{{ page.name }}">
+
+	<div class="ak-grid-row">
+        
+		<div class="advice-advice">
+			<div class="action-advice-col">
+				{% include "./language_picker.html" %}
+				<div class="advice-container">
+					<h1>{{ page.title }}</h1>
+						
+					{% if page.custom_fields.featured_image %}
+					<img class="ak-featured-img {% if page.goal %}ak-margin-top-1{% endif %}" src="{{page.custom_fields.featured_image}}">
+					{% endif %}
+						
+					{% if form.statement_leadin %}
+					<div id="letter_to">
+						{% include_tmpl form.statement_leadin %}
+					</div>
+					{% endif %}
+								
+					<div id="sign-advice">
+						<div class="well">
+                
+							<h2>{% filter ak_text:"petition" %}Petition{% endfilter %}</h2>
+							<div class="ak-margin-bottom-1 ak-text-expander">
+								{% include_tmpl form.statement_text %}
+							</div>
+							<a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"read_more" %}Read more{% endfilter %}</a>
+						</div>
+
+						{% if form.about_text %}
+						<h1>{% filter ak_text:"why_is_this_important" %}Why is this important?{% endfilter %}</h1>
+						<div id="ak-petition-story">
+							<div class="ak-text-expander">{% include_tmpl form.about_text %}</div>
+							<a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"read_more" %}Read more{% endfilter %}</a>
+						</div>
+						{% endif %}
+
+						{% if page.custom_fields.campaign %}
+						{% cache_report "custom_field_for_page_id" with page.custom_fields.campaign as page_id "partnership_icons" as custom_field %}
+						{% if custom_field_for_page_id and custom_field_for_page_id != 'None' %}
+						<h2>{% filter ak_text:"in_partnership_with" %}In partnership with{% endfilter %}:</h2>
+						<div class="unescape-html">{{ custom_field_for_page_id }}</div>
+						{% endif %}
+						{% endif %}
+					</div>
+				</div>						
+			</div>						
+		</div>
+		<div class="action-form-container-col ak-grid-col ak-grid-col-4-of-12" id="action-form-container-col">
+
+			{% include "./progress_meter.html" %}
+			<div class="action-form">
+				<div id="action-form-container-id" class="action-form-container">
+							
+					<div class="ak-field-box ak-field-box-borderless">
+                            
+						<div id="petition-form" class="ak-styled-fields {{templateset.custom_fields.field_labels_class|default:"ak-labels-overlaid"}} {{templateset.custom_fields.field_errors_class|default:"ak-errs-below"}}">
+							{% include "./user_form_wrapper.html" %}
+							<div class="ak-field">
+								<label for="id_comment">{% filter ak_text:"your_comment_optional" %}Your comments (optional){% endfilter %}:</label>
+								<textarea id="id_comment" name="action_comment"></textarea>
+							</div>
+
+							<div class="js-nav-buttons">
+								<button type="submit" class="btn btn-primary">{% filter ak_text:"sign_the_petition" %}Sign the petition{% endfilter %}</button>
+							</div>
+						</div>
+
+					</div>
+					<div class="privacy-statement">
+						By clicking “Sign” you are supporting this campaign, and agreeing to WeMove Europe using your information for the purpose of this campaign. We might hand over your name, surname and country to the petition target. Unless you subscribe to receive personalised updates, we will delete your data after the campaign has ended. We will never share your data with any third parties without your permission. See our full privacy policy <a href="https://www.wemove.eu/privacy-policy" target="_blank">here</a>.
+					</div>
+				</div>
+						
+			</div>  
+
+			<aside class="recent-comments" style="display: none">
+				<h4>Recent comments</h4>
+				<div class="recent-comment">
+					<div class="recent-comment-by" style="font-style: italic;"></div>
+					<div class="recent-comment-text"></div>
+				</div>
+			</aside>
+
+		</div>
+
+	</div><!--gridrow-->
+
+</form>
+
+{% if page.custom_fields.consent_page %}
+<div id="consent-header" class="modal-header" style="display: none">
+    <h4 class="modal-title">Want to know what happens next?</h4>
+</div>
+<div id="consent-buttons" class="row" style="display: none">
+    <div class="col-xs-12 col-md-6"> 
+        <button type="button" id="btn_optin" name="consents[2.1.0-en]" value="explicit_opt_in" class="btn optin js-popup-consent-button ">
+            Yes, keep me informed!
+        </button>
+    </div>
+    <div class="col-xs-12 col-md-6"> 
+        <button type="button" id="btn_optout" name="consents[2.1.0-en]" value="none_given" class="btn optout js-popup-consent-button ">
+            No, do not contact me.
+        </button>
+    </div>
+</div>
+<script>
+    
+    $('form.ak-form').on('submit', function (evt) {
+        console.log('submit');
+        evt.preventDefault();
+        var form = $(this);
+        var native_xhr = new XMLHttpRequest();
+        var xhr = $.ajax({
+            'type': "POST",
+            'url': form.attr('action'), 
+            'data': form.serialize(),
+            'xhr': function() { return native_xhr }
+        }).done( function (data, status, xhr) {
+            console.log('data', data);
+            console.log('status', status);
+            console.log('state', xhr.state());
+            console.log('url', native_xhr.responseURL);
+            var response_url = new URL( native_xhr.responseURL );
+            var akid = response_url.searchParams.get('akid');
+            var consent_page = '/signup/{{ page.custom_fields.consent_page }}/';
+            var consent_data = '/context/{{ page.custom_fields.consent_page }}';
+            
+            $.ajax({
+                'type': "GET",
+                'url': consent_data, 
+                'data': {
+                    'callback': 'x',
+                    'akid': akid
+                },
+                'converters': {
+                    'text script': function (text) {
+                        return text;
+                    }
+                }
+            }).done( function (data, status, xhr) {
+                console.log('context data', data);
+                console.log('context status', status);
+                var json = JSON.parse( data.slice(2, -1) );
+                console.log('context json', json);
+                if ( ! json.name ) {
+                    // User not recognized despite being sent with valid AKID. They've already signed that form. Go to the next step.
+                    window.location( response_url );
+                } else {
+                    // User was recognized. They haven't signed this consent form yet. Show them the form.
+                    init_modal();
+			
+    				$.get( 
+                        consent_page,
+                        {
+                            'akid': akid,
+                            'action': response_url.searchParams.get('action')
+                        }, 
+    					function ( data ) {
+                            var modal = $('.modal.fade')                
+    						modal.find('.modal-content').append(
+                                $('#consent-header').show()
+                            );
+    						modal.find('.modal-content').append(
+                                '<div class="modal-body"></div>'
+    						);
+    						modal.find('.modal-body').append(
+    							$(data).find('#signup-story').children()
+                            );
+    						modal.find('.modal-content').append(
+                                $('#consent-buttons').show()
+                            );
+    						modal.show();
+    					}
+    				);
+                        
+                }
+            } ).fail( function (xhr, status, error) {
+            
+            } );
+            
+        } ).fail( function (xhr, status, error) {
+            
+        } );
+            
+    } );
+    
+</script>
+{% endif %}
+
+<script>
+	var recent_comments = {% report "comments_recent_actions" with page.id as page_id %};
+	recent_comments.shift();
+	
+	window.currentCommentIndex = 0;
+	window.recentCommentShown = false;
+	window.comment_elt = $('.recent-comments .recent-comment');
+	$( function () {		
+		if (comment_elt.length > 0) {
+			if (recent_comments.length && ! recentCommentShown) {
+				recentCommentShown = true;
+				comment_elt.parent().fadeIn('slow');
+				cycleRecentComment();
+			}
+		}
+	} );
+	
+	function cycleRecentComment() {
+		comment_elt.fadeOut('slow', function() {
+			var comment = recent_comments[currentCommentIndex ++ % recent_comments.length];
+			comment_elt.find('.recent-comment-by').text(comment[0]);
+			comment_elt.find('.recent-comment-text').text(comment[1]);
+			comment_elt.removeClass('hidden');
+			comment_elt.fadeIn('slow');
+			var duration = Math.ceil(comment[1].split(' ').length * 0.2);
+            if (duration < 3) { duration = 3; }
+			setTimeout(cycleRecentComment, duration * 1000);
+		});
+	}
+</script>
+
+<div class="js-recent-action" style="display: none">
+    <i class="glyphicon glyphicon-thumbs-up"></i> 
+		<span class="js-text"></span>
+</div>
+
+<script>
+	var recent_signers = {% report "names_recent_actions" with page.id as page_id %};
+	recent_signers.shift();
+
+	window.recentActions = recent_signers.map( n => n[0] + " has just signed the petition" );
+
+	window.currentActionIndex = 0;
+	window.recentActionShown = false;
+	window.recent_action_elt = $('.js-recent-action');
+	$( function () {		
+		if (recent_action_elt.length > 0) {
+			if (window.innerWidth > 1180) {
+				if (recentActions.length && ! recentActionShown) {
+					recentActionShown = true;
+					cycleRecentAction();
+				}
+			}
+		}
+	} );
+
+	function cycleRecentAction() {
+		recent_action_elt.fadeOut('slow', function() {
+			var signer = recentActions[currentActionIndex ++ % recentActions.length];
+			recent_action_elt.find('.js-text').text(signer);
+			recent_action_elt.removeClass('hidden');
+			recent_action_elt.fadeIn('slow');
+			setTimeout(cycleRecentAction, 5000);
+		});
+	}
+		
+</script>
+	
+{% endblock %}
