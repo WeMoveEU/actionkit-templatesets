@@ -25,7 +25,18 @@
 
 		{% include "./user_form_wrapper.html" %}
 
-		<button type="submit" class="full">Sign Up</button>
+		<div id="consent-buttons" class="row" style="display: none">
+			<div class="col-xs-12 col-md-6"> 
+				<button type="button" id="btn_optin" name="consents[2.1.0-en]" value="explicit_opt_in" class="btn optin js-popup-consent-button ">
+					Yes, keep me informed!
+				</button>
+			</div>
+			<div class="col-xs-12 col-md-6"> 
+				<button type="button" id="btn_optout" name="consents[2.1.0-en]" value="none_given" class="btn optout js-popup-consent-button ">
+					No, do not contact me.
+				</button>
+			</div>
+		</div>
 
 	</div>
     
