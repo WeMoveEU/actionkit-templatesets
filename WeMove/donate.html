@@ -472,11 +472,11 @@
 
 
 
-                         <div id="ak-fieldbox-mandate">
-                           <div id="ak-mandate">By clicking "Donate", I authorize Braintree, a service of PayPal, on behalf of <span id="ak-client-name">{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}</span> (i) to verify my bank account information using bank information and consumer reports and (ii) to debit my bank account.</div>
-                         </div>
+                <div id="smart-button-container">
+                    <div style="text-align: center;">
+                      <div id="ak-paypal-button" class="ak-paypal-button"></div>
                     </div>
-                    </div>
+                </div>
 
                 <button type="submit" class="ak-submit-button ak-donate-area-step-3 stripe-checkout" data-paymentmethod="card" style="color: #fff;" >Credit Card</button>
                 <button type="submit" class="ak-submit-button ak-donate-area-step-3 stripe-checkout" data-paymentmethod="sepa_debit" style="color: #fff;" >SEPA Debit</button>
@@ -499,6 +499,20 @@ $(function() {
             var button = e.target;
             var method = $(button).data('paymentmethod');
 
+            $.post('https://actionkit-stripe-api.not-a2.eu/checkout/payment', data=JSON.stringify({
+                    "amount": "10.00",
+                    "email": "bob@example.com",
+                    "first_name": "Bob",
+                    "last_name": "Bobby",
+                    "country": "FR",
+                    "methods": [method],
+                    "country": $('#id_country').val()
+             })).then
+
+        }
+    );
+});
+</script>
 
 {% if 1 or page.custom_fields.next_step %}
 <div class="row">
