@@ -20,7 +20,7 @@
 
 	{% store as signup_page_name %}{% report signup_page_for_list_language with page.list_id as list_id user.lang_id as lang_id %}{% endstore %}
 	
-	{% if ! signup_page_name %}
+	{% if not signup_page_name %}
 	
 	You should be asked to consent, but we don't have a consent page for that list in your language, so jump to the next step.
 	
