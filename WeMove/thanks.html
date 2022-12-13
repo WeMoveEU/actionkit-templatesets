@@ -4,6 +4,46 @@
 
 {% block content %}
 
+{% if not args.share and not arg.done %}
+
+{% store as next_step %}{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}?{% else %}/thanks/{{ page.name }}?share=1&{% endif %}action_id={{ action.id }}&akid={{ akid }}{{ akid }}{% endstore %}
+
+[[ Next Step: {{ next_step }} ]]
+
+[[ Substatus: {{ user.subscription_status }} ]]
+
+{% if user.subscription_status != 'subscribed' %}
+	{% store as previous_consents %}{% report previous_user_consent_for_list with user.id as user_id page.list_id as list_id %}{% endstore %}
+	[[ Previous consents: {{ previous_consents }} ]]
+
+    {% if not previous_consents %}
+
+	{% store as signup_page_name %}{% report signup_page_for_list_language with page.list_id as list_id user.lang_id as lang_id %}{% endstore %}
+	
+	{% if ! signup_page_name %}
+	
+	You should be asked to consent, but we don't have a consent page for that list in your language, so jump to the next step.
+	
+	<a href="{{next_step}}">Please continue to the next step.</a>
+	<script>
+		// window.location = '{{ next_step }}';
+	</script>
+		
+	{% else %}
+
+	{% store as consent_link %}/act/{{ signup_page_name }}?action_id={{ action.id }}&akid={{ akid }}{{ akid }}&next_step=page.custom_fields.next_step{% endstore %}
+
+	<a href="{{ consent_link }}">Please continue to the next step.</a>
+	<script>
+		// window.location = '{{ consent_link }}';
+	</script>
+
+	{% endif %}
+	
+
+
+{% else %}
+
 <form name="taf" method="POST" action="/update_action/" accept-charset="utf-8" class="ak-thanks ak-styled-fields">
     <input type="hidden" name="page" value="{{ page.name }}">
 
@@ -50,7 +90,7 @@
                 {% include_tmpl form.thank_you_text %}
             </div>
 						
-						<a href="{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% else %}/thanks/{{ page.name }}?done=1&amp;action_id={{ action.id }}&amp;akid={{ akid }}{% endif %}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
+						<a href="{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}action_id={{ action.id }}&amp;akid={{ akid }}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
 						
 						
         </div>
@@ -151,13 +191,15 @@
 				
 				<div class="col-md-12" style="text-align: center;">
 					<br>
-					<a href="{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% else %}/thanks/{{ page.name }}?done=1&amp;action_id={{ action.id }}&amp;akid={{ akid }}{% endif %}" class="skip btn btn-default">Skip this step</a>
+					<a href="{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}action_id={{ action.id }}&amp;akid={{ akid }}" class="skip btn btn-default">Skip this step</a>
 				</div>
 			</div>
 
 {% endif %}
 
 </form>
+
+{% endif %}
 
 {% endif %}
 
