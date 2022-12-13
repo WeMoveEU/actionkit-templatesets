@@ -413,27 +413,17 @@
 
                 <div class="ak-labels-above ak-styled-fields ak-donate-area-step-3 ak-errs-below">
 
-                    <h4>Payment Information</h4>
-                   {% if page.accept_ach %}
-                      <div id="ak-accept-ach-payement">
-                      <div id="ak-fieldbox-payment_method">
-                            <input type="radio" id="ak_payment_method_cc" name="payment_method" value="cc" checked>
-<label for="ak_payment_method_cc">Credit Card</label>
+                  <h4>Donate <span class="ak-currency-sym">{{ page.currency_sym }}</span><span class="ak-donation-total-amount"></span></h4>
 
-<br>
-                          <input type="radio" id="ak_payment_method_ach" name="payment_method" value="ach">
-                           <label for="ak_payment_method_ach">US Bank Transfer</label>
-                      </div>
-                   {% endif %}
                   <div class="cc_payment_options">
-                    <div id="ak-fieldbox-card_num" class="">
+                    <!-- <div id="ak-fieldbox-card_num" class="">
                         <label for="ak-card_num">Credit Card #</label>
                         <input type="hidden" name="required" value="card_num" id="ak-card_num-required">
                         <div id="ak-card_num-hosted" class="hosted-field"></div>
                         <input id="ak-card_num" type="text" name="card_num">
-                    </div>
+                    </div> -->
 
-                    <div class="ak-err-below">
+                    <!-- <div class="ak-err-below">
 
                         <div id="ak-fieldbox-exp_date">
                             <input type="hidden" name="required" value="exp_date_month" id="ak-exp_date_month-required">
@@ -462,114 +452,37 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    </div>
+                    </div> -->
 
-                    <div class="ak-err-below">
+                    <!-- <div class="ak-err-below">
                         <div id="ak-fieldbox-card_code">
                             <input type="hidden" name="required" value="card_code" id="ak-card_code-required">
                             <label for="ak-card_code">Verification Code</label>
                             <div id="ak-card_code-hosted" class="hosted-field"></div>
                             <input id="ak-card_code" type="text" name="card_code" size="4">
                         </div>
-                    </div>
+                    </div> -->
                   </div>
-                    {% if page.accept_ach %}
-                    <div class="ach_payment_options">
 
-                         <div id="ak-fieldbox-ach_method">
-                           <hr>
-                           <h4>US Bank Transfer</h4>
-                           <input type="radio" id="ak_ach_method_account_number" name="ach_method" value="account_number" checked>
-                           <label for="ak_ach_method_account_number">Account Number</label>
-                           <br>
-                           <input type="radio" id="ak_ach_method_bank_login" name="ach_method" value="bank_login">
-                           <label for="ak_ach_method_bank_login">Bank Login</label>
-                         </div>
-
-                      <div class="account_number_options">
-                        <div class="ak-err-below">
-                             <div id="ak-fieldbox-routing_number">
-                                 <label for="ak-routing_number">Routing Number</label>
-                                 <input id="ak-routing_number" type="text" name="routing_number" size="9">
-                             </div>
-                        </div>
-
-                         <div class="ak-err-below">
-                             <div id="ak-fieldbox-bank_account">
-                                 <label for="ak-bank_account">Bank Account</label>
-                                 <input id="ak-bank_account" type="text" name="bank_account" size="17">
-                             </div>
-                         </div>
-
-                         <div class="ak-err-below">
-                             <div id="ak-fieldbox-account_type">
-                                 <label for="ak-account_type">Account Type</label>
-                                 <select id="ak-account_type" type="text" name="account_type">
-                                     <option value="checking">checking</option>
-                                     <option value="savings">savings</option>
-                                 </select>
-                             </div>
-                         </div>
-                       </div>
-
-                         <div class="ak-err-below">
-                        <div id="ak-fieldbox-ownership_type">
-                                 <label for="ak-ownership_type">Ownership Type</label>
-                                 <select id="ak-ownership_type" type="text" name="ownership_type">
-                                     <option value="personal">personal</option>
-                                     <option value="business">business</option>
-                                 </select>
-                             </div>
-                         </div>
-
-                         <div class="ak-err-below">
-                             <div id="ak-fieldbox-business_name">
-                                 <label for="ak-business_name">Business Name</label>
-                                 <input id="ak-business_name" type="text" name="business_name">
-                             </div>
-                         </div>
-
-                         <div id="ak-fieldbox-mandate">
-                           <div id="ak-mandate">By clicking "Donate", I authorize Braintree, a service of PayPal, on behalf of <span id="ak-client-name">{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}</span> (i) to verify my bank account information using bank information and consumer reports and (ii) to debit my bank account.</div>
-                         </div>
-                    </div>
-                    </div>
-
-
-                    {% endif %}
 
                 </div><!--ak-styled-fields-->
 
+
                 <button class="ak-donate-three-step-visible button btn" id="ak-continue-button" type="button">Next</button>
 
-                {% if page.payment_processor_information.init_submit_disabled %}
 
-                    {% comment %}
-                    For pages that use Braintree, the submit button will be enabled by javascript.
-                    {% endcomment %}
 
-                    <button disabled="true" type="submit" class="ak-submit-button ak-donate-area-step-3">Donate <span class="ak-currency-sym">{{ page.currency_sym }}</span><span class="ak-donation-total-amount"></span></button>
-                    <noscript>
-                        <p>
-                            <b>JavaScript is required</b> so this page
-                            can securely submit your donation.
-                        </p>
-                    </noscript>
-
-                {% else %}
-
-                    <button type="submit" class="ak-submit-button ak-donate-area-step-3">Donate <span class="ak-currency-sym">{{ page.currency_sym }}</span><span class="ak-donation-total-amount"></span></button>
-
-                {% endif %}
-
-                {% if show_paypal %}
-                    <div class="ak-payment-options ak-margin-bottom-1 ak-donate-area-step-2">
-                        <input type="hidden" name="paypal" value="0" id="ak-pay-by-paypal">
-                        Or check out with
-                        <button type="submit" id="ak-paypal-button" class="ak-inline ak-paypal-button"><img src="/media/modern/paypal-logo-1.svg"></button>
+                <div id="smart-button-container">
+                    <div style="text-align: center;">
+                      <div id="ak-paypal-button" class="ak-paypal-button"></div>
                     </div>
-                {% endif %}
-                {% fastaction %}
+                </div>
+
+                <button type="submit" class="ak-submit-button ak-donate-area-step-3 stripe-checkout" data-paymentmethod="card" style="color: #fff;" >Credit Card</button>
+                <button type="submit" class="ak-submit-button ak-donate-area-step-3 stripe-checkout" data-paymentmethod="sepa_debit" style="color: #fff;" >SEPA Debit</button>
+                <button type="submit" class="ak-submit-button ak-donate-area-step-3 stripe-checkout" data-paymentmethod="ideal" style="color: #fff;" >iDEAL</button>
+
+
             </div>
 
             </div>
@@ -579,7 +492,27 @@
     </div>
 
 </form>
+<script>
+$(function() {
+    $('button.stripe-checkout').click(
+        function(e) {
+            var button = e.target;
+            var method = $(button).data('paymentmethod');
 
+            $.post('https://actionkit-stripe-api.not-a2.eu/checkout/payment', data=JSON.stringify({
+                    "amount": "10.00",
+                    "email": "bob@example.com",
+                    "first_name": "Bob",
+                    "last_name": "Bobby",
+                    "country": "FR",
+                    "methods": [method],
+                    "country": $('#id_country').val()
+             })).then
+
+        }
+    );
+});
+</script>
 
 {% if 1 or page.custom_fields.next_step %}
 <div class="row">
@@ -629,6 +562,48 @@
 {% endblock %}
 
 {% block script_additions %}
+
+<script src="https://www.paypal.com/sdk/js?client-id=sb&disable-funding=credit,card&currency=USD" data-sdk-integration-source="button-factory"></script>
+<script>
+  function initPayPalButton() {
+    paypal.Buttons({
+      style: {
+        shape: 'rect',
+        color: 'gold',
+        layout: 'vertical',
+        label: 'paypal',
+
+      },
+
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{"amount":{"currency_code":"USD","value":1}}]
+        });
+      },
+
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(orderData) {
+
+          // Full available details
+          console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+
+          // Show a success message within this page, e.g.
+          const element = document.getElementById('ak-paypal-button');
+          element.innerHTML = '';
+          element.innerHTML = '<h3>Thank you for your payment!</h3>';
+
+          // Or go to another URL:  actions.redirect('thank_you.html');
+
+        });
+      },
+
+      onError: function(err) {
+        console.log(err);
+      }
+    }).render('#ak-paypal-button');
+  }
+
+</script>
 
 <script language="javascript">
 //<!--
@@ -705,21 +680,10 @@
                                 .on('click keyup', clear_radio_buttons)
                                 .on('click', update_total);
         $('input[type=radio][name=payment_method]').change(function() {
-            if (this.value == 'ach') {
-                $('.ach_payment_options').show();
-                $('.cc_payment_options').hide();
-            } else {
                 $('.ach_payment_options').hide();
                 $('.cc_payment_options').show();
-            }
         });
-        $('input[type=radio][name=ach_method]').change(function() {
-            if (this.value == 'account_number') {
-                $('.account_number_options').show();
-            } else {
-                $('.account_number_options').hide();
-            }
-        });
+
         $('#ak-ownership_type').change(function() {
             if (this.value == 'business') {
                 $('#ak-fieldbox-business_name').show();
@@ -876,6 +840,8 @@
             $('.ak-donate-area-step-3').fadeIn( speed,
                 focus_field_if_blank( $('#ak-card_num') )
             );
+            initPayPalButton();
+
         }
     }
 
@@ -1009,33 +975,7 @@
         }
 
         var payment_method = actionkit.form["payment_method"] && actionkit.form["payment_method"].value;
-        if (payment_method == 'ach') {
-            if ($('#ak-ownership_type').val() == 'business') {
-                if (!$('#ak-business_name').val()) {
-                    actionkit.errors['business_name:missing'] = actionkit.forms.errorMessage('business_name:missing');
-                    step_has_errors = true;
-                }
-            }
-            var ach_method = actionkit.form["ach_method"] && actionkit.form["ach_method"].value;
-            if (ach_method != 'bank_login') {
-                var bank_account = $('#ak-bank_account').val();
-                if (!bank_account) {
-                    actionkit.errors['bank_account:missing'] = actionkit.forms.errorMessage('bank_account:missing');
-                    step_has_errors = true;
-                } else if (!valid_bank_account_number(bank_account)) {
-                    actionkit.errors['bank_account:invalid'] = actionkit.forms.errorMessage('bank_account:invalid');
-                    step_has_errors = true;
-                }
-                var routing_number = $('#ak-routing_number').val();
-                if (!routing_number) {
-                    actionkit.errors['routing_number:missing'] = actionkit.forms.errorMessage('routing_number:missing');
-                    step_has_errors = true;
-                } else if (!valid_bank_routing_number(routing_number)) {
-                    actionkit.errors['routing_number:invalid'] = actionkit.forms.errorMessage('routing_number:invalid');
-                    step_has_errors = true;
-                }
-            }
-	} else if (actionkit.donations && actionkit.donations.vgs){
+        if (actionkit.donations && actionkit.donations.vgs){
 	    actionkit.donations.vgs.validateHostedForm().map(function(error){
 		actionkit.donations.vgs.handleError(error);
 		step_has_errors = true;
@@ -1363,13 +1303,7 @@
 
                 /* Get a Stripe Checkout Session and send the user there. */
 
-                $.post('https://actionkit-stripe-api.not-a2.eu/checkout/payment', data=JSON.stringify({
-                    "amount": "10.00",
-                    "email": "bob@example.com",
-                    "first_name": "Bob",
-                    "last_name": "Bobby",
-                    "country": "FR"
-             })).then
+
             }
         }
 
@@ -1429,211 +1363,7 @@ $(function() {
 </script>
 {% endif %}
 
-{% if pp.use_vzero or pp.use_vgs %}
-<style type="text/css">
-.hosted-field {
-    height: 2.375em;
-    padding: 7px 7px;
-    margin-bottom: 6px;
-    background-color: white;
-    border: 1px solid #ccc;
-}
-</style>
-{% endif %}
-{% if pp.use_vzero %}
-<style type="text/css">
-.hosted-field.braintree-hosted-fields-invalid {
-    border-color: {{ templateset.custom_fields.color_error|default:"#d00" }};
-    background-color: #FFC8C8;
-}
-</style>
-{% braintree_js_libs %}
-<script src="/resources/ak_braintree_vzero.js"></script>
-<script>
-$(function() {
-    var form = document.querySelector("#act"),
-        options = {
-            form: form,
-            fields: {
-                number: {
-                    selector: '#ak-card_num-hosted'
-                },
-                cvv: {
-                    selector: '#ak-card_code-hosted'
-                },
-                expirationDate: {
-                    selector: '#ak-exp_date-hosted',
-                    placeholder: 'MM / YYYY'
-                }
-            },
-            styles: {
-                'input': {
-                    'font-family': '{{ templateset.custom_fields.font_family|default:"sans-serif"|safe }}',
-                    'font-size': '{{ templateset.custom_fields.font_size|default:"16.5px" }}',
-                    'color': '#4b4b4b'
-                },
-                'input.invalid': {
-                    'color': '{{templateset.custom_fields.color_error|default:"#d00" }}',
-                    'background-color': '#FFC8C8'
-                },
-                'input.valid': {
-                    'color': 'green'
-                }
-            },
-            submitOnEmpty: function() {
-                return $('#ak-pay-by-paypal').val() == 1;
-            },
-            submit: form.querySelector(".ak-submit-button"),
-            {% if page.accept_ach %}ach: true,{% endif %}
-            {% if page.use_3d_secure %}use_3d_secure: true,{% endif %}
-        },
-        toRemove = ["#ak-card_num", "#ak-card_code", "#ak-exp_date_month",
-                    "#ak-exp_date_year", "#ak-card_num-required",
-                    "#ak-card_code-required", "#ak-exp_date_month-required",
-                    "#ak-exp_date_year-required"];
 
-    toRemove.forEach(function(el) {
-        $(el).remove();
-    });
-
-    actionkit.donations.handleError = function(err) {
-        if (window.console) {
-            window.console.log(err);
-        }
-
-        if (!actionkit.errors) {
-            actionkit.errors = {};
-        }
-
-        switch (err.code) {
-            case 'HOSTED_FIELDS_FIELDS_EMPTY':
-                actionkit.errors['card_num:invalid'] = "Credit card fields are empty.";
-                break;
-          case 'HOSTED_FIELDS_FIELDS_INVALID':
-                err.details.invalidFieldKeys.forEach(function(key) {
-                    var map = {
-                        'number': 'card_num',
-                        'cvv': 'card_code',
-                        'expirationDate': 'card_exp'
-                    };
-                    actionkit.errors[map[key] + ':invalid'] = "This field is invalid.";;
-                });
-                break;
-          case 'HOSTED_FIELDS_FAILED_TOKENIZATION':
-                actionkit.errors['card_num:invalid'] = "Please check that your credit card is valid.";
-                break;
-          case 'HOSTED_FIELDS_TOKENIZATION_NETWORK_ERROR':
-                actionkit.errors['card_num:invalid'] = "Network error.";
-                break;
-          default:
-                actionkit.errors['card_num:invalid'] = "An error occurred: " + err.message;
-        }
-        actionkit.forms.onValidationErrors(actionkit.errors);
-    };
-
-{% if page.use_3d_secure and page.use_account_switcher %}
-    {# get client token from context for appropriate currency #}
-    let braintreeInitialized = false;
-
-    function initFromContext() {
-        if (!braintreeInitialized) {
-            actionkit.donations.initClient(actionkit.context.client_token, options);
-            braintreeInitialized = true;
-        }
-    }
-
-    $(actionkit.form).bind("actionkit.ready", initFromContext);
-    if (actionkit.context) {
-        initFromContext();
-    }
-
-    function reloadWithFormData() {
-        if (actionkit.forms.prefilling) {
-            return;
-        }
-        let qs = new URLSearchParams(window.location.search),
-            fd = new FormData(actionkit.form),
-            skipKeys = {"device_data": 1, "page": 1, "url": 1};
-
-        for (let key of fd.keys()) {
-            if (key in skipKeys) {
-                continue;
-            }
-            let val = fd.get(key);
-            if (val) {
-                qs.set(key, val);
-            } else if (qs.has(key)) {
-                qs.delete(key);
-            }
-        }
-
-        qs.set("prefill", "1");
-
-        window.location.search = qs.toString();
-    }
-    $(":input[name=payment_account]").bind("change", reloadWithFormData);
-
-{% else %}
-    actionkit.donations.initClient('{{ pp.client_token }}', options);
-{% endif %}
-
-    // read by 3-step validation
-    actionkit.donations.skip_cc_validation = true;
-    actionkit.donations.vzero = true;
-});
-</script>
-{% endif %}
-
-{% if pp.use_vgs %}
-
-  <style>
-    .hosted-field iframe {
-        width:  100%;
-        height: 100%;
-    }
-  </style>
-  <script type="text/javascript" src="https://js.verygoodvault.com/vgs-collect/2.8/vgs-collect.js"></script>
-  <script src="/resources/ak_vgs.js"></script>
-  <script>
-    var vgs = {
-        token: '{{ pp.client_token }}',
-        environment: '{{ pp.vgs_environment }}',
-        submitOnEmpty: function() { return $('#ak-pay-by-paypal').val() == 1; },
-        rawFieldSelectors: ["#ak-card_num", "#ak-card_code", "#ak-exp_date-hosted"],
-        fields: [{ "selector": "#ak-card_num-hosted", "name": "card_num", "type": "card-number", "placeholder": "",
-                   "validations": ["required", "validCardNumberExtended"], "autoComplete": "cc-number",
-                   "color": "black", "successColor": "green", "errorColor": "#d00", "fontSize": "15.5px"},
-                 {"selector": "#ak-card_code-hosted", "name": "card_code", "type": "card-security-code", "placeholder": "",
-                  "validations": ["required", "validCardSecurityCode"], "color": "black",
-                  "successColor": "green", "fontSize": "15.5px", "errorColor": "#d00"}]};
-
-    {% if pp.supports_oneclick %}
-       $(function(){
-         vgs.form = actionkit.form;
-         var fastActionOptions = {
-             spinnerReplaces: '.ak-field-box', // element temporarily replaced by spinner
-             ccSavePlacement: { before: '.ak-submit-button' },
-             badgePlacement: { before: '.ak-field-box' }, // or after, container
-             // requireComplianceFields: 1, // require employer and occupation
-             vgs: vgs
-         };
-         var faForm = new actionkit.forms.fastaction.form(actionkit, fastActionOptions);
-         faForm.init()
-           .then(faForm.processOneclick)
-           .always(function(){
-               if(faForm.mode == 'interactive'){ // interactive or oneclick failed
-                   faForm.renderInteractive();
-               }
-           })
-       });
-    {% else %}
-      $(function(){
-         vgs.form = actionkit.form;
-         actionkit.donations.vgs.initClient(vgs);
-      });
-    {% endif %}
-  </script>
-{% endif %}
 {% endwith %}
 
 {% endblock %}
