@@ -496,10 +496,15 @@
 $(function() {
     $('button.stripe-checkout').click(
         function(e) {
-            var button = e.target;
-            var method = $(button).data('paymentmethod');
+          var button = e.target;
+          var method = $(button).data('paymentmethod');
 
-            $.post('https://actionkit-stripe-api.not-a2.eu/checkout/payment', data=JSON.stringify({
+          $.ajax({
+            url: 'https://actionkit-stripe-api.not-a2.eu/checkout/payment', 
+            method: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: JSON.stringify({
                     "amount": "10.00",
                     "email": "bob@example.com",
                     "first_name": "Bob",
@@ -507,7 +512,9 @@ $(function() {
                     "country": "FR",
                     "methods": [method],
                     "country": $('#id_country').val()
-             })).then
+            }).then(function(resp) {
+              window.location = resp.url
+            })
 
         }
     );
