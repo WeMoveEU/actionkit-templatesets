@@ -15,34 +15,56 @@
 [[ Substatus: {{ user.subscription_status }} ]]
 
 {% if user.subscription_status != 'subscribed' %}
-	{% store as previous_consents %}{% report previous_user_consent_for_list with user.id as user_id page.list_id as list_id %}{% endstore %}
-	[[ Previous consents: {{ previous_consents }} ]]
 
-    {% if not previous_consents %}
+	You already subscribed, so jump to the next step.
 
-	{% store as signup_page_name %}{% report signup_page_for_list_language with page.list_id as list_id user.lang_id as lang_id %}{% endstore %}
-	
-	{% if not signup_page_name %}
-	
-	You should be asked to consent, but we don't have a consent page for that list in your language, so jump to the next step.
-	
-	<a href="{{next_step}}">Please continue to the next step.</a>
+	<a href="{{ next_step }}">Please continue to the next step.</a>
 	<script>
 		// window.location = '{{ next_step }}';
 	</script>
-		
+
+{% else %}
+
+	{% store as previous_consents %}{% report previous_user_consent_for_list with user.id as user_id page.list_id as list_id %}{% endstore %}
+	[[ Previous consents: {{ previous_consents }} ]]
+
+    {% if previous_consents %}
+
+		You have already been asked to consent, so jump to the next step.
+
+		<a href="{{ next_step }}">Please continue to the next step.</a>
+		<script>
+			// window.location = '{{ next_step }}';
+		</script>
+	
 	{% else %}
 
-	{% store as consent_link %}/act/{{ signup_page_name }}?action_id={{ action.id }}&akid={{ akid }}{{ akid }}&next_step=page.custom_fields.next_step{% endstore %}
+		{% store as signup_page_name %}{% report signup_page_for_list_language with page.list_id as list_id user.lang_id as lang_id %}{% endstore %}
+	
+		{% if not signup_page_name %}
+	
+			You should be asked to consent, but we don't have a consent page for that list in your language, so jump to the next step.
+	
+			<a href="{{ next_step }}">Please continue to the next step.</a>
+			<script>
+				// window.location = '{{ next_step }}';
+			</script>
+		
+		{% else %}
 
-	<a href="{{ consent_link }}">Please continue to the next step.</a>
-	<script>
-		// window.location = '{{ consent_link }}';
-	</script>
+			{% store as consent_link %}/act/{{ signup_page_name }}?action_id={{ action.id }}&akid={{ akid }}{{ akid }}&next_step=page.custom_fields.next_step{% endstore %}
+
+			<a href="{{ consent_link }}">Please continue to the next step.</a>
+			<script>
+				// window.location = '{{ consent_link }}';
+			</script>
+
+		{% endif %}
 
 	{% endif %}
-	
 
+{% endif %}
+	
 
 {% else %}
 
