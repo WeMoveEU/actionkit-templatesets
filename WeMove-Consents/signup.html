@@ -24,9 +24,11 @@
 
 	    <input type="hidden" name="akid" value="{{ akid }}">
 	    <input type="hidden" name="redirect" value="/act/{{ args.next_step }}">
+	    <input type="hidden" name="require_opt_in" value="">
 
 	    <input type="hidden" name="action_consent_version" value="{{ page.custom_fields.consent_version }}">
 	    <input type="hidden" name="action_consent_action" value="">
+	    <input type="hidden" name="action_via_email" value="">
 
 		<div id="consent-buttons" class="row">
 			<div class="col-xs-12 col-md-6"> 
@@ -52,17 +54,28 @@
 </form>
 
 <script>
-	var consent_field = $('input[name="action_consent_action"]');
-	{% if user.country == 'Germany' or user.country == 'Austria' %}
+	{% if args.confirm %}
 		$('#consent-buttons div').toggle()
-		consent_field.val( 'e' );
+		$('input[name="action_consent_action"]').val( 'y' );
+		$('input[name="action_via_email"]').val(1);
+		$('form.action_form').get(0).submit();
+	{% elif args.decline %}
+		$('#consent-buttons div').toggle()
+		$('input[name="action_consent_action"]').val( 'n' );
+		$('input[name="require_opt_in"]').val(1);
+		$('input[name="action_via_email"]').val(1);
+		$('form.action_form').get(0).submit();
+	{% elif user.country == 'Germany' or user.country == 'Austria' %}
+		$('#consent-buttons div').toggle()
+		$('input[name="action_consent_action"]').val( 'e' );
 		$('form.action_form').get(0).submit();
 	{% else %}
 		$('#btn_optin').on('click', function () {
-			consent_field.val( 'y' )
+			$('input[name="action_consent_action"]').val( 'y' );
 		} );
 		$('#btn_optout').on('click', function () {
-			consent_field.val( 'n' )
+			$('input[name="action_consent_action"]').val( 'n' );
+			$('input[name="require_opt_in"]').val(1);
 		} );
 	{% endif %}
 </script>
