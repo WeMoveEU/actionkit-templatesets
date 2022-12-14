@@ -498,9 +498,22 @@ $(function() {
         function(e) {
             var button = e.target;
             var method = $(button).data('paymentmethod');
+            $.post('https://actionkit-stripe-api.not-a2.eu/checkout/payment', data=JSON.stringify({
+                    "amount": "10.00",
+                    "email": "bob@example.com",
+                    "first_name": "Bob",
+                    "last_name": "Bobby",
+                    "country": "FR",
+                    "methods": [method],
+                    "country": $('#id_country').val()
+             })).then
 
+        }
+    );
+});
+</script>
 
-{% if 1 or page.custom_fields.next_step %}
+{% if page.custom_fields.next_step %}
 <div class="row">
 	<br>
 	<div class="col-md-12" style="text-align: center;">
