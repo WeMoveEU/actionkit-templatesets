@@ -6,7 +6,7 @@
 
 [[ share {{ args.share }} ]] | [[ done {{ args.done }} ]]
 
-{% if not args.share and not arg.done %}
+{% if ( not args.share ) and ( not arg.done ) %}
 
 {% store as next_step %}{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}?{% else %}/thanks/{{ page.name }}?share=1&{% endif %}action_id={{ action.id }}&akid={{ akid }}{% endstore %}
 
