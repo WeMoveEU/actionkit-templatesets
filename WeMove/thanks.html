@@ -4,8 +4,6 @@
 
 {% block content %}
 
-[[ share {{ args.share }} ]] | [[ done {{ args.done }} ]]
-
 {% if args.done %}
 
 <div class="raction " id="rthanks" style="">
@@ -165,9 +163,9 @@
 
 {% store as next_step %}{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}?{% else %}/thanks/{{ page.name }}?share=1&{% endif %}action_id={{ action.id }}&akid={{ akid }}{% endstore %}
 
-[[ Next Step: {{ next_step }} ]]
+<!-- Next Step: {{ next_step }} -->
 
-[[ Substatus: {{ user.subscription_status }} ]]
+<!-- Substatus: {{ user.subscription_status }} -->
 
 {% if user.subscription_status == 'subscribed' %}
 
@@ -181,7 +179,7 @@
 {% else %}
 
 	{% store as previous_consents %}{% report "previous_user_consent_for_list" with user.id as user_id page.list_id as list_id %}{% endstore %}
-	[[ Previous consents: {{ previous_consents }} ]]
+	<!-- Previous consents: {{ previous_consents }} -->
 
     {% if previous_consents > 0 %}
 
@@ -194,10 +192,10 @@
 	
 	{% else %}
 	
-	[[ Lang ID: {{ user.lang_id }} ]]
+	<!-- Lang ID: {{ user.lang_id }} -->
 
 		{% store as signup_page_name %}{% report "signup_page_for_list_language" with page.list_id as list_id user.lang_id as lang_id %}{% endstore %}
-		[[ Signup Page: {{ signup_page_name }} ]]
+		<!-- Signup Page: {{ signup_page_name }} -->
 	
 		{% if not signup_page_name %}
 	
