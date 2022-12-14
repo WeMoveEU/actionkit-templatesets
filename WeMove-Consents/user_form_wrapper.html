@@ -1,8 +1,10 @@
 <ul class="compact" id="ak-errors"></ul>
-<div id="known_user" class="known-member" style="display: none !important">
+<div id="known_user" class="known-member">
+	<div style="display: none !important">
     Sign this as <strong id="known_user_name"></strong> 
 		<br>
 		Not you? <a href="?" onclick="return actionkit.forms.logOut()">Click here.</a>
+	</div>
 </div>
 <div id="unknown_user" class="ak-user-form">
     {% include "./user_form.html" %}
