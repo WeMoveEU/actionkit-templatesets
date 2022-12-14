@@ -38,8 +38,13 @@
 		</script>
 	
 	{% else %}
+	
+	[[ Lang ID: {{ user.lang_id }} ]]
+	[[ Language: {{ user.language }} ]]
+	[[ Language ID: {{ user.language.id }} ]]
 
 		{% store as signup_page_name %}{% report "signup_page_for_list_language" with page.list_id as list_id user.lang_id as lang_id %}{% endstore %}
+		[[ Signup Page: {{ signup_page_name }} ]]
 	
 		{% if not signup_page_name %}
 	
