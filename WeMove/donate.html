@@ -500,19 +500,24 @@ $(function() {
           var method = $(button).data('paymentmethod');
 
           $.ajax({
-            url: 'https://actionkit-stripe-api.not-a2.eu/checkout/payment', 
+            url: 'https://actionkit-stripe-api.not-a2.eu/checkout/payment',
             method: 'POST',
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             data: JSON.stringify({
-                    "amount": "10.00",
-                    "email": "bob@example.com",
-                    "first_name": "Bob",
-                    "last_name": "Bobby",
-                    "country": "FR",
-                    "methods": [method],
-                    "country": $('#id_country').val()
-            }).then(function(resp) {
+                    "amount": actionkit.form.amount.value,
+                    "email": actionkit.form.email.value,
+                    "name": actionkit.form.name.value,
+                    "line1": actionkit.form.address1.value,
+                    "line2": actionkit.form.address2.value,
+                    "postal": actionkit.form.postal.value,
+                    "city": actionkit.form.city.value,
+                    "region": actionkit.form.region.value,
+                    "country": $('#id_country').val(),
+                    "methods": [method]
+
+                  })
+		    }).then(function(resp) {
               window.location = resp.url
             })
 
@@ -520,7 +525,6 @@ $(function() {
     );
 });
 </script>
-
 {% if 1 or page.custom_fields.next_step %}
 <div class="row">
 	<br>
