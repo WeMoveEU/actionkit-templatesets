@@ -365,7 +365,7 @@
 			<script>
                 init_modal();
 			
-				$.get( '/thanks/{{ share_page }}?taf=1&akid={{ akid }}&action={{ action.id }}', {}, 
+				$.get( '/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}', {}, 
 					function ( data ) {
                         var modal = $('.modal.fade')                
 						modal.find('.modal-content').append(
