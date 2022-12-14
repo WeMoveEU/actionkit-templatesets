@@ -14,7 +14,7 @@
 
 [[ Substatus: {{ user.subscription_status }} ]]
 
-{% if user.subscription_status != 'subscribed' %}
+{% if user.subscription_status == 'subscribed' %}
 
 	You already subscribed, so jump to the next step.
 
