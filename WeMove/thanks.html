@@ -6,70 +6,22 @@
 
 [[ share {{ args.share }} ]] | [[ done {{ args.done }} ]]
 
-{% if ( not args.share ) and ( not arg.done ) %}
+{% if args.done %}
 
-{% store as next_step %}{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}?{% else %}/thanks/{{ page.name }}?share=1&{% endif %}action_id={{ action.id }}&akid={{ akid }}{% endstore %}
-
-[[ Next Step: {{ next_step }} ]]
-
-[[ Substatus: {{ user.subscription_status }} ]]
-
-{% if user.subscription_status == 'subscribed' %}
-
-	You already subscribed, so jump to the next step.
-
-	<a href="{{ next_step }}">Please continue to the next step.</a>
-	<script>
-		window.location = '{{ next_step }}';
-	</script>
-
-{% else %}
-
-	{% store as previous_consents %}{% report "previous_user_consent_for_list" with user.id as user_id page.list_id as list_id %}{% endstore %}
-	[[ Previous consents: {{ previous_consents }} ]]
-
-    {% if previous_consents > 0 %}
-
-		You have already been asked to consent, so jump to the next step.
-
-		<a href="{{ next_step }}">Please continue to the next step.</a>
-		<script>
-			window.location = '{{ next_step }}';
-		</script>
-	
-	{% else %}
-	
-	[[ Lang ID: {{ user.lang_id }} ]]
-
-		{% store as signup_page_name %}{% report "signup_page_for_list_language" with page.list_id as list_id user.lang_id as lang_id %}{% endstore %}
-		[[ Signup Page: {{ signup_page_name }} ]]
-	
-		{% if not signup_page_name %}
-	
-			You should be asked to consent, but we don't have a consent page for that list in your language, so jump to the next step.
-	
-			<a href="{{ next_step }}">Please continue to the next step.</a>
-			<script>
-				window.location = '{{ next_step }}';
-			</script>
-		
+<div class="raction " id="rthanks" style="">
+  <p><b>
+		{% if page.custom_fields.final_message %}
+			{{ page.custom_fields.final_message }}
 		{% else %}
-
-			{% store as consent_link %}/act/{{ signup_page_name }}?action_id={{ action.id }}&akid={{ akid }}&next_step={{ page.custom_fields.next_step }}{% endstore %}
-
-			<a href="{{ consent_link }}">Please continue to the next step.</a>
-			<script>
-				window.location = '{{ consent_link }}';
-			</script>
-
+			{% filter ak_text:"final_message" %}
+				Thank you for standing for democracy with us. It is only together that we can truly be a force to be reckoned with.
+			{% endfilter %}
 		{% endif %}
-
-	{% endif %}
-
-{% endif %}
+	</b></p>
 	
+</div>
 
-{% else %}
+{% elif args.share %}
 
 <form name="taf" method="POST" action="/update_action/" accept-charset="utf-8" class="ak-thanks ak-styled-fields">
     <input type="hidden" name="page" value="{{ page.name }}">
@@ -86,23 +38,6 @@
         </div>
     {% endif %}
 {% endif %}
-
-{% if args.done %}
-
-<div class="raction " id="rthanks" style="">
-  <p><b>
-		{% if page.custom_fields.final_message %}
-			{{ page.custom_fields.final_message }}
-		{% else %}
-			{% filter ak_text:"final_message" %}
-				Thank you for standing for democracy with us. It is only together that we can truly be a force to be reckoned with.
-			{% endfilter %}
-		{% endif %}
-	</b></p>
-	
-</div>
-
-{% else %}
 
 {% if page.SUPPRESS_SHARING %}
     <div class="ak-grid-row">
@@ -225,6 +160,66 @@
 {% endif %}
 
 </form>
+
+{% else %}
+
+{% store as next_step %}{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}?{% else %}/thanks/{{ page.name }}?share=1&{% endif %}action_id={{ action.id }}&akid={{ akid }}{% endstore %}
+
+[[ Next Step: {{ next_step }} ]]
+
+[[ Substatus: {{ user.subscription_status }} ]]
+
+{% if user.subscription_status == 'subscribed' %}
+
+	You already subscribed, so jump to the next step.
+
+	<a href="{{ next_step }}">Please continue to the next step.</a>
+	<script>
+		window.location = '{{ next_step }}';
+	</script>
+
+{% else %}
+
+	{% store as previous_consents %}{% report "previous_user_consent_for_list" with user.id as user_id page.list_id as list_id %}{% endstore %}
+	[[ Previous consents: {{ previous_consents }} ]]
+
+    {% if previous_consents > 0 %}
+
+		You have already been asked to consent, so jump to the next step.
+
+		<a href="{{ next_step }}">Please continue to the next step.</a>
+		<script>
+			window.location = '{{ next_step }}';
+		</script>
+	
+	{% else %}
+	
+	[[ Lang ID: {{ user.lang_id }} ]]
+
+		{% store as signup_page_name %}{% report "signup_page_for_list_language" with page.list_id as list_id user.lang_id as lang_id %}{% endstore %}
+		[[ Signup Page: {{ signup_page_name }} ]]
+	
+		{% if not signup_page_name %}
+	
+			You should be asked to consent, but we don't have a consent page for that list in your language, so jump to the next step.
+	
+			<a href="{{ next_step }}">Please continue to the next step.</a>
+			<script>
+				window.location = '{{ next_step }}';
+			</script>
+		
+		{% else %}
+
+			{% store as consent_link %}/act/{{ signup_page_name }}?action_id={{ action.id }}&akid={{ akid }}&next_step={{ page.custom_fields.next_step }}{% endstore %}
+
+			<a href="{{ consent_link }}">Please continue to the next step.</a>
+			<script>
+				window.location = '{{ consent_link }}';
+			</script>
+
+		{% endif %}
+
+	{% endif %}
 
 {% endif %}
 
