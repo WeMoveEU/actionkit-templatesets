@@ -513,11 +513,13 @@ $(function() {
 });
 </script>
 
-{% if page.custom_fields.next_step %}
+{% store as next_step %}{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}&amp;action={{ args.action }}{% elif page.custom_fields.daisy_chain_action %}/thanks/{{ page.custom_fields.daisy_chain_action }}?akid={{ akid }}&amp;action={{ args.action }}{% endif %}{% endstore %}
+
+{% if next_step %}
 <div class="row">
 	<br>
 	<div class="col-md-12" style="text-align: center;">
-		<a href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
+		<a href="{{ next_step }}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
 	</div>
 </div>
 {% endif %}
