@@ -23,6 +23,7 @@
 	<div id="signup-form" class=" ak-styled-fields {{templateset.custom_fields.field_labels_class|default:"ak-labels-overlaid"}} {{templateset.custom_fields.field_errors_class|default:"ak-errs-below"}}">
 
 	    <input type="hidden" name="akid" value="{{ akid }}">
+	    <input type="hidden" name="redirect" value="/act/{{ args.next_step }}">
 
 	    <input type="hidden" name="action_consent_version" value="{{ page.custom_fields.consent_version }}">
 	    <input type="hidden" name="action_consent_action" value="">
