@@ -481,12 +481,29 @@
                 {% if not has_products %}
                 {% if allow_monthly %}
                 <div id="ak-recurring-type" class="ak-donate-area-step-3">
-                    <div class="">
+
+                    <div class="ui-checkbox pl-2">
                         <label for="id_donation_type_recurring">
-                            <input type="checkbox" name="donation_type" id="id_donation_type_recurring" value="recurring">
-                            Become a sustaining, monthly contributor
+                            <span class="ui-checkbox-control">
+                                <input name="donation_type" id="id_donation_type_recurring" value="recurring"
+                                       type="checkbox">
+                                <span class="ui-checkbox-icon">
+                                    <svg style="display:none" fill="none" height="12" viewBox="0 0 14 12" width="14" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="m12.9261 1.92603-8.14818 8.14817-3.7037-3.70373" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                    </svg>
+                                </span>
+                            </span>
+                            <span class="ui-checkbox-text">
+                                <span class="text-truncate" data-qa="tribute-label">
+                                    Become a sustaining, monthly contributor
+                                </span>
+                            </span>
                         </label>
                     </div>
+                    <script>
+                        $('#id_donation_type_recurring').on('click', function () { $('.ui-checkbox-icon svg').toggle() });
+                    </script>
+
 
                 </div>
                 {% else %}
@@ -1483,21 +1500,82 @@ WeMove Stripe Code
     }
 
     .paypal-checkout.ak-donate-area-step-3 {
-        width: 85%;
+        width: 97%;
         height: 50px;
     }
 
+    .wemove #ak-recurring-type div.ui-checkbox {
+        display: inline-flex;
+        align-items: flex-start;
+        max-width: 100%;
+        color: #222832;
+        cursor: pointer;
+    }
 
-    .ak-paypal-button {
+    .ui-checkbox-control {
+        position: relative;
+        width: 20px;
+        flex-shrink: 0;
+    }
+
+    .ui-checkbox-control input {
+        opacity: .0001;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        cursor: pointer;
+    }
+
+    .ui-checkbox-control input~.ui-checkbox-icon {
+        background: #fff;
+        box-shadow: 0px 2px 3px rgba(12, 33, 65, .15),
+            inset 0px -1px 0px rgba(0, 0, 0, .2),
+            inset 0px 0px 0px 1px #c0c5cd;
+    }
+
+    .ui-checkbox-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 20px;
+        height: 20px;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        background-size: 20px 20px;
+        border-radius: 4px;
+    }
+
+    .ui-checkbox-label {
+        color: #222832;
+        cursor: pointer;
+    }
+
+    .ui-checkbox-control input:checked~.ui-checkbox-icon {
+        color: #fff;
+        background: #3371e6;
+        box-shadow: 0px 2px 3px rgba(12, 33, 65, .15), inset 0px 1px 0px rgba(0, 0, 0, .2), inset 0px 0px 0px 1px rgba(0, 0, 0, .1);
+    }
+
+    .wemove div#ak-recurring-type span {
+        margin: 0 15px 0 15px;
+    }
+
+    .wemove .ak-paypal-button {
         padding: 0;
         top: auto;
-        width: 85%;
+        width: 73%;
         height: 50px;
         border: none;
         /* nothing */
     }
 
-    .ak-paypal-button:hover {
+    .wemove .ak-paypal-button:hover {
         border: none;
     }
 
@@ -1525,10 +1603,10 @@ WeMove Stripe Code
 
     .wemove hr.ak-stepper-line {
         z-index: -10;
-        width: 67%;
+        width: 60%;
         height: 2px;
         top: 50px;
-        left: 15%;
+        left: 22%;
         margin: 0;
         position: absolute;
         background: #d8d8d8;
@@ -1594,6 +1672,7 @@ WeMove Stripe Code
         padding: 0 20px 20px 20px;
     }
 </style>
+
 
 
 {% endblock %}
