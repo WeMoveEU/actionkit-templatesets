@@ -1,21 +1,21 @@
 {% extends "WeMove/signup.html" %}
 {% block content %}
-<a id="next-link" href="#">Please continue to the next step.</a>	
-<script>
-	const url_params = new URLSearchParams(window.location.search);
-	var next_link;
-	if ( url_params.get('akid')[0] == 's' ) {
-		{% if page.custom_fields.share_target %}
-		next_link = '{{ page.custom_fields.share_target }}';
-		{% elif page.custom_fields.daisy_chain_action %}
-		next_link = '/act/{{ page.custom_fields.daisy_chain_action }}';
-		{% else %}
-		next_link = 'https://www.wemove.eu/';
-		{% endif %}
-	} else {
-		next_link = '/thanks/{{ page.name }}?share=1&' + url_params
-	}
-	$('#next-link').attr('href') = next_link;
-	window.location = next_link;
-</script>
+	<a id="next-link" href="#">Please continue to the next step.</a>	
+	<script>
+		const url_params = new URLSearchParams(window.location.search);
+		var next_link;
+		if ( url_params.get('akid')[0] == 's' ) {
+			{% if page.custom_fields.share_target %}
+			next_link = '{{ page.custom_fields.share_target }}';
+			{% elif page.custom_fields.daisy_chain_action %}
+			next_link = '/act/{{ page.custom_fields.daisy_chain_action }}';
+			{% else %}
+			next_link = 'https://www.wemove.eu/';
+			{% endif %}
+		} else {
+			next_link = '/thanks/{{ page.name }}?share=1&' + url_params
+		}
+		$('#next-link').attr('href') = next_link;
+		window.location = next_link;
+	</script>
 {% endblock %}
