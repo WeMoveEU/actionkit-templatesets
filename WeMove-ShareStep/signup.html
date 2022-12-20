@@ -1,5 +1,6 @@
 {% extends "WeMove/signup.html" %}
 {% block content %}
+<a id="next-link" href="#">Please continue to the next step.</a>	
 <script>
 	const url_params = new URLSearchParams(window.location.search);
 	var next_link;
@@ -17,5 +18,4 @@
 	$('#next-link').attr('href') = next_link;
 	window.location = next_link;
 </script>
-<a id="next-link" href="#">Please continue to the next step.</a>	
 {% endblock %}
