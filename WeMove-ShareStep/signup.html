@@ -1,5 +1,5 @@
 {% block content %}
-	{% if akid %}
+	{# if akid #}
 	<a id="next-link" href="#">Please continue to the next step.</a>	
 	<script>
 		const url_params = new URLSearchParams(window.location.search);
@@ -19,8 +19,8 @@
 		$('#next-link').attr('href', next_link);
 		window.location = next_link;
 	</script>
-	{% else %}
+	{# else #}
 		{# remember 1 as args.share #}
-		{% include "./thanks.html" %}
-	{% endif %}
+		{# include "./thanks.html" #}
+	{# endif #}
 {% endblock %}
