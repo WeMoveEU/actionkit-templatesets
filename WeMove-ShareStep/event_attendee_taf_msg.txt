@@ -1,1 +1,2 @@
 {% extends "WeMove/event_attendee_taf_msg.txt" %}
+
