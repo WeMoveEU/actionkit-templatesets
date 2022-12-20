@@ -20,6 +20,7 @@
 		window.location = next_link;
 	</script>
 	{% else %}
+		{% store 1 as args.share %}
 		{% include "thanks.html" %}
 	{% endif %}
 {% endblock %}
