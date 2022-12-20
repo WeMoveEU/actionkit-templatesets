@@ -27,58 +27,7 @@
 
     {% load_prefill %}
     {% load_ak_context context %}
-    
-    <style>
-        .ak-progress-meter .ak-progress-meter-border {
-            border-color: #ffffff;
-        }
-        .ak-whipcount-callbox .ak-whipcount-boxhead {
-            color: #ffffff;
-        }
-        @media (min-width:480px) {
-            body .ak-steps-area h3 div.ak-step-number {
-                color: #ffffff;
-            }
-        }
-        @media (max-width:479px) {
-            .ak-steps-area h3 {
-                color: #ffffff;
-            }
-            .ak-steps-area h3 div.ak-step-number {
-                background-color: #ffffff;
-            }
-        }
-        body,
-        a.ak-highlight-on-hover {
-            color: ##4b4b4b;
-        }
-        .ak-donate-menu input:checked + div.ak-step-number {
-            background: ##4b4b4b;
-        }
-        .ak-whipcount-callbox .ak-whipcount-boxhead {
-            background-color: ##4b4b4b;
-        }
-        @media (min-width:480px) {
-            .ak-steps-area h3 label.ak-step-label {
-                color: ##4b4b4b;
-            }
-            .ak-steps-area h3 div.ak-step-number {
-                background-color: ##4b4b4b;
-            }
-        }
-        @media (max-width:479px) {
-            .ak-steps-area h3 {
-                background: ##4b4b4b;
-            }
-            .ak-steps-area h3 div.ak-step-number {
-                color: ##4b4b4b;
-            }
-        }
-    .ak-target-phone .ak-target-label, span.office_phone_label,
-        span.ak-target-fax, span.ak-target-separator { display: none }
-    .ak-event-description, .ak-event-note-to-attendees, .ak-event-directions { white-space: pre-line; }
-    </style>
-		
+    		
 	  <link rel="stylesheet" type="text/css" href="https://act.wemove.eu/javascripts/frontend.css">
 	  <script src="https://act.wemove.eu/javascripts/frontend.js?1664972532" type="text/javascript"></script>
     {% load_js %}
@@ -86,65 +35,114 @@
         /resources/actionkit.js
     {% end %}
 		
-		<style>
-			/* #rsign .raction-content .advice-container>p, */
-			#rsign .raction-content .advice-container #letter_to {
-				font-size: var(--speakout-font-size-lg);
-				font-weight: var(--speakout-font-weight-bold);
-				font-style: italic;
+	<style>
+		.ak-progress-meter .ak-progress-meter-border {
+			border-color: #ffffff;
+		}
+		.ak-whipcount-callbox .ak-whipcount-boxhead {
+			color: #ffffff;
+		}
+		@media (min-width:480px) {
+			body .ak-steps-area h3 div.ak-step-number {
+				color: #ffffff;
 			}
-			
-			.ak-grid-col.ak-grid-col-4-of-12 {
-				margin-left: 0;
+		}
+		@media (max-width:479px) {
+			.ak-steps-area h3 {
+				color: #ffffff;
 			}
-			
-			.ak-field-box {
-			    background: none;
-			    border: none;
-					padding: 0;
+			.ak-steps-area h3 div.ak-step-number {
+				background-color: #ffffff;
 			}
-			
-			button { height: auto; }
-			
-			#rsign .raction-content .action-form-container-col .progress {
-				width: auto;
+		}
+		body,
+		a.ak-highlight-on-hover {
+			color: ##4b4b4b;
+		}
+		.ak-donate-menu input:checked + div.ak-step-number {
+			background: ##4b4b4b;
+		}
+		.ak-whipcount-callbox .ak-whipcount-boxhead {
+			background-color: ##4b4b4b;
+		}
+		@media (min-width:480px) {
+			.ak-steps-area h3 label.ak-step-label {
+				color: ##4b4b4b;
 			}
-			
-			.share-big a.btn:hover,
-			a.btn.skip:hover { border-bottom-width: 1px; }
-            
-            .signature-counter { float: left; }
-            .signature-counter-label { float: right; }
-            
-            .js-nav-buttons button:only-child { width: 100%; }
-			
-            #ak-fieldbox-first_name { width: 50%; float: left; padding-right: 0.25em; }
-            #ak-fieldbox-last_name { width: 50%; float: left; padding-left: 0.25em; }
-            #ak-fieldbox-email { clear: left; }
-            #ak-fieldbox-country { width: 50%; float: left; padding-right: 0.25em; }
-            #ak-fieldbox-zip { width: 50%; float: left; padding-left: 0.25em; }
-            #ak-fieldbox-zip input { width: 100%; }
-            #ak-fieldbox-postal { width: 50%; float: left; padding-left: 0.25em; }
-            .ak-privacy { clear: left; }
-            .ak-field { clear: left; }
+			.ak-steps-area h3 div.ak-step-number {
+				background-color: ##4b4b4b;
+			}
+		}
+		@media (max-width:479px) {
+			.ak-steps-area h3 {
+				background: ##4b4b4b;
+			}
+			.ak-steps-area h3 div.ak-step-number {
+				color: ##4b4b4b;
+			}
+		}
+		.ak-target-phone .ak-target-label, span.office_phone_label,
+		span.ak-target-fax, span.ak-target-separator { display: none }
+		.ak-event-description, .ak-event-note-to-attendees, .ak-event-directions { white-space: pre-line; }
+
+		/* #rsign .raction-content .advice-container>p, */
+		#rsign .raction-content .advice-container #letter_to {
+			font-size: var(--speakout-font-size-lg);
+			font-weight: var(--speakout-font-weight-bold);
+			font-style: italic;
+		}
+		
+		.ak-grid-col.ak-grid-col-4-of-12 {
+			margin-left: 0;
+		}
+		
+		.ak-field-box {
+			background: none;
+			border: none;
+			padding: 0;
+		}
+		
+		button { height: auto; }
+		
+		#rsign .raction-content .action-form-container-col .progress {
+			width: auto;
+		}
+		
+		.share-big a.btn:hover,
+		a.btn.skip:hover { border-bottom-width: 1px; }
         
-            .ak-userfield-input[disabled],
-            .ak-userfield-input[readonly],
-            fieldset[disabled] .ak-userfield-input,
-            .ak-field input[disabled], 
-            .ak-field input[readonly], 
-            fieldset[disabled] .ak-field input,
-            .ak-field select[disabled], 
-            .ak-field select[readonly], 
-            fieldset[disabled] .ak-field select,
-            .ak-field textarea[disabled], 
-            .ak-field textarea[readonly], 
-            fieldset[disabled] .ak-field textarea {
-                background-color: #eee !important;
-                opacity: 1;
-            }
-            
-		</style>
+        .signature-counter { float: left; }
+        .signature-counter-label { float: right; }
+        
+        .js-nav-buttons button:only-child { width: 100%; }
+		
+        #ak-fieldbox-first_name { width: 50%; float: left; padding-right: 0.25em; }
+        #ak-fieldbox-last_name { width: 50%; float: left; padding-left: 0.25em; }
+        #ak-fieldbox-email { clear: left; }
+        #ak-fieldbox-country { width: 50%; float: left; padding-right: 0.25em; }
+        #ak-fieldbox-zip { width: 50%; float: left; padding-left: 0.25em; }
+        #ak-fieldbox-zip input { width: 100%; }
+        #ak-fieldbox-postal { width: 50%; float: left; padding-left: 0.25em; }
+        .ak-privacy { clear: left; }
+        .ak-field { clear: left; }
+    
+        .ak-userfield-input[disabled],
+        .ak-userfield-input[readonly],
+        fieldset[disabled] .ak-userfield-input,
+        .ak-field input[disabled], 
+        .ak-field input[readonly], 
+        fieldset[disabled] .ak-field input,
+        .ak-field select[disabled], 
+        .ak-field select[readonly], 
+        fieldset[disabled] .ak-field select,
+        .ak-field textarea[disabled], 
+        .ak-field textarea[readonly], 
+        fieldset[disabled] .ak-field textarea {
+            background-color: #eee !important;
+            opacity: 1;
+        }
+        
+	</style>
 		
     {% block script_additions %}{% endblock %}
 </head>
