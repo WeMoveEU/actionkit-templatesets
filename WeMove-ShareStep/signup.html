@@ -16,7 +16,7 @@
 		} else {
 			next_link = '/thanks/{{ page.name }}?share=1&' + url_params
 		}
-		$('#next-link').attr('href') = next_link;
+		$('#next-link').attr('href', next_link);
 		window.location = next_link;
 	</script>
 {% endblock %}
