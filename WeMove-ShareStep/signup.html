@@ -4,7 +4,8 @@
 	<script>
 		const url_params = new URLSearchParams(window.location.search);
 		var next_link;
-		if ( url_params.get('akid')[0] == 's' ) {
+		var akid = url_params.get('akid');
+		if ( akid && akid[0] == 's' ) {
 			{% if page.custom_fields.share_target %}
 			next_link = '{{ page.custom_fields.share_target }}';
 			{% elif page.custom_fields.daisy_chain_action %}
