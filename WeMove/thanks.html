@@ -50,7 +50,7 @@
                 {% include_tmpl form.thank_you_text %}
             </div>
 						
-						<a href="{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}action_id={{ action.id }}&amp;akid={{ akid }}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
+						<a href="{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
 						
 						
         </div>
@@ -151,7 +151,7 @@
 				
 				<div class="col-md-12" style="text-align: center;">
 					<br>
-					<a href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}action_id={{ action.id }}&amp;akid={{ akid }}" class="skip btn btn-default">Skip this step</a>
+					<a href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default">Skip this step</a>
 				</div>
 			</div>
 
@@ -161,7 +161,7 @@
 
 {% else %}
 
-{% store as next_step %}{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}?{% else %}/thanks/{{ page.name }}?share=1&{% endif %}action_id={{ action.id }}&akid={{ akid }}{% endstore %}
+{% store as next_step %}{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}?{% else %}/thanks/{{ page.name }}?share=1&{% endif %}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% endstore %}
 
 <!-- Next Step: {{ next_step }} -->
 
@@ -208,7 +208,7 @@
 		
 		{% else %}
 
-			{% store as consent_link %}/act/{{ signup_page_name }}?action_id={{ action.id }}&akid={{ akid }}&next_step={{ page.custom_fields.next_step }}{% endstore %}
+			{% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}&next_step={{ page.custom_fields.next_step }}{% endstore %}
 
 			<a href="{{ consent_link }}">Please continue to the next step.</a>
 			<script>
