@@ -137,7 +137,7 @@
 
 	var recent_sharers = {% report "names_recent_shares" with page.id as page_id %};
 	recent_sharers.shift();
-	recent_sharers = recent_sharers.map( n => [ n[0], n[1] + " has just shared this on " + n[2] ] );
+	recent_sharers = recent_sharers.map( n => [ n[0], n[1] + " just shared this on " + n[2] ] );
 	
 	var recent_actions = recent_signers.concat( recent_sharers );
 	recent_actions = recent_actions.sort( function compare(a,b) {
