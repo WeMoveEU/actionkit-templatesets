@@ -3,10 +3,13 @@
 {% block content %}
 
 <style>
-	label.ak-btn { max-width: revert; }
+    label.ak-btn {
+        max-width: revert;
+    }
 </style>
 
-<form id="act" name="act" class="{{ templateset.custom_fields.donation_steps }}" method="POST" action="/act/" accept-charset="utf-8">
+<form id="act" name="act" class="{{ templateset.custom_fields.donation_steps }}" method="POST" action="/act/"
+    accept-charset="utf-8">
     <input type="hidden" name="page" value="{{ page.name }}">
     <input type="hidden" name="orig_akid" value="{{ akid }}">
 
@@ -18,232 +21,291 @@
 
     <div class="ak-grid-row">
 
-        <div class="ak-grid-col ak-grid-col-8-of-12">
-           {% if page.custom_fields.featured_image %}
+        <div class="ak-grid-col ak-grid-col-6-of-12">
+            {% if page.custom_fields.featured_image %}
             <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
             {% endif %}
             <div>{% include "./progress_meter.html" %}</div>
             {% include_tmpl form.ask_text %}
         </div>
-
+        <div class="ak-grid-col ak-grid-col-1-of-12"></div>
         <div class="ak-grid-col ak-grid-col-4-of-12 donate-form-container">
-            <div class="ak-field-box donate-form-fixed" id="step-tracker">
+            <div class="ak-field-box " id="step-tracker">
 
-            <!--Add .ak-donate-three-step for three-step-->
-            <div class="ak-donate-menu ak-donate-three-step-visible">
-                <hr class="ak-stepper-line"></hr>
-                <label class="ak-donate-step ak-donate-step-1">
-                    <input type="radio" id="ak-donate-step-1" name="ak-donate-step" value="1" checked="checked">
-                    <div class="ak-step-number">1</div>
-                    <span>Amount</span>
-                </label>
-                <label class="ak-donate-step ak-donate-step-2">
-                    <input type="radio" id="ak-donate-step-2" name="ak-donate-step" value="2">
-                    <div class="ak-step-number">2</div>
-                    <span>Name</span>
-                </label>
-                <label class="ak-donate-step ak-donate-step-3">
-                    <input type="radio" id="ak-donate-step-3" name="ak-donate-step" value="3">
-                    <div class="ak-step-number">3</div>
-                    <span>Payment</span>
+                <!--Add .ak-donate-three-step for three-step-->
+                <div class="ak-donate-menu ak-donate-three-step-visible">
+                    <hr class="ak-stepper-line">
+                    </hr>
+                    <label class="ak-donate-step ak-donate-step-1">
+                        <input type="radio" id="ak-donate-step-1" name="ak-donate-step" value="1" checked="checked">
+                        <div class="ak-step-number">1</div>
+                        <span>Amount</span>
+                    </label>
+                    <label class="ak-donate-step ak-donate-step-2">
+                        <input type="radio" id="ak-donate-step-2" name="ak-donate-step" value="2">
+                        <div class="ak-step-number">2</div>
+                        <span>Name</span>
+                    </label>
+                    <label class="ak-donate-step ak-donate-step-3">
+                        <input type="radio" id="ak-donate-step-3" name="ak-donate-step" value="3">
+                        <div class="ak-step-number">3</div>
+                        <span>Payment</span>
 
-                </label>
+                    </label>
+                </div>
             </div>
 
             <div id="ak-donation-details" class="xak-errs-below">
+                {% if not has_products %}
+                {% if allow_monthly %}
+                <div id="ak-recurring-type" class="ak-donate-area-step-1">
 
-                <div id="ak-product-list" class="ak-donate-area-step-1 ak-errs-below">
-                    {% if has_products %}
-                    <table class="ak-margin-bottom-1">
-                        <thead>
-                        <tr>
-                            <th class="ak-product-details-header ak-small-header">Product</th>
-                            <th class="ak-product-amount-header ak-small-header">Price</th>
-                            <th class="ak-product-quantity-header ak-small-header">Quantity</th>
-                            <th class="ak-product-quantity-header ak-small-header">Total</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for product in products %}
-                        <tr>
-                            <td class="ak-product-details">
-                                <div class="ak-product-name">{{ product.name }}</div>
-                                {% if product.desc %}<div class="ak-product-description">{{ product.desc }}</div>{% endif %}
-                            </td>
-                            <td class="ak-product-amount">
-                                <span id="product_{{ product.id }}_price" data-price="{{ product.price }}">
-                                    {% if product.price == 0 %}
-                                        FREE!
-                                    {% else %}
-                                        <span class="ak-currency-sym">{{ page.currency_sym }}</span>{{ product.price|commify }}
-                                    {% endif %}
+                    <div class="ui-checkbox pl-2">
+                        <label for="id_donation_type_recurring">
+                            <span class="ui-checkbox-control">
+                                <input name="donation_type" id="id_donation_type_recurring" value="recurring"
+                                    type="checkbox">
+                                <span class="ui-checkbox-icon ">
+                                    <svg style="display:none" fill="none" height="12" viewBox="0 0 14 12" width="14"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="m12.9261 1.92603-8.14818 8.14817-3.7037-3.70373" stroke="currentColor"
+                                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                                    </svg>
                                 </span>
-                            </td>
-                            <td class="ak-product-quantity">
-                                {% if product.max == 1 %}
-                                <input type="checkbox" value="1" name="product_{{ product.id }}" id="product_{{ product.id }}" data-product="{{ product.id }}" class="ak_product_inputs">
-                                {% else %}
-                                <input type="number" min="0" max="{{ product.max }}" onvalidate="return validate_product_count(this)" name="product_{{ product.id }}" id="product_{{ product.id }}" size="2" data-product="{{ product.id }}" class="ak_product_inputs">
-                                {% endif %}
-                            </td>
-                            <td class="ak-product-subtotal">
-                                <span class="ak-currency-sym">{{ page.currency_sym }}</span><span class="ak_product_subtotal_{{ product.id }}"></span>
-                            </td>
-                        </tr>
-                        {% endfor %}
+                            </span>
+                            <span class="ui-checkbox-text">
+                                <span class="text-truncate recurring-type-label" data-qa="tribute-label">
+                                    Become a sustaining, monthly contributor
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                    <script>
+                        $('#id_donation_type_recurring').on('click', function () { $('.ui-checkbox-icon svg').toggle() });
+                    </script>
 
-                        </tbody>
-                    </table>
 
-                     <p class="ak-donation-subtotal ak-align-right">
-                         <label class="ak-small-header">Product Total</label>
-                             <strong><span class="ak-currency-sym">{{ page.currency_sym }}</span></strong>
-                             <span id="ak-donation-subtotal-amount"></span>
-                         </label>
-                    </p>
-
-                    {% endif %}
-                </div><!--product-list-->
-
-                <div id="ak-candidate-list" class="ak-donate-area-step-1 ak-errs-below">
-                    {% if has_candidates %}
-
-                    <table>
-                        <thead>
-                        <tr>
-                            <th id="ak-candidate-details-header">Candidate</th>
-                            <th>&nbsp;</th>
-                            <th id="ak-candidate-amount-header">Donation</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for candidate in candidates %}
-                        <tr>
-                            <td class="ak-candidate-details">
-                                {% if candidate.portrait_url %}
-                                <img class="ak-candidate-portrait" src="{{ candidate.portrait_url }}">
-                                {% endif %}
-                            </td>
-                            <td class="ak-candidate-name">
-                                <div>{{ candidate.name }}</div>
-                                <p>{{ candidate.desc|safe }}</p>
-                            </td>
-                            <td class="ak-candidate-amount ak-align-right">
-                                <span class="ak-currency-sym">{{ page.currency_sym }}</span><input type="text" name="candidate_{{ candidate.id }}" id="candidate_{{ candidate.id }}" size="2" class="ak_candidate_inputs">
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                    {% endif %}
                 </div>
-
-                {% if has_products %}
-                <h4 class="ak-donate-area-step-1">Donation (Optional)</h4>
+                {% else %}
+                <div id="ak-recurring-type"></div>
+                <input type="hidden" name="donation_type" value="single">
                 {% endif %}
 
+                <div id="donation-amounts" class="ak-donate-area-step-1 ">
 
-                <div id="ak-amount-list" class="ak-err-above ak-donate-area-step-1">
+                    <div id="ak-product-list" class="ak-donate-area-step-1 ak-errs-below">
+                        {% if has_products %}
+                        <table class="ak-margin-bottom-1">
+                            <thead>
+                                <tr>
+                                    <th class="ak-product-details-header ak-small-header">Product</th>
+                                    <th class="ak-product-amount-header ak-small-header">Price</th>
+                                    <th class="ak-product-quantity-header ak-small-header">Quantity</th>
+                                    <th class="ak-product-quantity-header ak-small-header">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in products %}
+                                <tr>
+                                    <td class="ak-product-details">
+                                        <div class="ak-product-name">{{ product.name }}</div>
+                                        {% if product.desc %}<div class="ak-product-description">{{ product.desc }}
+                                        </div>{% endif %}
+                                    </td>
+                                    <td class="ak-product-amount">
+                                        <span id="product_{{ product.id }}_price" data-price="{{ product.price }}">
+                                            {% if product.price == 0 %}
+                                            FREE!
+                                            {% else %}
+                                            <span class="ak-currency-sym">{{ page.currency_sym }}</span>{{
+                                            product.price|commify }}
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                    <td class="ak-product-quantity">
+                                        {% if product.max == 1 %}
+                                        <input type="checkbox" value="1" name="product_{{ product.id }}"
+                                            id="product_{{ product.id }}" data-product="{{ product.id }}"
+                                            class="ak_product_inputs">
+                                        {% else %}
+                                        <input type="number" min="0" max="{{ product.max }}"
+                                            onvalidate="return validate_product_count(this)"
+                                            name="product_{{ product.id }}" id="product_{{ product.id }}" size="2"
+                                            data-product="{{ product.id }}" class="ak_product_inputs">
+                                        {% endif %}
+                                    </td>
+                                    <td class="ak-product-subtotal">
+                                        <span class="ak-currency-sym">{{ page.currency_sym }}</span><span
+                                            class="ak_product_subtotal_{{ product.id }}"></span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
 
-                {% if show_currency_select %}
+                            </tbody>
+                        </table>
 
-                    {% comment %}
-                    Only English currency names are currently available from
-                    ActionKit.
+                        <p class="ak-donation-subtotal ak-align-right">
+                            <label class="ak-small-header">Product Total</label>
+                            <strong><span class="ak-currency-sym">{{ page.currency_sym }}</span></strong>
+                            <span id="ak-donation-subtotal-amount"></span>
+                            </label>
+                        </p>
 
-                    When translating your templatesets, you could partly or
-                    entirely translate the list and include that as plain
-                    HTML here, or remove the ' - {{currency.name}}' so only
-                    the ISO abbreviation shows.
-                    {% endcomment %}
+                        {% endif %}
+                    </div><!--product-list-->
 
-                    <div class="ak-currency">
-                        <label>
-                            <select name="currency">
-                                {% for code in "USD,GBP,CAD,AUD,EUR"|split:"," %}
+                    <div id="ak-candidate-list" class="ak-donate-area-step-1 ak-errs-below">
+                        {% if has_candidates %}
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th id="ak-candidate-details-header">Candidate</th>
+                                    <th>&nbsp;</th>
+                                    <th id="ak-candidate-amount-header">Donation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for candidate in candidates %}
+                                <tr>
+                                    <td class="ak-candidate-details">
+                                        {% if candidate.portrait_url %}
+                                        <img class="ak-candidate-portrait" src="{{ candidate.portrait_url }}">
+                                        {% endif %}
+                                    </td>
+                                    <td class="ak-candidate-name">
+                                        <div>{{ candidate.name }}</div>
+                                        <p>{{ candidate.desc|safe }}</p>
+                                    </td>
+                                    <td class="ak-candidate-amount ak-align-right">
+                                        <span class="ak-currency-sym">{{ page.currency_sym }}</span><input type="text"
+                                            name="candidate_{{ candidate.id }}" id="candidate_{{ candidate.id }}"
+                                            size="2" class="ak_candidate_inputs">
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    </div>
+
+                    {% if has_products %}
+                    <h4 class="ak-donate-area-step-1">Donation (Optional)</h4>
+                    {% endif %}
+
+                    <div id="ak-amount-list" class="ak-err-above ak-donate-area-step-1">
+
+                        {% if show_currency_select %}
+
+                        {% comment %}
+                        Only English currency names are currently available from
+                        ActionKit.
+
+                        When translating your templatesets, you could partly or
+                        entirely translate the list and include that as plain
+                        HTML here, or remove the ' - {{currency.name}}' so only
+                        the ISO abbreviation shows.
+                        {% endcomment %}
+
+                        <div class="ak-currency">
+                            <label>
+                                <select name="currency">
+                                    {% for code in "USD,GBP,CAD,AUD,EUR"|split:"," %}
                                     {% with currency_info|get:code as currency %}
                                     <option value="{{code}}">{{code}} - {{currency.name}}</option>
                                     {% endwith %}
-                                {% endfor %}
-                                <option value="" disabled>&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;</option>
-                                {% for code, currency in currency_info.items %}
+                                    {% endfor %}
+                                    <option value="" disabled>
+                                        &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
+                                    </option>
+                                    {% for code, currency in currency_info.items %}
                                     <option value="{{code}}">{{code}} - {{currency.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                        </div>
+
+                        {% elif page.derived.use_account_switcher %}
+
+                        <div id="ak-multi-currency">
+                            <label class="ak-label-above ak-margin-none" for="amount">Secure Donation:</label>
+                            <span class="ak-currencies">
+                                {% for currency, account_name in page.derived.currency_accounts %}
+                                <span class="ak-currency">
+                                    <input type="radio" {% if forloop.first %}checked{% endif %} name="payment_account"
+                                        id="id_currency_{{currency}}" value="{{account_name}}">
+                                    <label for="id_currency_{{currency}}">{{currency}}</label>
+                                </span>
                                 {% endfor %}
-                            </select>
-                        </label>
-                    </div>
+                            </span>
+                        </div>
 
-                {% elif page.derived.use_account_switcher %}
-
-                    <div id="ak-multi-currency">
-                    <label class="ak-label-above ak-margin-none" for="amount">Secure Donation:</label>
-                    <span class="ak-currencies">
-                        {% for currency, account_name in page.derived.currency_accounts %}
-                        <span class="ak-currency">
-                            <input type="radio" {% if forloop.first %}checked{% endif %} name="payment_account" id="id_currency_{{currency}}" value="{{account_name}}">
-                            <label for="id_currency_{{currency}}">{{currency}}</label>
-                        </span>
-                        {% endfor %}
-                    </span>
-                    </div>
-
-                {% endif %}
-
-                   <div class="ak-amount-wrapper">
-                    {% for row in amounts|columns:4 %}
-                    <ul class="ak-unstyled">
-                        {% for amount in row %}
-                        {% if amount == "other" %}
-                        <li id="ak-other-amount-container">
-                            <noscript><input type="radio" value="" class="ak-amount-radio-button" name="amount"></noscript>
-                            <label for="ak-other-amount-field" class="ak-btn">
-                                <span class="ak-currency-sym">{{ page.currency_sym }}</span> <input type="text" id="ak-other-amount-field" name="amount_other" size="3" >
-                            </label>
-                        </li>
-                        {% else %}
-                        <li>
-                            <label for="id_amount_{{amount}}" class="ak-btn amount-btn">
-                                <span class="ak-currency-sym"></span>
-                                <input type="radio" id="id_amount_{{amount}}"
-                                    value="{{ amount }}"
-                                    class="ak-amount-radio-button"
-                                    name="amount" {% if not args.amount_other and amount == default_amount %}checked{% endif %}>{{ page.currency_sym }}{{ amount|commify }}
-                            </label>
-                        </li>
                         {% endif %}
-                        {% endfor %}
-                    </ul>
-                    {% endfor %}
-                </div>
-                </div>
 
-                <div id="ak-donation-total-div"></div>
-                <script type="text/ak-template" for="ak-donation-total-div">
+                        <div class="ak-amount-wrapper">
+                            {% for row in amounts|columns:4 %}
+                            <ul class="ak-unstyled">
+                                {% for amount in row %}
+                                {% if amount == "other" %}
+                                <li id="ak-other-amount-container">
+                                    <noscript><input type="radio" value="{{ amount }}" class="ak-amount-radio-button"
+                                            name="amount"></noscript>
+                                    <label for="ak-other-amount-field" class="ak-btn">
+                                        <span class="ak-currency-sym">{{ page.currency_sym }}</span> <input type="text"
+                                            id="ak-other-amount-field" name="amount_other" size="3">
+                                    </label>
+                                </li>
+                                {% else %}
+                        <li>
+                            <label for="id_amount_{{amount}}" class="ak-btn">
+                                <span class="ak-currency-sym"></span><input type="radio" id="id_amount_{{amount}}" value="{{ amount }}" class="ak-amount-radio-button" name="amount" {% if not args.amount_other and amount == default_amount %}checked{% endif %}>{{ page.currency_sym }}{{ amount|commify }}
+                            </label>
+                        </li>
+                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                            {% endfor %}
+
+                            <button
+                                class="ak-donate-three-step-visible ak-donate-area-step-1 amount-selected button btn"
+                                id="ak-continue-button" type="button">Continue</button>
+
+                        </div>
+                    </div>
+
+                    <div id="ak-donation-total-div"></div>
+                    <script type="text/ak-template" for="ak-donation-total-div">
                     [% if (has_products || has_candidates) { %]
                         <p class="ak-donation-total ak-donate-area-step-1">
                             <label for="amount">
                                 Total Amount
-                             </label>
-                                <span class="ak-currency-sym">{{ page.currency_sym }}</span><span class="ak-donation-total-amount"></span>
-
+                            </label>
+                            <span class="ak-currency-sym">{{ page.currency_sym }}</span><span class="ak-donation-total-amount"></span>
                         </p>
-                    [% }
-                    setTimeout(update_total, 0);
-                    %]
-                </script>
 
-                <div id="ak-donation-contact" class="ak-styled-fields ak-donate-area-step-2 ak-errs-below ak-margin-top-1">
+                     setTimeout(update_total, 0);
+                     [% } %]
+                    </script>
+
+                </div>
+
+                <div id="ak-donation-contact"
+                    class="ak-styled-fields ak-donate-area-step-2 ak-errs-below ak-margin-top-1">
 
                     <ul id="ak-errors"></ul>
-                    <div style="display: none"><div id="known_user">
-                        Not <span id="known_user_name"></span>?  <a href="?" onclick="return actionkit.forms.logOut()">Click here.</a>
-                    </div></div>
+                    <div style="display: none">
+                        <div id="known_user">
+                            Not <span id="known_user_name"></span>? <a href="?"
+                                onclick="return actionkit.forms.logOut()">Click here.</a>
+                        </div>
+                    </div>
                     <div id="unknown_user"></div>
 
-                    <h4 class="{% if not has_shippable_products %}ak-donate-three-step-hidden{% endif %}">Billing Address</h4>
+                    <h4 class="{% if not has_shippable_products %}ak-donate-three-step-hidden{% endif %}">Billing
+                        Address</h4>
 
                     <div class="ak-labels-overlaid ak-errs-below test2">
-                      {% if page.accept_ach %}
+                        {% if page.accept_ach %}
                         <div>
                             <label for="id_first_name">First Name</label>
                             <input id="id_first_name" type="text" name="first_name">
@@ -254,12 +316,12 @@
                             <input id="id_last_name" type="text" name="last_name">
                             <input type="hidden" name="required" value="last_name">
                         </div>
-                      {% else %}
+                        {% else %}
                         <div>
-                          <label for="id_name">Name</label>
-                          <input id="id_name" type="text" name="name">
+                            <label for="id_name">Name</label>
+                            <input id="id_name" type="text" name="name">
                         </div>
-                      {% endif %}
+                        {% endif %}
                         <div>
                             <label class="required" for="id_email">Email</label>
                             <input id="id_email" type="text" name="email">
@@ -303,11 +365,11 @@
                         <div class="ak-errs-below" class="ak-intl-billing-fields">
                             <div>
                                 <label for="id_region">Region</label>
-                                <input id="id_region"  type="text" name="region" size="20">
+                                <input id="id_region" type="text" name="region" size="20">
                             </div>
                             <div>
                                 <label for="id_postal">Postal Code</label>
-                                <input id="id_postal"  type="text" name="postal" size="10">
+                                <input id="id_postal" type="text" name="postal" size="10">
                             </div>
                         </div>
 
@@ -319,7 +381,7 @@
                         {% include "./privacy.html" %}
 
                         {% else %}
-                            <input type="hidden" name="country" value="United States">
+                        <input type="hidden" name="country" value="United States">
                         {% endif %}
                     </div> <!-- labels overlaid (billing address) -->
 
@@ -332,13 +394,13 @@
                     <div class="ak-labels-overlaid ak-errs-below">
                         <div>
                             <label for="action_employer">Employer</label>
-                            <input id="action_employer"  type="text" name="action_employer" size="20">
+                            <input id="action_employer" type="text" name="action_employer" size="20">
                             <input type="hidden" name="required" value="action_employer">
                         </div>
 
                         <div>
                             <label for="action_occupation">Occupation</label>
-                            <input id="action_occupation"  type="text" name="action_occupation" size="20">
+                            <input id="action_occupation" type="text" name="action_occupation" size="20">
                             <input type="hidden" name="required" value="action_occupation">
                         </div>
 
@@ -377,18 +439,18 @@
                                 </div>
                                 <div>
                                     <label for="id_shipping_zip">Shipping ZIP</label>
-                                    <input id="id_shipping_zip"  type="text" name="shipping_zip" maxlength="5" size="5">
+                                    <input id="id_shipping_zip" type="text" name="shipping_zip" maxlength="5" size="5">
                                 </div>
                             </div>
                             {% if page.allow_international %}
                             <div class="ak-intl-shipping-fields">
                                 <div>
                                     <label for="id_shipping_region">Shipping region</label>
-                                    <input id="id_shipping_region"  type="text" name="shipping_region" size="20">
+                                    <input id="id_shipping_region" type="text" name="shipping_region" size="20">
                                 </div>
                                 <div>
                                     <label for="id_shipping_postal">Shipping postal Code</label>
-                                    <input id="id_shipping_postal"  type="text" name="shipping_postal" size="10">
+                                    <input id="id_shipping_postal" type="text" name="shipping_postal" size="10">
                                 </div>
                             </div>
                             <div>
@@ -402,20 +464,26 @@
                     </div> <!-- shipping address -->
                     {% endif %}
 
+                    <button class="ak-donate-three-step-visible details-entered button btn" id="ak-continue-button"
+                        type="button">Proceed to Payment</button>
+
                 </div> <!-- donation contact -->
+
+            </div>
+            <div id="payment-methods" class="ak-labels-above ak-styled-fields ak-donate-area-step-3 ak-errs-below">
 
                 <div class="ak-labels-above ak-styled-fields ak-donate-area-step-3 ak-errs-below">
 
 
-                  <div class="cc_payment_options">
-                    <!-- <div id="ak-fieldbox-card_num" class="">
+                    <div class="cc_payment_options">
+                        <!-- <div id="ak-fieldbox-card_num" class="">
                         <label for="ak-card_num">Credit Card #</label>
                         <input type="hidden" name="required" value="card_num" id="ak-card_num-required">
                         <div id="ak-card_num-hosted" class="hosted-field"></div>
                         <input id="ak-card_num" type="text" name="card_num">
                     </div> -->
 
-                    <!-- <div class="ak-err-below">
+                        <!-- <div class="ak-err-below">
 
                         <div id="ak-fieldbox-exp_date">
                             <input type="hidden" name="required" value="exp_date_month" id="ak-exp_date_month-required">
@@ -446,7 +514,7 @@
                         </div>
                     </div> -->
 
-                    <!-- <div class="ak-err-below">
+                        <!-- <div class="ak-err-below">
                         <div id="ak-fieldbox-card_code">
                             <input type="hidden" name="required" value="card_code" id="ak-card_code-required">
                             <label for="ak-card_code">Verification Code</label>
@@ -454,54 +522,57 @@
                             <input id="ak-card_code" type="text" name="card_code" size="4">
                         </div>
                     </div> -->
-                  </div>
+                    </div>
 
 
 
                 </div><!--ak-styled-fields-->
 
 
-                <button class="ak-donate-three-step-visible button btn" id="ak-continue-button" type="button">Proceed to Payment</button>
 
-                {% if not has_products %}
-                    {% if allow_monthly %}
-                        <div id="ak-recurring-type" class="ak-donate-area-step-3">
-                          <div class="">
-                            <label for="id_donation_type_recurring">
-                            <input type="checkbox" name="donation_type" id="id_donation_type_recurring" value="recurring">
-    						 Become a sustaining, monthly contributor
-                            </label>
-                          </div>
-
-                        </div>
-                    {% else %}
-                        <div id="ak-recurring-type"></div>
-                        <input type="hidden" name="donation_type" value="single">
-                    {% endif %}
                 {% endif %}
 
+                <button id="stripe-payment-card-toggle-button" class="ak-submit-button ak-donate-area-step-3"
+                    data-paymentmethod="card" style="color: #fff;">Credit Card</button>
+                    <div style="display: none;" id="stripe-payment-element-container">
+                        <div id="stripe-payment-by-card">
+                        <form id="stripe-payment-card-form">
+                            <div id="stripe-payment-card-element">
+                                <!--Stripe.js injects the Payment Element-->
+                            </div>
+                        </form>
+                    </div>
+                </div>
 
+                <button type="submit" class="ak-submit-button ak-donate-area-step-3 stripe-checkout"
+                    data-paymentmethod="sepa_debit" style="color: #fff;">SEPA Debit</button>
 
+                <button type="submit" class="ak-submit-button ak-donate-area-step-3 stripe-checkout"
+                    data-paymentmethod="ideal" style="color: #fff;">iDEAL</button>
 
+                <script>
+                    $('#stripe-payment-card-toggle-button').on(
+                        'click', function(e) {
+                            $('#stripe-payment-element-container').toggle();
+                            return false;
+                        });
+                </script>
 
-                <button type="submit" class="ak-submit-button ak-donate-area-step-3 stripe-checkout" data-paymentmethod="card" style="color: #fff;" >Credit Card</button>
-                <button type="submit" class="ak-submit-button ak-donate-area-step-3 stripe-checkout" data-paymentmethod="sepa_debit" style="color: #fff;" >SEPA Debit</button>
-                <button type="submit" class="ak-submit-button ak-donate-area-step-3 stripe-checkout" data-paymentmethod="ideal" style="color: #fff;" >iDEAL</button>
-
-
-                <div id="smart-button-container" class="ak-donate-area-step-3 paypal-checkout" data-paymentmethod="paypal">
+                <div id="smart-button-container" class="ak-donate-area-step-3 paypal-checkout"
+                    data-paymentmethod="paypal">
                     <div style="text-align: center;">
-                      <div id="ak-paypal-button" class="ak-paypal-button"></div>
+                        <div id="ak-paypal-button" class="ak-paypal-button"></div>
                     </div>
                 </div>
 
                 <div class="donate-amount-message ak-donate-area-step-3">
-                <h4>Donate <span class="ak-currency-sym">{{ page.currency_sym }}</span><span class="ak-donation-total-amount"></span></h4>
+                    <h4>Donate <span class="ak-currency-sym">{{ page.currency_sym }}</span><span
+                            class="ak-donation-total-amount"></span></h4>
                 </div>
 
             </div>
 
-            </div>
+
 
         </div>
 
@@ -509,102 +580,109 @@
 
 </form>
 
-{% if 1 or page.custom_fields.next_step %}
+{% store as next_step %}
+{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}&amp;action={{ args.action }}{% elif page.custom_fields.daisy_chain_action %}/thanks/{{ page.custom_fields.daisy_chain_action }}?share=1&amp;akid={{ akid }}&amp;action={{ args.action }}{% endif %}{% endstore %}
+
+{% if next_step %}
 <div class="row">
-	<br>
-	<div class="col-md-12" style="text-align: center;">
-		<a href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
-	</div>
+    <br>
+    <div class="col-md-12" style="text-align: center;">
+        <a href="{{ next_step }}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
+    </div>
 </div>
 {% endif %}
 
 <div class="row" id="other_ways_giving">
-	<div class="col-md-12">
-		<h3>Other ways of giving</h3>
-		<div class="row">
-			<div class="col-md-4">
-				<p> <i>You can transfer your donation to our bank account</i></p>
-				<p> <i>Please include your email address as payment reference</i> </p>
-				<p>
-					WeMove Europe SCE mbH<br>
-					IBAN: DE98 4306 0967 1177 7069 00<br>
-					BIC: GENODEM1GLS, GLS Bank<br>
-					Berlin, Germany
-				</p>
-			</div>
+    <div class="col-md-12">
+        <h3>Other ways of giving</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <p> <i>You can transfer your donation to our bank account</i></p>
+                <p> <i>Please include your email address as payment reference</i> </p>
+                <p>
+                    WeMove Europe SCE mbH<br>
+                    IBAN: DE98 4306 0967 1177 7069 00<br>
+                    BIC: GENODEM1GLS, GLS Bank<br>
+                    Berlin, Germany
+                </p>
+            </div>
 
-			<div class="col-md-3">
-				<!--Make a <b>recurring</b> donation
+            <div class="col-md-3">
+                <!--Make a <b>recurring</b> donation
 				<a href="https://www.wemove.eu/civicrm/contribute/transact?reset=1&id=83" title="Donate with PayPal" target="_blank">  <img src="https://www.wemove.eu/sites/wemove.eu/files/paypal.png" /></a>
 				<p> </p>
 				Make a <b>one-off</b> donation
 				<a href="https://www.wemove.eu/civicrm/contribute/transact?reset=1&id=88" title="Donate with Paypal" target="_blank">  <img src="https://www.wemove.eu/sites/wemove.eu/files/paypal.png" /></a>
 				</div>-->
-			</div>
+            </div>
 
-			<div class="col-md-5">
-				We want to be transparent and accountable about how we spend your donations - for more information please see our
-				<strong><a href="https://www.wemove.eu/how-we-are-funded" target="_blank">Donation Policy</a></strong>.
-				<br>
-				<br>
-				Your personal information will be kept private and held securely. By submitting information you are agreeing to WeMove Europe keeping you informed about campaigns and agree to the use of cookies in accordance with our
-				<strong><a href="https://www.wemove.eu/privacy-policy" target="_blank">privacy policy</a></strong>.
-			</div>
-		</div>
-	</div>
+            <div class="col-md-5">
+                We want to be transparent and accountable about how we spend your donations - for more information
+                please see our
+                <strong><a href="https://www.wemove.eu/how-we-are-funded" target="_blank">Donation Policy</a></strong>.
+                <br>
+                <br>
+                Your personal information will be kept private and held securely. By submitting information you are
+                agreeing to WeMove Europe keeping you informed about campaigns and agree to the use of cookies in
+                accordance with our
+                <strong><a href="https://www.wemove.eu/privacy-policy" target="_blank">privacy policy</a></strong>.
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
 
 {% block script_additions %}
 
-<script src="https://www.paypal.com/sdk/js?client-id=sb&disable-funding=credit,card&currency=USD" data-sdk-integration-source="button-factory"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=sb&disable-funding=credit,card&currency=USD"
+    data-sdk-integration-source="button-factory"></script>
 <script>
-  window.ppInitialized = false;
-  function initPayPalButton() {
-    if (window.ppInitialized) return;
-    paypal.Buttons({
-      style: {
-        shape: 'rect',
-        color: 'gold',
-        layout: 'vertical',
-        label: 'paypal',
-        height: 42
-      },
+    window.ppInitialized = false;
+    function initPayPalButton() {
+        if (window.ppInitialized) return;
+        paypal.Buttons({
+            style: {
+                shape: 'rect',
+                color: 'gold',
+                layout: 'vertical',
+                label: 'paypal',
+                height: 42
+            },
 
-      createOrder: function(data, actions) {
-        return actions.order.create({
-          purchase_units: [{"amount":{"currency_code":"USD","value":1}}]
-        });
-      },
+            createOrder: function (data, actions) {
+                return actions.order.create({
+                    purchase_units: [{ "amount": { "currency_code": "USD", "value": 1 } }]
+                });
+            },
 
-      onApprove: function(data, actions) {
-        return actions.order.capture().then(function(orderData) {
+            onApprove: function (data, actions) {
+                return actions.order.capture().then(function (orderData) {
 
-          // Full available details
-          console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                    // Full available details
+                    console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
 
-          // Show a success message within this page, e.g.
-          const element = document.getElementById('ak-paypal-button');
-          element.innerHTML = '';
-          element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                    // Show a success message within this page, e.g.
+                    const element = document.getElementById('ak-paypal-button');
+                    element.innerHTML = '';
+                    element.innerHTML = '<h3>Thank you for your payment!</h3>';
 
-          // Or go to another URL:  actions.redirect('thank_you.html');
+                    // Or go to another URL:  actions.redirect('thank_you.html');
 
-        });
-      },
+                });
+            },
 
-      onError: function(err) {
-        console.log(err);
-      }
-    }).render('#ak-paypal-button');
-    window.ppInitialized = true;
-  }
+            onError: function (err) {
+                console.log(err);
+            }
+        }).render('#ak-paypal-button');
+        window.ppInitialized = true;
+    }
 
 </script>
 
 <script language="javascript">
-//<!--
+    //<!--
     function clear_radio_buttons() {
         $('input.ak-amount-radio-button').prop('checked', false);
     }
@@ -637,7 +715,7 @@
     function update_total() {
         var total = 0.0;
 
-        product_infos().forEach(function(info) {
+        product_infos().forEach(function (info) {
             total += info.subtotal;
         });
 
@@ -668,21 +746,21 @@
         return total;
     }
 
-    $(function() {
+    $(function () {
         $('.ak_product_inputs').on('change blur', update_total);
         $('.ak_candidate_inputs').on('change blur', update_total);
         $('.ak-amount-radio-button').on('change blur', update_total)
-                                .on('click', clear_other)
-                                .on('click', update_total);
+            .on('click', clear_other)
+            .on('click', update_total);
         $('#ak-other-amount-field').on('change blur', update_total)
-                                .on('click keyup', clear_radio_buttons)
-                                .on('click', update_total);
-        $('input[type=radio][name=payment_method]').change(function() {
-                $('.ach_payment_options').hide();
-                $('.cc_payment_options').show();
+            .on('click keyup', clear_radio_buttons)
+            .on('click', update_total);
+        $('input[type=radio][name=payment_method]').change(function () {
+            $('.ach_payment_options').hide();
+            $('.cc_payment_options').show();
         });
 
-        $('#ak-ownership_type').change(function() {
+        $('#ak-ownership_type').change(function () {
             if (this.value == 'business') {
                 $('#ak-fieldbox-business_name').show();
             } else {
@@ -696,7 +774,7 @@
         $('label.ak-radio-checked').removeClass('ak-radio-checked');
         $(this).closest('label').addClass('ak-radio-checked');
     }
-    $(function() {
+    $(function () {
         $('input[name="amount"]').on(
             'click', highlight_selected_amount_button);
         $('input[name="amount_other"]').on(
@@ -713,15 +791,15 @@
     function redraw_currency_symbol() {
         var id = $('input[id^=id_currency_]:checked, option[id^=id_currency_]:selected').attr('id');
         var iso_code_match = /([A-Z][A-Z][A-Z])$/.exec(id);
-        if ( ! iso_code_match ) {
+        if (!iso_code_match) {
             return
         }
         var iso_code = iso_code_match[1];
         var currency_sym = actionkit.utils.currencySymbols[iso_code];
-        $('.ak-currency-sym').text( currency_sym || '' );
+        $('.ak-currency-sym').text(currency_sym || '');
     }
 
-    $(function() {
+    $(function () {
         $('input[id^=id_currency_], select[name="currency"], select[name="payment_account"]').on('change', redraw_currency_symbol);
         redraw_currency_symbol();
     });
@@ -734,7 +812,7 @@
 
     {% if page.allow_international %}
     function country_change() {
-        if ( $('#id_country').val() == 'United States' ) {
+        if ($('#id_country').val() == 'United States') {
             $('.ak-us-billing-fields').show();
             $('.ak-intl-billing-fields').hide();
         } else {
@@ -744,7 +822,7 @@
         sync_to_shipping();
     }
     function shipping_country_change() {
-        if ( $('#id_shipping_country').val() == 'United States' ) {
+        if ($('#id_shipping_country').val() == 'United States') {
             $('.ak-us-shipping-fields').show();
             $('.ak-intl-shipping-fields').hide();
         } else {
@@ -752,20 +830,20 @@
             $('.ak-intl-shipping-fields').show();
         }
     }
-    $( function () {
+    $(function () {
         $('#id_country').on('change blur', country_change);
         $('#id_shipping_country').on('change blur', shipping_country_change);
         country_change();
         shipping_country_change();
-    } );
+    });
     {% endif %}
 
 
     function toggle_shipping() {
-        if ( $('#ak-shipping-same').prop("checked") ) {
+        if ($('#ak-shipping-same').prop("checked")) {
             sync_to_shipping();
             $('#ak-shipping-fields').slideUp();
-            if($('.ak-shipping-required').length)
+            if ($('.ak-shipping-required').length)
                 $('.ak-shipping-required').remove();
         } else {
             clear_shipping();
@@ -794,7 +872,7 @@
     }
 
     function sync_to_shipping(e) {
-        if ( ! $('#ak-shipping-same').prop("checked") ) {
+        if (!$('#ak-shipping-same').prop("checked")) {
             return;
         }
         var i, field, ship_field, bill_value;
@@ -809,65 +887,67 @@
         {% endif %}
     }
 
-    $( function () {
+    $(function () {
         $('#ak-shipping-same').on('change', toggle_shipping);
         toggle_shipping();
 
         $('#id_address1, #id_address2, #id_city, #id_state, #id_zip, ' +
             '#id_region, #id_postal').on('change blur', sync_to_shipping);
-    } );
+    });
 
     var three_step_initialized = 0;
     function three_step_reveal() {
         var current_step = $('input[name="ak-donate-step"]:checked').val();
-        if ( current_step != "2" && current_step != "3" ) {
+        if (current_step != "2" && current_step != "3") {
             current_step = "1"
         }
         var speed = three_step_initialized ? 1 : 400;
-        if ( current_step == "1" ) {
-            $('.ak-donate-area-step-2, .ak-donate-area-step-3, #ak-continue-button').hide();
-            $('.ak-donate-area-step-1').fadeIn( speed );
+        if (current_step == "1") {
+            $('.ak-donate-area-step-2, .ak-donate-area-step-3, .amount-selected').hide();
+            $('.ak-donate-area-step-1').fadeIn(speed);
 
-        } else if ( current_step == "2" ) {
-            $('.ak-donate-area-step-1, .ak-donate-area-step-3').hide();
-            $('.ak-donate-area-step-2, #ak-continue-button').fadeIn( speed,
-                focus_field_if_blank( $('#id_name') )
+        } else if (current_step == "2") {
+            $('.ak-donate-area-step-1, .ak-donate-area-step-3, .amount-selected').hide();
+            $('.ak-donate-area-step-2, .details-entered').fadeIn(speed,
+                focus_field_if_blank($('#id_name'))
             );
-        } else if ( current_step == "3" ) {
-            $('.ak-donate-area-step-1, .ak-donate-area-step-2, #ak-continue-button').hide();
-            $('.ak-donate-area-step-3').fadeIn( speed,
-                focus_field_if_blank( $('#ak-card_num') )
+        } else if (current_step == "3") {
+            $('.ak-donate-area-step-1, .ak-donate-area-step-2, .details-entered').hide();
+            WeMoveStripe.initializeElements(
+                $('#act').get(0),
+                '#stripe-payment-card-element'
             );
+            $('.ak-donate-area-step-3').fadeIn(speed);
             initPayPalButton();
 
         }
     }
 
-    function focus_field_if_blank ( field_elt ) {
-        return ( function () {
-            if ( ! field_elt.val() ) {
+    function focus_field_if_blank(field_elt) {
+        return (function () {
+            if (!field_elt.val()) {
                 field_elt.focus()
             }
-        } )
+        })
     }
 
     var step_has_errors = false;
     function three_step_advance() {
         // trigger validation on the step we're leaving
         var current_step = $('input[name="ak-donate-step"]:checked').val();
-	// hitting "back" after donating confuses our step navigation.
-	// User gets dropped on first step, then browser autocomplete sets our step tracker field without us knowing.
-	// So, check what step the UI's on, and if step tracker and UI disagree give precedence to the UI.
-	var currentStepUI = $('div.ak-donate-area-step-1,div.ak-donate-area-step-2,div.ak-donate-area-step-3').filter(':visible');
-	if(currentStepUI.length){
-	    var uiStepNum = currentStepUI.attr('class')
-		.match(/ak-donate-area-step-[0-9]/g)[0]
-		.slice(-1);
-	    if(uiStepNum != current_step){
-		$('input[name=ak-donate-step][value=' + uiStepNum + ']').prop('checked', true);
-		current_step = uiStepNum;
-	    }
-	}
+        // hitting "back" after donating confuses our step navigation.
+        // User gets dropped on first step, then browser autocomplete sets our step tracker field without us knowing.
+        // So, check what step the UI's on, and if step tracker and UI disagree give precedence to the UI.
+        var currentStepUI = $('div.ak-donate-area-step-1,div.ak-donate-area-step-2,div.ak-donate-area-step-3').filter(':visible');
+        if (currentStepUI.length) {
+            var uiStepNum = currentStepUI.attr('class')
+                .match(/ak-donate-area-step-[0-9]/g)[0]
+                .slice(-1);
+            if (uiStepNum != current_step) {
+                $('input[name=ak-donate-step][value=' + uiStepNum + ']').prop('checked', true);
+                current_step = uiStepNum;
+            }
+        }
         validate_step(current_step);
 
         if (!step_has_errors) {
@@ -887,9 +967,9 @@
         }
 
         // can't skip over a step unless it's already been completed
-        if ( (! step_has_errors) && (current_step == 1) && (next == 3) ) {
+        if ((!step_has_errors) && (current_step == 1) && (next == 3)) {
             validate_step(2);
-            if ( step_has_errors ) {
+            if (step_has_errors) {
                 $('#ak-donate-step-2').prop('checked', true);
                 three_step_reveal();
                 return;
@@ -903,14 +983,14 @@
         }
     }
 
-    function validate_product_count ( field ) {
+    function validate_product_count(field) {
         var product_count = field.value;
         if (product_count == "" || product_count == "0") {
             return true
         }
-        product_count = parseInt( product_count );
-        var product_max = parseInt( $(field).attr('max') );
-        if ( product_max && product_count > product_max ) {
+        product_count = parseInt(product_count);
+        var product_max = parseInt($(field).attr('max'));
+        if (product_max && product_count > product_max) {
             var err_msg = actionkit.forms.errorMessage('product:max');
             err_msg = err_msg.replace("{0}", product_max);
             return err_msg
@@ -927,35 +1007,35 @@
             validate_fields = ["amount"];
         } else if (step == "2") {
             validate_fields = ["email", "first_name", "last_name", "name",
-                               "address1", "address2", "city", "state", "zip",
-                               "country", "region", "postal",
-                               "shipping_address1", "shipping_address2",
-                               "shipping_city", "shipping_state",
-                               "shipping_zip", "shipping_country",
-                               "shipping_region", "shipping_postal",
-                               "privacy"
-                               {% if has_candidates %},"action_employer", "action_occupation"{% endif %}];
-        } else {
-            validate_fields = ["card_num", "card_code",
-                               "exp_date_year", "exp_date_month", "exp_date"];
-        }
+                "address1", "address2", "city", "state", "zip",
+                "country", "region", "postal",
+                "shipping_address1", "shipping_address2",
+                "shipping_city", "shipping_state",
+                "shipping_zip", "shipping_country",
+                "shipping_region", "shipping_postal",
+                "privacy"
+                               {% if has_candidates %}, "action_employer", "action_occupation"{% endif %}];
+    } else {
+        validate_fields = ["card_num", "card_code",
+            "exp_date_year", "exp_date_month", "exp_date"];
+    }
 
-        doing_step_validation = true;
-        actionkit.forms.validate();
-        doing_step_validation = false;
+    doing_step_validation = true;
+    actionkit.forms.validate();
+    doing_step_validation = false;
 
-        if (step == "1") {
-            step_has_errors = step_1_validation();
-        }
+    if (step == "1") {
+        step_has_errors = step_1_validation();
+    }
 
-        if (step == "2" && !step_has_errors) {
-            step_has_errors = step_2_validation();
-        }
+    if (step == "2" && !step_has_errors) {
+        step_has_errors = step_2_validation();
+    }
 
 
-        if (step == "3" && !step_has_errors) {
-            step_has_errors = step_3_validation();
-        }
+    if (step == "3" && !step_has_errors) {
+        step_has_errors = step_3_validation();
+    }
     }
 
     function do_validate_credit_card() {
@@ -973,11 +1053,11 @@
         }
 
         var payment_method = actionkit.form["payment_method"] && actionkit.form["payment_method"].value;
-        if (actionkit.donations && actionkit.donations.vgs){
-	    actionkit.donations.vgs.validateHostedForm().map(function(error){
-		actionkit.donations.vgs.handleError(error);
-		step_has_errors = true;
-	    });
+        if (actionkit.donations && actionkit.donations.vgs) {
+            actionkit.donations.vgs.validateHostedForm().map(function (error) {
+                actionkit.donations.vgs.handleError(error);
+                step_has_errors = true;
+            });
         } else {
             if (!do_validate_credit_card()) {
                 return step_has_errors;
@@ -1018,7 +1098,7 @@
 
         // look for product selections
         var selected_products = false;
-        product_infos().forEach(function(info) {
+        product_infos().forEach(function (info) {
             if (info.quantity) {
                 selected_products = true;
             }
@@ -1027,7 +1107,7 @@
         // look for candidate selections
         var selected_candidates = false;
         $('.ak_candidate_inputs').each(
-            function(i) {
+            function (i) {
                 if ($(this).val() != "")
                     selected_candidates = true;
             });
@@ -1043,8 +1123,8 @@
             step_has_errors = true;
 
         } else if (($('#ak-other-amount-field').val() != "" &&
-                    $('#ak-other-amount-field').val() != undefined)  &&
-                   !/^[\d,]*(\.\d{1,2})?$/.test($('#ak-other-amount-field').val())) {
+            $('#ak-other-amount-field').val() != undefined) &&
+            !/^[\d,]*(\.\d{1,2})?$/.test($('#ak-other-amount-field').val())) {
             if (!actionkit.errors)
                 actionkit.errors = {};
             actionkit.errors['amount:invalid'] = actionkit.forms.errorMessage('amount:invalid');
@@ -1054,19 +1134,20 @@
 
         {% if page.minimum_amount %}
         var total = update_total();
-        if (!step_has_errors && total < {{ page.minimum_amount }}) {
-            if (!actionkit.errors) {
-                actionkit.errors = {};
-            }
-            err = actionkit.forms.errorMessage('amount:minimum');
-            err = err.replace("{0}", "{{ page.minimum_amount }}");
-            actionkit.errors['amount:minimum'] = err;
-            actionkit.forms.onValidationErrors(actionkit.errors);
-            step_has_errors = true;
+        if (!step_has_errors && total < {{ page.minimum_amount }
+    }) {
+        if (!actionkit.errors) {
+            actionkit.errors = {};
         }
-        {% endif %}
+        err = actionkit.forms.errorMessage('amount:minimum');
+        err = err.replace("{0}", "{{ page.minimum_amount }}");
+        actionkit.errors['amount:minimum'] = err;
+        actionkit.forms.onValidationErrors(actionkit.errors);
+        step_has_errors = true;
+    }
+    {% endif %}
 
-        return step_has_errors;
+    return step_has_errors;
     }
 
     function actionkitValidationErrors(errors, field) {
@@ -1116,16 +1197,16 @@
         three_step_initialized = 1;
     }
 
-    $(function() {
-         // three-step vs. one-step UI
-        if ( $('form.ak-donate-three-step').length == 0 ) {
+    $(function () {
+        // three-step vs. one-step UI
+        if ($('form.ak-donate-three-step').length == 0) {
             $('.ak-donate-three-step-visible').hide();
         } else {
             $('.ak-donate-three-step-hidden').hide();
             three_step_reveal();
             window.actionkitFormReady = three_step_initialize;
             // $('.ak-donate-menu input[type="radio"]').on('change', three_step_reveal);
-            $('#ak-continue-button').on('click', function (evt) {
+            $('.amount-selected, .details-entered').on('click', function (evt) {
                 // letting this event go will trigger our onsubmit and lead to validation woe
                 evt.preventDefault();
                 three_step_advance();
@@ -1142,7 +1223,7 @@
                 evt.preventDefault();
                 three_step_goto('3');
             });
-            $('.amount-btn').on('click', function(evt) {
+            $('.amount-btn').on('click', function (evt) {
                 three_step_advance();
             });
         }
@@ -1150,13 +1231,13 @@
     });
 
     function product_ids() {
-        return $("[data-product]").map(function(i, el) {
+        return $("[data-product]").map(function (i, el) {
             return $(el).data("product");
         }).toArray();
     }
 
     function product_infos() {
-        return product_ids().map(function(id) {
+        return product_ids().map(function (id) {
             return product_info(id);
         });
     }
@@ -1164,17 +1245,17 @@
     // calculate subtotals if products exist
     function calculate_product_subtotals() {
         var subtotal = 0;
-        product_infos().forEach(function(info) {
+        product_infos().forEach(function (info) {
             $('.ak_product_subtotal_' + info.id).text(info.subtotal.toFixed(2));
             subtotal += info.subtotal;
         });
         $('#ak-donation-subtotal-amount').text(subtotal.toFixed(2));
     }
 
-    $(function() {
+    $(function () {
         calculate_product_subtotals();
 
-        $('.ak_product_inputs').on('change', function() {
+        $('.ak_product_inputs').on('change', function () {
             calculate_product_subtotals();
         });
     });
@@ -1190,7 +1271,7 @@
 
         for (var n = value.length - 1; n >= 0; n--) {
             var cDigit = value.charAt(n),
-            nDigit = parseInt(cDigit, 10);
+                nDigit = parseInt(cDigit, 10);
 
             if (bEven) {
                 if ((nDigit *= 2) > 9) {
@@ -1221,15 +1302,15 @@
     }
 
     function valid_bank_routing_number(value) {
-        value = value.replace(/\D/g,'');
+        value = value.replace(/\D/g, '');
 
         if (value.length != 9) { return false; }
 
         var checksum = 0;
         for (var i = 0; i < value.length; i += 3) {
             checksum += parseInt(value.charAt(i), 10) * 3
-                     +  parseInt(value.charAt(i + 1), 10) * 7
-                     +  parseInt(value.charAt(i + 2), 10);
+                + parseInt(value.charAt(i + 1), 10) * 7
+                + parseInt(value.charAt(i + 2), 10);
         }
 
         if (checksum == 0 || checksum % 10 != 0) { return false; }
@@ -1245,44 +1326,44 @@
 
     function submit_paypal() {
         {% if page.paypal_user_requirements != "none" %}
-            {% if page.paypal_user_requirements == "email" %}
-                validate_fields = ["email", "privacy"];
-            {% else %}
-                validate_fields = [
-                    "email", "first_name", "last_name", "name",
-                    "address1", "address2", "city", "state", "zip",
-                    "country", "region", "postal",
-                    "shipping_address1", "shipping_address2",
-                    "shipping_city", "shipping_state",
-                    "shipping_zip", "shipping_country",
-                    "shipping_region", "shipping_postal", "privacy"
-                    {% if has_candidates %},"action_employer", "action_occupation"{% endif %}
+        {% if page.paypal_user_requirements == "email" %}
+        validate_fields = ["email", "privacy"];
+        {% else %}
+        validate_fields = [
+            "email", "first_name", "last_name", "name",
+            "address1", "address2", "city", "state", "zip",
+            "country", "region", "postal",
+            "shipping_address1", "shipping_address2",
+            "shipping_city", "shipping_state",
+            "shipping_zip", "shipping_country",
+            "shipping_region", "shipping_postal", "privacy"
+                    {% if has_candidates %}, "action_employer", "action_occupation"{% endif %}
                ];
-           {% endif %}
+    {% endif %}
 
-           doing_step_validation = true;
-           actionkit.forms.validate();
-           doing_step_validation = false;
-           if (!$.isEmptyObject(actionkit.errors)) {
-               return false;
-           }
-        {% endif %}
+    doing_step_validation = true;
+    actionkit.forms.validate();
+    doing_step_validation = false;
+    if (!$.isEmptyObject(actionkit.errors)) {
+        return false;
+    }
+    {% endif %}
 
-        /* set the paypal=1 hidden field */
-        $('#ak-pay-by-paypal').val(1);
+    /* set the paypal=1 hidden field */
+    $('#ak-pay-by-paypal').val(1);
 
-        /* clear out CC info if entered */
-        $('#ak-card_num').val('');
-        $('#ak-card_code').val('');
+    /* clear out CC info if entered */
+    $('#ak-card_num').val('');
+    $('#ak-card_code').val('');
 
-        /* disable CC requirements */
-        $('#ak-card_num-required').remove();
-        $('#ak-card_code-required').remove();
-        $('#ak-exp_date_month-required').remove();
-        $('#ak-exp_date_year-required').remove();
+    /* disable CC requirements */
+    $('#ak-card_num-required').remove();
+    $('#ak-card_code-required').remove();
+    $('#ak-exp_date_month-required').remove();
+    $('#ak-exp_date_year-required').remove();
 
-        /* and keep submitting */
-        return true;
+    /* and keep submitting */
+    return true;
     }
 
     function submit_cc() {
@@ -1293,7 +1374,7 @@
             return false
         }
 
-        if ( $('form.ak-donate-three-step').length > 0 ) {
+        if ($('form.ak-donate-three-step').length > 0) {
             validate_step("3");
 
             if (step_has_errors) {
@@ -1314,8 +1395,8 @@
          * to run all three even if all three have errors */
         actionkit.forms.validate();
         results = [step_1_validation(),
-                   step_2_validation(),
-                   step_3_validation()];
+        step_2_validation(),
+        step_3_validation()];
         var ok = !(results[0] || results[1] || results[2]);
         if (ok) {
             $('button.ak-submit-button').addClass('is-submitted');
@@ -1323,10 +1404,10 @@
         return ok
     }
 
-    $( function () {
+    $(function () {
         $('#ak-paypal-button').on('click', submit_paypal);
-    	$('.ak-submit-button').on('click', submit_cc);
-        $(window).on('pagehide', function() {
+        $('.ak-submit-button').on('click', submit_cc);
+        $(window).on('pagehide', function () {
             $('button.ak-submit-button').removeClass('is-submitted');
         });
 
@@ -1334,16 +1415,16 @@
         $('#ak-paypal-button').on('mousedown', function () {
             var form_elt = $(this).closest('form');
             var required_fields = form_elt.find('input[name="required"]');
-            if ( required_fields.length ) {
+            if (required_fields.length) {
                 required_fields.remove();
-                $('body').on('mouseup', function ( event ) {
-                    form_elt.append( required_fields );
-                    $( this ).unbind( event );
-                } );
+                $('body').on('mouseup', function (event) {
+                    form_elt.append(required_fields);
+                    $(this).unbind(event);
+                });
             }
-        } );
+        });
         {% endif %}
-    } );
+    });
 
 //-->
 </script>
@@ -1353,14 +1434,14 @@
 <script src="/resources/ak_authnet_accept.js"></script>
 {% authnet_js_libs %}
 <script>
-$(function() {
-    var form = document.querySelector("#act"),
-    options = {
-            form: form,
-            submit: form.querySelector(".ak-submit-button")
-    };
-    actionkit.authnet.initClient('{{ pp.login }}', '{{ pp.public_key }}', options);
-});
+    $(function () {
+        var form = document.querySelector("#act"),
+            options = {
+                form: form,
+                submit: form.querySelector(".ak-submit-button")
+            };
+        actionkit.authnet.initClient('{{ pp.login }}', '{{ pp.public_key }}', options);
+    });
 </script>
 {% endif %}
 
@@ -1369,195 +1450,265 @@ $(function() {
 {% comment %}
 WeMove Stripe Code
 {% endcomment %}
+<script type="module" async src="https://actionkit-stripe-api.wemove.support/static/js/index.efce8ec6.js"></script>
 <script>
-$(function() {
-    $('button.stripe-checkout').click(
-        function(e) {
-          var button = e.target;
-          var method = $(button).data('paymentmethod');
-
-          $.ajax({
-            url: 'https://actionkit-stripe-api.not-a2.eu/checkout/payment',
-            method: 'POST',
-            contentType: 'application/json; charset=utf-8',
-            dataType: 'json',
-            data: JSON.stringify({
-                    "amount": actionkit.form.amount.value,
-                    "email": actionkit.form.email.value,
-                    "name": actionkit.form.name.value,
-                    "line1": actionkit.form.address1.value,
-                    "line2": actionkit.form.address2.value,
-                    "postal": actionkit.form.postal.value,
-                    "city": actionkit.form.city.value,
-                    "region": actionkit.form.region.value,
-                    "country": $('#id_country').val(),
-                    "methods": [method]
-
-                  })
-		    }).then(function(resp) {
-              window.location = resp.url
-            })
-
-        }
-    );
+// debuggin code
+$( () => {
+    $('#id_amount_5').click();
+    $('#act input[name="email"]').val('someone@example.com');
+    $('#id_country > option:nth-child(14)').prop('selected', true);
+    $('#id_address1').val('996 West Nobel Drive');
+    $('#id_name').val('Jin Grant');
+    $('#id_postal').val('3-19 N');
+    $('#id_city').val('Dusseldorf');
 });
 </script>
 
 <style>
-body {
-    min-height: 2048px;
-}
+    body {
+        min-height: 2048px;
+    }
 
-button, input[type="submit"], a.ak-button, .ak-button {
-    background-color: #21194F;
-}
+    button,
+    input[type="submit"],
+    a.ak-button,
+    .ak-button {
+        background-color: #21194F;
+    }
 
-#ak-amount-list li label {
-    background: #21194F;
-    color: #fff;
-    width: 125px;
-    margin: 10px;
-}
+    #ak-amount-list li label {
+        background: #21194F;
+        color: #fff;
+        width: 150px;
+        margin: 5px;
+    }
 
-#ak-amount-list li label:hover,
-#ak-amount-list li label.ak-radio-checked,
-div#ak-amount-list label[for="amount_other_field"].ak-radio-checked {
-    background: #C552DF;
-}
+    #ak-amount-list li label:hover,
+    #ak-amount-list li label.ak-radio-checked,
+    div#ak-amount-list label[for="amount_other_field"].ak-radio-checked {
+        background: #C552DF;
+    }
 
-.donate-form-container {
-    display: block;
-    background: #fff;
-}
+    .donate-form-container {
+        display: block;
+        font-size: 16px;
+        color: #414141;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        position: fixed;
+        right: 20px;
+        top: 200px;
+        z-index: 400;
+        margin: 15px;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 0;
+    }
 
-.donate-form-fixed {
-    font-size: 16px;
-    color: #414141;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    position: fixed;
-    right: 20px;
-    top: 200px;
-    z-index: 400;
-    margin: 15px;
-    padding: 30px;
-    background-color: #fff;
-    border-radius: 0;
-    {% comment %} min-width: 470px; {% endcomment %}
-}
+    .ak-donate-three-step-visible.button.btn {
+        width: 100%;
+        background-color: #21194F;
+        color: #fff;
+    }
 
-.ak-donate-three-step-visible.button.btn {
-    width: 100%;
-    background-color: #21194F;
-    color: #fff;
-}
+    .ak-submit-button.ak-donate-area-step-3,
+    .paypal-checkout.ak-donate-area-step-3 {
+        display: block;
+        height: 42px;
+        width: 90%;
+        margin: 10px auto;
+        padding: 0;
+        font-size: 1.2rem;
+        line-height: 1.3;
+    }
 
-.ak-submit-button.ak-donate-area-step-3 {
-    display: block;
-    height: 42px;
-    width: 90%;
-    margin: 10px auto;
-    padding: 0;
-    font-size: 1.2rem;
-    line-height: 1.3;
-}
+    #stripe-payment-element-container {
+        max-width: 280px; /* needs to be reponsive */
+        margin: 10px auto;
+    }
 
-.smart-button-container {
-    height: 50px;
-}
+    .paypal-checkout.ak-donate-area-step-3 {
+        width: 97%;
+        height: 50px;
+    }
 
-.ak-paypal-button {
-    padding: 0;
-    top: auto;
-    width: 85%;
-    height: 50px;
-    border: none;
-    /* nothing */
-}
+    .wemove #ak-recurring-type div.ui-checkbox {
+        display: inline-flex;
+        align-items: flex-start;
+        max-width: 100%;
+        color: #222832;
+        cursor: pointer;
+    }
 
-.ak-paypal-button:hover {
-    border: none;
-}
+    .ui-checkbox-control {
+        position: relative;
+        width: 20px;
+        flex-shrink: 0;
+    }
 
-.wemove #ak-recurring-type {
-    width: 80%;
-    margin: auto;
-    margin-bottom: 20px;
-}
+    .ui-checkbox-control input {
+        opacity: .0001;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        cursor: pointer;
+    }
 
-#ak-recurring-type label {
-    display: flex;
-    align-items: center;
-}
+    .ui-checkbox-control input~.ui-checkbox-icon {
+        background: #fff;
+        box-shadow: 0px 2px 3px rgba(12, 33, 65, .15),
+            inset 0px -1px 0px rgba(0, 0, 0, .2),
+            inset 0px 0px 0px 1px #c0c5cd;
+    }
 
-#ak-recurring-type input[type=checkbox] {
-    flex: none;
-}
+    .ui-checkbox-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 20px;
+        height: 20px;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        background-size: 20px 20px;
+        border-radius: 4px;
+    }
 
-button:hover,
-input[type="submit"]:hover,
-a.ak-button:hover,
-.ak-button:hover
-{
-    background: #C552DF;
-}
+    .ui-checkbox-label {
+        color: #222832;
+        cursor: pointer;
+    }
 
-.wemove hr.ak-stepper-line {
-    z-index: -10;
-    width: 67%;
-    height: 2px;
-    top: 50px;
-    left: 15%;
-    margin: 0;
-    position: absolute;
-    background: #d8d8d8;
-    border: none;
-}
+    .ui-checkbox-control input:checked~.ui-checkbox-icon {
+        color: #fff;
+        background: #3371e6;
+        box-shadow: 0px 2px 3px rgba(12, 33, 65, .15), inset 0px 1px 0px rgba(0, 0, 0, .2), inset 0px 0px 0px 1px rgba(0, 0, 0, .1);
+    }
 
-.wemove .ak-donate-menu div.ak-step-number
-{
-    border-radius: 22px;
-    background-color: #d8d8d8;
-    margin: auto;
-    height: 45px;
-    width: 45px;
-    line-height: 45px;
-    font-size: 20px;
-    box-sizing: border-box;
-    color: #fff;
-}
+    .wemove div#ak-recurring-type span {
+        margin: 0 15px 0 15px;
+    }
 
-.wemove .ak-donate-menu label {
-    width: 7em;
-}
+    .wemove .ak-paypal-button {
+        padding: 0;
+        top: auto;
+        width: 73%;
+        height: 50px;
+        border: none;
+        /* nothing */
+    }
 
-.wemove .ak-donate-menu input:checked + div.ak-step-number,
-.wemove .ak-donate-menu div.ak-step-number:hover {
-    background-color: #C552DF;
-}
+    .wemove .ak-paypal-button:hover {
+        border: none;
+    }
 
-.wemove label.ak-donate-step:hover {
-    color: #C552DF;
-}
+    .wemove #ak-recurring-type {
+        width: 80%;
+        margin: auto;
+        margin-bottom: 20px;
+    }
 
-.wemove .ak-donate-menu input:checked + div.ak-step-number:hover,
-label.ak-donate-step:hover div.ak-step-number {
-    background-color: #C552DF;
-}
+    #ak-recurring-type label {
+        display: flex;
+        align-items: center;
+    }
 
-.wemove .donate-amount-message {
-    width: 80%;
-    margin: auto;
-    text-align: center;
-}
+    #ak-recurring-type input[type=checkbox] {
+        flex: none;
+    }
 
+    button:hover,
+    input[type="submit"]:hover,
+    a.ak-button:hover,
+    .ak-button:hover {
+        background: #C552DF;
+    }
+
+    .wemove hr.ak-stepper-line {
+        z-index: -10;
+        width: 60%;
+        height: 2px;
+        top: 50px;
+        left: 22%;
+        margin: 0;
+        position: absolute;
+        background: #d8d8d8;
+        border: none;
+    }
+
+    .wemove .ak-donate-menu div.ak-step-number {
+        border-radius: 22px;
+        background-color: #d8d8d8;
+        margin: auto;
+        height: 45px;
+        width: 45px;
+        line-height: 45px;
+        font-size: 20px;
+        box-sizing: border-box;
+        color: #fff;
+    }
+
+    .wemove .ak-donate-menu label {
+        width: 7em;
+    }
+
+    .wemove .ak-donate-menu input:checked+div.ak-step-number,
+    .wemove .ak-donate-menu div.ak-step-number:hover {
+        background-color: #C552DF;
+    }
+
+    .wemove label.ak-donate-step:hover {
+        color: #C552DF;
+    }
+
+    .wemove .ak-donate-menu input:checked+div.ak-step-number:hover,
+    label.ak-donate-step:hover div.ak-step-number {
+        background-color: #C552DF;
+    }
+
+    .wemove .donate-amount-message {
+        width: 80%;
+        margin: auto;
+        text-align: center;
+    }
+
+    .wemove div#ak-amount-list #ak-other-amount-field {
+        color: #000;
+    }
+
+    .wemove .amount-selected.button,
+    .wemove .details-entered {
+        border-radius: 5px;
+        display: inline-block;
+        width: 315px;
+    }
+
+    .wemove .details-entered {
+        margin-top: 15px;
+    }
+
+    /* #donation-amounts {
+    } */
+
+    #ak-donation-contact {
+
+        padding: 0 20px 20px 20px;
+    }
+
+    .recurring-type-label {
+        text-align: left;
+    }
 </style>
-
 
 {% endblock %}
 
 {% block below_form %}
-  {% if page.payment_processor_information.is_quickdonate %}
-    {% load_quickdonate %}
-  {% endif %}
-  {{ block.super }}
+{% if page.payment_processor_information.is_quickdonate %}
+{% load_quickdonate %}
+{% endif %}
+{{ block.super }}
 {% endblock %}
