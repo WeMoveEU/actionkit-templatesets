@@ -1,5 +1,11 @@
 {% extends "./wrapper.html" %}
 {% block body_extra_classes %}wemove {% if page.payment_processor_information.is_oneclick %}actionkit-donate-fa {% endif %}{{ block.super }}{% endblock %}
+{% block css_additions %}
+{% load_css %}
+    //actionkit-stripe-api.wemove.support/static/index.0e2b4833.css
+{% end %}
+
+{% endblock %}
 {% block content %}
 
 <style>
@@ -532,43 +538,56 @@
 
                 {% endif %}
 
-                <button id="stripe-payment-card-toggle-button" class="ak-submit-button ak-donate-area-step-3"
-                    data-paymentmethod="card" style="color: #fff;">Credit Card</button>
-                    <div style="display: none;" id="stripe-payment-element-container">
+                <div id="stripe-container">
+                    <h3>Payment methods:</h3>
+
+                    <div style="" class="ak-donate-area-step-3 stripe-checkout" id="stripe-payment-element-container" >
+                        <div id="stripe-payment-message"></div>
                         <div id="stripe-payment-by-card">
                         <form id="stripe-payment-card-form">
-                            <div id="stripe-payment-card-element">
-                                <!--Stripe.js injects the Payment Element-->
+                            <div id="card-errors" role="alert"></div>
+                            <div id="spinner">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    style="margin: auto; display: block; shape-rendering: auto;"
+                                    width="100px"
+                                    height="100px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                                        <circle cx="50" cy="50" fill="none" stroke="#c552df" stroke-width="4" r="17" stroke-dasharray="80.11061266653974 28.703537555513243">
+                                        <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" values="0 50 50;360 50 50" keyTimes="0;1" />
+                                    </circle>
+                                </svg>
+                            </div>
+                            <div id="stripe-payment-card-element"  data-paymentmethods="card,sepa_debit">
+                            <!-- A Stripe Element will be inserted here. -->
                             </div>
                         </form>
+                        </div>
+                        <div id="stripe-payment-button-container">
+                            <button id="stripe-payment-button" class="ak-donate-three-step-visible payment-method button btn" type="button">
+                                Donate <span class="ak-currency-sym">{{ page.currency_sym }}</span>
+                                <span class="ak-donation-total-amount"></span>
+                            </button>
+                        </div>
                     </div>
+
+
                 </div>
 
-                <button type="submit" class="ak-submit-button ak-donate-area-step-3 stripe-checkout"
-                    data-paymentmethod="sepa_debit" style="color: #fff;">SEPA Debit</button>
-
-                <button type="submit" class="ak-submit-button ak-donate-area-step-3 stripe-checkout"
-                    data-paymentmethod="ideal" style="color: #fff;">iDEAL</button>
-
-                <script>
-                    $('#stripe-payment-card-toggle-button').on(
-                        'click', function(e) {
-                            $('#stripe-payment-element-container').toggle();
-                            return false;
-                        });
-                </script>
-
+                <div id="paypal-container">
+                <h3 style="margin-top: 2rem;">Donate with PayPal:</h3>
                 <div id="smart-button-container" class="ak-donate-area-step-3 paypal-checkout"
                     data-paymentmethod="paypal">
                     <div style="text-align: center;">
                         <div id="ak-paypal-button" class="ak-paypal-button"></div>
                     </div>
                 </div>
+                </div>
 
+                {% comment %}
                 <div class="donate-amount-message ak-donate-area-step-3">
                     <h4>Donate <span class="ak-currency-sym">{{ page.currency_sym }}</span><span
-                            class="ak-donation-total-amount"></span></h4>
+                        class="ak-donation-total-amount"></span></h4>
                 </div>
+                {% endcomment %}
 
             </div>
 
@@ -913,13 +932,15 @@
             );
         } else if (current_step == "3") {
             $('.ak-donate-area-step-1, .ak-donate-area-step-2, .details-entered').hide();
-            WeMoveStripe.initializeElements(
-                $('#act').get(0),
-                '#stripe-payment-card-element'
-            );
-            $('.ak-donate-area-step-3').fadeIn(speed);
-            initPayPalButton();
 
+             WeMoveStripe.initializeElements(
+                  $('#act').get(0),
+                  '#stripe-payment-card-element'
+             );
+
+            $('.ak-donate-area-step-3').fadeIn(speed);
+
+            initPayPalButton();
         }
     }
 
@@ -1450,8 +1471,18 @@
 {% comment %}
 WeMove Stripe Code
 {% endcomment %}
-<script type="module" async src="https://actionkit-stripe-api.wemove.support/static/js/index.efce8ec6.js"></script>
+<script type="module" async src="https://actionkit-stripe-api.wemove.support/static/index.4924a4c5.js"></script>
 <script>
+
+$(function()  {
+
+    $('#stripe-payment-button').click(function(e) {
+        e.preventDefault();
+        WeMoveStripe.handleSubmit(e, actionkit.form);
+    });
+
+});
+
 // debuggin code
 $( () => {
     $('#id_amount_5').click();
@@ -1464,245 +1495,6 @@ $( () => {
 });
 </script>
 
-<style>
-    body {
-        min-height: 2048px;
-    }
-
-    button,
-    input[type="submit"],
-    a.ak-button,
-    .ak-button {
-        background-color: #21194F;
-    }
-
-    #ak-amount-list li label {
-        background: #21194F;
-        color: #fff;
-        width: 150px;
-        margin: 5px;
-    }
-
-    #ak-amount-list li label:hover,
-    #ak-amount-list li label.ak-radio-checked,
-    div#ak-amount-list label[for="amount_other_field"].ak-radio-checked {
-        background: #C552DF;
-    }
-
-    .donate-form-container {
-        display: block;
-        font-size: 16px;
-        color: #414141;
-        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-        position: fixed;
-        right: 20px;
-        top: 200px;
-        z-index: 400;
-        margin: 15px;
-        padding: 30px;
-        background-color: #fff;
-        border-radius: 0;
-    }
-
-    .ak-donate-three-step-visible.button.btn {
-        width: 100%;
-        background-color: #21194F;
-        color: #fff;
-    }
-
-    .ak-submit-button.ak-donate-area-step-3,
-    .paypal-checkout.ak-donate-area-step-3 {
-        display: block;
-        height: 42px;
-        width: 90%;
-        margin: 10px auto;
-        padding: 0;
-        font-size: 1.2rem;
-        line-height: 1.3;
-    }
-
-    #stripe-payment-element-container {
-        max-width: 280px; /* needs to be reponsive */
-        margin: 10px auto;
-    }
-
-    .paypal-checkout.ak-donate-area-step-3 {
-        width: 97%;
-        height: 50px;
-    }
-
-    .wemove #ak-recurring-type div.ui-checkbox {
-        display: inline-flex;
-        align-items: flex-start;
-        max-width: 100%;
-        color: #222832;
-        cursor: pointer;
-    }
-
-    .ui-checkbox-control {
-        position: relative;
-        width: 20px;
-        flex-shrink: 0;
-    }
-
-    .ui-checkbox-control input {
-        opacity: .0001;
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-        cursor: pointer;
-    }
-
-    .ui-checkbox-control input~.ui-checkbox-icon {
-        background: #fff;
-        box-shadow: 0px 2px 3px rgba(12, 33, 65, .15),
-            inset 0px -1px 0px rgba(0, 0, 0, .2),
-            inset 0px 0px 0px 1px #c0c5cd;
-    }
-
-    .ui-checkbox-icon {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 20px;
-        height: 20px;
-        background-position: 50% 50%;
-        background-repeat: no-repeat;
-        background-size: 20px 20px;
-        border-radius: 4px;
-    }
-
-    .ui-checkbox-label {
-        color: #222832;
-        cursor: pointer;
-    }
-
-    .ui-checkbox-control input:checked~.ui-checkbox-icon {
-        color: #fff;
-        background: #3371e6;
-        box-shadow: 0px 2px 3px rgba(12, 33, 65, .15), inset 0px 1px 0px rgba(0, 0, 0, .2), inset 0px 0px 0px 1px rgba(0, 0, 0, .1);
-    }
-
-    .wemove div#ak-recurring-type span {
-        margin: 0 15px 0 15px;
-    }
-
-    .wemove .ak-paypal-button {
-        padding: 0;
-        top: auto;
-        width: 73%;
-        height: 50px;
-        border: none;
-        /* nothing */
-    }
-
-    .wemove .ak-paypal-button:hover {
-        border: none;
-    }
-
-    .wemove #ak-recurring-type {
-        width: 80%;
-        margin: auto;
-        margin-bottom: 20px;
-    }
-
-    #ak-recurring-type label {
-        display: flex;
-        align-items: center;
-    }
-
-    #ak-recurring-type input[type=checkbox] {
-        flex: none;
-    }
-
-    button:hover,
-    input[type="submit"]:hover,
-    a.ak-button:hover,
-    .ak-button:hover {
-        background: #C552DF;
-    }
-
-    .wemove hr.ak-stepper-line {
-        z-index: -10;
-        width: 60%;
-        height: 2px;
-        top: 50px;
-        left: 22%;
-        margin: 0;
-        position: absolute;
-        background: #d8d8d8;
-        border: none;
-    }
-
-    .wemove .ak-donate-menu div.ak-step-number {
-        border-radius: 22px;
-        background-color: #d8d8d8;
-        margin: auto;
-        height: 45px;
-        width: 45px;
-        line-height: 45px;
-        font-size: 20px;
-        box-sizing: border-box;
-        color: #fff;
-    }
-
-    .wemove .ak-donate-menu label {
-        width: 7em;
-    }
-
-    .wemove .ak-donate-menu input:checked+div.ak-step-number,
-    .wemove .ak-donate-menu div.ak-step-number:hover {
-        background-color: #C552DF;
-    }
-
-    .wemove label.ak-donate-step:hover {
-        color: #C552DF;
-    }
-
-    .wemove .ak-donate-menu input:checked+div.ak-step-number:hover,
-    label.ak-donate-step:hover div.ak-step-number {
-        background-color: #C552DF;
-    }
-
-    .wemove .donate-amount-message {
-        width: 80%;
-        margin: auto;
-        text-align: center;
-    }
-
-    .wemove div#ak-amount-list #ak-other-amount-field {
-        color: #000;
-    }
-
-    .wemove .amount-selected.button,
-    .wemove .details-entered {
-        border-radius: 5px;
-        display: inline-block;
-        width: 315px;
-    }
-
-    .wemove .details-entered {
-        margin-top: 15px;
-    }
-
-    /* #donation-amounts {
-    } */
-
-    #ak-donation-contact {
-
-        padding: 0 20px 20px 20px;
-    }
-
-    .recurring-type-label {
-        text-align: left;
-    }
-</style>
 
 {% endblock %}
 
