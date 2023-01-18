@@ -14,6 +14,11 @@
     }
 </style>
 
+{% store as currency %}{% if request.GET.currency %}{{ request.GET.currency }}{% elif page.custom_fields.wemove_currency %}{{ page.custom_fields.wemove_currency }}{% else %}EUR{% endif %}{% endstore %}
+{% store as currency_symbol %}{% if currency == 'EUR' %}€{% elif currency == 'PLN' %}zł{% elif currency == 'GBP' %}£{% else %}€{% endif %} {% endstore %}
+
+<h1>{{ currency_info|json }}</h1>
+
 <form id="act" name="act" class="{{ templateset.custom_fields.donation_steps }}" method="POST" action="/act/"
     accept-charset="utf-8">
     <input type="hidden" name="page" value="{{ page.name }}">
@@ -123,7 +128,7 @@
                                             {% if product.price == 0 %}
                                             FREE!
                                             {% else %}
-                                            <span class="ak-currency-sym">{{ page.currency_sym }}</span>{{
+                                            <span class="ak-currency-sym">{{ currency_symbol }}</span>{{
                                             product.price|commify }}
                                             {% endif %}
                                         </span>
@@ -141,7 +146,7 @@
                                         {% endif %}
                                     </td>
                                     <td class="ak-product-subtotal">
-                                        <span class="ak-currency-sym">{{ page.currency_sym }}</span><span
+                                        <span class="ak-currency-sym">{{ currency_symbol }}</span><span
                                             class="ak_product_subtotal_{{ product.id }}"></span>
                                     </td>
                                 </tr>
@@ -152,7 +157,7 @@
 
                         <p class="ak-donation-subtotal ak-align-right">
                             <label class="ak-small-header">Product Total</label>
-                            <strong><span class="ak-currency-sym">{{ page.currency_sym }}</span></strong>
+                            <strong><span class="ak-currency-sym">{{ currency_symbol }}</span></strong>
                             <span id="ak-donation-subtotal-amount"></span>
                             </label>
                         </p>
@@ -184,7 +189,7 @@
                                         <p>{{ candidate.desc|safe }}</p>
                                     </td>
                                     <td class="ak-candidate-amount ak-align-right">
-                                        <span class="ak-currency-sym">{{ page.currency_sym }}</span><input type="text"
+                                        <span class="ak-currency-sym">{{ currency_symbol }}</span><input type="text"
                                             name="candidate_{{ candidate.id }}" id="candidate_{{ candidate.id }}"
                                             size="2" class="ak_candidate_inputs">
                                     </td>
@@ -201,54 +206,9 @@
 
                     <div id="ak-amount-list" class="ak-err-above ak-donate-area-step-1">
 
-                        {% if show_currency_select %}
 
-                        {% comment %}
-                        Only English currency names are currently available from
-                        ActionKit.
 
-                        When translating your templatesets, you could partly or
-                        entirely translate the list and include that as plain
-                        HTML here, or remove the ' - {{currency.name}}' so only
-                        the ISO abbreviation shows.
-                        {% endcomment %}
-
-                        <div class="ak-currency">
-                            <label>
-                                <select name="currency">
-                                    {% for code in "USD,GBP,CAD,AUD,EUR"|split:"," %}
-                                    {% with currency_info|get:code as currency %}
-                                    <option value="{{code}}">{{code}} - {{currency.name}}</option>
-                                    {% endwith %}
-                                    {% endfor %}
-                                    <option value="" disabled>
-                                        &#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;
-                                    </option>
-                                    {% for code, currency in currency_info.items %}
-                                    <option value="{{code}}">{{code}} - {{currency.name}}</option>
-                                    {% endfor %}
-                                </select>
-                            </label>
-                        </div>
-
-                        {% elif page.derived.use_account_switcher %}
-
-                        <div id="ak-multi-currency">
-                            <label class="ak-label-above ak-margin-none" for="amount">Secure Donation:</label>
-                            <span class="ak-currencies">
-                                {% for currency, account_name in page.derived.currency_accounts %}
-                                <span class="ak-currency">
-                                    <input type="radio" {% if forloop.first %}checked{% endif %} name="payment_account"
-                                        id="id_currency_{{currency}}" value="{{account_name}}">
-                                    <label for="id_currency_{{currency}}">{{currency}}</label>
-                                </span>
-                                {% endfor %}
-                            </span>
-                        </div>
-
-                        {% endif %}
-
-                        <div class="ak-amount-wrapper">
+                          <div class="ak-amount-wrapper">
                             {% for row in amounts|columns:4 %}
                             <ul class="ak-unstyled">
                                 {% for amount in row %}
@@ -257,24 +217,31 @@
                                     <noscript><input type="radio" value="{{ amount }}" class="ak-amount-radio-button"
                                             name="amount"></noscript>
                                     <label for="ak-other-amount-field" class="ak-btn">
-                                        <span class="ak-currency-sym">{{ page.currency_sym }}</span> <input type="text"
+                                        <span class="ak-currency-sym">{{ currency_symbol }}</span> <input type="text"
                                             id="ak-other-amount-field" name="amount_other" size="3">
                                     </label>
                                 </li>
                                 {% else %}
-                        <li>
-                            <label for="id_amount_{{amount}}" class="ak-btn">
-                                <span class="ak-currency-sym"></span><input type="radio" id="id_amount_{{amount}}" value="{{ amount }}" class="ak-amount-radio-button" name="amount" {% if not args.amount_other and amount == default_amount %}checked{% endif %}>{{ page.currency_sym }}{{ amount|commify }}
-                            </label>
-                        </li>
+                                <li>
+                                <label for="id_amount_{{amount}}" class="ak-btn">
+                                    <span class="ak-currency-sym"></span><input type="radio" id="id_amount_{{amount}}" value="{{ amount }}" class="ak-amount-radio-button" name="amount" {% if not args.amount_other and amount == default_amount %}checked{% endif %}>{{ amount|commify }}
+                                </label>
+                                </li>
                                 {% endif %}
                                 {% endfor %}
                             </ul>
                             {% endfor %}
 
+
                             <button
                                 class="ak-donate-three-step-visible ak-donate-area-step-1 amount-selected button btn"
                                 id="ak-continue-button" type="button">Continue</button>
+
+                            <div class="ak-currency ak-styled-fields">
+                            <label>
+                              {% include "./currency_select.html" %}
+                            </label>
+                            </div>
 
                         </div>
                     </div>
@@ -286,7 +253,7 @@
                             <label for="amount">
                                 Total Amount
                             </label>
-                            <span class="ak-currency-sym">{{ page.currency_sym }}</span><span class="ak-donation-total-amount"></span>
+                            <span class="ak-currency-sym">{{ currency_symbol }}</span><span class="ak-donation-total-amount"></span>
                         </p>
 
                      setTimeout(update_total, 0);
@@ -534,8 +501,6 @@
 
                 </div><!--ak-styled-fields-->
 
-
-
                 {% endif %}
 
                 <div id="stripe-container">
@@ -563,7 +528,7 @@
                         </div>
                         <div id="stripe-payment-button-container">
                             <button id="stripe-payment-button" class="ak-donate-three-step-visible payment-method button btn" type="button">
-                                Donate <span class="ak-currency-sym">{{ page.currency_sym }}</span>
+                                Donate <span class="ak-currency-sym">{{ currency_symbol }}</span>
                                 <span class="ak-donation-total-amount"></span>
                             </button>
                         </div>
@@ -584,7 +549,7 @@
 
                 {% comment %}
                 <div class="donate-amount-message ak-donate-area-step-3">
-                    <h4>Donate <span class="ak-currency-sym">{{ page.currency_sym }}</span><span
+                    <h4>Donate <span class="ak-currency-sym">{{ currency_symbol }}</span><span
                         class="ak-donation-total-amount"></span></h4>
                 </div>
                 {% endcomment %}
@@ -807,20 +772,18 @@
     });
 
     /* Currency symbols */
-    function redraw_currency_symbol() {
-        var id = $('input[id^=id_currency_]:checked, option[id^=id_currency_]:selected').attr('id');
-        var iso_code_match = /([A-Z][A-Z][A-Z])$/.exec(id);
-        if (!iso_code_match) {
-            return
-        }
-        var iso_code = iso_code_match[1];
+    function redraw_currency_symbol(element) {
+        var iso_code = $(element).find('input:checked, option:selected').attr('value');
         var currency_sym = actionkit.utils.currencySymbols[iso_code];
-        $('.ak-currency-sym').text(currency_sym || '');
+        if (currency_sym) {
+            $('.ak-currency-sym').text((currency_sym || '') + ' ');
+        }
     }
 
     $(function () {
-        $('input[id^=id_currency_], select[name="currency"], select[name="payment_account"]').on('change', redraw_currency_symbol);
-        redraw_currency_symbol();
+        var currency_switcher = $('input[id^=id_currency_], select[name="currency"], select[name="payment_account"]');
+        currency_switcher.on('change', (e) => redraw_currency_symbol(e.target));
+        redraw_currency_symbol(currency_switcher);
     });
 
 
@@ -935,13 +898,16 @@
 
              WeMoveStripe.initializeElements(
                   $('#act').get(0),
-                  '#stripe-payment-card-element'
+                  '#stripe-payment-card-element',
+                  {
+                    location: window.location,
+                    currency: "{{ currency }}"
+                  }
              );
 
             $('.ak-donate-area-step-3').fadeIn(speed);
 
-            initPayPalButton();
-        }
+            initPayPalButton();       }
     }
 
     function focus_field_if_blank(field_elt) {
