@@ -2,7 +2,7 @@
 {% block body_extra_classes %}wemove {% if page.payment_processor_information.is_oneclick %}actionkit-donate-fa {% endif %}{{ block.super }}{% endblock %}
 {% block css_additions %}
 {% load_css %}
-    //actionkit-stripe-api.wemove.support/static/index.0e2b4833.css
+    //actionkit-stripe-api.wemove.support/stripe/static/index.0e2b4833.css
 {% end %}
 
 {% endblock %}
@@ -896,7 +896,7 @@
         } else if (current_step == "3") {
             $('.ak-donate-area-step-1, .ak-donate-area-step-2, .details-entered').hide();
 
-             WeMoveStripe.initializeElements(
+             WeMoveStripe.initializePaymentElement(
                   $('#act').get(0),
                   '#stripe-payment-card-element',
                   {
@@ -1437,17 +1437,8 @@
 {% comment %}
 WeMove Stripe Code
 {% endcomment %}
-<script type="module" async src="https://actionkit-stripe-api.wemove.support/static/index.4924a4c5.js"></script>
-<script>
+<script type="module" async src="https://actionkit-stripe-api.wemove.support/stripe/static/index.4924a4c5.js"></script>
 
-$(function()  {
-
-    $('#stripe-payment-button').click(function(e) {
-        e.preventDefault();
-        WeMoveStripe.handleSubmit(e, actionkit.form);
-    });
-
-});
 
 // debuggin code
 $( () => {
