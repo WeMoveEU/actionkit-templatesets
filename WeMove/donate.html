@@ -1,14 +1,7 @@
-{% extends "./wrapper.html" %}
-{% block body_extra_classes %}wemove {{ block.super }}{% endblock %}
-{% block css_additions %}
-{% load_css %}
-    //actionkit-stripe-api.wemove.support/stripe/static/index.0e2b4833.css
-{% end %}
-{% load_css %}
-    //donate-ui.not-a2.eu/donate-main.css
-{% end %}
-{% endblock %}
-{% block content %}
+{% extends "./wrapper.html" %} {% block body_extra_classes %}wemove {{ block.super }}{% endblock %}
+{% block css_additions %} {% load_css %}
+//actionkit-stripe-api.wemove.support/stripe/static/index.0e2b4833.css {% end %} {% load_css %}
+//donate-ui.not-a2.eu/donate-main.css {% end %} {% endblock %} {% block content %}
 
 <section
   id="donate-widget"
@@ -23,59 +16,66 @@
   data-ak_locale="{{page.lang.iso_code|default:'en'}}"
 />
 
-{% store as next_step %}
-{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}&amp;action={{ args.action }}{% elif page.custom_fields.daisy_chain_action %}/thanks/{{ page.custom_fields.daisy_chain_action }}?share=1&amp;akid={{ akid }}&amp;action={{ args.action }}{% endif %}{% endstore %}
-
-{% if next_step %}
+{% store as next_step %} {% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step
+}}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}&amp;action={{
+args.action }}{% elif page.custom_fields.daisy_chain_action %}/thanks/{{
+page.custom_fields.daisy_chain_action }}?share=1&amp;akid={{ akid }}&amp;action={{ args.action }}{%
+endif %}{% endstore %} {% if next_step %}
 <div class="row">
-    <br>
-    <div class="col-md-12" style="text-align: center;">
-        <a href="{{ next_step }}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
-    </div>
+  <br />
+  <div class="col-md-12" style="text-align: center">
+    <a href="{{ next_step }}" class="skip btn btn-default">
+      {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a
+    >
+  </div>
 </div>
 {% endif %}
 
 <div class="row" id="other_ways_giving">
-    <div class="col-md-12">
-        <h3>Other ways of giving</h3>
-        <div class="row">
-            <div class="col-md-4">
-                <p> <i>You can transfer your donation to our bank account</i></p>
-                <p> <i>Please include your email address as payment reference</i> </p>
-                <p>
-                    WeMove Europe SCE mbH<br>
-                    IBAN: DE98 4306 0967 1177 7069 00<br>
-                    BIC: GENODEM1GLS, GLS Bank<br>
-                    Berlin, Germany
-                </p>
-            </div>
+  <div class="col-md-12">
+    <h3>Other ways of giving</h3>
+    <div class="row">
+      <div class="col-md-4">
+        <p><i>You can transfer your donation to our bank account</i></p>
+        <p><i>Please include your email address as payment reference</i></p>
+        <p>
+          WeMove Europe SCE mbH<br />
+          IBAN: DE98 4306 0967 1177 7069 00<br />
+          BIC: GENODEM1GLS, GLS Bank<br />
+          Berlin, Germany
+        </p>
+      </div>
 
-            <div class="col-md-3">
-                <!--Make a <b>recurring</b> donation
+      <div class="col-md-3">
+        <!--Make a <b>recurring</b> donation
 				<a href="https://www.wemove.eu/civicrm/contribute/transact?reset=1&id=83" title="Donate with PayPal" target="_blank">  <img src="https://www.wemove.eu/sites/wemove.eu/files/paypal.png" /></a>
 				<p> </p>
 				Make a <b>one-off</b> donation
 				<a href="https://www.wemove.eu/civicrm/contribute/transact?reset=1&id=88" title="Donate with Paypal" target="_blank">  <img src="https://www.wemove.eu/sites/wemove.eu/files/paypal.png" /></a>
 				</div>-->
-            </div>
+      </div>
 
-            <div class="col-md-5">
-                We want to be transparent and accountable about how we spend your donations - for more information
-                please see our
-                <strong><a href="https://www.wemove.eu/how-we-are-funded" target="_blank">Donation Policy</a></strong>.
-                <br>
-                <br>
-                Your personal information will be kept private and held securely. By submitting information you are
-                agreeing to WeMove Europe keeping you informed about campaigns and agree to the use of cookies in
-                accordance with our
-                <strong><a href="https://www.wemove.eu/privacy-policy" target="_blank">privacy policy</a></strong>.
-            </div>
-        </div>
+      <div class="col-md-5">
+        We want to be transparent and accountable about how we spend your donations - for more
+        information please see our
+        <strong
+          ><a href="https://www.wemove.eu/how-we-are-funded" target="_blank"
+            >Donation Policy</a
+          ></strong
+        >.
+        <br />
+        <br />
+        Your personal information will be kept private and held securely. By submitting information
+        you are agreeing to WeMove Europe keeping you informed about campaigns and agree to the use
+        of cookies in accordance with our
+        <strong
+          ><a href="https://www.wemove.eu/privacy-policy" target="_blank">privacy policy</a></strong
+        >.
+      </div>
     </div>
+  </div>
 </div>
 
-{% endblock %}
-
-{% block below_form %}
+{% endblock %} {% block below_form %}
 <script type="module" src="//donate-ui.not-a2.eu/donate-main.js" />
 {% endblock %}
