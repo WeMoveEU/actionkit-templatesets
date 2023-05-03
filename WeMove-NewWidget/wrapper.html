@@ -27,14 +27,14 @@
 
     {% load_prefill %}
     {% load_ak_context context %}
-    		
+
 	  <link rel="stylesheet" type="text/css" href="https://act.wemove.eu/javascripts/frontend.css">
 	  <script src="https://act.wemove.eu/javascripts/frontend.js?1664972532" type="text/javascript"></script>
     {% load_js %}
         //ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
         /resources/actionkit.js
     {% end %}
-		
+
 	<style>
 		.ak-progress-meter .ak-progress-meter-border {
 			border-color: #ffffff;
@@ -91,31 +91,31 @@
 			font-weight: var(--speakout-font-weight-bold);
 			font-style: italic;
 		}
-		
+
 		.ak-grid-col.ak-grid-col-4-of-12 {
 			margin-left: 0;
 		}
-		
+
 		.ak-field-box {
 			background: none;
 			border: none;
 			padding: 0;
 		}
-		
+
 		button { height: auto; }
-		
+
 		#rsign .raction-content .action-form-container-col .progress {
 			width: auto;
 		}
-		
+
 		.share-big a.btn:hover,
 		a.btn.skip:hover { border-bottom-width: 1px; }
-        
+
         .signature-counter { float: left; }
         .signature-counter-label { float: right; }
-        
+
         .js-nav-buttons button:only-child { width: 100%; }
-		
+
         #ak-fieldbox-first_name { width: 50%; float: left; padding-right: 0.25em; }
         #ak-fieldbox-last_name { width: 50%; float: left; padding-left: 0.25em; }
         #ak-fieldbox-email { clear: left; }
@@ -125,32 +125,32 @@
         #ak-fieldbox-postal { width: 50%; float: left; padding-left: 0.25em; }
         .ak-privacy { clear: left; }
         .ak-field { clear: left; }
-    
+
         .ak-userfield-input[disabled],
         .ak-userfield-input[readonly],
         fieldset[disabled] .ak-userfield-input,
-        .ak-field input[disabled], 
-        .ak-field input[readonly], 
+        .ak-field input[disabled],
+        .ak-field input[readonly],
         fieldset[disabled] .ak-field input,
-        .ak-field select[disabled], 
-        .ak-field select[readonly], 
+        .ak-field select[disabled],
+        .ak-field select[readonly],
         fieldset[disabled] .ak-field select,
-        .ak-field textarea[disabled], 
-        .ak-field textarea[readonly], 
+        .ak-field textarea[disabled],
+        .ak-field textarea[readonly],
         fieldset[disabled] .ak-field textarea {
             background-color: #eee !important;
             opacity: 1;
         }
-        
+
 	</style>
-		
+
     {% block script_additions %}{% endblock %}
 </head>
 <body class="ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
     <script type="text/javascript">
         actionkit.forms.initPage()
     </script>
-					
+
     <div id="fb-root"></div>
 
     <div class="modal fade js-share-popup in" style="display: none; padding-right: 15px;" aria-hidden="false">
@@ -162,7 +162,7 @@
             </div>
         </div>
     </div>
-        
+
     <script>
         function init_modal () {
             var modal = $('.modal.fade')
@@ -170,18 +170,20 @@
             function resize_modal () { modal_backdrop.height( $(window).height() ) }
             $(window).on( 'resize', resize_modal );
             resize_modal();
-			
+
             modal_backdrop.on( 'click', close_modal );
             modal.find('.close').on( 'click', close_modal );
             function close_modal () { modal.hide() }
         }
     </script>
-                
+
 
 {% block pre_action_share %}
-	{% if page.custom_fields.pre_action_share %}
+    {# TODO re-enable the below line. Disabled for widget development purposes. #}
+    {# {% if page.custom_fields.pre_action_share %} #}
+	{% if False %}
 		{% store as share_page %}{% if page.custom_fields.pre_action_share == "1" %}{{ page.custom_fields.daisy_chain_action|default:page.name }}{% else %}{{ page.custom_fields.pre_action_share }}{% endif %}{% endstore %}
-        
+
         <h1 id="share-banner" style="display: none">
             {% filter ak_text:"tell_your_friends_banner" %}
             Can you spread the word?
@@ -189,10 +191,10 @@
         </h1>
 			<script>
                 init_modal();
-			
-				$.get( '/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}', {}, 
+
+				$.get( '/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}', {},
 					function ( data ) {
-                        var modal = $('.modal.fade')                
+                        var modal = $('.modal.fade')
 						modal.find('.modal-content').append(
                             $('#share-banner').show()
                         );
@@ -211,7 +213,7 @@
 
     <div id="wrapper">
       <div id="content">
-        
+
       <nav class="navbar navbar-default" style="border: 0; margin-bottom: 0">
           <div class="container-fluid">
               <!-- Brand and toggle get grouped for better mobile display -->
@@ -240,7 +242,7 @@
       </nav>
 
     <div class="container-fluid" style="margin-bottom: 20px">
-        
+
     {% block finished_alert %}
         {% if page.custom_fields.finished_alert %}
             <div class="alert alert-warning alert-finished" role="alert">
@@ -253,7 +255,7 @@
             </script>
         {% endif %}
     {% endblock %}
-          
+
         <div class="raction" id="rsign">
             <div class="raction-content">
 
