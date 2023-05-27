@@ -14,10 +14,11 @@
     }
 </style>
 
+
+
+{% comment %} This currency thing is duplicated for the PayPal block below. TODO. {% endcomment %}
 {% store as currency %}{% if request.GET.currency %}{{ request.GET.currency }}{% elif page.custom_fields.wemove_currency %}{{ page.custom_fields.wemove_currency }}{% else %}EUR{% endif %}{% endstore %}
 {% store as currency_symbol %}{% if currency == 'EUR' %}€{% elif currency == 'PLN' %}zł{% elif currency == 'GBP' %}£{% else %}€{% endif %} {% endstore %}
-
-<h1>{{ currency_info|json }}</h1>
 
 <form id="act" name="act" class="{{ templateset.custom_fields.donation_steps }}" method="POST" action="/act/"
     accept-charset="utf-8">
@@ -538,7 +539,7 @@
                 </div>
 
                 <div id="paypal-container">
-                <h3 style="margin-top: 2rem;">Donate with PayPal:</h3>
+                <h3 style="margin-top: 2rem;">Donate with PayPal</h3>
                 <div id="smart-button-container" class="ak-donate-area-step-3 paypal-checkout"
                     data-paymentmethod="paypal">
                     <div style="text-align: center;">
@@ -618,8 +619,8 @@
 {% endblock %}
 
 {% block script_additions %}
-
-<script src="https://www.paypal.com/sdk/js?client-id=sb&disable-funding=credit,card&currency=USD"
+{% store as currency %}{% if request.GET.currency %}{{ request.GET.currency }}{% elif page.custom_fields.wemove_currency %}{{ page.custom_fields.wemove_currency }}{% else %}EUR{% endif %}{% endstore %}
+<script src="https://www.paypal.com/sdk/js?client-id=sb&disable-funding=credit,card,eps,sofort&currency={{ currency }}"
     data-sdk-integration-source="button-factory"></script>
 <script>
     window.ppInitialized = false;
@@ -636,7 +637,7 @@
 
             createOrder: function (data, actions) {
                 return actions.order.create({
-                    purchase_units: [{ "amount": { "currency_code": "USD", "value": 1 } }]
+                    purchase_units: [{ "amount": { "currency_code": $(actionkit.form.currency).val(), "value": 1 } }]
                 });
             },
 
@@ -1438,7 +1439,7 @@
 WeMove Stripe Code
 {% endcomment %}
 <script type="module" async src="https://actionkit-stripe-api.wemove.support/stripe/static/index.4924a4c5.js"></script>
-
+<script>
 
 // debuggin code
 $( () => {
