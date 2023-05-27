@@ -74,27 +74,108 @@
                             <i style="position: relative; top: -1px" class="fa fa-phone call-icon"></i> 
                             <i class="fa fa-spinner fa-pulse fa-fw hidden call-in-progress-icon"></i>CONNECTION TO <strong>SIMON CAVALLETTO</strong><br>FREE SERVICE
                         </button>
+						<div id="call-status"></div>
+						<style>
+							#call-status {
+								text-align: center;
+							}
+						</style>
                         <script>
+							var current_call_recipient;
+							var current_call_action;
+							var current_call_akid;
                             $('.js-dial-representative').on('click', function(evt) {
                                 evt.preventDefault();
-                                $.post( 
-                            'https://act.not-a2.eu/twilio/api/call/start', {
-                                    'decision_id': '51724',
-                                    'campaign_id': '1395',
-                                    'rcall_id': '',
-                                    'use_known_member_data': 'true',
-                                    'known_member_data': '',
-                                    'email': 'simonm@me.com',
-                                    'firstname': 'Simon',
-                                    'lastname': 'Cavalletto',
-                                    'phone': '%2B19175027795',
-                                    'country': 'us',
-                                    'postcode': '10025',
-                                    'source_id': '1199831'
-                                }, function (response) {
-                                    console.log('Response', response)
-                                } )
+								$('#call-status').html('Calling...');
+								$('.js-dial-representative').attr('disabled', 'disabled');
+								
+								var ak_form = $('form[name="act"]');
+                                $.ajax( {
+									"method": "POST",
+									"url": '/rest/v1/action/', 
+									"data": ak_form.serialize(),
+									"success": function (response) {
+	                                    console.log('AK Response', response);
+										current_call_action = response.action_id;
+										current_call_akid = response.akid;
+										
+		                                $.ajax( {
+											"method": "POST",
+											"url": 'https://act.not-a2.eu/twilio/api/call/start', 
+											"data": {
+			                                    'decision_id': '{{ page.custom_fields.call_decision_id }}',
+			                                    'campaign_id': '{{ page.custom_fields.call_campaign_id }}',
+			                                    'source_id': '{{ page.custom_fields.call_source_id }}',
+			                                    'rcall_id': '',
+			                                    'use_known_member_data': 'true',
+			                                    'known_member_data': '',
+			                                    'email': $('#id_email').val(),
+			                                    'firstname': $('#id_name').val(),
+			                                    'lastname': '',
+			                                    'phone': $('#id_phone').val(),
+			                                    'country':  $('#id_country').val(),
+			                                    'postcode': $('#id_postal').val()
+			                                },
+											"success": function (response) {
+			                                    console.log('Response', response);
+												current_call_recipient = response.rcall_recipient_id;
+												check_call_status();
+			                                } 
+										} );
+										
+	                                } 
+								} );
+								
                             } );
+							
+							function check_call_status () {
+								poll_for_status( function ( status ) {
+									if ( ! status ) {
+	                                    console.log('Call status is null, checking again');
+										check_again()
+									} else if ( status == 'interstitial' ) {
+	                                    console.log('Call status is interstitial, checking again');
+										check_again()
+									} else if ( status == 'failed' ) {
+										$('#call-status').html('Call failed.');
+										$('.js-dial-representative').removeAttr('disabled');
+	                                    console.log('Call status is failed');
+										
+									} else if ( status == 'success' ) {
+										$('#call-status').html('Call connected!');
+	                                    console.log('Call status is success');
+										check_again()
+
+									} else if ( status == 'completed' ) {
+										$('#call-status').html('Call completed');
+										$('.js-dial-representative').removeAttr('disabled');
+	                                    console.log('Call status is completed');
+										
+									} else {
+	                                    console.log('Call status is unexpected:', status);
+										$('#call-status').html('Call failed. (' + status + ')');
+										$('.js-dial-representative').removeAttr('disabled');
+									}
+								} );
+							}
+							
+							function check_again () {
+								setTimeout( function () {
+									check_call_status()
+								}, 100 );
+							}
+							
+							function poll_for_status ( status_callback ) {
+                                $.ajax( {
+									"method": "GET",
+									"url":                             'https://act.not-a2.eu/twilio/rcall_recipient/' + current_call_recipient + '/status', 
+									"success": function (response) {
+	                                    console.log('Status', response);
+										status_callback( response.call_status );
+	                                } 
+								} );
+							}
+							
                         </script>
                                                 
                         {% endif %}
