@@ -233,10 +233,16 @@
 
               <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
                   <ul class="nav navbar-nav navbar-right">
+										{% if page.custom_fields.youmove_campaign %}
+											<li><a href="https://www.wemove.eu/you#campaigns">{% filter ak_text:"nav_youmove" %}YouMove Campaigns{% endfilter %}</a></li>
+											<li><a href="https://www.wemove.eu/you/create">{% filter ak_text:"nav_start" %}Start a Campaign{% endfilter %}</a></li>
+											<li><a href="https://www.wemove.eu/user">{% filter ak_text:"nav_login" %}Log In{% endfilter %}</a></li>
+											{% else %}
                       <li><a href="https://www.wemove.eu">{% filter ak_text:"nav_home" %}Home{% endfilter %}</a></li>
                       <li><a href="https://www.wemove.eu/en/campaigns">{% filter ak_text:"nav_campaigns" %}Campaigns{% endfilter %}</a></li>
                       <li><a href="https://www.wemove.eu/en/community">{% filter ak_text:"nav_about" %}About{% endfilter %}</a></li>
                       <li><a href="https://act.wemove.eu/campaigns/chip-in-wemove?utm_medium=speakout&utm_source=nav&utm_campaign=en">{% filter ak_text:"nav_donate" %}Donate{% endfilter %}</a></li>
+											{% endif %}
                   </ul>
 
               </div><!-- /.navbar-collapse -->
