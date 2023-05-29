@@ -223,7 +223,11 @@
                       <span class="icon-bar"></span>
                   </button>
                   <a class="navbar-brand" href="https://www.wemove.eu">
+											{% if page.custom_fields.youmove_campaign %}
+                      <img src="https://you.wemove.eu/images/wemove/youmove-logo.svg" />
+											{% else %}
                       <img src="https://act.wemove.eu/images/wemove/wemove-europe.svg" />
+											{% endif %}
                   </a>
               </div>
 
@@ -270,8 +274,13 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-5">
-        <div class="logo"><img src="https://act.wemove.eu/images/wemove/wemove-europe-white.svg"></div>
-        <div class="text"><p>{% filter ak_text:"wemove_footer" %}WeMove Europe is an independent and values-based organisation that seeks to build people power to transform Europe in the name of our community, future generations and the planet.{% endfilter %}</p></div>
+				{% if page.custom_fields.youmove_campaign %}
+				<div class="logo"><img src="https://act.wemove.eu/images/wemove/wemove-europe-white.svg"></div>
+				<div class="text"><p>{% filter ak_text:"wemove_footer" %}WeMove Europe is an independent and values-based organisation that seeks to build people power to transform Europe in the name of our community, future generations and the planet.{% endfilter %}</p></div>
+				{% else %}
+				<div class="logo"><img src="https://you.wemove.eu/images/wemove/youmove-logo-white.svg"></div>
+				<div class="text"><p>{% filter ak_text:"youmove_footer" %}YouMove petitions are started and run by civil society groups and members of the public. WeMove Europe hosts these petitions and they are in line with our values but they are not necessarily endorsed by WeMove Europe.{% endfilter %}</p></div>
+				{% endif %}
       </div>
       <div class="col-sm-7">
         <ul class="footer-menu">
