@@ -37,7 +37,10 @@
     {% end %}
 
     <style>
+      /* LUCAS FIXES BEGINS */
+
       #letter_to img {
+        /* It should be .img-responsive + #rsign .raction-content .advice-container>img */
         display: block;
         width: calc(100% + var(--speakout-grid-gutter-width)) !important;
         height: auto;
@@ -51,6 +54,7 @@
         padding-left: 40px !important;
       }
 
+    /* END LUCAS FIXES */
     </style>
 
     <style>
@@ -160,13 +164,13 @@
             opacity: 1;
         }
 
-                .youmove-page .action-form-container {
-                    background: linear-gradient(to right, #ec4f22 0%,#cf0404 100%) !important;
-                }
+        .youmove-page .action-form-container {
+            background: linear-gradient(to right, #ec4f22 0%,#cf0404 100%) !important;
+        }
 
-                .youmove-page #progress {
-                    background: #44BC96;
-                }
+        .youmove-page #progress {
+            background: #44BC96;
+        }
 
     </style>
 
@@ -207,6 +211,10 @@
 {% block pre_action_share %}
     {% if page.custom_fields.pre_action_share %}
         {% store as share_page %}{% if page.custom_fields.pre_action_share == "1" %}{{ page.custom_fields.daisy_chain_action|default:page.name }}{% else %}{{ page.custom_fields.pre_action_share }}{% endif %}{% endstore %}
+
+        {% if page.custom_fields.featured_image %}
+            <img class="img-responsive" src="{{page.custom_fields.featured_image}}">
+        {% endif %}
 
         <h1 id="share-banner" style="display: none">
             {% filter ak_text:"tell_your_friends_banner" %}
