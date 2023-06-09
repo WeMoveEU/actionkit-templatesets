@@ -54,8 +54,116 @@
         padding-left: 40px !important;
       }
 
+      /* FLOATING LABEL BEGINS */
+      #petition-form .floating-input-field {
+        position: relative;
+        margin: 0 0 6px;
+      }
+
+      #petition-form .floating-input-field input,
+      #petition-form .floating-input-field select,
+      #petition-form .floating-input-field textarea {
+        margin-bottom: 0;
+        padding-left: 1rem;
+        height: 50px;
+        width: 100%;
+        font-size: 15px;
+        border: 1px solid #fff;
+        outline:none;
+      }
+
+      #petition-form .floating-input-field textarea {
+        height: auto;
+      }
+
+      #petition-form .floating-input-field label {
+        display: inline-block !important;
+        position: absolute;
+        padding: 0 0 0 1rem;
+        max-width: 100%;
+        left: 0;
+        top: 13px;
+
+        color: var(--speakout-color-text-base);
+        font-weight: var(--speakout-font-weight-normal) !important;
+        font-size: 15px;
+        line-height: 1.6;
+        overflow: hidden;
+        white-space: nowrap;
+        word-break: keep-all;
+        text-overflow: ellipsis;
+
+        transition: all .2s ease-in-out;
+
+        pointer-events: none;
+      }
+
+      #petition-form .floating-input-field input:focus {
+        background: #f4f4f4;
+        border-color: #f4f4f4;
+      }
+
+      #petition-form .floating-input-field.is-floating label {
+        top: 2px;
+        font-size: 11px;
+        opacity: .9;
+        outline: none;
+      }
+      /* FLOATING LABEL ENDS */
+
+      /* TEMP */
+      #ak-fieldbox-postal {
+        display: block !important;
+      }
+
+
+
+      /*
+      position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+      */
+
     /* END LUCAS FIXES */
     </style>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", init);
+
+      function init() {
+        setFloatingLabels();
+      }
+
+      const setFloatingLabels = () => {
+        const form = document.querySelector("#petition-form");
+
+        if (!form) {
+          return;
+        }
+
+        const selectors =
+          `.floating-input-field input,
+          .floating-input-field select,
+          .floating-input-field textarea`;
+
+        $(selectors).on('focus blur change', updateIsFloatingClass);
+      }
+
+      const updateIsFloatingClass = (event) => {
+        const container = $(event.target).parent()[0];
+
+        container.classList.remove('is-floating');
+
+        if (event.type === 'focus' || event.target.value !== '') {
+          container.classList.add('is-floating');
+        }
+      };
+    </script>
 
     <style>
         .ak-progress-meter .ak-progress-meter-border {
