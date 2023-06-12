@@ -173,7 +173,7 @@
 
 	<a href="{{ next_step }}">Please continue to the next step.</a>
 	<script>
-		window.location = '{{ next_step }}';
+		window.location = '{{ next_step }}&consent=anonymous';
 	</script>
 
 {% elif user.subscription_status == 'subscribed' %}
@@ -182,7 +182,7 @@
 
 	<a href="{{ next_step }}">Please continue to the next step.</a>
 	<script>
-		window.location = '{{ next_step }}';
+		window.location = '{{ next_step }}&consent=already';
 	</script>
 
 {% else %}
@@ -196,7 +196,7 @@
 
 		<a href="{{ next_step }}">Please continue to the next step.</a>
 		<script>
-			window.location = '{{ next_step }}';
+			window.location = '{{ next_step }}&consent=previous';
 		</script>
 	
 	{% else %}
@@ -212,7 +212,7 @@
 	
 			<a href="{{ next_step }}">Please continue to the next step.</a>
 			<script>
-				window.location = '{{ next_step }}';
+				window.location = '{{ next_step }}&consent=nolang';
 			</script>
 		
 		{% else %}
