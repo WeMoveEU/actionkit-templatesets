@@ -7,15 +7,16 @@
         [% with (progress) { %]
             [% if ( goal && total ) { %]
                 [% progress.current = goal_type == 'dollars' ? total.dollars : goal_type == 'money' ? total.money : total.actions; %]
+                [% progress.current = parseInt(progress.current) + {{ page.custom_fields.external_signature_count|default:"0" }} + {{ page.custom_fields.external_signature_extras|default:"0" }}; %]
                 [% progress.percent = parseInt(progress.current/goal*100); %]
 								
 								<div class="signature-counter">
 	                [% if (goal_type == "dollars") { %]
-										$[%= add_commas(total.dollars) %] 
+										$[%= add_commas(progress.current) %] 
 	                [% } else if (goal_type == "money") { %]
-										{{ page.currency|iso_currency_symbol }}[%= add_commas(total.money) %] 
+										{{ page.currency|iso_currency_symbol }}[%= add_commas(progress.current) %] 
 	                [% } else { %]  
-	                        [%= add_commas(total.actions) %] 
+	                        [%= add_commas(progress.current) %] 
 	                [% } %]
 								  </div>
 								<div class="signature-counter-label">
@@ -27,7 +28,7 @@
 	                    of our goal of {{ page.currency|iso_currency_symbol }}[%= add_commas(goal)  %]!
 	                [% } else { %]  
 	                        of [%= add_commas(goal) %]
-													[%= total.actions != 1 ? 'signatures' : 'signature' %]
+													[%= progress.current != 1 ? 'signatures' : 'signature' %]
 	                [% } %]
 								  </div>
 									
