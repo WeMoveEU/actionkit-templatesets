@@ -161,7 +161,7 @@
 
 {% else %}
 
-{% store as next_step %}{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}?{% else %}/thanks/{{ page.name }}?share=1&{% endif %}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% endstore %}
+{% store as next_step %}{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}?{% else %}/thanks/{{ page.name }}?share=1&{% endif %}akid={{ akid }}{% if action %}&previous_action={{ action.id }}{% endif %}{% endstore %}
 
 <!-- Next Step: {{ next_step }} -->
 
