@@ -217,7 +217,7 @@
 		
 		{% else %}
 
-			{% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&previous_action={{ action.id }}{% endif %}&next_step={{ next_step|urlencode }}{% endstore %}
+			{% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&trigger_page={{ page.name }}&trigger_action={{ action.id }}{% endif %}&next_step={{ next_step|urlencode }}{% endstore %}
 
 			<a href="{{ consent_link }}">Please continue to the next step.</a>
 			<script>
