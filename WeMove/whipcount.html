@@ -15,7 +15,7 @@
     <div class="ak-grid-row">
         <div class="ak-grid-col ak-grid-col-12-of-12">
             <h3 class="thanks">Thanks for making a whipcount call!</h3>
-            <p>We've noted that {% for contact in action.called.all %}{{ contact.target.title_last }} is {{ contact.response }}{% endfor %}!</p>
+            <p>We've noted that {% for contact in action.called.all %}{% with "title_"|concatenate:target.title|spaces_to_underscores as translation_key %}{{ target.title|ak_text:translation_key }}{% endwith %} {{ target.last_name }} is {{ contact.response }}{% endfor %}!</p>
             <div>
                 {% include_tmpl form.thank_you_text %}
             </div>
@@ -81,11 +81,11 @@
                 </h3>
                 <div class="ak-whipcount-callbox">
                     <div class="ak-whipcount-boxhead">
-                        <div class="ak-target-name">{{ target.title_full }}:</div>
+                        <div class="ak-target-name">{% with "title_"|concatenate:target.title|spaces_to_underscores as translation_key %}{{ target.title|ak_text:translation_key }}{% endwith %} {{ target.full_name }}:</div>
                         <div class="ak-target-phone">{{ target.phone }}</div>
                     </div>
                     <div class="ak-whipcount-boxbody">
-                        <label for="response-{{target.id}}">What is {{ target.title_full }}'s stance on this issue?</label>
+                        <label for="response-{{target.id}}">What is {% with "title_"|concatenate:target.title|spaces_to_underscores as translation_key %}{{ target.title|ak_text:translation_key }}{% endwith %} {{ target.full_name }}'s stance on this issue?</label>
                         <ul class="ak-errs-below ak-err-below">
                             <li>
                                 <label for="uncommitted-{{ target.id }}"><input type="radio" name="response-{{ target.id }}" value="uncommitted" id="uncommitted-{{ target.id }}"> Uncommitted/Did not answer</label>
@@ -101,7 +101,7 @@
                             </li>
                         </ul>
                         <input type="hidden" name="required" value="response-{{ target.id }}">
-                        <input type="hidden" name="error_response-{{target.id}}:missing" value="Please let us know what {{ target.title_last }} responded!">
+                        <input type="hidden" name="error_response-{{target.id}}:missing" value="Please let us know what {% with "title_"|concatenate:target.title|spaces_to_underscores as translation_key %}{{ target.title|ak_text:translation_key }}{% endwith %} {{ target.last }} responded!">
                     </div>
                 </div>
             </div>
