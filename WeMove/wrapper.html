@@ -58,19 +58,20 @@
       #petition-form .floating-input-field {
         position: relative;
         margin: 0 0 6px;
+        padding-left: 0;
       }
 
       #petition-form .floating-input-field input,
       #petition-form .floating-input-field select,
       #petition-form .floating-input-field textarea {
         margin-bottom: 0;
-        padding-left: 1rem;
         height: 50px;
         width: 100%;
         font-size: 15px;
         border: 1px solid #fff;
         background: #fff !important;
         outline:none;
+        padding: 12px 14px 0 14px;
       }
 
       #petition-form .floating-input-field textarea {
@@ -122,11 +123,39 @@
       }
 
       #petition-form button[type=submit] {
-        margin-top: -14px !important;
+        margin-top: -16px !important;
       }
 
       #petition-form .ak-error {
         color: #000 !important;
+      }
+
+      #rsign .raction-content .action-form-container-col {
+        margin-top: 20px;
+        padding-top: 0;
+      }
+
+      img.partner-logo {
+        max-width: 260px;
+      }
+
+      .action-form {
+        background: var(--speakout-color-bg-form);
+        min-width: 480px;
+      }
+
+      #rsign .raction-content .action-form-container-col .action-form-container {
+        padding: 1rem;
+      }
+
+      .ak-field-box {
+        margin: 0;
+      }
+
+      @media (min-width: 992px) {
+        .action-form {
+          min-width: auto;
+        }
       }
 
       /* TEMP */
@@ -138,6 +167,7 @@
         display: block !important;
         padding-left: 0 !important;
       }
+      /* END TEMP */
 
     /* END LUCAS FIXES */
     </style>
