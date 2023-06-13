@@ -69,6 +69,7 @@
         width: 100%;
         font-size: 15px;
         border: 1px solid #fff;
+        background: #fff !important;
         outline:none;
       }
 
@@ -111,23 +112,32 @@
       }
       /* FLOATING LABEL ENDS */
 
-      /* TEMP */
-      #ak-fieldbox-postal {
-        display: block !important;
+      .ak-err-below .ak-err {
+        padding: 6px 0 0 0 !important;
+        margin: 0 0 6px 0 !important;
+        list-style: none !important;
+        color: #fff !important;
+        font-size: 14px;
+        line-height: 21px;
       }
 
+      #petition-form button[type=submit] {
+        margin-top: -14px !important;
+      }
 
+      #petition-form .ak-error {
+        color: #000 !important;
+      }
 
-      /*
-      position: absolute;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    width: 1px;
-    margin: -1px;
-    padding: 0;
-    border: 0;
-      */
+      /* TEMP */
+      #ak-fieldbox-zip {
+        display: none !important;
+      }
+
+      #ak-fieldbox-postal {
+        display: block !important;
+        padding-left: 0 !important;
+      }
 
     /* END LUCAS FIXES */
     </style>
@@ -187,28 +197,28 @@
         }
         body,
         a.ak-highlight-on-hover {
-            color: ##4b4b4b;
+            color: #4b4b4b;
         }
         .ak-donate-menu input:checked + div.ak-step-number {
-            background: ##4b4b4b;
+            background: #4b4b4b;
         }
         .ak-whipcount-callbox .ak-whipcount-boxhead {
-            background-color: ##4b4b4b;
+            background-color: #4b4b4b;
         }
         @media (min-width:480px) {
             .ak-steps-area h3 label.ak-step-label {
-                color: ##4b4b4b;
+                color: #4b4b4b;
             }
             .ak-steps-area h3 div.ak-step-number {
-                background-color: ##4b4b4b;
+                background-color: #4b4b4b;
             }
         }
         @media (max-width:479px) {
             .ak-steps-area h3 {
-                background: ##4b4b4b;
+                background: #4b4b4b;
             }
             .ak-steps-area h3 div.ak-step-number {
-                color: ##4b4b4b;
+                color: #4b4b4b;
             }
         }
         .ak-target-phone .ak-target-label, span.office_phone_label,
