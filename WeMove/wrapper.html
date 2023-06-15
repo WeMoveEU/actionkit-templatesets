@@ -330,7 +330,6 @@
         <div class="modal-dialog" style="z-index:1041;">
             <div class="modal-content">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-
             </div>
         </div>
     </div>
@@ -353,10 +352,6 @@
 {% block pre_action_share %}
     {% if page.custom_fields.pre_action_share %}
         {% store as share_page %}{% if page.custom_fields.pre_action_share == "1" %}{{ page.custom_fields.daisy_chain_action|default:page.name }}{% else %}{{ page.custom_fields.pre_action_share }}{% endif %}{% endstore %}
-
-        {% if page.custom_fields.featured_image %}
-            <img class="img-responsive" src="{{page.custom_fields.featured_image}}">
-        {% endif %}
 
         <h1 id="share-banner" style="display: none">
             {% filter ak_text:"tell_your_friends_banner" %}
