@@ -38,10 +38,24 @@
 
     <style>
       /* LUCAS FIXES BEGINS */
+      #rsign .raction-content .action-form-container-col .progress {
+        margin-bottom: 0;
+      }
+
+      .ak-progress-meter {
+        margin-bottom: 0;
+      }
+
       .raction ul,
       .raction ol {
-        list-style: disc !important;
-        padding-left: 40px !important;
+        list-style: disc;
+        padding-left: 40px;
+      }
+
+       .raction ul.dropdown-menu,
+       .raction ol.dropdown-menu {
+        list-style: none;
+        padding-left: 0;
       }
 
       .raction-content .advice-container > img {
@@ -122,20 +136,17 @@
 
       #petition-form .ak-error {
         color: #000 !important;
+        font-weight: normal !important;
       }
 
       #rsign .raction-content .action-form-container-col {
         margin-top: 20px;
-        padding-top: 0;
+        padding: 0;
+        background: var(--speakout-color-bg-form);
       }
 
       img.partner-logo {
         max-width: 260px;
-      }
-
-      .action-form {
-        background: var(--speakout-color-bg-form);
-        min-width: 480px;
       }
 
       #rsign .raction-content .action-form-container-col .action-form-container {
@@ -146,8 +157,14 @@
         margin: 0;
       }
 
+      @media (min-width: 680px) {
+        #rsign .raction-content .action-form-container-col {
+          min-width: 480px;
+        }
+      }
+
       @media (min-width: 992px) {
-        .action-form {
+        #rsign .raction-content .action-form-container-col {
           min-width: auto;
         }
       }
