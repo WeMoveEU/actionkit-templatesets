@@ -19,47 +19,6 @@ wemove
   data-selected_frequency="{{ page.custom_fields.selected_frequency }}"
   data-selected_amount="{{ page.custom_fields.selected_amount }}"
 />
-
-
-<h1>{{ currency_info|json }}</h1>
-
-            <div id="page-data">
-                <b>ActionKit Template Context</b>
-                has_products {{ has_products }}<br />
-                allow_monthly {{ allow_monthly }}<br />
-                products {{ products }}<br />
-                currency_symbol {{ currency_symbol }}<br />
-                has_candidates {{ has_candidates }}<br />
-                candidates {{ candidates }}<br />
-                amounts {{ amounts }}<br />
-                page {{ page }}<br />
-                has_shippable_products {{ has_shippable_products }}<br />
-                templateset.custom_fields {{ templateset.custom_fields }}<br />
-                page.custom_fields {{ page.custom_fields }}<br />
-                akid {{ akid }}<br />
-
-                <b>JS window.actionkit</b>
-                <span class="ak-object-info" />
-                <script>
-                    (function () {
-                        var ak = window.actionkit || {};
-                        console.log(ak);
-                        document.querySelector('.ak-object-info').innerHTML = JSON.stringify(ak, null, 2);
-                    })()
-                </script>
-            </div>
-
-
-{% store as next_step %}
-{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}&amp;action={{ args.action }}{% elif page.custom_fields.daisy_chain_action %}/thanks/{{ page.custom_fields.daisy_chain_action }}?share=1&amp;akid={{ akid }}&amp;action={{ args.action }}{% endif %}{% endstore %}
-
-{% if next_step %}
-<div class="row">
-    <br>
-    <div class="col-md-12" style="text-align: center;">
-        <a href="{{ next_step }}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
-    </div>
-</div>
 {% endif %}
 
 <div class="row" id="other_ways_giving">

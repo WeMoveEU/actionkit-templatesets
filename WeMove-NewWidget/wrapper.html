@@ -266,6 +266,34 @@
 
     </div>
 
+
+    <div id="page-data">
+        <b>ActionKit Template Context</b>
+        has_products {{ has_products }}<br />
+        allow_monthly {{ allow_monthly }}<br />
+        products {{ products }}<br />
+        currency_symbol {{ currency_symbol }}<br />
+        has_candidates {{ has_candidates }}<br />
+        candidates {{ candidates }}<br />
+        amounts {{ amounts }}<br />
+        page {{ page }}<br />
+        has_shippable_products {{ has_shippable_products }}<br />
+        templateset.custom_fields {{ templateset.custom_fields }}<br />
+        page.custom_fields {{ page.custom_fields }}<br />
+        akid {{ akid }}<br />
+
+        <b>JS window.actionkit</b>
+        <span class="ak-object-info" />
+        <script>
+            (function () {
+                var ak = window.actionkit || {};
+                console.log(ak);
+                document.querySelector('.ak-object-info').innerHTML = JSON.stringify(ak, null, 2);
+            })()
+        </script>
+    </div>
+
+
 </div>
 
 <div id="footer">
