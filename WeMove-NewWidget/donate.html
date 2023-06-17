@@ -21,7 +21,24 @@ wemove
   data-akid="{{ akid }}"
   data-ak_page_id="{{ page.id }}"
   data-ak_page_name="{{ page.name }}"
+  data-ak_locale="{{page.lang.iso_code|default:'en'}}"
 />
+
+
+<h1>{{ currency_info|json }}</h1>
+
+
+
+{% store as next_step %}
+{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}&amp;action={{ args.action }}{% elif page.custom_fields.daisy_chain_action %}/thanks/{{ page.custom_fields.daisy_chain_action }}?share=1&amp;akid={{ akid }}&amp;action={{ args.action }}{% endif %}{% endstore %}
+
+{% if next_step %}
+<div class="row">
+    <br>
+    <div class="col-md-12" style="text-align: center;">
+        <a href="{{ next_step }}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
+    </div>
+</div>
 {% endif %}
 
 <div class="row" id="other_ways_giving">
