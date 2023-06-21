@@ -666,26 +666,26 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
         return
     }
     const page_type = pageType(action_type);
-    return fetch(`/admin/core/${page_type}page/copy/?id=${model_id}`)
-	.then(function(response) {
-        const page_id = response.url.match(/\d+/)[0];
-        return $.get(apiRoot + "/page/" + page_id).done(function(page) {
-            return $.when(
-				api('PATCH', `${page_type}page/${page_id}`, { 
-                    name: page_name,
-                    title:`Enter a Title for ${page_name}`,
-					// notes: page_name,
-                    language: language,
-                    multilingual_campaign: mcamp,
-                    fields: fields,
-                });
-                api('PATCH', 'pagefollowup/' + page.followup.id, { 
-					url: followup_url 
-				});
-				console.log(`Created ${language} ${action_type} page ${page_id}`)
-            );
-        });
-    });
+    return fetch(`/admin/core/${page_type}page/copy/?id=${model_id}`).then(
+		function(response) {
+	        const page_id = response.url.match(/\d+/)[0];
+	        return $.get(apiRoot + "/page/" + page_id).done(function(page) {
+	            return $.when(
+					api('PATCH', `${page_type}page/${page_id}`, { 
+	                    name: page_name,
+	                    title:`Enter a Title for ${page_name}`,
+						// notes: page_name,
+	                    language: language,
+	                    multilingual_campaign: mcamp,
+	                    fields: fields,
+	                });
+	                api('PATCH', 'pagefollowup/' + page.followup.id, { 
+						url: followup_url 
+					});
+					console.log(`Created ${language} ${action_type} page ${page_id}`);
+	            );
+	        });
+	    });
 }
 
 function createMailings(evt) {
