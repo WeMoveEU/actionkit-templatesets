@@ -142,8 +142,8 @@
 </section>
 
 <form>
-<fieldset id="page_form" class="">
-	<h3>Add a Journey Step</h3>
+<fieldset id="page_form" style="display: none">
+	<h2>Add a Journey Step</h2>
 	<div class="fieldset-contents">
 		<div class="form-row form-row-CheckboxInput language-picker">
 			<div class="form-label col span_1_of_4"><label>Languages:</label></div>
@@ -420,6 +420,7 @@ function displayPages(campaign) {
         });
         $('#create_pages').on('click', createPages);
         $('#add_step').on('click', function () {
+				$('#add_step').hide();
                 $('#page_form').show();
         });
     });
@@ -665,7 +666,8 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
         return
     }
     const page_type = pageType(action_type);
-    return fetch(`/admin/core/${page_type}page/copy/?id=${model_id}`).then(function(response) {
+    return fetch(`/admin/core/${page_type}page/copy/?id=${model_id}`)
+	.then(function(response) {
         const page_id = response.url.match(/\d+/)[0];
         return $.get(apiRoot + "/page/" + page_id).done(function(page) {
             return $.when(
@@ -676,8 +678,11 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
                     language: language,
                     multilingual_campaign: mcamp,
                     fields: fields,
-                }),
-                api('PATCH', 'pagefollowup/' + page.followup.id, { url: followup_url })
+                });
+                api('PATCH', 'pagefollowup/' + page.followup.id, { 
+					url: followup_url 
+				});
+				console.log(`Created ${language} ${action_type} page ${page_id}`)
             );
         });
     });
