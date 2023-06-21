@@ -232,9 +232,8 @@
 	var multilingual_campaigns = {};
 </script>
 
-
 <script>
-	
+
 function readLanguages() {
     $.get(apiRoot + "/language/").done(function(result) {
         result.objects.forEach(function(lang) {
@@ -308,7 +307,7 @@ function fetchCampaigns() {
 			raw_campaigns = field.field_choices;
 			campaign_list = field.choices.map((opt) => ({id: opt[0], name: opt[1]}))
 												.sort( (c1,c2) => c2.id - c1.id );
-		} )
+		} );
 }
 
 function readCampaigns(searched_name) {
@@ -330,12 +329,12 @@ function readCampaigns(searched_name) {
 
 function showCampaignList() {
 	fetchCampaigns().done( function() {
-		const table = $('#campaign-list table')
+		const table = $('#campaign-list table');
 		campaign_list.forEach( function(cmp) {
 			table.append(
                 ` <tr class="item"><td><a href="?searched_name=${cmp.name}">${cmp.name}</a></td></tr>`
-			)
-		}    )
+			);
+		} );
 	} );
 }
 
@@ -669,6 +668,7 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
     return fetch(`/admin/core/${page_type}page/copy/?id=${model_id}`).then(
 		function(response) {
 	        const page_id = response.url.match(/\d+/)[0];
+			console.log(`Created ${language} ${action_type} page ${page_id}`);
 	        return $.get(apiRoot + "/page/" + page_id).done(function(page) {
 	            return $.when(
 					api('PATCH', `${page_type}page/${page_id}`, { 
@@ -678,11 +678,10 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
 	                    language: language,
 	                    multilingual_campaign: mcamp,
 	                    fields: fields,
-	                });
+	                }),
 	                api('PATCH', 'pagefollowup/' + page.followup.id, { 
 						url: followup_url 
-					});
-					console.log(`Created ${language} ${action_type} page ${page_id}`);
+					})
 	            );
 	        });
 	    });
