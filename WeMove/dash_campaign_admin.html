@@ -1,5 +1,5 @@
 <script src="/static/admin/js/collapse.js"></script>
- 
+
 <style>
 	#campaign_form, #campaign_output, #campaign_matches, #pages_output, #mailings_output, #not_found, #page_form, #mailing_form {
 		display: none;
@@ -12,10 +12,10 @@
 		width: 300px;
 	}
 	
-	#campaign_search { 
-		border: 1px solid #ccc; 
-		background: #eee; 
-		padding: 0.25em; 
+	#campaign_search {
+		border: 1px solid #ccc;
+		background: #eee;
+		padding: 0.25em;
 	}
 	#campaign_search input[type="search"] {
 		border-radius: 99px;
@@ -49,7 +49,7 @@
 </section>
 
 <script>
-	$( function () { 
+	$( function () {
 		showCampaignList();
 	} );
 </script>
@@ -65,7 +65,7 @@
 	<h2>Campaign Details</h2>
 	<div id="camp_id" class="form-row form-row-CheckboxInput clearfix">			
 		<div class="form-label col span_1_of_4">
-			<label for="id_display_name">Page ID</label> 
+			<label for="id_display_name">Page ID</label>
 		</div>
 		<div class="form-control col span_3_of_4">
 			<span></span>
@@ -215,7 +215,7 @@
 
 <script>
 	var searched_name = "{{searched_name}}";
-	$( function () { 
+	$( function () {
 		readCampaigns(searched_name);
 	} );
 </script>
@@ -235,9 +235,10 @@
 <script>
 
 function api(method, path, data) {
+	console.log("Calling API:", method, path, data);
     return $.ajax({
         type: method,
-        url: `${apiRoot}/${path}`, 
+        url: `${apiRoot}/${path}`,
         contentType: 'application/json',
         processData: ( method == 'GET' ? true : false ),
         data: ( method == 'GET' ? data : JSON.stringify(data) )
@@ -273,7 +274,7 @@ function readModels() {
     var prefix = window.models.campaign_name + ":";
     $.when(
         api('GET', "multilingualcampaign/?name__startswith=" + prefix),
-        api('GET', "page/?field__name=campaign&field__value=" + window.models.campaign.id)
+        api('GET', "page/", { field__name: 'campaign', field__value: window.models.campaign.id })
     ).done(function(mcamps, pages) {
         mcamp_types = {};
         mcamps[0].objects.forEach(function(mcamp) {
@@ -397,9 +398,10 @@ function displayCampaign(camp) {
 }
 
 function displayPages(campaign) {
-    api('GET', "page/?field__name=campaign&field__value=" + campaign.id).done(function(result) {
+    api('GET', "page/", { field__name: 'campaign', field__value: campaign.id })
+	.done(function(result) {
         var pages = {};
-        result.objects.forEach(function(page) { 
+        result.objects.forEach(function(page) {
             if (page.id != campaign.id) {
                 if (!pages[page.language]) pages[page.language] = [];
                 pages[page.language].push(page);
@@ -530,24 +532,20 @@ function saveCampaignPage() {
 
 function createCampaignPage() {
     var campaign_name = $('#name').val();
-        $.post(apiRoot + '/signuppage/', { 
-            name: campaign_name,
-            title: $('#title').val()
-    }).done(addCampaignOption);
-}
-
-function addCampaignOption() {
-    var campaign_name = $('#name').val();
-    api('GET', "/signuppage/?name=" + campaign_name).done(function(result) {
-        var campaign_id = result.objects[0].id;
-        $.ajax({
-            type: 'PATCH',
-            url: apiRoot + "/allowedpagefield/campaign", 
-            data: {
-                field_choices: raw_campaigns + "\n" + campaign_id + "=" + campaign_name
-            }
-        }).done(() => setCampaignMetadata(campaign_id));
-    });
+    api('POST', 'signuppage/', {
+        name: campaign_name,
+        title: $('#title').val()
+    }).done(function () {
+	    var campaign_name = $('#name').val();
+	    api('GET', "signuppage/", {
+			name: campaign_name
+		}).done(function(result) {
+	        var campaign_id = result.objects[0].id;
+	        api('PATCH', "allowedpagefield/campaign", {
+	            field_choices: raw_campaigns + "\n" + campaign_id + "=" + campaign_name
+	        }).done(() => setCampaignMetadata(campaign_id));
+	    });
+	});
 }
 
 function setCampaignMetadata(campaign_id) {
@@ -557,14 +555,14 @@ function setCampaignMetadata(campaign_id) {
         contentType: 'application/json',
         processData: false,
         data: JSON.stringify({
-            fields: { 
+            fields: {
                 campaign: campaign_id,
                 topic: $('#topic').val(),
                 lead_campaigner: $('#lead_campaigner').val()
             }
         })
-    }).done(function() { 
-		document.location = "?searched_name=" + $('#name').val(); 
+    }).done(function() {
+		document.location = "?searched_name=" + $('#name').val();
 	});
 }
 
@@ -671,9 +669,9 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
 		function(response) {
 	        const page_id = response.url.match(/\d+/)[0];
 			console.log(`Created ${language} ${action_type} page ${page_id}`);
-	        return api('GET', "/page/" + page_id).done(function(page) {
+	        return api('GET', "page/" + page_id).done(function(page) {
 	            return $.when(
-					api('PATCH', `${page_type}page/${page_id}`, { 
+					api('PATCH', `${page_type}page/${page_id}`, {
 	                    name: page_name,
 	                    title:`Enter a Title for ${page_name}`,
 						// notes: page_name,
@@ -681,8 +679,8 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
 	                    multilingual_campaign: mcamp,
 	                    fields: fields,
 	                }),
-	                api('PATCH', 'pagefollowup/' + page.followup.id, { 
-						url: followup_url 
+	                api('PATCH', 'pagefollowup/' + page.followup.id, {
+						url: followup_url
 					})
 	            );
 	        });
@@ -703,7 +701,7 @@ function createMailings(evt) {
     $form.find('.language-picker input').each(function() {
         if (this.checked) {
             var lang = this.dataset.iso_code;
-            calls.push(api('POST', 'mailing', { 
+            calls.push(api('POST', 'mailing', {
                 notes: mailing_name + "-" + lang,
                 fields: fields
             }));
