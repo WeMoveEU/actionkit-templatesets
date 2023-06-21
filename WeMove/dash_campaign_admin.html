@@ -553,7 +553,9 @@ function setCampaignMetadata(campaign_id) {
                 lead_campaigner: $('#lead_campaigner').val()
             }
         })
-    }).done(function() { document.location = "?searched_name=" + $('#name').val() });
+    }).done(function() { 
+		document.location = "?searched_name=" + $('#name').val(); 
+	});
 }
 
 function pageType(actionType) {
@@ -653,16 +655,16 @@ function createPages(evt) {
 function createPage(action_type, page_name, language, mcamp, fields, followup_url) {
     if ( ! action_type ) {
             window.alert("No action type specified when creating page");
-            return
+            return;
     }
     if ( ! language ) {
             window.alert("No language specified when creating page");
-            return
+            return;
     }
     const model_id = window.models[action_type][language];
     if ( ! model_id ) {
         window.alert(`Can't find a model ID for action ${action_type} in language ${language}`);
-        return
+        return;
     }
     const page_type = pageType(action_type);
     return fetch(`/admin/core/${page_type}page/copy/?id=${model_id}`).then(
@@ -696,7 +698,7 @@ function createMailings(evt) {
         campaign: campaign.id,
         moment: $form.find('input[name=moment]:checked').val(),
         ask_type: $form.find('input[name=ask_type]:checked').val(),
-    }
+    };
     var calls = [];
     $form.find('.language-picker input').each(function() {
         if (this.checked) {
@@ -707,7 +709,9 @@ function createMailings(evt) {
             }));
         }
     });
-    $.when(...calls).then(() => document.location = "?searched_name=" + campaign.name);
+    $.when(...calls).then(
+		() => document.location = "?searched_name=" + campaign.name
+	);
 }
 
 </script>
