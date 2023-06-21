@@ -413,7 +413,7 @@ function displayPages(campaign) {
             $('#page_form input[value=share]').removeAttr('disabled');
         }
         $('#page_form').data('campaign', campaign);
-        $('#pages_output,#page_form').show();
+        $('#pages_output').show();
         $('#page_form input[name=action_type]').on('click', function() {
             $('#page_form input[name=notes]').val(campaign.name + "-" + this.value);
         });
