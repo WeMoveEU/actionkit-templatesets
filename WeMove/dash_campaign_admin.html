@@ -261,8 +261,8 @@ function readLanguages() {
 
 function readCampaigners() {
     api('GET', "authuser/", { is_active: 'true', order_by: '-id', _limit: 100 } ).done(function(result) {
-        result.objects.forEach(function(staff) {
-            var staff_name = `${staff.first_name} ${staff.last_name}`;
+        result.objects.map( staff => `${staff.first_name} ${staff.last_name}`)
+		.sort().forEach(function(staff_name) {
             $('.lead_campaigner-picker .form-control select').append(
                 ` <option value="${staff_name}">${staff_name}</option>`
             );
@@ -273,7 +273,7 @@ function readCampaigners() {
 function readModels() {
     var prefix = window.models.campaign_name + ":";
     $.when(
-        api('GET', "multilingualcampaign/?name__startswith=" + prefix),
+        api('GET', "multilingualcampaign/", { name__startswith: prefix }),
         api('GET', "page/", { field__name: 'campaign', field__value: window.models.campaign.id })
     ).done(function(mcamps, pages) {
         mcamp_types = {};
@@ -350,7 +350,7 @@ function showCampaignList() {
 }
 
 function readMultilingualCampaigns(prefix) {
-    return api('GET', "multilingualcampaign/?name__startswith=" + prefix).done(function(camps) {
+    return api('GET', "multilingualcampaign/", { name__startswith: prefix } ).done(function(camps) {
         camps.objects.forEach(function(camp) {
             multilingual_campaigns[camp.resource_uri] = camp.name;
             $('.step-picker .form-control select').append(
@@ -477,7 +477,7 @@ function pageLink(page) {
 }
 
 function displayMailings(campaign) {
-    api('GET', "mailing/?field__name=campaign&field__value=" + campaign.id).done(function(result) {
+    api('GET', "mailing/", { field__name: 'campaign', field__value: campaign.id } ).done(function(result) {
         var mailings = result.objects;
         mailings.sort((m1,m2) => m1.notes.localeCompare(m2.notes));
         if (mailings.length) {
@@ -590,7 +590,7 @@ function multilingualCampaignFor(campaign_name, action_type) {
     if (mcamp) {
         return $.Deferred().resolve(mcamp);
     } else {
-        return api('POST', 'multilingualcampaign', { name: mcamp_name });
+        return api('POST', 'multilingualcampaign/', { name: mcamp_name });
     }
 }
 
@@ -631,7 +631,7 @@ function createPages(evt) {
                             // Assuming the share step is defined in first step of the journey
                             prev_followup_url = pageViewUrl(pages[0], 'share');
                         }
-                        calls.push(api('PATCH', 'pagefollowup/' + previous_page.followup.id, {
+                        calls.push(api('PATCH', `pagefollowup/${previous_page.followup.id}`, {
                             url: prev_followup_url
                         }));
                     } else if (!previous_page) {
@@ -669,9 +669,9 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
 		function(response) {
 	        const page_id = response.url.match(/\d+/)[0];
 			console.log(`Created ${language} ${action_type} page ${page_id}`);
-	        return api('GET', "page/" + page_id).done(function(page) {
+	        return api('GET', `page/${page_id}`).done(function(page) {
 	            return $.when(
-					api('PATCH', `${page_type}page/${page_id}`, {
+					api('PATCH', `${page_type}page/${page_id}/`, {
 	                    name: page_name,
 	                    title:`Enter a Title for ${page_name}`,
 						// notes: page_name,
@@ -679,7 +679,7 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
 	                    multilingual_campaign: mcamp,
 	                    fields: fields,
 	                }),
-	                api('PATCH', 'pagefollowup/' + page.followup.id, {
+	                api('PATCH', `pagefollowup/${page.followup.id}/`, {
 						url: followup_url
 					})
 	            );
