@@ -234,8 +234,18 @@
 
 <script>
 
+function api(method, path, data) {
+    return $.ajax({
+        type: method,
+        url: `${apiRoot}/${path}`, 
+        contentType: 'application/json',
+        processData: ( method == 'GET' ? true : false ),
+        data: ( method == 'GET' ? data : JSON.stringify(data) )
+    });
+}
+
 function readLanguages() {
-    api("language/").done(function(result) {
+    api('GET', "language/").done(function(result) {
         result.objects.forEach(function(lang) {
             window.languages[lang.resource_uri] = lang;
             if (coreLanguages.includes(lang.name)) {
@@ -249,7 +259,7 @@ function readLanguages() {
 }
 
 function readCampaigners() {
-    api("authuser/", { is_active: 'true', order_by: '-id', _limit: 100 } ).done(function(result) {
+    api('GET', "authuser/", { is_active: 'true', order_by: '-id', _limit: 100 } ).done(function(result) {
         result.objects.forEach(function(staff) {
             var staff_name = `${staff.first_name} ${staff.last_name}`;
             $('.lead_campaigner-picker .form-control select').append(
@@ -262,8 +272,8 @@ function readCampaigners() {
 function readModels() {
     var prefix = window.models.campaign_name + ":";
     $.when(
-        api("multilingualcampaign/?name__startswith=" + prefix),
-        api("page/?field__name=campaign&field__value=" + window.models.campaign.id)
+        api('GET', "multilingualcampaign/?name__startswith=" + prefix),
+        api('GET', "page/?field__name=campaign&field__value=" + window.models.campaign.id)
     ).done(function(mcamps, pages) {
         mcamp_types = {};
         mcamps[0].objects.forEach(function(mcamp) {
@@ -283,7 +293,7 @@ function readModels() {
 }
 
 function readFieldValues(field_name, entity, default_value) {
-    return api(`allowed${entity}field/${field_name}`).done(function(field) {
+    return api('GET', `allowed${entity}field/${field_name}`).done(function(field) {
         var $formControl = $(`.${field_name}-picker .form-control`);
         var $select = $formControl.find('select');
         field.choices.forEach(function(opt) {
@@ -302,7 +312,7 @@ function readFieldValues(field_name, entity, default_value) {
 }
 
 function fetchCampaigns() {
-	return api("allowedpagefield/campaign")
+	return api('GET', "allowedpagefield/campaign")
 		.done(function(field) {
 			raw_campaigns = field.field_choices;
 			campaign_list = field.choices.map((opt) => ({id: opt[0], name: opt[1]}))
@@ -339,7 +349,7 @@ function showCampaignList() {
 }
 
 function readMultilingualCampaigns(prefix) {
-    return api("multilingualcampaign/?name__startswith=" + prefix).done(function(camps) {
+    return api('GET', "multilingualcampaign/?name__startswith=" + prefix).done(function(camps) {
         camps.objects.forEach(function(camp) {
             multilingual_campaigns[camp.resource_uri] = camp.name;
             $('.step-picker .form-control select').append(
@@ -370,7 +380,7 @@ function displayEditForm(page) {
 function displayCampaign(camp) {
     readLanguages();
     readModels();
-    api("page/" + camp.id).done(function(page) {
+    api('GET', "page/" + camp.id).done(function(page) {
         $('#campaign_output #camp_id span').text(camp.id);
         $('#campaign_output #camp_name span').text(camp.name);
         $('#campaign_output #camp_topic span').text(page.fields.topic);
@@ -387,7 +397,7 @@ function displayCampaign(camp) {
 }
 
 function displayPages(campaign) {
-    api("page/?field__name=campaign&field__value=" + campaign.id).done(function(result) {
+    api('GET', "page/?field__name=campaign&field__value=" + campaign.id).done(function(result) {
         var pages = {};
         result.objects.forEach(function(page) { 
             if (page.id != campaign.id) {
@@ -465,7 +475,7 @@ function pageLink(page) {
 }
 
 function displayMailings(campaign) {
-    api("mailing/?field__name=campaign&field__value=" + campaign.id).done(function(result) {
+    api('GET', "mailing/?field__name=campaign&field__value=" + campaign.id).done(function(result) {
         var mailings = result.objects;
         mailings.sort((m1,m2) => m1.notes.localeCompare(m2.notes));
         if (mailings.length) {
@@ -528,7 +538,7 @@ function createCampaignPage() {
 
 function addCampaignOption() {
     var campaign_name = $('#name').val();
-    api("/signuppage/?name=" + campaign_name).done(function(result) {
+    api('GET', "/signuppage/?name=" + campaign_name).done(function(result) {
         var campaign_id = result.objects[0].id;
         $.ajax({
             type: 'PATCH',
@@ -566,16 +576,6 @@ function pageType(actionType) {
     } else {
         return actionType;
     }
-}
-
-function api(method, path, data) {
-    return $.ajax({
-        type: method,
-        url: `${apiRoot}/${path}`, 
-        contentType: 'application/json',
-        processData: ( method == 'GET' ? true : false ),
-        data: ( method == 'GET' ? data : JSON.stringify(data) )
-    });
 }
 
 function multilingualCampaignFor(campaign_name, action_type) {
@@ -671,7 +671,7 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
 		function(response) {
 	        const page_id = response.url.match(/\d+/)[0];
 			console.log(`Created ${language} ${action_type} page ${page_id}`);
-	        return api("/page/" + page_id).done(function(page) {
+	        return api('GET', "/page/" + page_id).done(function(page) {
 	            return $.when(
 					api('PATCH', `${page_type}page/${page_id}`, { 
 	                    name: page_name,
