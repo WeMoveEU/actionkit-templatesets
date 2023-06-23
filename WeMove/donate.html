@@ -4,7 +4,9 @@
 {% load_css %}
     //actionkit-stripe-api.wemove.support/stripe/static/index.0e2b4833.css
 {% end %}
-
+{% load_css %}
+    //donate-ui.not-a2.eu/donate-main.css
+{% end %}
 {% endblock %}
 {% block content %}
 
@@ -17,10 +19,8 @@
   data-selected_currency="{{ page.custom_fields.selected_currency }}"
   data-selected_frequency="{{ page.custom_fields.selected_frequency }}"
   data-selected_amount="{{ page.custom_fields.selected_amount }}"
-  data-akid="{{ akid }}"
-  data-ak_page_id="{{ page.id }}"
   data-ak_page_name="{{ page.name }}"
-  data-ak_locale="{{page.lang.iso_code|default:'en'}}"		 
+  data-ak_locale="{{page.lang.iso_code|default:'en'}}"
 />
 
 {% store as next_step %}
