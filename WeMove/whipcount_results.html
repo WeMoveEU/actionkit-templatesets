@@ -13,7 +13,7 @@
             {% for target in group.targets %}
             <tr class="ak-target-{{ target.stance.view }}">
                 <td>
-                    <a class="ak-target-name ak-highlight-on-hover" href="?target={{ target.resource_uri }}&amp;akid={{ user.token }}&amp;source={{ args.source }}&amp;referring_akid={{ args.referring_akid }}">{{ target.title_last }}</a>
+                    <a class="ak-target-name ak-highlight-on-hover" href="?target={{ target.resource_uri }}&amp;akid={{ user.token }}&amp;source={{ args.source }}&amp;referring_akid={{ args.referring_akid }}">{% with "title_"|concatenate:target.title|spaces_to_underscores as translation_key %}{{ target.title|ak_text:translation_key }}{% endwith %} {{ target.last }}</a>
                 </td>
                 <td>
                     {% if target.us_district %}
