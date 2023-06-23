@@ -173,7 +173,7 @@
 
 	<a href="{{ next_step }}">Please continue to the next step.</a>
 	<script>
-		window.location = '{{ next_step }}';
+		window.location = '{{ next_step }}&consent=anonymous';
 	</script>
 
 {% elif user.subscription_status == 'subscribed' %}
@@ -182,7 +182,7 @@
 
 	<a href="{{ next_step }}">Please continue to the next step.</a>
 	<script>
-		window.location = '{{ next_step }}';
+		window.location = '{{ next_step }}&consent=already';
 	</script>
 
 {% else %}
@@ -196,14 +196,14 @@
 
 		<a href="{{ next_step }}">Please continue to the next step.</a>
 		<script>
-			window.location = '{{ next_step }}';
+			window.location = '{{ next_step }}&consent=previous';
 		</script>
 	
 	{% else %}
 	
 	<!-- Lang ID: {{ user.lang_id }} -->
 
-		{% store as signup_page_name %}{% report "signup_page_for_list_language" with page.list_id as list_id user.lang_id as lang_id %}{% endstore %}
+		{% store as signup_page_name %}{% report "signup_page_for_list_language" with page.list_id as list_id user.lang_id|default:100 as lang_id %}{% endstore %}
 		<!-- Signup Page: {{ signup_page_name }} -->
 	
 		{% if not signup_page_name %}
@@ -212,12 +212,12 @@
 	
 			<a href="{{ next_step }}">Please continue to the next step.</a>
 			<script>
-				window.location = '{{ next_step }}';
+				window.location = '{{ next_step }}&consent=nolang';
 			</script>
 		
 		{% else %}
 
-			{% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}&next_step={{ page.custom_fields.next_step }}{% endstore %}
+			{% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&trigger_page={{ page.name }}&trigger_action={{ action.id }}{% endif %}&next_step={{ next_step|urlencode }}{% endstore %}
 
 			<a href="{{ consent_link }}">Please continue to the next step.</a>
 			<script>

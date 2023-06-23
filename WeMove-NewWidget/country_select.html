@@ -1,6 +1,6 @@
 
 <select name="{{ input_name_prefix }}country" id="id_{{ input_name_prefix }}country" {% if onchange %}onchange="{{ onchange }}" onblur="{{ onchange }}"{% endif %}>
-    <option selected value="">{% filter capfirst %}{% filter ak_field:"country" %}Country{% endfilter %}{% endfilter %}</option>
+    <option selected value=""></option>
     <option value="al">{% filter ak_field:"Albania" %}Albania{% endfilter %}</option>
     <option value="at">{% filter ak_field:"Austria" %}Austria{% endfilter %}</option>
     <option value="be">{% filter ak_field:"Belgium" %}Belgium{% endfilter %}</option>

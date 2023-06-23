@@ -1,14 +1,15 @@
 {% extends "./wrapper.html" %}
-{% block body_extra_classes %}
-wemove
-{{ block.super }}
-{% endblock %}
-
+{% block body_extra_classes %}wemove {{ block.super }}{% endblock %}
 {% block css_additions %}
-<link rel="stylesheet" href="//donate-ui.not-a2.eu/donate-main.css" />
+{% load_css %}
+    //actionkit-stripe-api.wemove.support/stripe/static/index.0e2b4833.css
+{% end %}
+{% load_css %}
+    //donate-ui.not-a2.eu/donate-main.css
+{% end %}
 {% endblock %}
-
 {% block content %}
+
 <section
   id="donate-widget"
   data-config_override="{{ page.custom_fields.config_override }}"
@@ -18,16 +19,9 @@ wemove
   data-selected_currency="{{ page.custom_fields.selected_currency }}"
   data-selected_frequency="{{ page.custom_fields.selected_frequency }}"
   data-selected_amount="{{ page.custom_fields.selected_amount }}"
-  data-akid="{{ akid }}"
-  data-ak_page_id="{{ page.id }}"
   data-ak_page_name="{{ page.name }}"
   data-ak_locale="{{page.lang.iso_code|default:'en'}}"
 />
-
-
-<h1>{{ currency_info|json }}</h1>
-
-
 
 {% store as next_step %}
 {% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}&amp;action={{ args.action }}{% elif page.custom_fields.daisy_chain_action %}/thanks/{{ page.custom_fields.daisy_chain_action }}?share=1&amp;akid={{ akid }}&amp;action={{ args.action }}{% endif %}{% endstore %}
@@ -82,6 +76,6 @@ wemove
 
 {% endblock %}
 
-{% block end_body %}
+{% block below_form %}
 <script type="module" src="//donate-ui.not-a2.eu/donate-main.js" />
-{% endblock end_body %}
+{% endblock %}

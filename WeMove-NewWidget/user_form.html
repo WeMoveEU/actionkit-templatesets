@@ -4,21 +4,21 @@
 {% comment %}
 
   To change which fields show, edit {% hide_by_default %} below and set
-  individual pages' required fields in the page admin, or activate the 
+  individual pages' required fields in the page admin, or activate the
   User Fields customization option in the page admin to override which
   fields are visible and the order they're shown in.
-  
+
   Unhide or require the 'country' field to make the form international. To
   geolocate more users outside the United States, unhide/require 'city'.
-  
+
   You can change label text in the language admin, change {% field_order %}
   below, edit the CSS, or replace this form entirely with static HTML. See
   the advanced template ref for more:
-  
+
   https://roboticdogs.actionkit.com/docs/manual/developer/customizing_pages.html#working-with-templates
 
   name email prefix first_name middle_name last_name suffix country address1 address2 city state zip region postal phone
-  
+
   Enjoy!
 
 {% endcomment %}
@@ -27,14 +27,15 @@
 {% hide_by_default prefix first_name middle_name last_name suffix country phone address1 address2 city state region postal %}
 
 {% for field in user_fields %}
-    <div id="ak-fieldbox-{{ field.field_name }}" {% if field.field_name|is_in:context.required %}class="required"{% endif %}>
+    <div id="ak-fieldbox-{{ field.field_name }}" class="floating-input-field{% if field.field_name|is_in:context.required %} required{% endif %}">
         <label for="id_{{ field.field_name }}">
-            {{ field.label_text }}{% if field.field_name|is_in:context.required %}<span class="ak-required-flag">*</span>{% endif %}
+            {{ field.label_text }}:{% if field.field_name|is_in:context.required %}<span class="ak-required-flag">*</span>{% endif %}
         </label>
+
         {% switch field.field_name %}
             {% case 'country' %}
                 {% include "./country_select.html" %}
-            {% case 'state' %} 
+            {% case 'state' %}
                 {% include "./state_select.html" %}
             {% else %}
                 {{ field.input_html }}

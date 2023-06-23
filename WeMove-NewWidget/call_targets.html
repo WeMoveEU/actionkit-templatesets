@@ -6,7 +6,7 @@
                 <input id="id_target_{{target.pk}}" type="checkbox" name="target_checked" value="{{ target.pk }}">
                 <label for="id_target_{{target.pk}}">
             {% endif %}
-            <span class="ak-target-titlename">{% if target.title_informal_full %} {{ target.title_informal_full }} {% endif %}</span><span class="ak-target-separator">: </span><span class="ak-target-contact">{{ target.contact_html|safe }}</span>
+            <span class="ak-target-titlename">{% with "title_"|concatenate:target.title|spaces_to_underscores as translation_key %}{{ target.title|ak_text:translation_key }}{% endwith %} {{ target.full_name }}</span><span class="ak-target-separator">: </span><span class="ak-target-contact">{{ target.contact_html|safe }}</span>
             {% if is_checkboxes %}</label>{% endif %}
             </div>
             {% if target.callable_offices and options.local_offices %}
