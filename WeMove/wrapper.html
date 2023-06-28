@@ -29,12 +29,12 @@
     {% load_prefill %}
     {% load_ak_context context %}
 
-      <link rel="stylesheet" type="text/css" href="https://act.wemove.eu/javascripts/frontend.css">
-      <script src="https://act.wemove.eu/javascripts/frontend.js?1664972532" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://static.wemove.eu/action-kit/css/wemove.css?v=1">
     {% load_js %}
         //ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
         /resources/actionkit.js
     {% end %}
+    <script src="https://static.wemove.eu/action-kit/js/wemove.js"></script>
 
     <style>
       /* LUCAS FIXES BEGINS */
@@ -59,7 +59,7 @@
       }
 
       .raction-content .advice-container > img {
-        margin-bottom: 10px;
+        margin-bottom: 30px;
       }
 
       /* FLOATING LABEL BEGINS */
@@ -140,7 +140,6 @@
       }
 
       #rsign .raction-content .action-form-container-col {
-        margin-top: 20px;
         padding: 0;
         background: var(--speakout-color-bg-form);
       }
@@ -236,7 +235,7 @@
                 background-color: #ffffff;
             }
         }
-        body,
+
         a.ak-highlight-on-hover {
             color: #4b4b4b;
         }
@@ -266,7 +265,14 @@
         span.ak-target-fax, span.ak-target-separator { display: none }
         .ak-event-description, .ak-event-note-to-attendees, .ak-event-directions { white-space: pre-line; }
 
-        /* #rsign .raction-content .advice-container>p, */
+        #rsign .raction-content .advice-container > h1 {
+          margin-bottom: 0;
+        }
+
+        #rsign .raction-content .advice-container div > p strong {
+            font-size: var(--speakout-font-size-lg);
+        }
+
         #rsign .raction-content .advice-container #letter_to {
             font-size: var(--speakout-font-size-lg);
             font-weight: var(--speakout-font-weight-bold);
@@ -287,6 +293,12 @@
 
         #rsign .raction-content .action-form-container-col .progress {
             width: auto;
+        }
+
+        .raction ol.references,
+        .raction ul.references {
+          padding: 0;
+          list-style: none;
         }
 
         .share-big a.btn:hover,
