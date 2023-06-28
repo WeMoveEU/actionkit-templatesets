@@ -182,38 +182,7 @@
     /* END LUCAS FIXES */
     </style>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", init);
 
-      function init() {
-        setFloatingLabels();
-      }
-
-      const setFloatingLabels = () => {
-        const form = document.querySelector("#petition-form");
-
-        if (!form) {
-          return;
-        }
-
-        const selectors =
-          `.floating-input-field input,
-          .floating-input-field select,
-          .floating-input-field textarea`;
-
-        $(selectors).on('focus blur change', updateIsFloatingClass);
-      }
-
-      const updateIsFloatingClass = (event) => {
-        const container = $(event.target).parent()[0];
-
-        container.classList.remove('is-floating');
-
-        if (event.type === 'focus' || event.target.value !== '') {
-          container.classList.add('is-floating');
-        }
-      };
-    </script>
 
     <style>
         .ak-progress-meter .ak-progress-meter-border {
@@ -266,7 +235,7 @@
         .ak-event-description, .ak-event-note-to-attendees, .ak-event-directions { white-space: pre-line; }
 
         #rsign .raction-content .advice-container > h1 {
-          margin-bottom: 0;
+          margin-bottom: 30px;
         }
 
         #rsign .raction-content .advice-container div > p strong {
