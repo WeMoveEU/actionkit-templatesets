@@ -31,6 +31,11 @@
 
     <link rel="stylesheet" href="https://static.wemove.eu/action-kit/css/wemove.css?v=1">
 
+    {% load_js %}
+        //ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
+        /resources/actionkit.js
+    {% end %}
+
     {% block script_additions %}{% endblock %}
 </head>
 <body class="{% if page.custom_fields.youmove_campaign %}youmove-page{% else %}wemove-page{% endif %} ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
@@ -210,10 +215,6 @@
 </div>
 
 </div>
-    {% load_js %}
-        //ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
-        /resources/actionkit.js
-    {% end %}
     <script src="https://static.wemove.eu/action-kit/js/wemove.js"></script>
 
     {% block below_form %}
