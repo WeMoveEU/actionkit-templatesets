@@ -29,7 +29,7 @@
     {% load_prefill %}
     {% load_ak_context context %}
 
-    <link rel="stylesheet" href="https://static.wemove.eu/action-kit/css/wemove.css?v=1">
+    <link rel="stylesheet" href="https://static.wemove.eu/action-kit/css/wemove.css?v=2">
 
     {% load_js %}
         //ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
@@ -83,7 +83,7 @@
 
                 $.get( '/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}', {},
                     function ( data ) {
-                        var modal = $('.modal.fade')
+                        const modal = $('.modal.fade');
                         modal.find('.modal-content').append(
                             $('#share-banner').show()
                         );
@@ -114,26 +114,26 @@
                       <span class="icon-bar"></span>
                   </button>
                   <a class="navbar-brand" href="https://www.wemove.eu">
-                                            {% if page.custom_fields.youmove_campaign %}
+                    {% if page.custom_fields.youmove_campaign %}
                       <img src="https://you.wemove.eu/images/wemove/youmove-logo.svg" />
-                                            {% else %}
+                    {% else %}
                       <img src="https://act.wemove.eu/images/wemove/wemove-europe.svg" />
-                                            {% endif %}
+                    {% endif %}
                   </a>
               </div>
 
               <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
                   <ul class="nav navbar-nav navbar-right">
-                                        {% if page.custom_fields.youmove_campaign %}
-                                            <li><a href="https://www.wemove.eu/you#campaigns">{% filter ak_text:"nav_youmove" %}YouMove Campaigns{% endfilter %}</a></li>
-                                            <li><a href="https://www.wemove.eu/you/create">{% filter ak_text:"nav_start" %}Start a Campaign{% endfilter %}</a></li>
-                                            <li><a href="https://www.wemove.eu/user">{% filter ak_text:"nav_login" %}Log In{% endfilter %}</a></li>
-                                            {% else %}
+                    {% if page.custom_fields.youmove_campaign %}
+                      <li><a href="https://www.wemove.eu/you#campaigns">{% filter ak_text:"nav_youmove" %}YouMove Campaigns{% endfilter %}</a></li>
+                      <li><a href="https://www.wemove.eu/you/create">{% filter ak_text:"nav_start" %}Start a Campaign{% endfilter %}</a></li>
+                      <li><a href="https://www.wemove.eu/user">{% filter ak_text:"nav_login" %}Log In{% endfilter %}</a></li>
+                    {% else %}
                       <li><a href="https://www.wemove.eu">{% filter ak_text:"nav_home" %}Home{% endfilter %}</a></li>
                       <li><a href="https://www.wemove.eu/en/campaigns">{% filter ak_text:"nav_campaigns" %}Campaigns{% endfilter %}</a></li>
                       <li><a href="https://www.wemove.eu/en/community">{% filter ak_text:"nav_about" %}About{% endfilter %}</a></li>
                       <li><a href="https://act.wemove.eu/campaigns/chip-in-wemove?utm_medium=speakout&utm_source=nav&utm_campaign=en">{% filter ak_text:"nav_donate" %}Donate{% endfilter %}</a></li>
-                                            {% endif %}
+                    {% endif %}
                   </ul>
 
               </div><!-- /.navbar-collapse -->

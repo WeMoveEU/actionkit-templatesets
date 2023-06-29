@@ -34,12 +34,11 @@
 
 {% block content %}
 <div class="ak-grid-row">
-    <div class="ak-grid-col ak-grid-col-12-of-12">
-	<h2>
-            {{campaign.title}} - Event Moderation
-	</h2>
-    </div>
+  <div class="ak-grid-col ak-grid-col-12-of-12">
+    <h2>{{campaign.title}} - Event Moderation</h2>
+  </div>
 </div>
+
 <div class="ak-grid-row">
     <div class="ak-grid-col {% if page.custom_fields.featured_image %} ak-grid-col-9-of-12 {% else %}ak-grid-col-12-of-12 {% endif %}">
     <div>
@@ -166,7 +165,7 @@
 	    Search events and hosts for a specific text string:
 	</label>
 	</p>
-	<input size="60" id="id_search_text" class="" name="q" dir="auto" type="text"><br> 
+	<input size="60" id="id_search_text" class="" name="q" dir="auto" type="text"><br>
 	<button type="submit" class="ak-event-search">Search</button>
 	</form>
     </div>
