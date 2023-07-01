@@ -29,11 +29,291 @@
     {% load_prefill %}
     {% load_ak_context context %}
 
-    <link rel="stylesheet" href="https://static.wemove.eu/action-kit/css/wemove.css?v=1">
+    <link rel="stylesheet" href="https://static.wemove.eu/action-kit/css/wemove.css?v=2">
+
     {% load_js %}
         //ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
         /resources/actionkit.js
     {% end %}
+    <script src="https://static.wemove.eu/action-kit/js/wemove.js"></script>
+
+    <style>
+      /* LUCAS FIXES BEGINS */
+      #rsign .raction-content .action-form-container-col .progress {
+        margin-bottom: 0;
+      }
+
+      .ak-progress-meter {
+        margin-bottom: 0;
+      }
+
+      .raction ul,
+      .raction ol {
+        list-style: disc;
+        padding-left: 40px;
+      }
+
+       .raction ul.dropdown-menu,
+       .raction ol.dropdown-menu {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .raction-content .advice-container > img {
+        margin-bottom: 30px;
+      }
+
+      /* FLOATING LABEL BEGINS */
+      #petition-form .floating-input-field {
+        position: relative;
+        margin: 0 0 6px;
+        padding-left: 0;
+      }
+
+      #petition-form .floating-input-field input,
+      #petition-form .floating-input-field select,
+      #petition-form .floating-input-field textarea {
+        margin-bottom: 0;
+        height: 50px;
+        width: 100%;
+        font-size: 15px;
+        border: 1px solid #fff;
+        background: #fff !important;
+        outline:none;
+        padding: 12px 14px 0 14px;
+      }
+
+      #petition-form .floating-input-field textarea {
+        height: auto;
+      }
+
+      #petition-form .floating-input-field label {
+        display: inline-block !important;
+        position: absolute;
+        padding: 0 0 0 1rem;
+        max-width: 100%;
+        left: 0;
+        top: 13px;
+
+        color: var(--speakout-color-text-base);
+        font-weight: var(--speakout-font-weight-normal) !important;
+        font-size: 15px;
+        line-height: 1.6;
+        overflow: hidden;
+        white-space: nowrap;
+        word-break: keep-all;
+        text-overflow: ellipsis;
+
+        transition: all .2s ease-in-out;
+
+        pointer-events: none;
+      }
+
+      #petition-form .floating-input-field input:focus {
+        background: #f4f4f4;
+        border-color: #f4f4f4;
+      }
+
+      #petition-form .floating-input-field.is-floating label {
+        top: 2px;
+        font-size: 11px;
+        opacity: .9;
+        outline: none;
+      }
+      /* FLOATING LABEL ENDS */
+
+      .ak-err-below .ak-err {
+        padding: 6px 0 0 0 !important;
+        margin: 0 0 6px 0 !important;
+        list-style: none !important;
+        color: #fff !important;
+        font-size: 14px;
+        line-height: 21px;
+      }
+
+      #petition-form button[type=submit] {
+        margin-top: -16px !important;
+      }
+
+      #petition-form .ak-error {
+        color: #000 !important;
+        font-weight: normal !important;
+      }
+
+      #rsign .raction-content .action-form-container-col {
+        padding: 0;
+        background: var(--speakout-color-bg-form);
+      }
+
+      img.partner-logo {
+        max-width: 260px;
+      }
+
+      #rsign .raction-content .action-form-container-col .action-form-container {
+        padding: 1rem;
+      }
+
+      .ak-field-box {
+        margin: 0;
+      }
+
+      @media (min-width: 680px) {
+        #rsign .raction-content .action-form-container-col {
+          min-width: 480px;
+        }
+      }
+
+      @media (min-width: 992px) {
+        #rsign .raction-content .action-form-container-col {
+          min-width: auto;
+        }
+      }
+
+      /* TEMP */
+      #ak-fieldbox-zip {
+        display: none !important;
+      }
+
+      #ak-fieldbox-postal {
+        display: block !important;
+        padding-left: 0 !important;
+      }
+      /* END TEMP */
+
+    /* END LUCAS FIXES */
+    </style>
+
+
+
+    <style>
+        .ak-progress-meter .ak-progress-meter-border {
+            border-color: #ffffff;
+        }
+        .ak-whipcount-callbox .ak-whipcount-boxhead {
+            color: #ffffff;
+        }
+        @media (min-width:480px) {
+            body .ak-steps-area h3 div.ak-step-number {
+                color: #ffffff;
+            }
+        }
+        @media (max-width:479px) {
+            .ak-steps-area h3 {
+                color: #ffffff;
+            }
+            .ak-steps-area h3 div.ak-step-number {
+                background-color: #ffffff;
+            }
+        }
+
+        a.ak-highlight-on-hover {
+            color: #4b4b4b;
+        }
+        .ak-donate-menu input:checked + div.ak-step-number {
+            background: #4b4b4b;
+        }
+        .ak-whipcount-callbox .ak-whipcount-boxhead {
+            background-color: #4b4b4b;
+        }
+        @media (min-width:480px) {
+            .ak-steps-area h3 label.ak-step-label {
+                color: #4b4b4b;
+            }
+            .ak-steps-area h3 div.ak-step-number {
+                background-color: #4b4b4b;
+            }
+        }
+        @media (max-width:479px) {
+            .ak-steps-area h3 {
+                background: #4b4b4b;
+            }
+            .ak-steps-area h3 div.ak-step-number {
+                color: #4b4b4b;
+            }
+        }
+        .ak-target-phone .ak-target-label, span.office_phone_label,
+        span.ak-target-fax, span.ak-target-separator { display: none }
+        .ak-event-description, .ak-event-note-to-attendees, .ak-event-directions { white-space: pre-line; }
+
+        #rsign .raction-content .advice-container > h1 {
+          margin-bottom: 30px;
+        }
+
+        #rsign .raction-content .advice-container div > p strong {
+            font-size: var(--speakout-font-size-lg);
+        }
+
+        #rsign .raction-content .advice-container #letter_to {
+            font-size: var(--speakout-font-size-lg);
+            font-weight: var(--speakout-font-weight-bold);
+            font-style: italic;
+        }
+
+        .ak-grid-col.ak-grid-col-4-of-12 {
+            margin-left: 0;
+        }
+
+        .ak-field-box {
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        button { height: auto; }
+
+        #rsign .raction-content .action-form-container-col .progress {
+            width: auto;
+        }
+
+        .raction ol.references,
+        .raction ul.references {
+          padding: 0;
+          list-style: none;
+        }
+
+        .share-big a.btn:hover,
+        a.btn.skip:hover { border-bottom-width: 1px; }
+
+        .signature-counter { float: left; }
+        .signature-counter-label { float: right; }
+
+        .js-nav-buttons button:only-child { width: 100%; }
+
+        #ak-fieldbox-first_name { width: 50%; float: left; padding-right: 0.25em; }
+        #ak-fieldbox-last_name { width: 50%; float: left; padding-left: 0.25em; }
+        #ak-fieldbox-email { clear: left; }
+        #ak-fieldbox-country { width: 50%; float: left; padding-right: 0.25em; }
+        #ak-fieldbox-zip { width: 50%; float: left; padding-left: 0.25em; }
+        #ak-fieldbox-zip input { width: 100%; }
+        #ak-fieldbox-postal { width: 50%; float: left; padding-left: 0.25em; }
+        .ak-privacy { clear: left; }
+        .ak-field { clear: left; }
+
+        .ak-userfield-input[disabled],
+        .ak-userfield-input[readonly],
+        fieldset[disabled] .ak-userfield-input,
+        .ak-field input[disabled],
+        .ak-field input[readonly],
+        fieldset[disabled] .ak-field input,
+        .ak-field select[disabled],
+        .ak-field select[readonly],
+        fieldset[disabled] .ak-field select,
+        .ak-field textarea[disabled],
+        .ak-field textarea[readonly],
+        fieldset[disabled] .ak-field textarea {
+            background-color: #eee !important;
+            opacity: 1;
+        }
+
+        .youmove-page .action-form-container {
+            background: linear-gradient(to right, #ec4f22 0%,#cf0404 100%) !important;
+        }
+
+        .youmove-page #progress {
+            background: #44BC96;
+        }
+
+    </style>
 
     {% block script_additions %}{% endblock %}
 </head>
@@ -82,7 +362,7 @@
 
                 $.get( '/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}', {},
                     function ( data ) {
-                        var modal = $('.modal.fade')
+                        const modal = $('.modal.fade');
                         modal.find('.modal-content').append(
                             $('#share-banner').show()
                         );
@@ -102,78 +382,37 @@
     <div id="wrapper">
       <div id="content">
 
-      <header class="header">
-        <div class="top-header-wrapper">
-          <div class="logo">
-            <a class="logo__link" href="/default">
-              <img alt="WeMove Europe logo" src="https://www.wemove.eu/uploads/logo_3_8acffc909d.svg" width="230" height="110" decoding="async" data-nimg="1" class="logo__icon" loading="lazy" style="color:transparent">
-            </a>
-          </div>
-          <button class="icon-hambuguer navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#header-wrapper" aria-controls="header-wrapper">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15">
-              <path fill="#21194F" d="M20 3V0H0V3H20ZM20 9V6H0V9H20ZM20 15V12H0V15H20Z"></path>
-            </svg>
-          </button>
-        </div>
-        <div class="nav-wrapper collapse d-lg-block" id="header-wrapper">
-          <nav class="nav nav--top">
-            <ul class="nav__main-list">
-              <li>
-                <div class="dropdown">
-                  <button class="btn dropdown-toggle" type="button" id="aboutUsDropdown-f1438b6f-63e5-4bb7-98d3-bf8c62e6398b" data-bs-toggle="dropdown" aria-expanded="false">About us</button>
-                  <ul class="dropdown-menu" aria-labelledby="aboutUsDropdown-f1438b6f-63e5-4bb7-98d3-bf8c62e6398b">
-                    <li>
-                      <a class="dropdown-item" href="/default/community">Community</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="/default/victories">Victories</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="/default/team">Team</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="/default/work-with-us">Work with us</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="/default/how-we-are-funded">How we are funded</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="/default/contact-us">Contact us</a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li class="nav__item">
-                <a class="nav__link regular-link regular-link--default" href="/default/updates">Updates</a>
-              </li>
-              <li class="nav__item">
-                <a class="nav__link button-fill button-fill--light-blue" href="https://www.youmoveeurope.eu">YouMove</a>
-              </li>
-              <li>
-                <div class="dropdown">
-                  <button class="btn dropdown-toggle" type="button" id="languageDropdown-3df198ab-f9c4-41d2-8cba-c4bb417a822d" data-bs-toggle="dropdown" aria-expanded="false">Language</button>
-                  <ul class="dropdown-menu" aria-labelledby="languageDropdown-3df198ab-f9c4-41d2-8cba-c4bb417a822d">
-                    <li>
-                      <a class="dropdown-item" href="/nl/campaigns">Nederlands</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="/fr/campaigns">Français</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="/de/campaigns">Deutsch</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="/en/campaigns">English</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="/it/campaigns">Italiano</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="/pl/campaigns">Polski</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="/es/campaigns">Español</a>
-                    </li>
+      <nav class="navbar navbar-default" style="border: 0; margin-bottom: 0">
+          <div class="container-fluid">
+              <!-- Brand and toggle get grouped for better mobile display -->
+              <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
+                      <span class="sr-only">{% filter ak_text:"toggle_navigation" %}Toggle navigation{% endfilter %}</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="https://www.wemove.eu">
+                                            {% if page.custom_fields.youmove_campaign %}
+                      <img src="https://you.wemove.eu/images/wemove/youmove-logo.svg" />
+                                            {% else %}
+                      <img src="https://act.wemove.eu/images/wemove/wemove-europe.svg" />
+                                            {% endif %}
+                  </a>
+              </div>
+
+              <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
+                  <ul class="nav navbar-nav navbar-right">
+                                        {% if page.custom_fields.youmove_campaign %}
+                                            <li><a href="https://www.wemove.eu/you#campaigns">{% filter ak_text:"nav_youmove" %}YouMove Campaigns{% endfilter %}</a></li>
+                                            <li><a href="https://www.wemove.eu/you/create">{% filter ak_text:"nav_start" %}Start a Campaign{% endfilter %}</a></li>
+                                            <li><a href="https://www.wemove.eu/user">{% filter ak_text:"nav_login" %}Log In{% endfilter %}</a></li>
+                                            {% else %}
+                      <li><a href="https://www.wemove.eu">{% filter ak_text:"nav_home" %}Home{% endfilter %}</a></li>
+                      <li><a href="https://www.wemove.eu/en/campaigns">{% filter ak_text:"nav_campaigns" %}Campaigns{% endfilter %}</a></li>
+                      <li><a href="https://www.wemove.eu/en/community">{% filter ak_text:"nav_about" %}About{% endfilter %}</a></li>
+                      <li><a href="https://act.wemove.eu/campaigns/chip-in-wemove?utm_medium=speakout&utm_source=nav&utm_campaign=en">{% filter ak_text:"nav_donate" %}Donate{% endfilter %}</a></li>
+                                            {% endif %}
                   </ul>
                 </div>
               </li>
@@ -270,9 +509,6 @@
 </div>
 
 </div>
-
-    <script src="https://static.wemove.eu/action-kit/js/wemove.js"></script>
-
     {% block below_form %}
     <script type="text/javascript">
         actionkit.forms.contextRoot = '/context/';
