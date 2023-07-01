@@ -1,0 +1,52 @@
+<header>
+  <nav class="navbar navbar-default" style="border: 0; margin-bottom: 0">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
+                <span class="sr-only">{% filter ak_text:"toggle_navigation" %}Toggle navigation{% endfilter %}</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://www.wemove.eu">
+                                      {% if page.custom_fields.youmove_campaign %}
+                <img src="https://you.wemove.eu/images/wemove/youmove-logo.svg" />
+                                      {% else %}
+                <img src="https://act.wemove.eu/images/wemove/wemove-europe.svg" />
+                                      {% endif %}
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                                  {% if page.custom_fields.youmove_campaign %}
+                                      <li><a href="https://www.wemove.eu/you#campaigns">{% filter ak_text:"nav_youmove" %}YouMove Campaigns{% endfilter %}</a></li>
+                                      <li><a href="https://www.wemove.eu/you/create">{% filter ak_text:"nav_start" %}Start a Campaign{% endfilter %}</a></li>
+                                      <li><a href="https://www.wemove.eu/user">{% filter ak_text:"nav_login" %}Log In{% endfilter %}</a></li>
+                                      {% else %}
+                <li><a href="https://www.wemove.eu">{% filter ak_text:"nav_home" %}Home{% endfilter %}</a></li>
+                <li><a href="https://www.wemove.eu/en/campaigns">{% filter ak_text:"nav_campaigns" %}Campaigns{% endfilter %}</a></li>
+                <li><a href="https://www.wemove.eu/en/community">{% filter ak_text:"nav_about" %}About{% endfilter %}</a></li>
+                <li><a href="https://act.wemove.eu/campaigns/chip-in-wemove?utm_medium=speakout&utm_source=nav&utm_campaign=en">{% filter ak_text:"nav_donate" %}Donate{% endfilter %}</a></li>
+                                      {% endif %}
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </nav>
+    <nav class="nav nav--bottom">
+      <ul class="nav__main-list">
+        <li class="nav__item">
+          <a class="nav__link regular-link regular-link--default" href="campaigns">Campaigns</a>
+        </li>
+        <li class="nav__item">
+          <a class="nav__link regular-link regular-link--default" href="https://act.wemove.eu/campaigns/join-wemove">Join us</a>
+        </li>
+        <li class="nav__item">
+          <a class="nav__link button-fill button-fill--pink" href="https://act.wemove.eu/campaigns/chip-in-wemove?utm_medium=wemove_en&amp;utm_source=web&amp;utm_campaign=nav&amp;reset=1&amp;id=1&amp;utm_medium=wemove_en&amp;utm_source=web&amp;utm_campaign=nav">Donate</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
