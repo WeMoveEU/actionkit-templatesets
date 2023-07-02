@@ -112,7 +112,7 @@
               {% endif %}
             </a>
           </div>
-          <button class="icon-hambuguer navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target=".header-wrapper" aria-controls="header-wrapper">
+          <button id="nav-button" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#nav-bar" aria-controls="nav-bar" aria-haspopup="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15">
               <path fill="#21194F" d="M20 3V0H0V3H20ZM20 9V6H0V9H20ZM20 15V12H0V15H20Z"></path>
             </svg>
@@ -120,39 +120,39 @@
         </div>
 
         {% if page.custom_fields.youmove_campaign %}
-        <nav class="flex items-center justify-center">
-          <a class="text-primary hover:text-turquoise font-gilroy-bold py-2 text-base uppercase lg:mr-2 xl:mr-6 regular-link regular-link--default" href="https://youmoveeurope.eu/en">YouMove Campaigns</a>
-          <a href="https://www.wemove.eu/form/start-your-campaign">Start a campaign</a>
+        <nav id="nav-bar" class="dropdown-menu" aria-labelledby="nav-button">
+          <a href="https://youmoveeurope.eu/en">YouMove Campaigns</a>
+          <a class="button-fill orange" href="https://www.wemove.eu/form/start-your-campaign">Start a campaign</a>
           <a href="https://www.wemove.eu/user/login">Log-in</a>
           <a href="https://www.wemove.eu/you/my-campaigns">My campaigns</a>
           <a href="https://youmoveeurope.eu/en/help">Help</a>
 
-          <span class="lg:border-l lg:border-black lg:py-2 lg:pl-3">
-            <div class="mt-0 relative block text-center lg:inline-block lg:text-left">
-              <button type="button" class="text-primary font-gilroy-bold hover:text-turquoise m-auto flex items-center py-2 text-base uppercase">
-                <span class="m-auto lg:mr-1">English</span>
+          <span>
+            <div>
+              <button id="lang-button" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#language-nav" aria-controls="language-nav" aria-haspopup="true">
+                <span>Language</span>
                 <svg width="8" height="8" viewBox="0 0 13 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M6.46971 7.5L0.866753 0L12.0727 0L6.46971 7.5Z" fill="#21194F"></path>
                 </svg>
               </button>
-              <ul class="text-primary font-gilroy-bold right-0 z-10 mt-2 w-full origin-top-right flex-col rounded-md bg-gray-100 text-base uppercase focus:outline-none lg:absolute lg:w-40 lg:bg-white lg:shadow-lg lg:ring-1 lg:ring-black lg:ring-opacity-10 hidden">
+              <ul id="language-nav" class="dropdown-menu" aria-labelledby="lang-button">
                 <li>
-                  <a class="hover:text-turquoise text-primary block px-4 py-2 leading-4" href="https://youmoveeurope.eu/de">Deutsch</a>
+                  <a href="https://youmoveeurope.eu/de">Deutsch</a>
                 </li>
                 <li>
-                  <a class="hover:text-turquoise text-primary block px-4 py-2 leading-4" href="httpws://youmoveeurope.eu/es">Español</a>
+                  <a href="httpws://youmoveeurope.eu/es">Español</a>
                 </li>
                 <li>
-                  <a class="hover:text-turquoise text-primary block px-4 py-2 leading-4" href="https://youmoveeurope.eu/fr">Français</a>
+                  <a href="https://youmoveeurope.eu/fr">Français</a>
                 </li>
                 <li>
-                  <a class="hover:text-turquoise text-primary block px-4 py-2 leading-4" href="https://youmoveeurope.eu/it">Italiano</a>
+                  <a href="https://youmoveeurope.eu/it">Italiano</a>
                 </li>
                 <li>
-                  <a class="hover:text-turquoise text-primary block px-4 py-2 leading-4" href="https://youmoveeurope.eu/pl">Polski</a>
+                  <a href="https://youmoveeurope.eu/pl">Polski</a>
                 </li>
                 <li>
-                  <a class="hover:text-turquoise text-primary block px-4 py-2 leading-4" href="https://youmoveeurope.eu/nl">Nederlands</a>
+                  <a href="https://youmoveeurope.eu/nl">Nederlands</a>
                 </li>
               </ul>
             </div>
