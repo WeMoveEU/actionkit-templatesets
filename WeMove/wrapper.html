@@ -263,9 +263,38 @@
             </div>
         </div>
     </div>
-</div>
+  </div>
 </div>
 
+{% if page.custom_fields.youmove_campaign %}
+<footer class="footer mt-24 text-center">
+  <nav class="bg-turquoise mb-8 flex flex-col justify-center border-y border-none py-2 md:flex-row md:gap-8">
+    <a class="font-gilroy-bold mx-0 py-2 text-lg capitalize text-white hover:text-white" href="/">YouMove campaigns</a>
+    <a class="font-gilroy-bold mx-0 py-2 text-lg capitalize text-white hover:text-white" href="https://www.wemove.eu/form/start-your-campaign">Start a campaign</a>
+    <a class="font-gilroy-bold mx-0 py-2 text-lg capitalize text-white hover:text-white" href="https://www.wemove.eu/user/login">Log-In</a>
+    <a class="font-gilroy-bold mx-0 py-2 text-lg capitalize text-white hover:text-white" href="https://www.wemove.eu/you/my-campaigns">My campaigns</a>
+    <a class="font-gilroy-bold mx-0 py-2 text-lg capitalize text-white hover:text-white" href="/help">Help</a>
+  </nav>
+  <div class="content text-primary mx-auto max-w-screen-2xl px-2 text-sm">
+    <p>
+      <strong>This website exists to promote positive social change, to protect the environment and to challenge injustice.</strong>
+    </p>
+    <p>
+      <strong>Petitions on this site are started and run by members of the public, civil society groups and politicians. WeMove Europe gGmbH hosts the You Move Europe website, but campaigns here are not necessarily endorsed by the charity. <a href="/en/terms-and-conditions">Read our Terms and Conditions</a>. </strong>
+    </p>
+    <p>
+      <strong>
+        <a href="https://www.wemove.eu/en/campaigns">Official WeMove Europe campaigns can be found here</a>. </strong>
+    </p>
+    <p>
+      <strong>WeMove Europe gGmbH hosts these petitions and they are in line with our values but they are not necessarily endorsed by WeMove Europe gGmbH.</strong>
+    </p>
+    <p>Address: WeMove Europe gGmbH - Planufer 91, 10967 Berlin | Phone: 030/60274195 | Email: <a href="mailto:youmove@wemove.eu">youmove@wemove.eu</a>
+    </p>
+    <p>© 2021 Copyright WeMove Europe gGmbH</p>
+  </div>
+</footer>
+{% else %}
 <footer class="footer">
   <div class="container">
     <div class="row row-first">
@@ -337,6 +366,13 @@
     </div>
   </div>
 </footer>
+{% endif %}
+
+
+
+
+
+
 
     {% block below_form %}
     <script type="text/javascript">
