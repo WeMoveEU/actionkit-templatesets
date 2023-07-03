@@ -1,3 +1,4 @@
+{% log_context %}
 <!DOCTYPE html>
 <html lang="{{page.lang.iso_code|default:'en'}}"{% if page.lang.is_rtl %} dir="rtl"{% endif %}>
 <head>
@@ -34,20 +35,8 @@
     {% load_js %}
         //ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
         //static.wemove.eu/action-kit/js/boostrap-5.1.3.min.js
-        //static.wemove.eu/action-kit/js/wemove.js
         /resources/actionkit.js
     {% end %}
-
-    <script>
-      window.actionkit.forms.isUnitedStates = function () {
-      var country =
-        window.actionkit.form &&
-        window.actionkit.form.country &&
-        window.actionkit.utils.val(window.actionkit.form.country);
-
-      return country == "United States" || country == "US";
-};
-    </script>
 
     {% block script_additions %}{% endblock %}
 </head>
@@ -116,13 +105,15 @@
       <div class="header-wrapper">
         <div class="top-header-wrapper">
           <div class="logo">
-            <a class="logo__link" href="/">
               {% if page.custom_fields.youmove_campaign %}
-              <img alt="YouMove logo" src="https://static.wemove.eu/action-kit/svg/youmove-iso-logo.svg" width="242" height="112" decoding="async" class="logo__icon" loading="lazy" style="color:transparent">
+              <a class="logo__link" data-link-translate-me href="https://youmoveeurope.eu/LANG_ISO">
+                <img alt="YouMove logo" src="https://static.wemove.eu/action-kit/svg/youmove-iso-logo.svg" width="242" height="112" decoding="async" class="logo__icon" loading="lazy" style="color:transparent">
+              </a>
               {% else %}
-              <img alt="WeMove Europe logo" src="https://static.wemove.eu/action-kit/svg/wemove-iso-logo__purple-text.svg" width="230" height="110" decoding="async" class="logo__icon" loading="lazy" style="color:transparent">
+              <a class="logo__link" data-link-translate-me href="https://wemove.eu/LANG_ISO">
+                <img alt="WeMove Europe logo" src="https://static.wemove.eu/action-kit/svg/wemove-iso-logo__purple-text.svg" width="230" height="110" decoding="async" class="logo__icon" loading="lazy" style="color:transparent">
+              </a>
               {% endif %}
-            </a>
           </div>
           <button id="nav-button" class="icon-hamburguer navbar-toggler" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#nav-bar" aria-controls="nav-bar" aria-haspopup="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15">
@@ -133,11 +124,11 @@
 
         {% if page.custom_fields.youmove_campaign %}
         <nav id="nav-bar" class="dropdown-menu" aria-labelledby="nav-button">
-          <a href="https://youmoveeurope.eu/en">YouMove Campaigns</a>
+          <a data-link-translate-me href="https://youmoveeurope.eu/LANG_ISO">YouMove Campaigns</a>
           <a class="button-fill orange" href="https://www.wemove.eu/form/start-your-campaign">Start a campaign</a>
           <a href="https://www.wemove.eu/user/login">Log-in</a>
           <a href="https://www.wemove.eu/you/my-campaigns">My campaigns</a>
-          <a href="https://youmoveeurope.eu/en/help">Help</a>
+          <a data-link-translate-me href="https://youmoveeurope.eu/LANG_ISO/help">Help</a>
 
           <div class="language-selector">
             <button id="lang-button" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#language-nav" aria-controls="language-nav" aria-haspopup="true">
@@ -177,31 +168,31 @@
                   <button class="btn dropdown-toggle" type="button" id="aboutUsDropdown-f1438b6f-63e5-4bb7-98d3-bf8c62e6398b" data-bs-toggle="dropdown" aria-expanded="false">About us</button>
                   <ul class="dropdown-menu" aria-labelledby="aboutUsDropdown-f1438b6f-63e5-4bb7-98d3-bf8c62e6398b">
                     <li>
-                      <a class="dropdown-item" href="https://wemove.eu/community">Community</a>
+                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/community">Community</a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="https://wemove.eu/victories">Victories</a>
+                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/victories">Victories</a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="https://wemove.eu/team">Team</a>
+                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/team">Team</a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="https://wemove.eu/work-with-us">Work with us</a>
+                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/work-with-us">Work with us</a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="https://wemove.eu/how-we-are-funded">How we are funded</a>
+                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/how-we-are-funded">How we are funded</a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="https://wemove.eu/contact-us">Contact us</a>
+                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/contact-us">Contact us</a>
                     </li>
                   </ul>
                 </div>
               </li>
               <li class="nav__item">
-                <a class="nav__link regular-link regular-link--default" href="https://wemove.eu/updates">Updates</a>
+                <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/updates">Updates</a>
               </li>
               <li class="nav__item">
-                <a class="nav__link button-fill button-fill--light-blue" href="https://www.youmoveeurope.eu">YouMove</a>
+                <a data-link-translate-me class="nav__link button-fill button-fill--light-blue" href="https://www.youmoveeurope.eu/LANG_ISO">YouMove</a>
               </li>
               <li>
                 <div class="dropdown">
@@ -236,7 +227,7 @@
           <nav class="nav nav--bottom">
             <ul class="nav__main-list">
               <li class="nav__item">
-                <a class="nav__link regular-link regular-link--default" href="https://wemove.eu/en/campaigns">Campaigns</a>
+                <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/campaigns">Campaigns</a>
               </li>
               <li class="nav__item">
                 <a class="nav__link regular-link regular-link--default" href="https://act.wemove.eu/campaigns/join-wemove">Join us</a>
@@ -282,11 +273,11 @@
 {% if page.custom_fields.youmove_campaign %}
 <footer>
   <nav class="footer-nav">
-    <a href="https://youmoveeurope.eu/en">YouMove campaigns</a>
+    <a data-link-translate-me href="https://youmoveeurope.eu/LANG_ISO">YouMove campaigns</a>
     <a href="https://www.wemove.eu/form/start-your-campaign">Start a campaign</a>
     <a href="https://www.wemove.eu/user/login">Log-In</a>
     <a href="https://www.wemove.eu/you/my-campaigns">My campaigns</a>
-    <a href="https://youmoveeurope.eu/en/help">Help</a>
+    <a data-link-translate-me href="https://youmoveeurope.eu/LANG_ISO/help">Help</a>
   </nav>
   <div class="legal-text">
     <p>
@@ -297,7 +288,7 @@
     </p>
     <p>
       <strong>
-        <a href="https://www.wemove.eu/en/campaigns">Official WeMove Europe campaigns can be found here</a>. </strong>
+        <a data-link-translate-me href="https://www.wemove.eu/LANG_ISO/campaigns">Official WeMove Europe campaigns can be found here</a>. </strong>
     </p>
     <p>
       <strong>WeMove Europe gGmbH hosts these petitions and they are in line with our values but they are not necessarily endorsed by WeMove Europe gGmbH.</strong>
@@ -313,7 +304,7 @@
     <div class="row row-first">
       <div class="col-md-4">
         <div class="logo-wrapper">
-          <a href="https://wemove.eu">
+          <a data-link-translate-me href="https://wemove.eu/LANG_ISO">
             <img alt="WeMove Europe logo" src="https://static.wemove.eu/action-kit/svg/wemove-iso-logo__white-text.svg" width="230" height="111" decoding="async" data-nimg="1" class="stat__icon" loading="lazy" style="color:transparent">
           </a>
         </div>
@@ -322,16 +313,16 @@
         <nav class="nav nav--top">
           <ul class="nav__main-list">
             <li class="nav__item">
-              <a class="nav__link regular-link regular-link--default" href="https://wemove.eu/community">Community</a>
+              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/community">Community</a>
             </li>
             <li class="nav__item">
-              <a class="nav__link regular-link regular-link--default" href="https://wemove.eu/campaigns">Campaigns</a>
+              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/campaigns">Campaigns</a>
             </li>
             <li class="nav__item">
               <a class="nav__link regular-link regular-link--default" href="https://act.wemove.eu/campaigns/join-wemove">Join us</a>
             </li>
             <li class="nav__item">
-              <a class="nav__link regular-link regular-link--default" href="https://wemove.eu/contact-us">Contact</a>
+              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/contact-us">Contact</a>
             </li>
           </ul>
         </nav>
@@ -368,10 +359,10 @@
         <nav class="nav nav--bottom">
           <ul class="nav__main-list">
             <li class="nav__item">
-              <a class="nav__link regular-link regular-link--default" href="https://wemove.eu/privacy-policy">Privacy Policy</a>
+              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/privacy-policy">Privacy Policy</a>
             </li>
             <li class="nav__item">
-              <a class="nav__link regular-link regular-link--default" href="https://wemove.eu/impressum">Impressum</a>
+              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/impressum">Impressum</a>
             </li>
           </ul>
         </nav>
@@ -399,5 +390,11 @@ ga('create', '{{ analytics_key }}', 'auto');
 ga('send', 'pageview');
 </script>
 {% endif %}
+
+<script>
+  window.lang_or_en = "{{ page.lang_or_en }}";
+</script>
+<script src="//static.wemove.eu/action-kit/js/wemove.js" defer></script>
+
 </body>
 </html>
