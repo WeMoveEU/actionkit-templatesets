@@ -1,11 +1,31 @@
 <ul class="compact" id="ak-errors"></ul>
+
 <div id="known_user" class="known-member">
-    Sign this as <strong id="known_user_name"></strong> 
-		<br>
-		Not you? <a href="?" onclick="return actionkit.forms.logOut()">Click here.</a>
+  <div class="known-member-inner">
+    <p>Sign this as <strong id="known_user_name">lucas ramos</strong></p>
+		<p>Not you? <a href="?" onclick="return actionkit.forms.logOut()">Click here.</a></p>
+  </div>
+
+  <div class="already-signed">
+    <p>It seems you have already signed. However, you can do more. Click below for next step.</p>
+
+    <a
+      class="btn btn-danger"
+      href="https://action.wemove.eu/act/basic-wemove-email-consent-en?akid=.23.jKUvQd&trigger_page=lucas-testing-petition&trigger_action=43&next_step=/thanks/lucas-testing-petition%3Fshare%3D1%26akid%3D.23.jKUvQd%26action_id%3D43"
+    >Next</a>
+  </div>
 </div>
+
 <div id="unknown_user" class="ak-user-form">
     {% include "./user_form.html" %}
+    <div class="ak-field floating-input-field">
+      <label for="id_comment">{% filter ak_text:"your_comment_optional" %}Your comments{% endfilter %}:</label>
+      <textarea id="id_comment" name="action_comment"></textarea>
+    </div>
+
+    <div class="js-nav-buttons">
+      <button type="submit" class="btn btn-primary">{% filter ak_text:"sign_the_petition" %}Sign the petition{% endfilter %}</button>
+    </div>
 </div>
 {% include "./privacy.html" %}
 
