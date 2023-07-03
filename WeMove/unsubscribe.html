@@ -2,70 +2,81 @@
 
 {% block content %}
 
-<div class="ak-grid-row">
-    <div class="ak-grid-col ak-grid-col-12-of-12">
-        <h2>{{ page.title }}</h2>
-    </div>
+<h1 class="page-header">{{ page.title }}</h1>
+
+<div class="region region-content">
+	<section id="block-system-main" class="block block-system clearfix">
+
+		<div id="crm-container" class="crm-container crm-public" lang="en" xml:lang="en">
+
+			<div class="clear"></div>
+
+			<div id="crm-main-content-wrapper">
+
+				<form id="unsub-form" name="act" method="POST" action="/act/" accept-charset="utf-8">
+					<input type="hidden" name="page" value="{{ page.name }}">
+
+					{% if page.custom_fields.featured_image %}
+					<img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
+					{% endif %}
+					{% if form.introduction_text|is_nonblank %}
+					{% include_tmpl form.introduction_text %}
+					{% endif %}
+
+					<div class="crm-block crm-form-block crm-miscellaneous-form-block">
+
+						<div class="ak-styled-fields ak-labels-overlaid ak-errs-below">
+
+							<ul class="compact" id="ak-errors"></ul>
+
+							<div id="known_user">
+
+								<p>You are requesting to opt out from all mailing lists for the user named below.</p>
+ 
+								<h3> <span id="known_user_name"></span> </h3>
+
+								<p>If this is not you, there is no need to do anything. You have not been added to any mailing lists.</p>
+
+								<p>If this is your name and you wish to opt out please click the Opt Out button to confirm.</p>
+
+							</div>
+
+							<div id="unknown_user">
+								<div>
+									<div>
+										<label for="id_email">Email address</label>
+										<input id="id_email" type="text" name="email" size=40>
+									</div>
+								</div>
+							</div>
+
+							{% if form.survey_question_text|is_nonblank %}
+							<div>
+								<label for="id_action_survey">
+									{% include_tmpl form.survey_question_text %}
+								</label>
+								<textarea id="id_action_survey" name="action_survey"></textarea>
+							</div>
+							{% endif %}
+
+							<div class="crm-submit-buttons">
+
+								<button class="crm-form-submit default validate crm-button crm-button-type-next crm-button_qf_Optout_next" value="1" type="submit" id="_qf_Optout_next-bottom">Opt Out</button>
+								
+								<a class="button" href="//www.wemove.eu">Cancel</a>
+							</div>
+
+						</div>
+
+					</div>
+
+
+				</form>
+			</div>
+
+
+		</div>
+	</section>
 </div>
-
-<form id="unsub-form" name="act" method="POST" action="/act/" accept-charset="utf-8">
-
-    <div class="ak-grid-row">
-        <div class="area ak-grid-col ak-grid-col-6-of-12">
-            {% if page.custom_fields.featured_image %}
-                <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
-            {% endif %}
-            {% include_tmpl form.introduction_text %}
-        </div>
-        <div class="area ak-grid-col ak-grid-col-6-of-12 ak-styled-fields {{templateset.custom_fields.field_labels_class|default:"ak-labels-overlaid"}} {{templateset.custom_fields.field_errors_class|default:"ak-errs-below"}}">
-
-            <ul class="compact" id="ak-errors"></ul>
-            <div id="unknown_user">
-                <div> 
-                    <div>
-                        <label for="id_email">Email address</label>
-                        <input id="id_email" type="text" name="email" size=40>
-                    </div>
-                    <input type="hidden" name="country" value="United States">
-                </div>
-            </div>
-            <div id="known_user">
-                <div class="ak-err">
-                    Not <span id="known_user_name"></span>?  
-                    Please don't use this form!
-                </div>
-            </div>
-
-            {% if user.subscriptions|length > 1 %}
-                <input type="hidden" name="have_unsub_lists" value="1">
-                <div>
-                    <label>
-                        Unsubscribe From
-                    </label>                    
-                    <div class="ak-unsubscribe-lists ak-checkbox-set">
-                        {% for s in user.subscriptions %}
-                            <label class="ak-checkbox-choice" style="display: block">
-                                <input type="checkbox" checked name="unsub_lists" value="{{ s.list.id }}">
-                                {{ s.list.name }}
-                            </label>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
-
-            <div>
-                <label for="id_action_survey">
-                    {% include_tmpl form.survey_question_text %}
-                </label>
-                <textarea id="id_action_survey" name="action_survey"></textarea>
-            </div>
-
-            <button type="submit">Unsubscribe</button>
-
-        </div>
-    </div>
-    
-    <input type="hidden" name="page" value="{{ page.name }}">
-</form>
 
 {% endblock %}
