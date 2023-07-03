@@ -19,7 +19,9 @@
 					{% if page.custom_fields.featured_image %}
 					<img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
 					{% endif %}
+					{% if form.introduction_text|is_nonblank %}
 					{% include_tmpl form.introduction_text %}
+					{% endif %}
 
 					<div class="crm-block crm-form-block crm-miscellaneous-form-block">
 
@@ -48,7 +50,7 @@
 								</div>
 							</div>
 
-							{% if form.survey_question_text|length %}
+							{% if form.survey_question_text|is_nonblank %}
 							<div>
 								<label for="id_action_survey">
 									{% include_tmpl form.survey_question_text %}
