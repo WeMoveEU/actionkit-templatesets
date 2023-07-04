@@ -392,7 +392,10 @@ ga('send', 'pageview');
 {% endif %}
 
 <script>
-  window.lang_or_en = "{{ page.lang_or_en }}";
+  window.language = {
+    name: "{{ page.lang_or_en }}",
+    iso: null,
+  };
 </script>
 <script src="//static.wemove.eu/action-kit/js/wemove.js" defer></script>
 
