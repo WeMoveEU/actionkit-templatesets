@@ -1,17 +1,18 @@
 {% if can_switch_lang %}
     {% with page.translations as translations %}
         <!-- Remove this if you don't want popins like "This page also in English" -->
-				
 				<div class="siblings dropdown">
-
-				    <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="dropdownsiblings" class="btn btn-default dropdown-toggle">
-				      <img src="https://act.wemove.eu/images/icon-translate.svg"> 
+				    <button type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              id="dropdownsiblings"
+              class="btn btn-default dropdown-toggle">
+				      <img src="https://act.wemove.eu/images/icon-translate.svg">
 	            {% for translated_page in translations %}
 	                {% if translated_page.id == page.id %}
 										{{ translated_page.lang.name|default:"English" }}
 	                {% endif %}
 	            {% endfor %}
-				      <span class="caret"></span>
 				    </button>
 				    <ul class="dropdown-menu" aria-labelledby="dropdownsiblings">
 	            {% for translated_page in translations %}
@@ -27,6 +28,5 @@
 				    </ul>
 		        <span style="ak-lang-popin"></span>
 				  </div>
-				
     {% endwith %}
 {% endif %}
