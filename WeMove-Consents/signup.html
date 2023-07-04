@@ -32,22 +32,18 @@
 	    <input type="hidden" name="action_trigger_page" value="{{ args.trigger_page }}">
 	    <input type="hidden" name="action_trigger_action" value="{{ args.trigger_action }}">
 
-		<div id="consent-buttons" class="row">
-			<div class="col-xs-12 col-md-6">
-				<button type="button" id="btn_optin" value="explicit_opt_in" class="btn optin js-popup-consent-button ">
-					Yes, keep me informed!
-				</button>
-			</div>
-			<div class="col-xs-12 col-md-6">
-				<button type="button" id="btn_optout" value="none_given" class="btn optout js-popup-consent-button ">
+		<div id="consent-buttons">
+				<button type="button" id="btn_optout" value="none_given" class="btn optout js-popup-consent-button">
 					No, do not contact me.
 				</button>
-			</div>
-			<div class="col-xs-12 col-md-12" style="display: none">
-				<button type="button" id="btn_email" value="email_opt_in" class="btn optemail js-popup-consent-button ">
+
+        <button type="button" id="btn_optin" value="explicit_opt_in" class="btn optin js-popup-consent-button">
+					Yes, keep me informed!
+				</button>
+
+				<button type="button" id="btn_email" value="email_opt_in" class="btn optemail js-popup-consent-button" hidden>
 					Confirm consent via email.
 				</button>
-			</div>
 		</div>
 
 	</div>
