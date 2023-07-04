@@ -57,17 +57,17 @@
     </div>
 
     <script>
-        // function init_modal () {
-        //     var modal = $('.modal.fade')
-        //     var modal_backdrop = modal.find('.modal-backdrop');
-        //     function resize_modal () { modal_backdrop.height( $(window).height() ) }
-        //     $(window).on( 'resize', resize_modal );
-        //     resize_modal();
+        function init_modal () {
+            var modal = $('.modal.fade')
+            var modal_backdrop = modal.find('.modal-backdrop');
+            function resize_modal () { modal_backdrop.height( $(window).height() ) }
+            $(window).on( 'resize', resize_modal );
+            resize_modal();
 
-        //     modal_backdrop.on( 'click', close_modal );
-        //     modal.find('.close').on( 'click', close_modal );
-        //     function close_modal () { modal.hide() }
-        // }
+            modal_backdrop.on( 'click', close_modal );
+            modal.find('.close').on( 'click', close_modal );
+            function close_modal () { modal.hide() }
+        }
     </script>
 
 {% block pre_action_share %}
