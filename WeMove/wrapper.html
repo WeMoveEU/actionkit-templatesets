@@ -1,4 +1,3 @@
-{% log_context %}
 <!DOCTYPE html>
 <html lang="{{page.lang.iso_code|default:'en'}}"{% if page.lang.is_rtl %} dir="rtl"{% endif %}>
 <head>
@@ -339,12 +338,7 @@ ga('send', 'pageview');
     name: "{{ page.lang_or_en }}",
     iso: null,
   };
-
-  $(window).on("popstate", () => {
-console.log('hola pichola!');
-});
 </script>
 <script src="//static.wemove.eu/action-kit/out/js/wemove-main.bundle.min.js" defer></script>
-
 </body>
 </html>
