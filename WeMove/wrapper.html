@@ -339,8 +339,12 @@ ga('send', 'pageview');
     name: "{{ page.lang_or_en }}",
     iso: null,
   };
+
+  $(window).on("popstate", () => {
+console.log('hola pichola!');
+});
 </script>
-<script src="//static.wemove.eu/action-kit/out/js/wemove-main.bundle.js" defer></script>
+<script src="//static.wemove.eu/action-kit/out/js/wemove-main.bundle.min.js" defer></script>
 
 </body>
 </html>
