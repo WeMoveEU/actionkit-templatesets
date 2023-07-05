@@ -6,7 +6,7 @@
 
 <form class="action_form" name="act" method="POST" action="/act/" accept-charset="utf-8">
 
-	<div id="signup-story">
+	<div id="signup-story" class="">
 
 		{% if page.custom_fields.featured_image %}
 		<img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
@@ -20,7 +20,7 @@
 
 	</div>
 
-	<div id="signup-form" class="ak-styled-fields {{templateset.custom_fields.field_labels_class|default:"ak-labels-overlaid"}} {{templateset.custom_fields.field_errors_class|default:"ak-errs-below"}}">
+	<div id="signup-form" class=" ak-styled-fields {{templateset.custom_fields.field_labels_class|default:"ak-labels-overlaid"}} {{templateset.custom_fields.field_errors_class|default:"ak-errs-below"}}">
 
 	    <input type="hidden" name="akid" value="{{ akid }}">
 	    <input type="hidden" name="redirect" value="{{ args.next_step }}">
@@ -32,18 +32,22 @@
 	    <input type="hidden" name="action_trigger_page" value="{{ args.trigger_page }}">
 	    <input type="hidden" name="action_trigger_action" value="{{ args.trigger_action }}">
 
-		<div id="consent-buttons">
-				<button type="button" id="btn_optout" value="none_given" class="btn optout js-popup-consent-button">
-					No, do not contact me.
-				</button>
-
-        <button type="button" id="btn_optin" value="explicit_opt_in" class="btn optin js-popup-consent-button">
+		<div id="consent-buttons" class="row">
+			<div class="col-xs-12 col-md-6">
+				<button type="button" id="btn_optin" value="explicit_opt_in" class="btn optin js-popup-consent-button ">
 					Yes, keep me informed!
 				</button>
-
-				<button type="button" id="btn_email" value="email_opt_in" class="btn optemail js-popup-consent-button" hidden>
+			</div>
+			<div class="col-xs-12 col-md-6">
+				<button type="button" id="btn_optout" value="none_given" class="btn optout js-popup-consent-button ">
+					No, do not contact me.
+				</button>
+			</div>
+			<div class="col-xs-12 col-md-12" style="display: none">
+				<button type="button" id="btn_email" value="email_opt_in" class="btn optemail js-popup-consent-button ">
 					Confirm consent via email.
 				</button>
+			</div>
 		</div>
 
 	</div>
