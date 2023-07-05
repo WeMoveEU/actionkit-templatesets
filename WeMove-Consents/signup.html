@@ -71,12 +71,13 @@
 	{% else %}
 		$('#btn_optin').on('click', function () {
 			$('input[name="action_consent_action"]').val( 'y' );
+      $('form.action_form').get(0).submit();
 		} );
 		$('#btn_optout').on('click', function () {
 			$('input[name="action_consent_action"]').val( 'n' );
+      $('form.action_form').get(0).submit();
 			$('input[name="require_opt_in"]').val(1);
 		} );
-    $('form.action_form').get(0).submit();
 	{% endif %}
 </script>
 
