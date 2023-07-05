@@ -16,7 +16,7 @@
 			{% endfilter %}
 		{% endif %}
 	</b></p>
-	
+
 </div>
 
 {% elif args.share %}
@@ -49,10 +49,10 @@
             <div>
                 {% include_tmpl form.thank_you_text %}
             </div>
-						
+
 						<a href="{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
-						
-						
+
+
         </div>
     </div>
 {% else %}
@@ -84,13 +84,13 @@
               </select>
               <button type="submit" class="ak-submit-button">Update</button>
             {% else %}
-              {% include_tmpl form.thank_you_text %}							
+              {% include_tmpl form.thank_you_text %}
             {% endif %}
             </div>
         </div>
 
-        <div class="ak-grid-col ak-grid-col-6-of-12 ak-margin-top-2">
-					
+        <div class="ak-grid-col ak-grid-col-6-of-12">
+
 					<div class="facebook-share-preview-container">
 					    <h3 class="facebook-share-preview--title">{{ page.followup.share_title_value }}</h3>
 							{% if page.custom_fields.featured_image or page.followup.share_image_value %}
@@ -103,7 +103,7 @@
 					    </div>
 					    <div style="clear: both;"></div>
 					  </div>
-					
+
 						<div class="share-big facebook-share-container js-facebook-share-container  ">
 							<a class="btn btn-primary popup facebook" href="/share/link?type=fb&amp;page_name={{page.name}}&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" target="_blank">
 								<i class="fa fa-facebook-square"></i> <span class="share-text">Share on Facebook</span>
@@ -141,14 +141,14 @@
 
 						{% if page.followup.send_taf %}
 						<div class="share-big email-share-container js-email-share-container  ">
-							<a class="btn btn-primary email" href="mailto:?subject={{ page.followup.taf_subject|urlencode }}&amp;body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}" target="_blank">								
+							<a class="btn btn-primary email" href="mailto:?subject={{ page.followup.taf_subject|urlencode }}&amp;body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}" target="_blank">
 								<i class="fa fa-envelope-o"></i> <span class="share-text">{% filter ak_text:"taf_mailto_ask" %}Share by e-mail{% endfilter %}</span>
 							</a>
 						</div>
 						{% endif %}
 
         </div>
-				
+
 				<div class="col-md-12" style="text-align: center;">
 					<br>
 					<a href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default">Skip this step</a>
@@ -198,23 +198,23 @@
 		<script>
 			window.location = '{{ next_step }}&consent=previous';
 		</script>
-	
+
 	{% else %}
-	
+
 	<!-- Lang ID: {{ user.lang_id }} -->
 
 		{% store as signup_page_name %}{% report "signup_page_for_list_language" with page.list_id as list_id user.lang_id|default:100 as lang_id %}{% endstore %}
 		<!-- Signup Page: {{ signup_page_name }} -->
-	
+
 		{% if not signup_page_name %}
-	
+
 			{# You should be asked to consent, but we don't have a consent page for that list in your language, so jump to the next step. #}
-	
+
 			<a href="{{ next_step }}">Please continue to the next step.</a>
 			<script>
 				window.location = '{{ next_step }}&consent=nolang';
 			</script>
-		
+
 		{% else %}
 
 			{% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&trigger_page={{ page.name }}&trigger_action={{ action.id }}{% endif %}&next_step={{ next_step|urlencode }}{% endstore %}
