@@ -9,14 +9,14 @@
                 [% progress.current = goal_type == 'dollars' ? total.dollars : goal_type == 'money' ? total.money : total.actions; %]
                 [% progress.current = parseInt(progress.current) + {{ page.custom_fields.external_signature_count|default:"0" }} + {{ page.custom_fields.external_signature_extras|default:"0" }}; %]
                 [% progress.percent = parseInt(progress.current/goal*100); %]
-								
+
 								<div class="signature-counter">
 	                [% if (goal_type == "dollars") { %]
-										$[%= add_commas(progress.current) %] 
+										$[%= add_commas(progress.current) %]
 	                [% } else if (goal_type == "money") { %]
-										{{ page.currency|iso_currency_symbol }}[%= add_commas(progress.current) %] 
-	                [% } else { %]  
-	                        [%= add_commas(progress.current) %] 
+										{{ page.currency|iso_currency_symbol }}[%= add_commas(progress.current) %]
+	                [% } else { %]
+	                        [%= add_commas(progress.current) %]
 	                [% } %]
 								  </div>
 								<div class="signature-counter-label">
@@ -26,12 +26,12 @@
 	                [% } else if (goal_type == "money") { %]
 	                         raised so far
 	                    of our goal of {{ page.currency|iso_currency_symbol }}[%= add_commas(goal)  %]!
-	                [% } else { %]  
+	                [% } else { %]
 	                        of [%= add_commas(goal) %]
-													[%= progress.current != 1 ? 'signatures' : 'signature' %]
+													[%= progress.current != 1 ? 'signaturessss' : 'signature' %]
 	                [% } %]
 								  </div>
-									
+
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped" style="width: [%= progress.current > goal ? 100 : progress.percent %]%;">&nbsp;</div>
                 </div>
