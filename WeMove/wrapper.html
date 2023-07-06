@@ -269,7 +269,7 @@
     </div>
     <div class="row row-second">
       <div class="col-md-4 col-left">
-        <p class="footer__text">WeMove Europe is an independent and values-based organisation that seeks to build people power to transform Europe in the name of our community, future generations and the planet.</p>
+        <p class="footer__text">{% filter ak_text:"footer_wm_legalText_1" %}WeMove Europe is an independent and values-based organisation that seeks to build people power to transform Europe in the name of our community, future generations and the planet.{% endfilter %}</p>
         <p class="footer__copyright">© 2023 WeMove Europe</p>
       </div>
       <div class="col-md-8 col-right">
@@ -298,10 +298,10 @@
         <nav class="nav nav--bottom">
           <ul class="nav__main-list">
             <li class="nav__item">
-              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/privacy-policy">Privacy Policy</a>
+              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/privacy-policy">{% filter ak_text:"nav_wm_privacyPolicy" %}Privacy Policy{% endfilter %}</a>
             </li>
             <li class="nav__item">
-              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/impressum">Impressum</a>
+              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/impressum">{% filter ak_text:"nav_wm_impressum" %}Impressum{% endfilter %}</a>
             </li>
           </ul>
         </nav>
