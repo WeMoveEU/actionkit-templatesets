@@ -3,10 +3,10 @@
 <div id="known_user" class="known-member">
   <div class="known-member-inner">
     <p>
-      {% filter ak_text:"knownUser_SignThisAs" %}Sign this as {% endfilter %}
+      {% filter ak_text:"knownUser_signingAs" %}Sign this as {% endfilter %}
       <strong id="known_user_name" data-user-full-name>lucas ramos</strong>
       <br/>
-      {% filter ak_text:"knownUser_NotYou" %}Not you?{% endfilter %}
+      {% filter ak_text:"knownUser_notYou_button" %}Not you?{% endfilter %}
       <a href="#" onclick="return actionkit.forms.logOut()">
         {% filter ak_text:"clickHere_button" %}Not you?{% endfilter %}
       </a>
@@ -14,13 +14,13 @@
   </div>
 
   <div class="already-signed">
-    <p>{% filter ak_text:"alreadySignedDoMoreClickNext_button" %}It seems you have already signed. However, you can do more. Click below for next step.{% endfilter %}</p>
+    <p>{% filter ak_text:"alreadySigned_link" %}It seems you have already signed. However, you can do more. Click below for next step.{% endfilter %}</p>
 
     <a
       class="btn btn-danger"
       href="https://action.wemove.eu/act/basic-wemove-email-consent-en"
     >
-      {% filter ak_text:"next_button" %}Next{% endfilter %}
+      {% filter ak_text:"next_button" %}Continue{% endfilter %}
     </a>
   </div>
 </div>
