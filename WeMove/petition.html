@@ -26,19 +26,19 @@
 					<div id="sign-advice">
 						<div class="well">
 
-							<h2>{% filter ak_text:"petition" %}Petition{% endfilter %}</h2>
+							<h2>{% filter ak_text:"petition_title" %}Petition{% endfilter %}</h2>
 
 							<div class="ak-margin-bottom-1 ak-text-expander">
 								{% include_tmpl form.statement_text %}
 							</div>
-							<a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"read_more" %}Read more{% endfilter %}</a>
+							<a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"readMore_button" %}Read more{% endfilter %}</a>
 						</div>
 
 						{% if form.about_text %}
 						<div id="ak-petition-story">
-              <h2>{% filter ak_text:"why_is_this_important" %}Why is this important?{% endfilter %}</h2>
+              <h2>{% filter ak_text:"whyIsThisImportant_title" %}Why is this important?{% endfilter %}</h2>
 							<div class="ak-text-expander">{% include_tmpl form.about_text %}</div>
-							<a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"read_more" %}Read more{% endfilter %}</a>
+							<a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"readMore_button" %}Read more{% endfilter %}</a>
 						</div>
 						{% endif %}
 
