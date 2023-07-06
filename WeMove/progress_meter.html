@@ -27,7 +27,7 @@
 	                         raised so far
 	                    of our goal of {{ page.currency|iso_currency_symbol }}[%= add_commas(goal)  %]!
 	                [% } else { %]
-	                        {% filter ak_text:"form_of" %}of{% endfilter %} [%= add_commas(goal) %]
+	                        {% filter ak_text:"form_signatures_of" %}of{% endfilter %} [%= add_commas(goal) %]
                             [%= progress.current != 1 ? '{% filter ak_text:"form_signaturesPlural" %}signatures{% endfilter %}' : '{% filter ak_text:"form_signaturesSingular" %}signature{% endfilter %}' %]
 	                [% } %]
 								  </div>
