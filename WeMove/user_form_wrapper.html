@@ -1,5 +1,9 @@
 <ul class="compact" id="ak-errors"></ul>
 
+{% if user %}
+	{% store as previous_actions %}{% report "previous_user_actions_for_page" with user.id as user_id page.id as page_id %}{% endstore %}
+{% endif %}
+
 <div id="known_user" class="known-member">
   <div class="known-member-inner">
     <p>
@@ -12,10 +16,9 @@
       </a>
     </p>
   </div>
-	
-{% store as previous_actions %}{% report "previous_user_actions_for_page" with user.id as user_id page.id as page_id %}{% endstore %}
+</div>
 
-{% if previous_actions != "0" %}
+{% if previous_actions and previous_actions != "0" %}
   <div class="already-signed">
     <p>{% filter ak_text:"alreadySigned_link" %}It seems you have already signed. However, you can do more. Click below for next step.{% endfilter %}</p>
 
@@ -25,7 +28,6 @@
       {% filter ak_text:"continue_button" %}Continue{% endfilter %}
     </a>
   </div>
-</div>
 {% endif %}
 
 <div id="unknown_user" class="ak-user-form">
@@ -36,7 +38,7 @@
     </div>
 </div>
 
-{% if previous_actions == "0" %}
+{% if not previous_actions or previous_actions == "0" %}
     <div class="js-nav-buttons">
       <button type="submit" class="btn btn-primary">{% filter ak_text:"form_signPetition_button" %}Sign the petition{% endfilter %}</button>
     </div>
