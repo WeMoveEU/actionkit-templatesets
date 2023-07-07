@@ -33,15 +33,15 @@
 	    <input type="hidden" name="action_trigger_action" value="{{ args.trigger_action }}">
 
 		<div id="consent-buttons">
-				<button type="submit" id="btn_optout" value="none_given" class="btn optout js-popup-consent-button">
+				<button type="button" id="btn_optout" value="none_given" class="btn optout js-popup-consent-button">
 					No, do not contact me.
 				</button>
 
-        <button type="submit" id="btn_optin" value="explicit_opt_in" class="btn optin js-popup-consent-button">
+        <button type="button" id="btn_optin" value="explicit_opt_in" class="btn optin js-popup-consent-button">
 					Yes, keep me informed!
 				</button>
 
-				<button type="submit" id="btn_email" value="email_opt_in" class="btn optemail js-popup-consent-button" hidden>
+				<button type="button" id="btn_email" value="email_opt_in" class="btn optemail js-popup-consent-button" hidden>
 					Confirm consent via email.
 				</button>
 		</div>
@@ -56,18 +56,18 @@
 		$('#consent-buttons div').toggle()
 		$('input[name="action_consent_action"]').val( 'y' );
 		$('input[name="action_via_email"]').val(1);
-		$('form.action_form').get(0).submit();
+		// $('form.action_form').get(0).submit();
 	{% elif args.decline %}
 		$('#consent-buttons div').toggle()
 		$('input[name="action_consent_action"]').val( 'n' );
 		$('input[name="require_opt_in"]').val(1);
 		$('input[name="action_via_email"]').val(1);
-		$('form.action_form').get(0).submit();
+		// $('form.action_form').get(0).submit();
 	{% elif user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
 		$('#consent-buttons div').toggle()
 		$('input[name="action_consent_action"]').val( 'e' );
 		$('input[name="require_opt_in"]').val(1);
-		$('form.action_form').get(0).submit();
+		// $('form.action_form').get(0).submit();
 	{% else %}
 		$('#btn_optin').on('click', function () {
 			$('input[name="action_consent_action"]').val( 'y' );
