@@ -61,7 +61,7 @@
         <div class="ak-grid-col ak-grid-col-6-of-12">
             <h1>
                 {% if page.followup.send_taf %}
-                    {% filter ak_text:"tell_your_friends_banner" %}
+                    {% filter ak_text:"thanks_spreadTheWord_title" %}
                     Can you spread the word?
                     {% endfilter %}
                 {% elif not action.custom_fields.cwc_prefix and page.send_via_cwc and page.is_targeting_us_senate %}
@@ -106,13 +106,18 @@
 
 						<div class="share-big facebook-share-container js-facebook-share-container  ">
 							<a class="btn btn-primary popup facebook" href="/share/link?type=fb&amp;page_name={{page.name}}&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" target="_blank">
-								<i class="fa fa-facebook-square"></i> <span class="share-text">Share on Facebook</span>
+								<i class="fa fa-facebook-square"></i>
+                <span class="share-text">
+                  {% filter ak_text:"thanks_shareFacebook_button" %}Share on Facebook{% endfilter %}
+                </span>
 							</a>
 						</div>
 
 						<div class="share-big twitter-share-container js-twitter-share-container  ">
 							<a class="btn btn-primary popup twitter" href="/share/link?type=tw&amp;page_name={{page.name}}&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" target="_blank">
-								<i class="fa fa-twitter"></i> <span class="share-text">Share on Twitter</span>
+								<i class="fa fa-twitter"></i> <span class="share-text">
+                  {% filter ak_text:"thanks_shareTwitter_button" %}Share on Twitter{% endfilter %}
+                </span>
 							</a>
 							<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 						</div>
@@ -135,14 +140,16 @@
 						</script>
 						<div class="share-big whatsapp-share-container js-whatsapp-share-container">
 							<a class="btn btn-primary popup whatsapp-web" href="/thanks/{{ page.name }}?share=whatsapp&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" target="_blank">
-								<i class="fa fa-whatsapp"></i> <span class="share-text">Share on Whatsapp</span>
+								<i class="fa fa-whatsapp"></i> <span class="share-text">
+                  {% filter ak_text:"thanks_shareWhatsApp_button" %}Share on WhatsApp{% endfilter %}
+                </span>
 							</a>
 						</div>
 
 						{% if page.followup.send_taf %}
 						<div class="share-big email-share-container js-email-share-container  ">
 							<a class="btn btn-primary email" href="mailto:?subject={{ page.followup.taf_subject|urlencode }}&amp;body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}" target="_blank">
-								<i class="fa fa-envelope-o"></i> <span class="share-text">{% filter ak_text:"taf_mailto_ask" %}Share by e-mail{% endfilter %}</span>
+								<i class="fa fa-envelope-o"></i> <span class="share-text">{% filter ak_text:"thanks_shareEmail_button" %}Share by e-mail{% endfilter %}</span>
 							</a>
 						</div>
 						{% endif %}
@@ -151,7 +158,9 @@
 
 				<div class="col-md-12" style="text-align: center;">
 					<br>
-					<a href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default">Skip this step</a>
+					<a href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default">
+            {% filter ak_text:"thanks_skipStep_button" %}Skip this step{% endfilter %}
+            </a>
 				</div>
 			</div>
 
