@@ -56,18 +56,18 @@
 		$('#consent-buttons div').toggle()
 		$('input[name="action_consent_action"]').val( 'y' );
 		$('input[name="action_via_email"]').val(1);
-		// $('form.action_form').get(0).submit();
+		$('form.action_form').get(0).submit();
 	{% elif args.decline %}
 		$('#consent-buttons div').toggle()
 		$('input[name="action_consent_action"]').val( 'n' );
 		$('input[name="require_opt_in"]').val(1);
 		$('input[name="action_via_email"]').val(1);
-		// $('form.action_form').get(0).submit();
+		$('form.action_form').get(0).submit();
 	{% elif user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
 		$('#consent-buttons div').toggle()
 		$('input[name="action_consent_action"]').val( 'e' );
 		$('input[name="require_opt_in"]').val(1);
-		// $('form.action_form').get(0).submit();
+		$('form.action_form').get(0).submit();
 	{% else %}
 		$('#btn_optin').on('click', function () {
 			$('input[name="action_consent_action"]').val( 'y' );
