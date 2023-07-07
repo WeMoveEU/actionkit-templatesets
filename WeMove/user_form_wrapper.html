@@ -38,7 +38,7 @@
     </div>
 </div>
 
-{% if not previous_actions or previous_actions == "0" %}
+{% if previous_actions == "" or previous_actions == "0" %}
     <div class="js-nav-buttons">
       <button type="submit" class="btn btn-primary">{% filter ak_text:"form_signPetition_button" %}Sign the petition{% endfilter %}</button>
     </div>
