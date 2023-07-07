@@ -71,11 +71,11 @@
 
         {% if page.custom_fields.youmove_campaign %}
         <nav id="nav-bar" class="dropdown-menu" aria-labelledby="nav-button">
-          <a data-link-translate-me href="https://youmoveeurope.eu/LANG_ISO">YouMove Campaigns</a>
-          <a data-link-translate-me="ym-start-a-campaign" class="button-fill orange" href="https://www.wemove.eu/form/start-your-campaign">Start a campaign</a>
-          <a data-link-translate-me="ym-login" href="https://www.wemove.eu/user/login">Log-in</a>
-          <a data-link-translate-me="ym-my-campaigns" href="https://www.wemove.eu/you/my-campaigns">My campaigns</a>
-          <a data-link-translate-me href="https://youmoveeurope.eu/LANG_ISO/help">Help</a>
+          <a data-link-translate-me href="https://youmoveeurope.eu/LANG_ISO">{% filter ak_text:"nav_ym_youmoveCampaigns" %}YouMove Campaigns{% endfilter %}</a>
+          <a data-link-translate-me="ym-start-a-campaign" class="button-fill orange" href="https://www.wemove.eu/form/start-your-campaign">{% filter ak_text:"nav_ym_startCampaign" %}Start a campaign{% endfilter %}</a>
+          <a data-link-translate-me="ym-login" href="https://www.wemove.eu/user/login">{% filter ak_text:"nav_ym_login" %}Log-in{% endfilter %}</a>
+          <a data-link-translate-me="ym-my-campaigns" href="https://www.wemove.eu/you/my-campaigns">{% filter ak_text:"nav_ym_myCampaigns" %}My campaigns{% endfilter %}</a>
+          <a data-link-translate-me href="https://youmoveeurope.eu/LANG_ISO/help">{% filter ak_text:"nav_ym_help" %}Help{% endfilter %}</a>
         </nav>
         {% else %}
         <div class="nav-wrapper collapse" id="nav-bar">
@@ -83,31 +83,31 @@
             <ul class="nav__main-list">
               <li>
                 <div class="dropdown">
-                  <button class="btn dropdown-toggle" type="button" id="aboutUsDropdown" data-bs-toggle="dropdown" aria-expanded="false">About us</button>
+                  <button class="btn dropdown-toggle" type="button" id="aboutUsDropdown" data-bs-toggle="dropdown" aria-expanded="false">{% filter ak_text:"nav_wm_aboutUS" %}About us{% endfilter %}</button>
                   <ul class="dropdown-menu" aria-labelledby="aboutUsDropdown">
                     <li>
-                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/community">Community</a>
+                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/community">{% filter ak_text:"nav_wm_community" %}Community{% endfilter %}</a>
                     </li>
                     <li>
-                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/victories">Victories</a>
+                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/victories">{% filter ak_text:"nav_wm_victories" %}Victories{% endfilter %}</a>
                     </li>
                     <li>
-                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/team">Team</a>
+                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/team">{% filter ak_text:"nav_wm_team" %}Team{% endfilter %}</a>
                     </li>
                     <li>
-                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/work-with-us">Work with us</a>
+                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/work-with-us">{% filter ak_text:"nav_wm_workWithUs" %}Work with us{% endfilter %}</a>
                     </li>
                     <li>
-                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/how-we-are-funded">How we are funded</a>
+                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/how-we-are-funded">{% filter ak_text:"nav_wm_howWeAreFunded" %}How we are funded{% endfilter %}</a>
                     </li>
                     <li>
-                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/contact-us">Contact us</a>
+                      <a data-link-translate-me class="dropdown-item" href="https://wemove.eu/LANG_ISO/contact-us">{% filter ak_text:"nav_wm_contactUs" %}Contact us{% endfilter %}</a>
                     </li>
                   </ul>
                 </div>
               </li>
               <li class="nav__item">
-                <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/updates">Updates</a>
+                <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/updates">{% filter ak_text:"nav_wm_updates" %}Updates{% endfilter %}</a>
               </li>
               <li class="nav__item">
                 <a data-link-translate-me class="nav__link button-fill button-fill--light-blue" href="https://www.youmoveeurope.eu/LANG_ISO">YouMove</a>
@@ -117,13 +117,13 @@
           <nav class="nav nav--bottom">
             <ul class="nav__main-list">
               <li class="nav__item">
-                <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/campaigns">Campaigns</a>
+                <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/campaigns">{% filter ak_text:"nav_wm_campaigns" %}Campaigns{% endfilter %}</a>
               </li>
               <li class="nav__item">
-                <a data-link-translate-me="wm-join" class="nav__link regular-link regular-link--default" href="https://act.wemove.eu/campaigns/join-wemove">Join us</a>
+                <a data-link-translate-me="wm-join" class="nav__link regular-link regular-link--default" href="https://act.wemove.eu/campaigns/join-wemove">{% filter ak_text:"nav_wm_joinUs" %}Join us{% endfilter %}</a>
               </li>
               <li class="nav__item">
-                <a data-link-translate-me="wm-donate" class="nav__link button-fill button-fill--pink" href="https://act.wemove.eu/campaigns/chip-in-wemove?utm_medium=ak&utm_source=nav&utm_campaign=en">Donate</a>
+                <a data-link-translate-me="wm-donate" class="nav__link button-fill button-fill--pink" href="https://act.wemove.eu/campaigns/chip-in-wemove?utm_medium=ak&utm_source=nav&utm_campaign=en">{% filter ak_text:"nav_wm_donate" %}Donate{% endfilter %}</a>
               </li>
             </ul>
           </nav>
@@ -175,27 +175,24 @@
 {% if page.custom_fields.youmove_campaign %}
 <footer>
   <nav class="footer-nav">
-    <a data-link-translate-me href="https://youmoveeurope.eu/LANG_ISO">YouMove campaigns</a>
-    <a href="https://www.wemove.eu/form/start-your-campaign">Start a campaign</a>
-    <a href="https://www.wemove.eu/user/login">Log-In</a>
-    <a href="https://www.wemove.eu/you/my-campaigns">My campaigns</a>
-    <a data-link-translate-me href="https://youmoveeurope.eu/LANG_ISO/help">Help</a>
+    <a data-link-translate-me href="https://youmoveeurope.eu/LANG_ISO">{% filter ak_text:"nav_ym_youmoveCampaigns" %}YouMove Campaigns{% endfilter %}</a>
+    <a href="https://www.wemove.eu/form/start-your-campaign">{% filter ak_text:"nav_ym_startCampaign" %}Start a campaign{% endfilter %}</a>
+    <a href="https://www.wemove.eu/user/login">{% filter ak_text:"nav_ym_login" %}Log-in{% endfilter %}</a>
+    <a href="https://www.wemove.eu/you/my-campaigns">{% filter ak_text:"nav_ym_myCampaigns" %}My campaigns{% endfilter %}</a>
+    <a data-link-translate-me href="https://youmoveeurope.eu/LANG_ISO/help">{% filter ak_text:"nav_ym_help" %}Help{% endfilter %}</a>
   </nav>
   <div class="legal-text">
     <p>
-      <strong>This website exists to promote positive social change, to protect the environment and to challenge injustice.</strong>
+      <strong>{% filter ak_text:"footer_ym_legalText_1" %}This website exists to promote positive social change, to protect the environment and to challenge injustice.{% endfilter %}</strong>
     </p>
     <p>
-      <strong>Petitions on this site are started and run by members of the public, civil society groups and politicians. WeMove Europe gGmbH hosts the You Move Europe website, but campaigns here are not necessarily endorsed by the charity. <a href="/en/terms-and-conditions">Read our Terms and Conditions</a>. </strong>
+      <strong>{% filter ak_text:"footer_ym_legalText_2" %}Petitions on this site are started and run by members of the public, civil society groups and politicians. WeMove Europe gGmbH hosts the You Move Europe website, but campaigns here are not necessarily endorsed by the charity. <a href="/en/terms-and-conditions">Read our Terms and Conditions</a>.{% endfilter %}</strong>
     </p>
     <p>
-      <strong>
-        <a data-link-translate-me href="https://www.wemove.eu/LANG_ISO/campaigns">Official WeMove Europe campaigns can be found here</a>. </strong>
+      <strong>{% filter ak_text:"footer_ym_legalText_3" %}
+        <a data-link-translate-me href="https://www.wemove.eu/LANG_ISO/campaigns">Official WeMove Europe campaigns can be found here</a>.{% endfilter %}</strong>
     </p>
-    <p>
-      <strong>WeMove Europe gGmbH hosts these petitions and they are in line with our values but they are not necessarily endorsed by WeMove Europe gGmbH.</strong>
-    </p>
-    <p>Address: WeMove Europe gGmbH - Planufer 91, 10967 Berlin | Phone: 030/60274195 | Email: <a href="mailto:youmove@wemove.eu">youmove@wemove.eu</a>
+    <p>{% filter ak_text:"footer_ym_legalText_4" %}Address: WeMove Europe gGmbH - Planufer 91, 10967 Berlin | Phone: 030/60274195 | Email: <a href="mailto:youmove@wemove.eu">youmove@wemove.eu</a>{% endfilter %}
     </p>
     <p>© 2021 Copyright WeMove Europe gGmbH</p>
   </div>
@@ -215,16 +212,16 @@
         <nav class="nav nav--top">
           <ul class="nav__main-list">
             <li class="nav__item">
-              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/community">Community</a>
+              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/community">{% filter ak_text:"nav_wm_community" %}Community{% endfilter %}</a>
             </li>
             <li class="nav__item">
-              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/campaigns">Campaigns</a>
+              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/campaigns">{% filter ak_text:"nav_wm_campaigns" %}Campaigns{% endfilter %}</a>
             </li>
             <li class="nav__item">
-              <a class="nav__link regular-link regular-link--default" href="https://act.wemove.eu/campaigns/join-wemove">Join us</a>
+              <a class="nav__link regular-link regular-link--default" href="https://act.wemove.eu/campaigns/join-wemove">{% filter ak_text:"nav_wm_joinUs" %}Join us{% endfilter %}</a>
             </li>
             <li class="nav__item">
-              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/contact-us">Contact</a>
+              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/contact-us">{% filter ak_text:"nav_wm_contactUs" %}Contact{% endfilter %}</a>
             </li>
           </ul>
         </nav>
@@ -232,7 +229,7 @@
     </div>
     <div class="row row-second">
       <div class="col-md-4 col-left">
-        <p class="footer__text">WeMove Europe is an independent and values-based organisation that seeks to build people power to transform Europe in the name of our community, future generations and the planet.</p>
+        <p class="footer__text">{% filter ak_text:"footer_wm_legalText_1" %}WeMove Europe is an independent and values-based organisation that seeks to build people power to transform Europe in the name of our community, future generations and the planet.{% endfilter %}</p>
         <p class="footer__copyright">© 2023 WeMove Europe</p>
       </div>
       <div class="col-md-8 col-right">
@@ -261,10 +258,10 @@
         <nav class="nav nav--bottom">
           <ul class="nav__main-list">
             <li class="nav__item">
-              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/privacy-policy">Privacy Policy</a>
+              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/privacy-policy">{% filter ak_text:"nav_wm_privacyPolicy" %}Privacy Policy{% endfilter %}</a>
             </li>
             <li class="nav__item">
-              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/impressum">Impressum</a>
+              <a data-link-translate-me class="nav__link regular-link regular-link--default" href="https://wemove.eu/LANG_ISO/impressum">{% filter ak_text:"nav_wm_impressum" %}Impressum{% endfilter %}</a>
             </li>
           </ul>
         </nav>
