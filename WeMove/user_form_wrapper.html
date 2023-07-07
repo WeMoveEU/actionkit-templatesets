@@ -13,7 +13,7 @@
     </p>
   </div>
 	
-	{% store as previous_actions %}{% report "previous_user_actions_page" with user.id as user_id page.id as page_id %}{% endstore %}
+	{% store as previous_actions %}{% report "previous_user_actions_for_page" with user.id as user_id page.id as page_id %}{% endstore %}
 	{{ previous_actions }}
 
   <div class="already-signed">
