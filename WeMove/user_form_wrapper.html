@@ -13,9 +13,9 @@
     </p>
   </div>
 	
-	{% store as previous_actions %}{% report "previous_user_actions_for_page" with user.id as user_id page.id as page_id %}{% endstore %}
-	{{ previous_actions }}
+{% store as previous_actions %}{% report "previous_user_actions_for_page" with user.id as user_id page.id as page_id %}{% endstore %}
 
+{% if previous_actions %}
   <div class="already-signed">
     <p>{% filter ak_text:"alreadySigned_link" %}It seems you have already signed. However, you can do more. Click below for next step.{% endfilter %}</p>
 
@@ -26,6 +26,7 @@
     </a>
   </div>
 </div>
+{% endif %}
 
 <div id="unknown_user" class="ak-user-form">
     {% include "./user_form.html" %}
@@ -33,10 +34,13 @@
       <label for="id_comment">{% filter ak_text:"form_field_comments" %}Your comments{% endfilter %}:</label>
       <textarea id="id_comment" name="action_comment"></textarea>
     </div>
+</div>
 
+{% if not previous_actions %}
     <div class="js-nav-buttons">
       <button type="submit" class="btn btn-primary">{% filter ak_text:"form_signPetition_button" %}Sign the petition{% endfilter %}</button>
     </div>
-</div>
+{% endif %}
+
 {% include "./privacy.html" %}
 
