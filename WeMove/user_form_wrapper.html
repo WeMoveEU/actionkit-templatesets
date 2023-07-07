@@ -15,7 +15,7 @@
 	
 {% store as previous_actions %}{% report "previous_user_actions_for_page" with user.id as user_id page.id as page_id %}{% endstore %}
 
-{% if previous_actions %}
+{% if previous_actions > 0 %}
   <div class="already-signed">
     <p>{% filter ak_text:"alreadySigned_link" %}It seems you have already signed. However, you can do more. Click below for next step.{% endfilter %}</p>
 
@@ -36,7 +36,7 @@
     </div>
 </div>
 
-{% if not previous_actions %}
+{% if previous_actions < 1> %}
     <div class="js-nav-buttons">
       <button type="submit" class="btn btn-primary">{% filter ak_text:"form_signPetition_button" %}Sign the petition{% endfilter %}</button>
     </div>
