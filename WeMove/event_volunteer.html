@@ -26,7 +26,7 @@
             {% include "./progress_meter.html" %}
         </div>
 
-        <div id="volunteer-form" class="ak-grid-col ak-grid-col-6-of-12 ak-styled-fields {{templateset.custom_fields.field_labels_class|default:"ak-labels-overlaid"}} {{templateset.custom_fields.field_errors_class|default:"ak-errs-below"}}">
+        <div id="volunteer-form" class="ak-grid-col ak-grid-col-6-of-12 ak-styled-fields ak-labels-overlaid ak-errs-below">
 
             {% include "./user_form_wrapper.html" %}
             {% if form.ground_rules|is_nonblank %}

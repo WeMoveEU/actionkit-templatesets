@@ -137,8 +137,8 @@ $(window).on('load', function (){
 
             <div class="ak-grid-col ak-grid-col-6-of-12">
                 <h3>RSVP to attend this event</h3>
-                <div id="event-attend-form" class="{{templateset.custom_fields.field_errors_class|default:"ak-errs-below"}}">
-                    <div class="{{templateset.custom_fields.field_labels_class|default:"ak-labels-overlaid"}}">
+                <div id="event-attend-form" class="ak-errs-below">
+                    <div class="ak-labels-overlaid">
                         {% if not update %}
                         {% include "./user_form_wrapper.html" %}
                         {% else %}

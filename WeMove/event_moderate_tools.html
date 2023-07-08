@@ -120,7 +120,7 @@ $(initModeratorTools);
 	    <h3>
 		{% if event.is_awaiting_approval %}Approve, Flag,{% else %}Flag{% endif %} or Delete Event
 	    </h3>
-	    <div class="ak-styled-fields {{templateset.custom_fields.field_errors_class|default:"ak-errs-below"}}">
+	    <div class="ak-styled-fields ak-errs-below">
 	      <div class="ak-mark-event">
 		<label for="id_mark_as">Mark event:</label>
 		<select name="event_mark_as" id="id_mark_as">
