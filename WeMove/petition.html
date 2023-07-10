@@ -28,7 +28,7 @@
 
 							<h2>{% filter ak_text:"petition_title" %}Petition{% endfilter %}</h2>
 
-							<div class="ak-margin-bottom-1 ak-text-expander">
+							<div class="ak-margin-bottom-1 ak-text-expander-disabled">
 								{% include_tmpl form.statement_text %}
 							</div>
 							<a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"readMore_button" %}Read more{% endfilter %}</a>
@@ -37,7 +37,7 @@
 						{% if form.about_text %}
 						<div id="ak-petition-story">
               <h2>{% filter ak_text:"whyIsThisImportant_title" %}Why is this important?{% endfilter %}</h2>
-							<div class="ak-text-expander">{% include_tmpl form.about_text %}</div>
+							<div class="ak-text-expander-disabled">{% include_tmpl form.about_text %}</div>
 							<a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"readMore_button" %}Read more{% endfilter %}</a>
 						</div>
 						{% endif %}
