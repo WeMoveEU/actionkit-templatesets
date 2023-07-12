@@ -213,6 +213,14 @@
 </fieldset>
 </form>
 
+<div>
+	<fieldset id="mailing_form" class="collapse collapsed">
+		<h2>API Debugging</h2>
+		<div id="api-log" class="fieldset-contents">
+		</div>
+	</fieldset>
+</div>
+
 <script>
 	var searched_name = "{{searched_name}}";
 	$( function () {
@@ -233,17 +241,25 @@
 </script>
 
 <script>
+	
+function api_log() {
+	console.log( "AK API:", ...arguments );
+	var log_item = $('<div>').html( JSON.stringify( arguments) );
+	$('#api-log').append(log_item);
+}
 
 function api(method, path, data) {
-	console.log("AK API Call:", method, path, data);
+	api_log("Call:", method, path, data);
     return $.ajax({
         type: method,
         url: `${apiRoot}/${path}`,
         contentType: 'application/json',
         processData: ( method == 'GET' ? true : false ),
         data: ( method == 'GET' ? data : JSON.stringify(data) )
-    }).fail(function(xhr, rstatus, rerror) {
-		console.log("AK API Error:", method, path, data, rstatus, rerror);
+    }).done(function(result) {
+			api_log("Results:", result);
+		}).fail(function(xhr, rstatus, rerror) {
+			api_log("Error:", method, path, data, rstatus, rerror);
   });
 }
 
@@ -670,7 +686,7 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
     return fetch(`/admin/core/${page_type}page/copy/?id=${model_id}`).then(
 		function(response) {
 	        const page_id = response.url.match(/\d+/)[0];
-			console.log(`Created ${language} ${action_type} page ${page_id}`);
+			api_log(`Created ${language} ${action_type} page ${page_id}`);
 	        return api('GET', `page/${page_id}`).done(function(page) {
 				return api('PATCH', `${page_type}page/${page_id}/`, {
                     name: page_name,
