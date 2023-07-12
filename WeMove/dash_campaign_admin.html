@@ -221,7 +221,7 @@
 	</fieldset>
 </div>
 <style>
-	#api-log > div { padding: 1px; border-bottom: 1px solid #f7f7f7; padding-left: 1.5em; text-indent:-1.5em; }
+	#api-log > div { padding: 1px; border-bottom: 1px solid #f7f7f7; padding-left: 1.5em; text-indent:-1.5em; white-space: pre-wrap; }
 	#api-log > div:nth-child(even) { background: #fcfcfc; }
 </style>
 
@@ -249,7 +249,7 @@
 function api_log() {
 	console.log( "AK API:", ...arguments );
 	var log_item = $('<div>').text( [...arguments].map( 
-		(i) => typeof(i) == 'string' ? i : JSON.stringify(i) 
+		(i) => typeof(i) == 'string' ? i : JSON.stringify(i, 2) 
 	).join(' ') );
 	$('#api-log').append(log_item);
 }
@@ -266,6 +266,7 @@ function api(method, path, data) {
 			api_log("Results:", method, path, '=', result);
 		}).fail(function(xhr, rstatus, rerror) {
 			api_log("Error:", method, path, data, rstatus, rerror);
+			alert("API Error:", method, path, data, rstatus, rerror);
   });
 }
 
