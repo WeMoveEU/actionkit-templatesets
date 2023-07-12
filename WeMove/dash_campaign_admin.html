@@ -252,7 +252,7 @@ function readLanguages() {
         result.objects.forEach(function(lang) {
             window.languages[lang.resource_uri] = lang;
             if (coreLanguages.includes(lang.name)) {
-				var checked_attr = ( lang.iso_code == 'en' || lang.iso_code == 'fr' ) ? 'checked="checked"' : '';
+				var checked_attr = ( 1 || lang.iso_code == 'en' || lang.iso_code == 'fr' ) ? 'checked="checked"' : '';
                 $('.language-picker .form-control').append(
                     ` <label><input type="checkbox" value="${lang.resource_uri}" data-iso_code="${lang.iso_code.toUpperCase()}" ${checked_attr}> ${lang.name}</label>`
                 );
