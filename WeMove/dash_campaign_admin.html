@@ -249,7 +249,7 @@
 function api_log() {
 	console.log( "AK API:", ...arguments );
 	var log_item = $('<div>').text( [...arguments].map( 
-		(i) => typeof(i) == 'string' ? i : JSON.stringify(i, 2) 
+		(i) => typeof(i) == 'string' ? i : JSON.stringify(i, null, 2) 
 	).join(' ') );
 	$('#api-log').append(log_item);
 }
