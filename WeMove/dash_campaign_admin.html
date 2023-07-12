@@ -244,7 +244,7 @@
 	
 function api_log() {
 	console.log( "AK API:", ...arguments );
-	var log_item = $('<div>').html( arguments.map( i => JSON.stringify(i) ).join(' ') ) );
+	var log_item = $('<div>').html( arguments.map( i => JSON.stringify(i) ).join(' ') );
 	$('#api-log').append(log_item);
 }
 
