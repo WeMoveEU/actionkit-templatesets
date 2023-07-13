@@ -148,7 +148,7 @@
             </div>
         </div>
     </form>
-    <button id="save_campaign">Save</button>
+    <button id="save_campaign" class="button-main">Save</button>
 </section>
 
 <section id="pages_output">
@@ -291,7 +291,7 @@ function api(method, path, data) {
         processData: ( method == 'GET' ? true : false ),
         data: ( method == 'GET' ? data : JSON.stringify(data) )
     }).done(function(result) {
-            api_log("Results:", method, path, '=', result);
+            api_log("Results:", method, path, data, '=>', result);
     }).fail(function(xhr, rstatus, rerror) {
         api_error("Error:", method, path, data, rstatus, rerror);
     });
@@ -456,7 +456,9 @@ function displayPages(campaign) {
         var pages = {};
         result.objects.forEach(function(page) {
             if (page.id != campaign.id) {
-                if (!pages[page.language]) pages[page.language] = [];
+                if (!pages[page.language]) {
+                    pages[page.language] = [];
+                }
                 pages[page.language].push(page);
             }
         });
