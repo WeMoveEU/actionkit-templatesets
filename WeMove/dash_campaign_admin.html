@@ -1,261 +1,272 @@
 <script src="/static/admin/js/collapse.js"></script>
 
 <style>
-	#campaign_form, #campaign_output, #campaign_matches, #pages_output, #mailings_output, #not_found, #page_form, #mailing_form {
-		display: none;
-	}
-	#campaign_matches ul {
-		list-style: initial;
-	}
-	.language-picker input { margin: 0; }
-	input[type=text] {
-		width: 300px;
-	}
-	
-	#campaign_search {
-		border: 1px solid #ccc;
-		background: #eee;
-		padding: 0.25em;
-	}
-	#campaign_search input[type="search"] {
-		border-radius: 99px;
-		padding: 0.25em 0.5em;
-	}
-	#campaign_search a.clear-search {
-		font-size: 120%;
-		margin-left: -1.5em;
-		margin-right: 0.8em;
-	}
-	
-	.form-row-CheckboxInput .form-control label { float: none }
-	
+    #campaign_form, #campaign_output, #campaign_matches, #pages_output, #mailings_output, #not_found, #page_form, #mailing_form {
+        display: none;
+    }
+    #campaign_matches ul {
+        list-style: initial;
+    }
+    .language-picker input { margin: 0; }
+    input[type=text] {
+        width: 300px;
+    }
+    
+    #campaign_search {
+        border: 1px solid #ccc;
+        background: #eee;
+        padding: 0.25em;
+    }
+    #campaign_search input[type="search"] {
+        border-radius: 99px;
+        padding: 0.25em 0.5em;
+    }
+    #campaign_search a.clear-search {
+        font-size: 120%;
+        margin-left: -1.5em;
+        margin-right: 0.8em;
+    }
+    
+    .form-row-CheckboxInput .form-control label { float: none }
+    
 </style>
 
 <form method="GET" id="campaign_search">
-	Campaign:
-	<input type="search" name="searched_name" value="{{searched_name}}" placeholder="Type a name to search or create a campaign" size="40">
-	{% if searched_name %}
-		<a class="clear-search" href="?">&times;</a>
-	{% endif %}
-	<input type="submit" value="&#x1F50D; Search">
+    Campaign:
+    <input type="search" name="searched_name" value="{{searched_name}}" placeholder="Type a name to search or create a campaign" size="40">
+    {% if searched_name %}
+        <a class="clear-search" href="?">&times;</a>
+    {% endif %}
+    <input type="submit" value="&#x1F50D; Search">
 </form>
 
 {% if not searched_name %}
 
 <section id="campaign-list">
-	<h2>Campaigns</h2>
-	<table class="changelist-table">
-	</table>
+    <h2>Campaigns</h2>
+    <table class="changelist-table">
+    </table>
 </section>
 
 <script>
-	$( function () {
-		showCampaignList();
-	} );
+    $( function () {
+        showCampaignList();
+    } );
 </script>
 
 {% else %}
 
 <section id="campaign_matches">
-	These campaigns match your search:
-	<ul></ul>
+    These campaigns match your search:
+    <ul></ul>
 </section>
 
 <section id="campaign_output">
-	<h2>Campaign Details</h2>
-	<div id="camp_id" class="form-row form-row-CheckboxInput clearfix">			
-		<div class="form-label col span_1_of_4">
-			<label for="id_display_name">Page ID</label>
-		</div>
-		<div class="form-control col span_3_of_4">
-			<span></span>
-		</div>
-	</div>
-	<div id="camp_name" class="form-row form-row-CheckboxInput clearfix">
-		<div class="form-label col span_1_of_4">
-			<label>Name: </label>
-		</div>
-		<div class="form-control col span_3_of_4">
-			<span></span>
-		</div>
-	</div>
-	<div id="camp_topic" class="form-row form-row-CheckboxInput clearfix">
-		<div class="form-label col span_1_of_4">
-			<label>Topic: </label>
-		</div>
-		<div class="form-control col span_3_of_4">
-			<span></span>
-		</div>
-	</div>
-	<div id="camp_lead_campaigner" class="form-row form-row-CheckboxInput clearfix">
-		<div class="form-label col span_1_of_4">
-			<label>Lead Campaigner: </label>
-		</div>
-		<div class="form-control col span_3_of_4">
-			<span></span>
-		</div>
-	</div>
-	<button id="open_edit">&#xFE0F; Edit</button>
+    <h2>Campaign Details</h2>
+    <div id="camp_id" class="form-row form-row-CheckboxInput clearfix">            
+        <div class="form-label col span_1_of_4">
+            <label for="id_display_name">Page ID</label>
+        </div>
+        <div class="form-control col span_3_of_4">
+            <span></span>
+        </div>
+    </div>
+    <div id="camp_name" class="form-row form-row-CheckboxInput clearfix">
+        <div class="form-label col span_1_of_4">
+            <label>Name: </label>
+        </div>
+        <div class="form-control col span_3_of_4">
+            <span></span>
+        </div>
+    </div>
+    <div id="camp_topic" class="form-row form-row-CheckboxInput clearfix">
+        <div class="form-label col span_1_of_4">
+            <label>Topic: </label>
+        </div>
+        <div class="form-control col span_3_of_4">
+            <span></span>
+        </div>
+    </div>
+    <div id="camp_lead_campaigner" class="form-row form-row-CheckboxInput clearfix">
+        <div class="form-label col span_1_of_4">
+            <label>Lead Campaigner: </label>
+        </div>
+        <div class="form-control col span_3_of_4">
+            <span></span>
+        </div>
+    </div>
+    <button id="open_edit">&#xFE0F; Edit</button>
 </section>
 
 <section id="campaign_form">
-	<p id="not_found" class="warning">No campaign matches this name, do you want to create it?</p>
-	<h2>Create Campaign</h2>
-	<form>
-		<div class="form-row">
-			<div class="form-label col span_1_of_4"><label>Short Name: </label></div>
-			<div class="form-control col span_3_of_4">
+    <p id="not_found" class="warning">No campaign matches this name, do you want to create it?</p>
+    <h2>Create Campaign</h2>
+    <form>
+        <div class="form-row">
+            <div class="form-label col span_1_of_4"><label>Short Name: </label></div>
+            <div class="form-control col span_3_of_4">
                                 <input name="name" placeholder="YYYY-MM-internal-name-no-spaces" type="text" id="name">
                         </div>
-		</div>
-		<div class="form-row">
-			<div class="form-label col span_1_of_4"><label>Title: </label></div>
-			<div class="form-control col span_3_of_4">
+        </div>
+        <div class="form-row">
+            <div class="form-label col span_1_of_4"><label>Title: </label></div>
+            <div class="form-control col span_3_of_4">
                                 <input name="title" placeholder="Staff-Facing Title For This Campaign" type="text" id="title">
                         </div>
-		</div>
-		<div class="form-row topic-picker">
-			<div class="form-label col span_1_of_4"><label>Topic: </label></div>
-			<div class="form-control col span_3_of_4">
+        </div>
+        <div class="form-row topic-picker">
+            <div class="form-label col span_1_of_4"><label>Topic: </label></div>
+            <div class="form-control col span_3_of_4">
                                 <select name="topic" id="topic">
                                         <option value="">Choose one:</option>
                                 </select>
                         </div>
-		</div>
-		<div class="form-row lead_campaigner-picker">
-			<div class="form-label col span_1_of_4"><label>Lead Campaigner: </label></div>
-			<div class="form-control col span_3_of_4">
+        </div>
+        <div class="form-row lead_campaigner-picker">
+            <div class="form-label col span_1_of_4"><label>Lead Campaigner: </label></div>
+            <div class="form-control col span_3_of_4">
                                 <select name="lead_campaigner" id="lead_campaigner">
                                         <option value="">Choose one:</option>
                                 </select>
                         </div>
-		</div>
-	</form>
-	<button id="save_campaign">Save</button>
+        </div>
+    </form>
+    <button id="save_campaign">Save</button>
 </section>
 
 <section id="pages_output">
-	<h2>Action Pages</h2>
-	<table>
-	</table>
-	<button id="add_step">Add A Step</button>
+    <h2>Action Pages</h2>
+    <table>
+    </table>
+    <button id="add_step">Add A Step</button>
 </section>
 
 <form>
 <fieldset id="page_form" style="display: none">
-	<h2>Add a Journey Step</h2>
-	<div class="fieldset-contents">
-		<div class="form-row form-row-CheckboxInput language-picker">
-			<div class="form-label col span_1_of_4"><label>Languages:</label></div>
-			<div class="form-control col span_3_of_4"></div>
-		</div>
-		<div class="form-row form-row-CheckboxInput">
-			<div class="form-label col span_1_of_4"><label>Action type:</label></div>
-			<div class="form-control col span_3_of_4">
-				<label><input type="radio" name="action_type" value="petition"> Petition</label>
-				<label><input type="radio" name="action_type" value="share" disabled> Share</label>
-				<label><input type="radio" name="action_type" value="donation" disabled> Donation</label>
-				<label><input type="radio" name="action_type" value="email" disabled> Email</label>
-				<label><input type="radio" name="action_type" value="tweet" disabled> Tweet</label>
-				<label><input type="radio" name="action_type" value="call" disabled> Call</label>
-				<label><input type="radio" name="action_type" value="facebook" disabled> Facebook</label>
-			</div>
-		</div>
-		<div class="form-row step-picker">
-			<div class="form-label col span_1_of_4"><label>Step:</label></div>
-			<div class="form-control col span_3_of_4">
-				<select name="after_step">
-					<option value="">First step of journey</option>
-				</select>
-			</div>
-		</div>
-		<div class="form-row">
-			<div class="form-label col span_1_of_4"><label>Internal Name: </label></div>
-			<div class="form-control col span_3_of_4">
-				<input type="text" name="notes" value="{{searched_name}}">-XX<br/>
-				<p class="help">This will be used to also initialise the URL slug (ActionKit's "short name"), so don't forget to change it!</p>
-			</div>
-		</div>
-		<button id="create_pages" class="button-main">Create Pages</button>
-	</div>
+    <h2>Add a Journey Step</h2>
+    <div class="fieldset-contents">
+        <div class="form-row form-row-CheckboxInput language-picker">
+            <div class="form-label col span_1_of_4"><label>Languages:</label></div>
+            <div class="form-control col span_3_of_4"></div>
+        </div>
+        <div class="form-row form-row-CheckboxInput">
+            <div class="form-label col span_1_of_4"><label>Action type:</label></div>
+            <div class="form-control col span_3_of_4">
+                <label><input type="radio" name="action_type" value="petition" checked> Petition</label>
+                <label><input type="radio" name="action_type" value="share" disabled> Share</label>
+                <label><input type="radio" name="action_type" value="donation"> Donation</label>
+                <label><input type="radio" name="action_type" value="email" disabled> Email</label>
+                <label><input type="radio" name="action_type" value="tweet" disabled> Tweet</label>
+                <label><input type="radio" name="action_type" value="call" disabled> Call</label>
+                <label><input type="radio" name="action_type" value="facebook" disabled> Facebook</label>
+            </div>
+        </div>
+        <div class="form-row step-picker">
+            <div class="form-label col span_1_of_4"><label>Step:</label></div>
+            <div class="form-control col span_3_of_4">
+                <select name="after_step">
+                    <option value="">First step of journey</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-label col span_1_of_4"><label>Internal Name: </label></div>
+            <div class="form-control col span_3_of_4">
+                <input type="text" name="notes" value="{{searched_name}}">-XX<br/>
+                <p class="help">This will be used to also initialise the URL slug (ActionKit's "short name"), so don't forget to change it!</p>
+            </div>
+        </div>
+        <button id="create_pages" class="button-main">Create Pages</button>
+    </div>
 </fieldset>
 </form>
 
 <section id="mailings_output">
-	<h2>Mailings</h2>
-	<table>
-		<tr><th scope="column">Name</th><th scope="column">Send date</th><th scope="column"></th></tr>
-	</table>
+    <h2>Mailings</h2>
+    <table>
+        <tr><th scope="column">Name</th><th scope="column">Send date</th><th scope="column"></th></tr>
+    </table>
 </section>
 
 <form>
 <fieldset id="mailing_form" class="collapse collapsed">
-	<h2>Add mailings</h2>
-	<div class="fieldset-contents">
-		<div class="form-row form-row-CheckboxInput language-picker">
-			<div class="form-label col span_1_of_4"><label>Languages:</label></div>
-			<div class="form-control col span_3_of_4"></div>
-		</div>
-		<div class="form-row form-row-CheckboxInput moment-picker">
-			<div class="form-label col span_1_of_4"><label>Moment:</label></div>
-			<div class="form-control col span_3_of_4"></div>
-		</div>
-		<div class="form-row form-row-CheckboxInput ask_type-picker">
-			<div class="form-label col span_1_of_4"><label>Ask type:</label></div>
-			<div class="form-control col span_3_of_4"></div>
-		</div>
-		<div class="form-row">
-			<div class="form-label col span_1_of_4"><label>Name: </label></div>
-			<div class="form-control col span_3_of_4"><input type="text" name="notes" value="{{searched_name}}">-XX</div>
-		</div>
-		<button id="create_mailings">Create mailings</button>
-	</div>
+    <h2>Add mailings</h2>
+    <div class="fieldset-contents">
+        <div class="form-row form-row-CheckboxInput language-picker">
+            <div class="form-label col span_1_of_4"><label>Languages:</label></div>
+            <div class="form-control col span_3_of_4"></div>
+        </div>
+        <div class="form-row form-row-CheckboxInput moment-picker">
+            <div class="form-label col span_1_of_4"><label>Moment:</label></div>
+            <div class="form-control col span_3_of_4"></div>
+        </div>
+        <div class="form-row form-row-CheckboxInput ask_type-picker">
+            <div class="form-label col span_1_of_4"><label>Ask type:</label></div>
+            <div class="form-control col span_3_of_4"></div>
+        </div>
+        <div class="form-row">
+            <div class="form-label col span_1_of_4"><label>Name: </label></div>
+            <div class="form-control col span_3_of_4"><input type="text" name="notes" value="{{searched_name}}">-XX</div>
+        </div>
+        <button id="create_mailings">Create mailings</button>
+    </div>
 </fieldset>
 </form>
 
 <div>
-	<fieldset id="mailing_form" class="collapse collapsed">
-		<h2>API Debugging</h2>
-		<div id="api-log" class="fieldset-contents">
-		</div>
-	</fieldset>
+    <fieldset id="mailing_form" class="collapse collapsed">
+        <h2>API Debugging</h2>
+        <div id="api-log" class="fieldset-contents">
+        </div>
+    </fieldset>
 </div>
 <style>
-	#api-log > div { padding: 1px; border-bottom: 1px solid #f7f7f7; padding-left: 1.5em; text-indent:-1.5em; white-space: pre-wrap; }
-	#api-log > div:nth-child(even) { background: #fcfcfc; }
+    #api-log > div { padding: 1px; border-bottom: 1px solid #f7f7f7; padding-left: 1.5em; text-indent:-1.5em; white-space: pre-wrap; max-height: 80px; }
+    #api-log > div:nth-child(even) { background: #fcfcfc; }
+    #api-log > div.expanded { max-height: auto; }
 </style>
 
 <script>
-	var searched_name = "{{searched_name}}";
-	$( function () {
-		readCampaigns(searched_name);
-	} );
+    var searched_name = "{{searched_name}}";
+    $( function () {
+        readCampaigns(searched_name);
+    } );
 </script>
 
 {% endif %}
 
 <script>
-	var apiRoot = "/rest/v1";
-	var models = {campaign_name: "models"};
-	var raw_campaigns = null;
-	var campaign_list = null;
-	var languages = {};
-	var coreLanguages = ["Dutch", "English", "French", "German", "Italian", "Polish", "Spanish"];
-	var multilingual_campaigns = {};
+    var apiRoot = "/rest/v1";
+    var models = {campaign_name: "models"};
+    var raw_campaigns = null;
+    var campaign_list = null;
+    var languages = {};
+    var coreLanguages = ["Dutch", "English", "French", "German", "Italian", "Polish", "Spanish"];
+    var multilingual_campaigns = {};
 </script>
 
 <script>
-	
+
 function api_log() {
-	console.log( "AK API:", ...arguments );
-	var log_item = $('<div>').text( [...arguments].map( 
-		(i) => typeof(i) == 'string' ? i : JSON.stringify(i, null, 2) 
-	).join(' ') );
-	$('#api-log').append(log_item);
+    console.log( "AK API:", ...arguments );
+    $('<div>').text( [...arguments].map( 
+        (i) => typeof(i) == 'string' ? i : JSON.stringify(i, null, 2) 
+    ).join(' ') ).appendTo('#api-log');
 }
 
+function api_error() {
+    api_log( ...arguments );
+    alert( [...arguments].map( 
+        (i) => typeof(i) == 'string' ? i : JSON.stringify(i, null, 2) 
+    ).join(' ') );
+}
+
+$('#api-log').on('click', 'div', function () { 
+    $(this).toggleClass('expanded') 
+} );
+
 function api(method, path, data) {
-	api_log("Call:", method, path, data);
+    api_log("Call:", method, path, data);
     return $.ajax({
         type: method,
         url: `${apiRoot}/${path}`,
@@ -263,11 +274,10 @@ function api(method, path, data) {
         processData: ( method == 'GET' ? true : false ),
         data: ( method == 'GET' ? data : JSON.stringify(data) )
     }).done(function(result) {
-			api_log("Results:", method, path, '=', result);
-		}).fail(function(xhr, rstatus, rerror) {
-			api_log("Error:", method, path, data, rstatus, rerror);
-			alert("API Error:", method, path, data, rstatus, rerror);
-  });
+            api_log("Results:", method, path, '=', result);
+    }).fail(function(xhr, rstatus, rerror) {
+        api_error("Error:", method, path, data, rstatus, rerror);
+    });
 }
 
 function readLanguages() {
@@ -275,7 +285,7 @@ function readLanguages() {
         result.objects.forEach(function(lang) {
             window.languages[lang.resource_uri] = lang;
             if (coreLanguages.includes(lang.name)) {
-				var checked_attr = ( 1 || lang.iso_code == 'en' || lang.iso_code == 'fr' ) ? 'checked="checked"' : '';
+                var checked_attr = ( 1 || lang.iso_code == 'en' || lang.iso_code == 'fr' ) ? 'checked="checked"' : '';
                 $('.language-picker .form-control').append(
                     ` <label><input type="checkbox" value="${lang.resource_uri}" data-iso_code="${lang.iso_code.toUpperCase()}" ${checked_attr}> ${lang.name}</label>`
                 );
@@ -287,7 +297,7 @@ function readLanguages() {
 function readCampaigners() {
     api('GET', "authuser/", { is_active: 'true', order_by: '-id', _limit: 100 } ).done(function(result) {
         result.objects.map( staff => `${staff.first_name} ${staff.last_name}`)
-		.sort().forEach(function(staff_name) {
+        .sort().forEach(function(staff_name) {
             $('.lead_campaigner-picker .form-control select').append(
                 ` <option value="${staff_name}">${staff_name}</option>`
             );
@@ -338,40 +348,40 @@ function readFieldValues(field_name, entity, default_value) {
 }
 
 function fetchCampaigns() {
-	return api('GET', "allowedpagefield/campaign")
-		.done(function(field) {
-			raw_campaigns = field.field_choices;
-			campaign_list = field.choices.map((opt) => ({id: opt[0], name: opt[1]}))
-												.sort( (c1,c2) => c2.id - c1.id );
-		} );
+    return api('GET', "allowedpagefield/campaign")
+        .done(function(field) {
+            raw_campaigns = field.field_choices;
+            campaign_list = field.choices.map((opt) => ({id: opt[0], name: opt[1]}))
+                                                .sort( (c1,c2) => c2.id - c1.id );
+        } );
 }
 
 function readCampaigns(searched_name) {
-	fetchCampaigns().done( function() {
-		matches = campaign_list.filter(function(camp) {
-			return camp.name.includes(searched_name);
-		});
-		if (matches.length == 0) {
-			displayCreateForm(searched_name);
-		} else if (matches.length == 1) {
-			model_campaign = campaign_list.find((camp) => camp.name == window.models.campaign_name);
-			window.models.campaign = model_campaign;
-			displayCampaign(matches[0]);
-		} else {
-			displayMatches(matches);
-		}
-	});
+    fetchCampaigns().done( function() {
+        matches = campaign_list.filter(function(camp) {
+            return camp.name.includes(searched_name);
+        });
+        if (matches.length == 0) {
+            displayCreateForm(searched_name);
+        } else if (matches.length == 1) {
+            model_campaign = campaign_list.find((camp) => camp.name == window.models.campaign_name);
+            window.models.campaign = model_campaign;
+            displayCampaign(matches[0]);
+        } else {
+            displayMatches(matches);
+        }
+    });
 }
 
 function showCampaignList() {
-	fetchCampaigns().done( function() {
-		const table = $('#campaign-list table');
-		campaign_list.forEach( function(cmp) {
-			table.append(
+    fetchCampaigns().done( function() {
+        const table = $('#campaign-list table');
+        campaign_list.forEach( function(cmp) {
+            table.append(
                 ` <tr class="item"><td><a href="?searched_name=${cmp.name}">${cmp.name}</a></td></tr>`
-			);
-		} );
-	} );
+            );
+        } );
+    } );
 }
 
 function readMultilingualCampaigns(prefix) {
@@ -424,7 +434,7 @@ function displayCampaign(camp) {
 
 function displayPages(campaign) {
     api('GET', "page/", { field__name: 'campaign', field__value: campaign.id })
-	.done(function(result) {
+    .done(function(result) {
         var pages = {};
         result.objects.forEach(function(page) {
             if (page.id != campaign.id) {
@@ -456,7 +466,7 @@ function displayPages(campaign) {
         });
         $('#create_pages').on('click', createPages);
         $('#add_step').on('click', function () {
-				$('#add_step').hide();
+                $('#add_step').hide();
                 $('#page_form').show();
         });
     });
@@ -561,16 +571,16 @@ function createCampaignPage() {
         name: campaign_name,
         title: $('#title').val()
     }).done(function () {
-	    var campaign_name = $('#name').val();
-	    api('GET', "signuppage/", {
-			name: campaign_name
-		}).done(function(result) {
-	        var campaign_id = result.objects[0].id;
-	        api('PATCH', "allowedpagefield/campaign", {
-	            field_choices: raw_campaigns + "\n" + campaign_id + "=" + campaign_name
-	        }).done(() => setCampaignMetadata(campaign_id));
-	    });
-	});
+        var campaign_name = $('#name').val();
+        api('GET', "signuppage/", {
+            name: campaign_name
+        }).done(function(result) {
+            var campaign_id = result.objects[0].id;
+            api('PATCH', "allowedpagefield/campaign", {
+                field_choices: raw_campaigns + "\n" + campaign_id + "=" + campaign_name
+            }).done(() => setCampaignMetadata(campaign_id));
+        });
+    });
 }
 
 function setCampaignMetadata(campaign_id) {
@@ -587,8 +597,8 @@ function setCampaignMetadata(campaign_id) {
             }
         })
     }).done(function() {
-		document.location = "?searched_name=" + $('#name').val();
-	});
+        document.location = "?searched_name=" + $('#name').val();
+    });
 }
 
 function pageType(actionType) {
@@ -670,8 +680,8 @@ function createPages(evt) {
             }
         });
         $.when(...calls).done(
-			() => document.location = `?searched_name=${campaign.name}`
-		);
+            () => document.location = `?searched_name=${campaign.name}`
+        );
     });
 }
 
@@ -691,24 +701,24 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
     }
     const page_type = pageType(action_type);
     return fetch(`/admin/core/${page_type}page/copy/?id=${model_id}`).then(
-		function(response) {
-	        const page_id = response.url.match(/\d+/)[0];
-			api_log(`Created ${language} ${action_type} page ${page_id}`);
-	        return api('GET', `page/${page_id}`).done(function(page) {
-				return api('PATCH', `${page_type}page/${page_id}/`, {
+        function(response) {
+            const page_id = response.url.match(/\d+/)[0];
+            api_log(`Created ${language} ${action_type} page ${page_id}`);
+            return api('GET', `page/${page_id}`).done(function(page) {
+                return api('PATCH', `${page_type}page/${page_id}/`, {
                     name: page_name,
                     title:`Enter a Title for ${page_name}`,
-					// notes: page_name,
+                    // notes: page_name,
                     language: language,
                     multilingual_campaign: mcamp,
                     fields: fields,
                 }).done( function () {
-	                return api('PATCH', `pagefollowup/${page.followup.id}/`, {
-						url: followup_url
-					})
+                    return api('PATCH', `pagefollowup/${page.followup.id}/`, {
+                        url: followup_url
+                    })
                 } );
-	        });
-	    });
+            });
+        });
 }
 
 function createMailings(evt) {
@@ -732,8 +742,8 @@ function createMailings(evt) {
         }
     });
     $.when(...calls).then(
-		() => document.location = "?searched_name=" + campaign.name
-	);
+        () => document.location = "?searched_name=" + campaign.name
+    );
 }
 
 </script>
