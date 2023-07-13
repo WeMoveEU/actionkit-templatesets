@@ -95,6 +95,14 @@
             <span></span>
         </div>
     </div>
+    <div id="camp_youmove" class="form-row form-row-CheckboxInput clearfix">
+        <div class="form-label col span_1_of_4">
+            <label>YouMove Campaign: </label>
+        </div>
+        <div class="form-control col span_3_of_4">
+            <span></span>
+        </div>
+    </div>
     <button id="open_edit">&#xFE0F; Edit</button>
 </section>
 
@@ -105,30 +113,39 @@
         <div class="form-row">
             <div class="form-label col span_1_of_4"><label>Short Name: </label></div>
             <div class="form-control col span_3_of_4">
-                                <input name="name" placeholder="YYYY-MM-internal-name-no-spaces" type="text" id="name">
-                        </div>
+                <input name="name" placeholder="YYYY-MM-internal-name-no-spaces" type="text" id="name">
+            </div>
         </div>
         <div class="form-row">
             <div class="form-label col span_1_of_4"><label>Title: </label></div>
             <div class="form-control col span_3_of_4">
-                                <input name="title" placeholder="Staff-Facing Title For This Campaign" type="text" id="title">
-                        </div>
+                <input name="title" placeholder="Staff-Facing Title For This Campaign" type="text" id="title">
+            </div>
         </div>
         <div class="form-row topic-picker">
             <div class="form-label col span_1_of_4"><label>Topic: </label></div>
             <div class="form-control col span_3_of_4">
-                                <select name="topic" id="topic">
-                                        <option value="">Choose one:</option>
-                                </select>
-                        </div>
+                <select name="topic" id="topic">
+                    <option value="">Choose one:</option>
+                </select>
+            </div>
         </div>
         <div class="form-row lead_campaigner-picker">
             <div class="form-label col span_1_of_4"><label>Lead Campaigner: </label></div>
             <div class="form-control col span_3_of_4">
-                                <select name="lead_campaigner" id="lead_campaigner">
-                                        <option value="">Choose one:</option>
-                                </select>
-                        </div>
+                <select name="lead_campaigner" id="lead_campaigner">
+                    <option value="">Choose one:</option>
+                </select>
+            </div>
+        </div>
+        <div id="camp_youmove" class="form-row form-row-CheckboxInput clearfix">
+            <div class="form-label col span_1_of_4">
+                <label>YouMove Campaign: </label>
+            </div>
+            <div class="form-control col span_3_of_4">
+                <label><input type="radio" name="youmove_campaign" value="">WeMove</label>
+                <label><input type="radio" name="youmove_campaign" value="1">YouMove</label>
+            </div>
         </div>
     </form>
     <button id="save_campaign">Save</button>
@@ -421,6 +438,7 @@ function displayCampaign(camp) {
         $('#campaign_output #camp_name span').text(camp.name);
         $('#campaign_output #camp_topic span').text(page.fields.topic);
         $('#campaign_output #camp_lead_campaigner span').text(page.fields.lead_campaigner);
+        $('#campaign_output #camp_youmove span').text(page.fields.youmove_campaign == '1' ? "YouMove" : "WeMove");
         $('#campaign_output').show();
         $('#open_edit').on('click', function() {
             displayEditForm(page);
@@ -593,7 +611,8 @@ function setCampaignMetadata(campaign_id) {
             fields: {
                 campaign: campaign_id,
                 topic: $('#topic').val(),
-                lead_campaigner: $('#lead_campaigner').val()
+                lead_campaigner: $('#lead_campaigner').val(),
+                youmove_campaign: $('#youmove_campaign').val()
             }
         })
     }).done(function() {
