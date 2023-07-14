@@ -291,7 +291,7 @@ function api(method, path, data) {
         processData: ( method == 'GET' ? true : false ),
         data: ( method == 'GET' ? data : JSON.stringify(data) )
     }).done(function(result) {
-            api_log("Results:", method, path, data, '=>', result);
+        api_log("Results:", method, path, data, '=>', result);
     }).fail(function(xhr, rstatus, rerror) {
         api_error("Error:", method, path, data, rstatus, rerror);
     });
@@ -495,11 +495,11 @@ function displayPages(campaign) {
 function sortJourney(pages) {
     Object.keys(pages).forEach(function(lang) {
         pages[lang].forEach(function(page) {
-            var next_url = page.followup ? page.followup.url : "";
-            var linked_page = pages[lang].find((p) => next_url.match("/" + p.name + "/?($|\\?)"));
+            var next_step = page.fields ? page.fields.next_step;
+            var linked_page = pages[lang].find( (p) => ( p.name == next_step || p.name == next_step.match("/" + p.name + "/?($|\\?)") ) );
             if (linked_page) {
-                if (next_url.startsWith("/thanks/")) {
-                    var action_type = next_url.endsWith("?done=1") ? "thanks" : "share";
+                if (next_step.startsWith("/thanks/")) {
+                    var action_type = next_step.endsWith("?done=1") ? "thanks" : "share";
                     page.next_step = { id: linked_page.id, type: linked_page.type, action_type: action_type, previous_step: page };
                     if (action_type == "share") {
                         page.next_step.next_step = { id: linked_page.id, type: linked_page.type, action_type: "thanks", previous_step: page.next_step };
@@ -511,7 +511,7 @@ function sortJourney(pages) {
             }
         });
         var lang_journey = [];
-        var cur_page = pages[lang].find((p) => !p.previous_step && p.next_step);
+        var cur_page = pages[lang].find((p) => !p.previous_step);
         //Don't you dare linking a page to itself!
         while (cur_page) {
             lang_journey.push(cur_page);
