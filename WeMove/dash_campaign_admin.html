@@ -495,7 +495,7 @@ function displayPages(campaign) {
 function sortJourney(pages) {
     Object.keys(pages).forEach(function(lang) {
         pages[lang].forEach(function(page) {
-            var next_step = page.fields ? page.fields.next_step;
+            var next_step = page.fields ? page.fields.next_step : null;
             var linked_page = pages[lang].find( (p) => ( p.name == next_step || p.name == next_step.match("/" + p.name + "/?($|\\?)") ) );
             if (linked_page) {
                 if (next_step.startsWith("/thanks/")) {
