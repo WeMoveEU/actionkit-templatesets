@@ -198,14 +198,15 @@
 
 <section id="mailings_output">
     <h2>Mailings</h2>
-    <table>
+    <table style="min-width: 300px">
         <tr><th scope="column">Name</th><th scope="column">Send date</th><th scope="column"></th></tr>
     </table>
+    <button id="add_mailing">Add Mailings</button>
 </section>
 
 <form>
-<fieldset id="mailing_form" class="collapse collapsed">
-    <h2>Add mailings</h2>
+<fieldset id="mailing_form" style="display: none">
+    <h2>Add Mailings</h2>
     <div class="fieldset-contents">
         <div class="form-row form-row-CheckboxInput language-picker">
             <div class="form-label col span_1_of_4"><label>Languages:</label></div>
@@ -566,6 +567,10 @@ function displayMailings(campaign) {
         });
         readFieldValues('ask_type', 'mailing', 'sign');
         $('#create_mailings').on('click', createMailings);
+        $('#add_mailing').on('click', function () {
+                $('#add_mailing').hide();
+                $('#mailing_form').show();
+        });
     });
 }
 
