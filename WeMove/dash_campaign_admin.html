@@ -314,7 +314,7 @@ function readCampaigners(default_value) {
         var $select = $('.lead_campaigner-picker .form-control select');
         result.objects.map( staff => `${staff.first_name} ${staff.last_name}`)
         .sort().forEach(function(staff_name) {
-            select.append(
+            $select.append(
                 ` <option value="${staff_name}">${staff_name}</option>`
             );
         });
