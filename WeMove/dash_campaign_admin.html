@@ -309,14 +309,18 @@ function readLanguages() {
     });
 }
 
-function readCampaigners() {
+function readCampaigners(default_value) {
     api('GET', "authuser/", { is_active: 'true', order_by: '-id', _limit: 100 } ).done(function(result) {
+        var $select = $('.lead_campaigner-picker .form-control select');
         result.objects.map( staff => `${staff.first_name} ${staff.last_name}`)
         .sort().forEach(function(staff_name) {
-            $('.lead_campaigner-picker .form-control select').append(
+            select.append(
                 ` <option value="${staff_name}">${staff_name}</option>`
             );
         });
+        if (default_value) {
+            $select.val(default_value);
+        }
     });
 }
 
