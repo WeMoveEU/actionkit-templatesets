@@ -224,13 +224,13 @@
             <div class="form-label col span_1_of_4"><label>Name: </label></div>
             <div class="form-control col span_3_of_4"><input type="text" name="notes" value="{{searched_name}}">-XX</div>
         </div>
-        <button id="create_mailings">Create mailings</button>
+        <button id="create_mailings" class="button-main">Create Mailings</button>
     </div>
 </fieldset>
 </form>
 
 <div>
-    <fieldset id="mailing_form" class="collapse collapsed">
+    <fieldset id="api_debugging" class="collapse collapsed">
         <h2>API Debugging</h2>
         <div id="api-log" class="fieldset-contents">
         </div>
@@ -558,7 +558,7 @@ function displayMailings(campaign) {
             $('#mailings_output table').html('<tr><td>No mailing yet</td></tr>');
         }
         $('#mailing_form').data('campaign', campaign);
-        $('#mailings_output,#mailing_form').show();
+        $('#mailings_output').show();
         readFieldValues('moment', 'mailing').done(function() {
             $('#mailing_form input[name=moment]').on('click', function() {
                 $('#mailing_form input[name=notes]').val(campaign.name + "-" + this.value);
