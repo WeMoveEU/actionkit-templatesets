@@ -558,7 +558,8 @@ function displayMailings(campaign) {
                 $('#mailing_form input[name=notes]').val(campaign.name + "-" + this.value);
             });
         });
-        readFieldValues('ask_type', 'mailing');
+        $('#mailing_form input[name=moment]:first').attr('checked', 'checked');
+        readFieldValues('ask_type', 'mailing', 'sign');
         $('#create_mailings').on('click', createMailings);
     });
 }
