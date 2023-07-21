@@ -519,17 +519,15 @@ function sortJourney(pages) {
             var next_step = page.fields ? page.fields.next_step : null;
             var linked_page = next_step ? pages[lang].find( (p) => ( p.name == next_step || p.name == next_step.match("/" + p.name + "/?($|\\?)") ) ) : null;
             if (linked_page) {
-                if (next_step) {
-                    page.next_step = linked_page;
-                    linked_page.previous_step = page;
-                } else {
-                    var after_action = page.followup.url;
-                    if ( after_action.match(/thanks/)[0] ) {
-                        var action_type = after_action.endsWith("?done=1") ? "thanks" : "share";
-                        page.next_step = { id: linked_page.id, type: linked_page.type, action_type: action_type, previous_step: page };
-                        if (action_type == "share") {
-                            page.next_step.next_step = { id: linked_page.id, type: linked_page.type, action_type: "thanks", previous_step: page.next_step };
-                        }
+                page.next_step = linked_page;
+                linked_page.previous_step = page;
+            } else {
+                var after_action = page.followup.url;
+                if ( after_action.match(/thanks/)[0] ) {
+                    var action_type = after_action.endsWith("?done=1") ? "thanks" : "share";
+                    page.next_step = { id: linked_page.id, type: linked_page.type, action_type: action_type, previous_step: page };
+                    if (action_type == "share") {
+                        page.next_step.next_step = { id: linked_page.id, type: linked_page.type, action_type: "thanks", previous_step: page.next_step };
                     }
                 }
             }
