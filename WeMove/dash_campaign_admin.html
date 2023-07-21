@@ -95,9 +95,9 @@
             <span></span>
         </div>
     </div>
-    <div id="camp_youmove" class="form-row form-row-CheckboxInput clearfix">
+    <div id="camp_topic" class="form-row form-row-CheckboxInput clearfix">
         <div class="form-label col span_1_of_4">
-            <label>YouMove Campaign: </label>
+            <label>Campaign Type: </label>
         </div>
         <div class="form-control col span_3_of_4">
             <span></span>
@@ -138,13 +138,11 @@
                 </select>
             </div>
         </div>
-        <div id="camp_youmove" class="form-row form-row-CheckboxInput clearfix">
-            <div class="form-label col span_1_of_4">
-                <label>YouMove Campaign: </label>
-            </div>
+        <div class="form-row campaign_type-picker">
+            <div class="form-label col span_1_of_4"><label>Campaign Type: </label></div>
             <div class="form-control col span_3_of_4">
-                <label><input type="radio" name="youmove_campaign" value="">WeMove</label>
-                <label><input type="radio" name="youmove_campaign" value="1">YouMove</label>
+                <select name="campaign_type" id="campaign_type">
+                </select>
             </div>
         </div>
     </form>
@@ -414,6 +412,7 @@ function readMultilingualCampaigns(prefix) {
 
 function displayCreateForm(default_name) {
     readFieldValues('topic', 'page');
+    readFieldValues('campaign_type', 'page');
     readCampaigners();
     $('#save_campaign').on('click', saveCampaignPage);
     $('#campaign_form').show().find('#name').val(default_name);
@@ -422,6 +421,7 @@ function displayCreateForm(default_name) {
 
 function displayEditForm(page) {
     readFieldValues('topic', 'page', page.fields.topic);
+    readFieldValues('campaign_type', 'page', page.fields.campaign_type);
     readCampaigners(page.fields.lead_campaigner);
     $('#campaign_form').data('campaign_id', page.id);
     $('#campaign_form #name').val(page.name).attr('readonly', 'readonly');
@@ -437,8 +437,8 @@ function displayCampaign(camp) {
         $('#campaign_output #camp_id span').text(camp.id);
         $('#campaign_output #camp_name span').text(camp.name);
         $('#campaign_output #camp_topic span').text(page.fields.topic);
+        $('#campaign_output #camp_campaign_type span').text(page.fields.campaign_type);
         $('#campaign_output #camp_lead_campaigner span').text(page.fields.lead_campaigner);
-        $('#campaign_output #camp_youmove span').text(page.fields.youmove_campaign == '1' ? "YouMove" : "WeMove");
         $('#campaign_output').show();
         $('#open_edit').on('click', function() {
             displayEditForm(page);
@@ -614,7 +614,7 @@ function setCampaignMetadata(campaign_id) {
                 campaign: campaign_id,
                 topic: $('#topic').val(),
                 lead_campaigner: $('#lead_campaigner').val(),
-                youmove_campaign: $('#youmove_campaign').val()
+                campaign_type: $('#campaign_type').val()
             }
         })
     }).done(function() {
