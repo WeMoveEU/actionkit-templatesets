@@ -29,11 +29,15 @@
     
     .form-row-CheckboxInput .form-control label { float: none }
  
-     #api_debugging h2 {
-         margin-top: 2em;
-         font-size: 18px;
-         background: #eee;
-         width: 100%;
+    .button-row {
+        margin-top: 0.5em;
+    }
+    
+    #api_debugging h2 {
+        margin-top: 2em;
+        font-size: 18px;
+        background: #eee;
+        width: 100%;
     }
     
 </style>
@@ -110,7 +114,7 @@
             <span></span>
         </div>
     </div>
-    <p><button id="open_edit" class="button-small-alternate">&#xFE0F; Edit</button></p>
+    <div class="button-row"><button id="open_edit" class="button-small-alternate">&#xFE0F; Edit</button></div>
 </section>
 
 <section id="campaign_form">
@@ -160,7 +164,7 @@
     <h2>Action Pages</h2>
     <table>
     </table>
-    <p><button id="add_step" class="button-small-alternate">Add A Step</button></p>
+    <div class="button-row"><button id="add_step" class="button-small-alternate">Add A Step</button></div>
 </section>
 
 <form>
@@ -208,7 +212,7 @@
     <table style="min-width: 300px">
         <tr><th scope="column">Name</th><th scope="column">Send date</th><th scope="column"></th></tr>
     </table>
-    <p><button id="add_mailing" class="button-small-alternate">Add Mailings</button></p>
+    <div class="button-row"><button id="add_mailing" class="button-small-alternate">Add Mailings</button></div>
 </section>
 
 <form>
