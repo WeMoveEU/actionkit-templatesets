@@ -361,7 +361,12 @@ function readFieldValues(field_name, entity, default_value) {
             }
         });
         if (default_value) {
-            $select.val(default_value);
+            if ($select.length) {
+                $select.val(default_value);
+            } else {
+                $(`input[name="${field_name}"][value="${default_value}"]`)
+                    .attr('checked', 'checked');
+            }
         }
     });
 }
@@ -557,8 +562,8 @@ function displayMailings(campaign) {
             $('#mailing_form input[name=moment]').on('click', function() {
                 $('#mailing_form input[name=notes]').val(campaign.name + "-" + this.value);
             });
+            $('#mailing_form input[name=moment]:first').attr('checked', 'checked');
         });
-        $('#mailing_form input[name=moment]:first').attr('checked', 'checked');
         readFieldValues('ask_type', 'mailing', 'sign');
         $('#create_mailings').on('click', createMailings);
     });
