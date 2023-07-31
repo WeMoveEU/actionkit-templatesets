@@ -15,7 +15,12 @@
     <meta property="og:site_name" content="{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}">
     <meta property="og:type" content="article">
     <meta name="twitter:card" content="summary">
+
+    {% if page.custom_fields.campaign_type == "youmove" %}
+    <link href="https://youmoveeurope.eu/favicon.png" rel="icon" />
+    {% else %}
     <link href="https://www.wemove.eu/favicon.png" rel="icon" />
+    {% endif %}
 
     {% endblock %}
 
