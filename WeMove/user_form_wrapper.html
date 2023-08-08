@@ -41,7 +41,6 @@
 {% if previous_actions|length == 0 or previous_actions == "0" %}
     <div class="js-nav-buttons">
       <button type="submit" class="btn btn-primary">{{ page.custom_fields.sign_petition_button }}</button>
-      <button type="submit" class="btn btn-primary">{% filter ak_text:"form_signPetition_button" %}Sign the petition{% endfilter %}</button>
     </div>
 {% endif %}
 
