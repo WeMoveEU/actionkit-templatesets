@@ -51,10 +51,10 @@
 						{% endif %}
 
 						{% if page.custom_fields.campaign %}
-						{% cache_report "custom_field_for_page_id" with page.custom_fields.campaign as page_id "partnership_icons" as custom_field %}
-						{% if custom_field_for_page_id and custom_field_for_page_id != 'None' %}
+						{% cache_report "custom_field_value_page_id" with page.custom_fields.campaign as page_id "partnership_icons" as custom_field %}
+						{% if custom_field_value_page_id and custom_field_value_page_id != 'None' %}
 						<h2>{% filter ak_text:"in_partnership_with" %}In partnership with{% endfilter %}:</h2>
-						<div class="unescape-html">{{ custom_field_for_page_id }}</div>
+						<div class="unescape-html">{{ custom_field_value_page_id }}</div>
 						{% endif %}
 						{% endif %}
 					</div>
