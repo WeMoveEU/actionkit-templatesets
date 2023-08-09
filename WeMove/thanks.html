@@ -138,6 +138,18 @@
 								} );
 							}
 						</script>
+
+            {% if page.custom_fields.instagram_share_link %}
+            <div class="share-big instagram-share-container">
+							<a class="btn btn-primary instagram" href="{{page.custom_fields.instagram_share_link}}" target="_blank">
+								<i class="fa fa-instagram"></i>
+                <span class="share-text">
+                  {% filter ak_text:"thanks_shareInstagram_button" %}Share Story on Instagram{% endfilter %}
+                </span>
+							</a>
+						</div>
+            {% endif %}
+
 						<div class="share-big whatsapp-share-container js-whatsapp-share-container">
 							<a class="btn btn-primary popup whatsapp-web" href="/thanks/{{ page.name }}?share=whatsapp&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" target="_blank">
 								<i class="fa fa-whatsapp"></i> <span class="share-text">
