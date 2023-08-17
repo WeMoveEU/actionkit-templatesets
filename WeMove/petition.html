@@ -7,7 +7,7 @@
 
 
 {% if args.utm_source or args.action_utm_source %}
-XXX
+    <input type="hidden" name="action_utm_source" value="{{ args.utm_source|default:args.action_utm_source }}">
 {% endif %}
 
 	<div class="ak-grid-row">
