@@ -5,17 +5,6 @@
 <form class="ak-form" name="act" method="POST" action="/act/" accept-charset="utf-8">
 	<input type="hidden" name="page" value="{{ page.name }}">
 
-
-{% if args.utm_source or args.action_utm_source %}
-    <input type="hidden" name="action_utm_source" value="{{ args.utm_source }}">
-{% endif %}
-{% if args.utm_medium or args.action_utm_medium %}
-    <input type="hidden" name="action_utm_medium" value="{{ args.utm_medium }}">
-{% endif %}
-{% if args.utm_campaign or args.action_utm_campaign %}
-    <input type="hidden" name="action_utm_campaign" value="{{ args.utm_campaign }}">
-{% endif %}
-
 	<div class="ak-grid-row">
 
 		<div class="advice-advice">
