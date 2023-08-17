@@ -9,7 +9,7 @@
 
     {% block share_metatags %}
     {{ page.followup.share_title_tag }}
-    {{ page.followup.share_description_tag }}
+    {% if form.id %}<meta name="description" property="og:description" content="{% block description %}{{ page.followup.share_description_value }}{% endblock %}">{% endif %}
     {{ page.followup.share_image_tag }}
     {{ page.followup.share_url_tag }}
     <meta property="og:site_name" content="{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}">
