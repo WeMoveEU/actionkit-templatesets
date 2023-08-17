@@ -182,6 +182,8 @@
 
 {% else %}
 
+<!-- Let AK know that we support sharing by including this: share/link?type=fb -->
+
 {% store as next_step %}{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}?{% else %}/thanks/{{ page.name }}?share=1&{% endif %}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% endstore %}
 
 <!-- Next Step: {{ next_step }} -->
