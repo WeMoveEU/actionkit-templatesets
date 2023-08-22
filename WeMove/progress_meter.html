@@ -8,6 +8,17 @@
             [% if ( goal && total ) { %]
                 [% progress.current = goal_type == 'dollars' ? total.dollars : goal_type == 'money' ? total.money : total.actions; %]
                 [% progress.current = parseInt(progress.current) + {{ page.custom_fields.external_signature_count|default:"0" }} + {{ page.custom_fields.external_signature_extras|default:"0" }}; %]
+                [% if goal_type == 'actions' && progress.current * 1.111 > goal {} %]
+                    [% const cutoffs = [ 100, 200, 500, 1000, 2000, 5000, 10000, 25000, 50000, 75000, 100000, 125000, 150000, 175000, 200000, 250000, 300000, 350000, 400000, 450000 ]; %]
+                    [% const reference = int( progress.current * 1.111 ); %]
+                    [% goal = ( int( reference / 100000 ) + 1 ) * 100000 %]
+                    [% for (const cutoff of cutoffs) { %]
+                      [% if ( cutoff > reference ) { %]
+                          [% goal = cutoff; %]
+                          [% break; %]
+                      [% } %]
+                    [% } %]
+                [% } %]
                 [% progress.percent = parseInt(progress.current/goal*100); %]
 
 								<div class="signature-counter">
