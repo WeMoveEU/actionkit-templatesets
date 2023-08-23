@@ -51,7 +51,7 @@
 							</div>
 
 							{% if form.survey_question_text|is_nonblank %}
-							<div>
+							<div class="opt-out-reason">
 								<label for="id_action_survey">
 									{% include_tmpl form.survey_question_text %}
 								</label>
@@ -62,7 +62,7 @@
 							<div class="crm-submit-buttons">
 
 								<button class="crm-form-submit default validate crm-button crm-button-type-next crm-button_qf_Optout_next" value="1" type="submit" id="_qf_Optout_next-bottom">Opt Out</button>
-								
+
 								<a class="button" href="//www.wemove.eu">Cancel</a>
 							</div>
 
