@@ -7,12 +7,11 @@
         <h2>{{ page.title }}</h2>
     </div>
 </div>
-
+{% include "./language_picker.html" %}
 <form class="action_form" name="act" method="POST" action="/act/" accept-charset="utf-8">
     
     <div class="ak-grid-row">
 
-        {% include "./language_picker.html" %}
         <div id="signup-story" class="ak-grid-col ak-grid-col-6-of-12">
 
             {% if page.custom_fields.featured_image %}
