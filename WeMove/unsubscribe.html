@@ -30,21 +30,18 @@
 							<ul class="compact" id="ak-errors"></ul>
 
 							<div id="known_user">
-
-								<p>You are requesting to opt out from all mailing lists for the user named below.</p>
+								<p>{% filter ak_text:"optout_identified_intro" %}You are requesting to opt out from all mailing lists for the user named below.{% endfilter %}</p>
  
 								<h3> <span id="known_user_name"></span> </h3>
 
-								<p>If this is not you, there is no need to do anything. You have not been added to any mailing lists.</p>
-
-								<p>If this is your name and you wish to opt out please click the Opt Out button to confirm.</p>
+								<p>{% filter ak_text:"optout_identified_extended" %}If this is not you, there is no need to do anything. You have not been added to any mailing lists. If this is your name and you wish to opt out please click the Opt Out button to confirm.{% endfilter %}</p>
 
 							</div>
 
 							<div id="unknown_user">
 								<div>
 									<div>
-										<label for="id_email">Email address</label>
+										<label for="id_email">{% filter ak_text:"field_email" %}Email address{% endfilter %}</label>
 										<input id="id_email" type="text" name="email" size=40>
 									</div>
 								</div>
@@ -61,9 +58,9 @@
 
 							<div class="crm-submit-buttons">
 
-								<button class="crm-form-submit default validate crm-button crm-button-type-next crm-button_qf_Optout_next" value="1" type="submit" id="_qf_Optout_next-bottom">Opt Out</button>
+								<button class="crm-form-submit default validate crm-button crm-button-type-next crm-button_qf_Optout_next" value="1" type="submit" id="_qf_Optout_next-bottom">{% filter ak_text:"optout_button_confirm" %}Opt Out{% endfilter %}</button>
 
-								<a class="button" href="//www.wemove.eu">Cancel</a>
+								<a class="button" href="//www.wemove.eu">{% filter ak_text:"optout_button_cancel" %}Cancel{% endfilter %}</a>
 							</div>
 
 						</div>
