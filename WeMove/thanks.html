@@ -238,6 +238,15 @@
 				window.location = '{{ next_step }}&consent=nolang';
 			</script>
 
+		{% elif page.type == 'unsubscribe' %}
+
+			{# You're taking action on a page that doesn't require consents. #}
+
+			<a href="{{ next_step }}">Please continue to the next step.</a>
+			<script>
+				window.location = '{{ next_step }}&consent=nolang';
+			</script>
+
 		{% else %}
 
 			{% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&trigger_page={{ page.name }}&trigger_action={{ action.id }}{% endif %}&next_step={{ next_step|urlencode }}{% endstore %}
