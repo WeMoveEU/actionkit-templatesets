@@ -40,16 +40,14 @@
 {% if page.SUPPRESS_SHARING %}
     <div class="ak-grid-row">
         <div class="ak-grid-col ak-grid-col-12-of-12">
-            <h2>
-                <img src="/media/modern/stance-supportive.svg" width="34" class="ak-checkmark-icon" alt="&#10003;">
-                {% filter ak_text:"noshare_thanks_banner" %}
-                Thanks!
-                {% endfilter %}
-            </h2>
-            <div>
-                {% include_tmpl form.thank_you_text %}
-            </div>
+          <div class="thanks-header">
+            <img src="/media/modern/stance-supportive.svg" height="34" width="34" class="ak-checkmark-icon" alt="&#10003;">
+            <h2>{% filter ak_text:"noshare_thanks_banner" %}Thanks!{% endfilter %}</h2>
+          </div>
 
+          <div>
+                {% include_tmpl form.thank_you_text %}
+          </div>
 
             {% if not page.type == 'Unsubscribe' %}
 						<a href="{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
