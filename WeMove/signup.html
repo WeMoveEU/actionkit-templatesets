@@ -21,13 +21,11 @@
             </div>
           {% endif %}
 
-          {% if form.statement_leadin %}
-					<div class="well">
-						{% include_tmpl form.statement_leadin %}
-					</div>
-					{% endif %}
-
           <div class="ak-abovefold">
+            <div class="well">
+              {% filter ak_text:"singup_well" %}I stand for a better Europe; for a European Union committed to social and economic justice, environmental sustainability and citizen-led democracy.{% endfilter %}
+            </div>
+
             {% include_tmpl form.introduction_text %}
           </div>
 			</div>
