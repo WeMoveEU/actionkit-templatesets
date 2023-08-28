@@ -82,6 +82,7 @@
         </div>
         <div class="form-control col span_3_of_4">
             <span></span>
+            <a class="button-small-alternate" href="">✎ Edit</a>
         </div>
     </div>
     <div id="camp_name" class="form-row form-row-CheckboxInput clearfix">
@@ -118,7 +119,6 @@
     </div>
     <div class="button-row">
         <button id="open_edit" class="button-small-alternate">Settings</button>
-        <a class="button-small-alternate" href="">✎ Edit</a>
     </div>
 </section>
 
@@ -461,6 +461,7 @@ function displayCampaign(camp) {
     readModels();
     api('GET', "page/" + camp.id).done(function(page) {
         $('#campaign_output #camp_id span').text(camp.id);
+        $('#campaign_output #camp_id 1').attr('href', `/admin/core/page/${camp.id}/change`);
         $('#campaign_output #camp_name span').text(camp.name);
         $('#campaign_output #camp_topic span').text(page.fields.topic);
         $('#campaign_output #camp_campaign_type span').text(page.fields.campaign_type);
