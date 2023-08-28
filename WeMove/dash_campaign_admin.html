@@ -476,7 +476,7 @@ function displayCampaign(camp) {
         $('#campaign_output #camp_lead_campaigner span').text(page.fields.lead_campaigner);
         const skipped_field_names = { topic:1, campaign_type: 1, lead_campaigner: 1 };
         $('#campaign_output #camp_custom_field_names span').text(
-            page.fields.keys().filter( (k) => ! skipped_field_names[k] ).join(", ") || 'None'
+            Object.keys(page.fields).filter( (k) => ! skipped_field_names[k] ).join(", ") || 'None'
         );
         $('#campaign_output').show();
         $('#open_edit').on('click', function() {
