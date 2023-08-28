@@ -17,18 +17,12 @@
     </div>
 
     <div class="ak-grid-row">
-        <div class="ak-grid-col ak-grid-col-4-of-12">
+        <div class="ak-grid-col ak-grid-col-12-of-12">
             
             {% if page.custom_fields.featured_image %}
             <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
             {% endif %}
-            
-            <div id="survey-contact" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
-                {% include "./user_form_wrapper.html" %}
-            </div>
-            
-            {% include "./progress_meter.html" %}
-            
+
         </div>
         <div id="ak-survey-questions" class="ak-grid-col ak-grid-col-8-of-12">
             <div class="ak-field-box ak-field-box-padded ak-styled-fields ak-labels-above ak-errs-below">
@@ -45,6 +39,12 @@
                 <button type="submit" class="ak-submit-button">Submit Survey</button>
             </div>
         </div>
+
+        <div id="survey-contact" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
+            {% include "./user_form_wrapper.html" %}
+        </div>
+
+        {% include "./progress_meter.html" %}
 
     </div>
 </form>
