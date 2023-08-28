@@ -461,7 +461,7 @@ function displayCampaign(camp) {
     readModels();
     api('GET', "page/" + camp.id).done(function(page) {
         $('#campaign_output #camp_id span').text(camp.id);
-        $('#campaign_output #camp_id 1').attr('href', `/admin/core/page/${camp.id}/change`);
+        $('#campaign_output #camp_id a').attr('href', `/admin/core/page/${camp.id}/change`);
         $('#campaign_output #camp_name span').text(camp.name);
         $('#campaign_output #camp_topic span').text(page.fields.topic);
         $('#campaign_output #camp_campaign_type span').text(page.fields.campaign_type);
