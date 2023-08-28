@@ -126,6 +126,7 @@
         </div>
         <div class="form-control col span_3_of_4">
             <span></span>
+            <a class="dash-icon-btn" href="" style="vertical-align: middle">✎</a>
         </div>
     </div>
 </section>
@@ -469,7 +470,7 @@ function displayCampaign(camp) {
     readModels();
     api('GET', "page/" + camp.id).done(function(page) {
         $('#campaign_output #camp_id span').text(camp.id);
-        $('#campaign_output #camp_id a').attr('href', `/admin/core/page/${camp.id}/change`);
+        $('#campaign_output #camp_id a, #campaign_output #camp_custom_field_names a').attr('href', `/admin/core/page/${camp.id}/change`);
         $('#campaign_output #camp_name span').text(camp.name);
         $('#campaign_output #camp_topic span').text(page.fields.topic);
         $('#campaign_output #camp_campaign_type span').text(page.fields.campaign_type);        
