@@ -27,6 +27,8 @@
         margin-right: 0.8em;
     }
     
+    a.dash-icon-btn { background: #27bbdd; color: white; border-radius: 99px;}
+    
     .form-row-CheckboxInput .form-control label { float: none }
  
     .button-row {
@@ -552,7 +554,7 @@ function pageLink(page) {
     }
     var action_label = page.action_label || action_type;
     var view_href = page.view_href || `/cms/view_by_page_id/${page.id}/`;
-    return `<a href="${view_href}">${action_label}</a> <a href="/admin/core/${page.type.toLowerCase()}page/${page.id}/change/">✎</a>`;
+    return `<a href="${view_href}">${action_label}</a> <a class="dash-icon-btn" href="/admin/core/${page.type.toLowerCase()}page/${page.id}/change/">✎</a>`;
 }
 
 function displayMailings(campaign) {
