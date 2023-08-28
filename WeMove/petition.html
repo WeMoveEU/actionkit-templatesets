@@ -42,21 +42,25 @@
 							<a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"readMore_button" %}Read more{% endfilter %}</a>
 						</div>
 
-						{% if form.about_text %}
-						<div id="ak-petition-story">
-              <h2>{% filter ak_text:"whyIsThisImportant_title" %}Why is this important?{% endfilter %}</h2>
-							<div class="ak-text-expander-disabled">{% include_tmpl form.about_text %}</div>
-							<a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"readMore_button" %}Read more{% endfilter %}</a>
-						</div>
-						{% endif %}
+                        {% if form.about_text %}
+                        <div id="ak-petition-story">
+                            <h2>{% filter ak_text:"whyIsThisImportant_title" %}Why is this important?{% endfilter %}</h2>
+                            <div class="ak-text-expander-disabled">{% include_tmpl form.about_text %}</div>
+                            <a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"readMore_button" %}Read more{% endfilter %}</a>
+                        </div>
+                        {% endif %}
 
-						{% if page.custom_fields.campaign %}
-						{% cache_report "custom_field_value_page_id" with page.custom_fields.campaign as page_id "partnership_icons" as custom_field %}
-						{% if custom_field_value_page_id and custom_field_value_page_id != 'None' %}
-						<h2>{% filter ak_text:"in_partnership_with" %}In partnership with{% endfilter %}:</h2>
-						<div class="unescape-html">{{ custom_field_value_page_id }}</div>
-						{% endif %}
-						{% endif %}
+                        {% cache_report "custom_field_from_page_or_campaign" with page.id as page_id "partnership_icons" as custom_field %}
+                        {% if custom_field_from_page_or_campaign and custom_field_from_page_or_campaign != 'None' %}
+                        <h4>{% filter ak_text:"references" %}References{% endfilter %}:</h4>
+                        <div class="unescape-html">{{ custom_field_from_page_or_campaign }}</div>
+                        {% endif %}
+
+                        {% cache_report "custom_field_from_page_or_campaign" with page.id as page_id "partnership_icons" as custom_field %}
+                        {% if custom_field_from_page_or_campaign and custom_field_from_page_or_campaign != 'None' %}
+                        <h2>{% filter ak_text:"in_partnership_with" %}In partnership with{% endfilter %}:</h2>
+                        <div class="unescape-html">{{ custom_field_from_page_or_campaign }}</div>
+                        {% endif %}
 					</div>
 				</div>
 			</div>
