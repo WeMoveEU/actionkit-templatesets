@@ -17,13 +17,6 @@
                 {% include_tmpl form.introduction_text %}
             </div>
             <a href="#" class="ak-read-more ak-mobile" data-lines="10">Read more</a>
-
-            {% if args.akid %}
-            <div id="survey-contact" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
-                {% include "./user_form_wrapper.html" %}
-            </div>
-            {% endif %}
-
             <div id="ak-survey-questions">
                 <div class="ak-field-box ak-field-box-padded ak-styled-fields ak-labels-above ak-errs-below">
 
@@ -38,11 +31,12 @@
                 </div>
             </div>
 
-            {% if not args.akid %}
             <div id="survey-contact" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
                 {% include "./user_form_wrapper.html" %}
+                <script>
+                    $('#known_user').moveBefore('#ak-survey-questions');
+                </script>
             </div>
-            {% endif %}
         </div>
 
         {% include "./progress_meter.html" %}
