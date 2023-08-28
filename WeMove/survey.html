@@ -8,19 +8,20 @@
     <div class="ak-grid-row">
         <div class="ak-grid-col ak-grid-col-12-of-12">
             <h2>{{ page.title }}</h2>
+            
+            {% if page.custom_fields.featured_image %}
+            <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
+            {% endif %}
 
             <div class="ak-mobile-padding ak-text-expander-disabled">
                 {% include_tmpl form.introduction_text %}
             </div>
             <a href="#" class="ak-read-more ak-mobile" data-lines="10">Read more</a>
-        </div>
-    </div>
 
-    <div class="ak-grid-row">
-        <div class="ak-grid-col ak-grid-col-12-of-12">
-            
-            {% if page.custom_fields.featured_image %}
-            <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
+            {% if args.akid %}
+            <div id="survey-contact" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
+                {% include "./user_form_wrapper.html" %}
+            </div>
             {% endif %}
 
             <div id="ak-survey-questions">
@@ -37,9 +38,11 @@
                 </div>
             </div>
 
+            {% if not args.akid %}
             <div id="survey-contact" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
                 {% include "./user_form_wrapper.html" %}
             </div>
+            {% endif %}
         </div>
 
         {% include "./progress_meter.html" %}
