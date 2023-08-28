@@ -525,9 +525,9 @@ function sortJourney(pages) {
                 var after_action = page.followup.url;
                 if ( after_action.match(/thanks/)[0] ) {
                     var action_type = after_action.endsWith("?done=1") ? "thanks" : "share";
-                    page.next_step = { id: page.id, type: page.type, action_type: action_type, previous_step: page };
+                    page.next_step = { id: page.id, type: page.type, action_label: action_type, previous_step: page };
                     if (action_type == "share") {
-                        page.next_step.next_step = { id: page.id, type: page.type, action_type: "thanks", previous_step: page.next_step };
+                        page.next_step.next_step = { id: page.id, type: page.type, action_label: "thanks", previous_step: page.next_step };
                     }
                 }
             }
@@ -550,7 +550,8 @@ function pageLink(page) {
         var mcamp = multilingual_campaigns[page.multilingual_campaign];
         action_type = mcamp ? mcamp.split(':')[1].trim() : page.type;
     }
-    return `<a href="/cms/view_by_page_id/${page.id}/">${action_type}</a> <a href="/admin/core/${page.type.toLowerCase()}page/${page.id}/change/">✎</a>`;
+    var action_label = page.action_label || action_type;
+    return `<a href="/cms/view_by_page_id/${page.id}/">${action_label}</a> <a href="/admin/core/${page.type.toLowerCase()}page/${page.id}/change/">✎</a>`;
 }
 
 function displayMailings(campaign) {
