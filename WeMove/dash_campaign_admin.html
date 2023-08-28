@@ -474,7 +474,7 @@ function displayCampaign(camp) {
         $('#campaign_output #camp_topic span').text(page.fields.topic);
         $('#campaign_output #camp_campaign_type span').text(page.fields.campaign_type);        
         $('#campaign_output #camp_lead_campaigner span').text(page.fields.lead_campaigner);
-        const skipped_field_names = { topic:1, campaign_type: 1, lead_campaigner: 1 };
+        const skipped_field_names = { campaign: 1, topic:1, campaign_type: 1, lead_campaigner: 1 };
         $('#campaign_output #camp_custom_field_names span').text(
             Object.keys(page.fields).filter( (k) => ! skipped_field_names[k] ).join(", ") || 'None'
         );
