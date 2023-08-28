@@ -23,25 +23,23 @@
             <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
             {% endif %}
 
-        </div>
-        <div id="ak-survey-questions" class="ak-grid-col ak-grid-col-8-of-12">
-            <div class="ak-field-box ak-field-box-padded ak-styled-fields ak-labels-above ak-errs-below">
+            <div id="ak-survey-questions">
+                <div class="ak-field-box ak-field-box-padded ak-styled-fields ak-labels-above ak-errs-below">
 
-                {% for question in form.surveyquestion_set.all %}
-                <div>
-                    <label class="ak-survey-question-label">
-                        {{ question.question_label|safe }}
-                    </label>
-                    {{ question.input_html|safe }}
+                    {% for question in form.surveyquestion_set.all %}
+                    <div>
+                        <label class="ak-survey-question-label">
+                            {{ question.question_label|safe }}
+                        </label>
+                        {{ question.input_html|safe }}
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
-
-                <button type="submit" class="ak-submit-button">Submit Survey</button>
             </div>
-        </div>
 
-        <div id="survey-contact" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
-            {% include "./user_form_wrapper.html" %}
+            <div id="survey-contact" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
+                {% include "./user_form_wrapper.html" %}
+            </div>
         </div>
 
         {% include "./progress_meter.html" %}
