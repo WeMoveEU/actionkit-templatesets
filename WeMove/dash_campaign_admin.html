@@ -75,14 +75,17 @@
 </section>
 
 <section id="campaign_output">
-    <h2>Campaign Details</h2>
+    <h2>
+        Campaign Details
+        <a id="open_edit" class="action campaign-settings" href="#">Edit Settings</a>
+    </h2>
     <div id="camp_id" class="form-row form-row-CheckboxInput clearfix">            
         <div class="form-label col span_1_of_4">
             <label for="id_display_name">Page ID</label>
         </div>
         <div class="form-control col span_3_of_4">
             <span></span>
-            <a class="button-small-alternate" href="">✎ Edit</a>
+            <a class="button-small-alternate" href="" style="vertical-align: middle">✎ Edit</a>
         </div>
     </div>
     <div id="camp_name" class="form-row form-row-CheckboxInput clearfix">
@@ -116,9 +119,6 @@
         <div class="form-control col span_3_of_4">
             <span></span>
         </div>
-    </div>
-    <div class="button-row">
-        <button id="open_edit" class="button-small-alternate">Settings</button>
     </div>
 </section>
 
@@ -469,6 +469,7 @@ function displayCampaign(camp) {
         $('#campaign_output').show();
         $('#open_edit').on('click', function() {
             displayEditForm(page);
+            return false;
         });
     });
     readMultilingualCampaigns(camp.name).done(function() {
