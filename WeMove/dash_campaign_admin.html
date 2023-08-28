@@ -551,7 +551,8 @@ function pageLink(page) {
         action_type = mcamp ? mcamp.split(':')[1].trim() : page.type;
     }
     var action_label = page.action_label || action_type;
-    return `<a href="/cms/view_by_page_id/${page.id}/">${action_label}</a> <a href="/admin/core/${page.type.toLowerCase()}page/${page.id}/change/">✎</a>`;
+    var view_href = page.view_href || `/cms/view_by_page_id/${page.id}/`;
+    return `<a href="${view_href}">${action_label}</a> <a href="/admin/core/${page.type.toLowerCase()}page/${page.id}/change/">✎</a>`;
 }
 
 function displayMailings(campaign) {
