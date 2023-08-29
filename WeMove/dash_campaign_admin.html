@@ -233,7 +233,7 @@
 <fieldset id="mailing_form" style="display: none">
     <h2>Add Mailings</h2>
     <div class="fieldset-contents">
-        <div class="form-row form-row-CheckboxInput mailmodel-picker">
+        <div class="form-row mailmodel-picker">
             <div class="form-label col span_1_of_4"><label>Model:</label></div>
             <div class="form-control col span_3_of_4"></div>
         </div>
@@ -576,7 +576,7 @@ function sortJourney(pages) {
                 var after_action = page.followup.url;
                 if ( after_action.match(/thanks/)[0] ) {
                     var action_type = after_action.endsWith("?done=1") ? "thanks" : "share";
-                    page.next_step = { id: page.id, type: page.type, action_label: action_type, view_href: `/thanks/${page.name}/?share=1`, previous_step: page };
+                    page.next_step = { id: page.id, type: page.type, action_label: action_type, view_href: `/thanks/${page.name}/?share=1`, edit_href: `/admin/core/pagefollowup/add_or_change/?page=${page}`, previous_step: page };
                     if (action_type == "share") {
                         page.next_step.next_step = { id: page.id, type: page.type, action_label: "thanks", view_href: `/thanks/${page.name}/?done=1`, previous_step: page.next_step };
                     }
@@ -603,7 +603,8 @@ function pageLink(page) {
     }
     var action_label = page.action_label || action_type;
     var view_href = page.view_href || `/cms/view_by_page_id/${page.id}/`;
-    return `<a href="${view_href}">${action_label}</a> <a class="dash-icon-btn" href="/admin/core/page/${page.id}/change/">✎</a>`;
+    var edit_href = page.edit_href || `/admin/core/page/${page.id}/change/`;
+    return `<a href="${view_href}">${action_label}</a> <a class="dash-icon-btn" href="${edit_href}">✎</a>`;
 }
 
 function displayMailings(campaign) {
@@ -825,6 +826,7 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
 function createMailings(evt) {
     evt.preventDefault();
     $form = $('#mailing_form');
+    var mailmodel = $form.find('input[name=mailmodel]').val();
     var mailing_name = $form.find('input[name=notes]').val();
     var campaign = $form.data('campaign');
     var fields = {
@@ -836,10 +838,27 @@ function createMailings(evt) {
     $form.find('.language-picker input').each(function() {
         if (this.checked) {
             var lang = this.dataset.iso_code;
-            calls.push(api('POST', 'mailing', {
-                notes: mailing_name + "-" + lang,
-                fields: fields
-            }));
+            var model_id;
+            if ( mailmodel ) {
+                model_id = mailing_models[ mailmodel ][ lang ];
+            }
+            if ( ! model_id ) {
+                calls.push(api('POST', 'mailing', {
+                    notes: mailing_name + "-" + lang,
+                    fields: fields
+                }));
+            } else {
+                calls.push(
+                    api('POST', `mailer/${model_id}/copy/`).done(
+                        function(result) {
+                            api('PATCH', `mailing/${result.id}/`, {
+                                notes: mailing_name + "-" + lang,
+                                fields: fields
+                            })
+                        }
+                    )
+                );
+            }
         }
     });
     $.when(...calls).then(
