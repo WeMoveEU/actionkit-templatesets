@@ -233,6 +233,10 @@
 <fieldset id="mailing_form" style="display: none">
     <h2>Add Mailings</h2>
     <div class="fieldset-contents">
+        <div class="form-row form-row-CheckboxInput mailmodel-picker">
+            <div class="form-label col span_1_of_4"><label>Model:</label></div>
+            <div class="form-control col span_3_of_4"></div>
+        </div>
         <div class="form-row form-row-CheckboxInput language-picker">
             <div class="form-label col span_1_of_4"><label>Languages:</label></div>
             <div class="form-control col span_3_of_4"></div>
@@ -350,7 +354,7 @@ function readCampaigners(default_value) {
     });
 }
 
-function readModels() {
+function readPageModels() {
     var prefix = window.models.campaign_name + ":";
     $.when(
         api('GET', "multilingualcampaign/", { name__startswith: prefix }),
@@ -371,6 +375,32 @@ function readModels() {
             }
         });
     });
+}
+
+var mailing_models = {};
+function readMailingModels() {
+    api('GET', "mailer/", { status: 'model' }).done( function(result) {
+        result.objects.forEach( function ( mailmodel ) {
+            const model_id = mailmodel.id;
+            const subject = mailmodel.subjects[0];
+            const match = subject.match(/^(.*?) *[-] *(\w\w)$/);
+            if ( match ) {
+                const lang_code = match[2];
+                const mailtype = match[1];
+                if ( ! mailing_models[ mailtype ] ) {
+                    mailing_models[ mailtype ] = {};
+                }
+                mailing_models[ mailtype ][ lang_code ] = model_id;
+            }
+        } );
+        const new_select = $('<select name="mailmodel">');
+        Object.keys(mailing_models).forEach(function(model_name) {
+            new_select.append(
+                ` <option value="${model_name}">${model_name}</option>`
+            );
+        });
+        $('#mailing_form .mailmodel-picker .form-control').append( new_select );
+    } );
 }
 
 function readFieldValues(field_name, entity, default_value) {
@@ -467,7 +497,8 @@ function displayEditForm(page) {
 
 function displayCampaign(camp) {
     readLanguages();
-    readModels();
+    readPageModels();
+    readMailingModels();
     api('GET', "page/" + camp.id).done(function(page) {
         $('#campaign_output #camp_id span').text(camp.id);
         $('#campaign_output #camp_id a, #campaign_output #camp_custom_field_names a').attr('href', `/admin/core/page/${camp.id}/change`);
