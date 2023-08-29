@@ -393,7 +393,7 @@ function readMailingModels() {
                 mailing_models[ mailtype ][ lang_code ] = model_id;
             }
         } );
-        const new_select = $('<select name="mailmodel">');
+        const new_select = $('<select name="mailmodel"> <option value="">Blank Mailing</option>');
         Object.keys(mailing_models).forEach(function(model_name) {
             new_select.append(
                 ` <option value="${model_name}">${model_name}</option>`
