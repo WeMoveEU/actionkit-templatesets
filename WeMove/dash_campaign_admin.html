@@ -576,7 +576,7 @@ function sortJourney(pages) {
                 var after_action = page.followup.url;
                 if ( after_action.match(/thanks/)[0] ) {
                     var action_type = after_action.endsWith("?done=1") ? "thanks" : "share";
-                    page.next_step = { id: page.id, type: page.type, action_label: action_type, view_href: `/thanks/${page.name}/?share=1`, edit_href: `/admin/core/pagefollowup/add_or_change/?page=${page}`, previous_step: page };
+                    page.next_step = { id: page.id, type: page.type, action_label: action_type, view_href: `/thanks/${page.name}/?share=1`, edit_href: `/admin/core/pagefollowup/add_or_change/?page=${page.id}`, previous_step: page };
                     if (action_type == "share") {
                         page.next_step.next_step = { id: page.id, type: page.type, action_label: "thanks", view_href: `/thanks/${page.name}/?done=1`, previous_step: page.next_step };
                     }
