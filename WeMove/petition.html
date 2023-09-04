@@ -13,8 +13,10 @@
 				<div class="advice-container">
 					<h1>{{ page.title }}</h1>
 
-					{% if page.custom_fields.featured_image %}
-					<img class="ak-featured-img {% if page.goal %}ak-margin-top-1{% endif %}" src="{{page.custom_fields.featured_image}}">
+                    {% cache_report "custom_field_from_page_or_campaign" with page.id as page_id "featured_image" as field_name %}
+                    {% if custom_field_from_page_or_campaign and custom_field_from_page_or_campaign != 'None' %}
+					{% if custom_field_from_page_or_campaign %}
+					<img class="ak-featured-img {% if page.goal %}ak-margin-top-1{% endif %}" src="{{custom_field_from_page_or_campaign}}">
 					{% endif %}
 
 					{% if form.statement_leadin %}
