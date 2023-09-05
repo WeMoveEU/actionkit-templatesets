@@ -54,7 +54,7 @@
 	              {% cache_report "custom_field_from_page_or_campaign" with page.id as page_id "references" as field_name %}
 	              {% if custom_field_from_page_or_campaign and custom_field_from_page_or_campaign != 'None' %}
 	              <h4>{% filter ak_text:"references" %}References{% endfilter %}:</h4>
-	              <div class="unescape-html">{{ custom_field_from_page_or_campaign }}</div>
+	              <div class="unescape-html references">{{ custom_field_from_page_or_campaign }}</div>
 	              {% endif %}
 
               </div>
@@ -63,7 +63,7 @@
 							{% if custom_field_from_page_or_campaign and custom_field_from_page_or_campaign != 'None' %}
 							<p></p>
 							<h2>{% filter ak_text:"in_partnership_with" %}In partnership with{% endfilter %}:</h2>
-							<div class="unescape-html">{{ custom_field_from_page_or_campaign }}</div>
+							<div class="unescape-html partnership-icons">{{ custom_field_from_page_or_campaign }}</div>
 							{% endif %}
 
 
