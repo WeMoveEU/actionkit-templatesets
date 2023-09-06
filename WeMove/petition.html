@@ -17,7 +17,6 @@
           {% if custom_field_from_page_or_campaign and custom_field_from_page_or_campaign != 'None' %}
 					<img class="ak-featured-img {% if page.goal %}ak-margin-top-1{% endif %}" src="{{custom_field_from_page_or_campaign}}">
 					{% endif %}
-					{% endif %}
 
 					{% if form.statement_leadin %}
 					<div id="letter_to">
@@ -51,11 +50,11 @@
                   <a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"readMore_button" %}Read more{% endfilter %}</a>
 	              {% endif %}
 
-	              {% cache_report "custom_field_from_page_or_campaign" with page.id as page_id "references" as field_name %}
-	              {% if custom_field_from_page_or_campaign and custom_field_from_page_or_campaign != 'None' %}
+	              {% store as references %}{% report "custom_field_from_page_or_campaign" with page.id as page_id "references" as field_name %}{% endstore %}
+	              {% if references and references != 'None' %}
                   <div class="references">
                     <h4>{% filter ak_text:"references" %}References{% endfilter %}:</h4>
-                    <div class="unescape-html">{{ custom_field_from_page_or_campaign }}</div>
+                    <div class="unescape-html">{{ references }}</div>
                   </div>
 	              {% endif %}
               </div>
