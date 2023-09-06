@@ -300,7 +300,7 @@ function api_log() {
 }
 
 function api_error() {
-    api_log( ...arguments );
+    api_log( 'Error:', ...arguments );
     alert( [...arguments].map( 
         (i) => typeof(i) == 'string' ? i : JSON.stringify(i, null, 2) 
     ).join(' ') );
@@ -783,7 +783,7 @@ function createPages(evt) {
             }
         });
         $.when(...calls).done(
-            () => document.location = `?searched_name=${campaign.name}`
+            // () => document.location = `?searched_name=${campaign.name}`
         );
     });
 }
@@ -819,7 +819,7 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
             fields: fields,
         })
     } );
-    var p_patchfup = p_patchpage.done( function () {
+    var p_patchfup = p_patchpage.done( function (page) {
         return api('PATCH', `pagefollowup/${page.followup.id}/`, {
             url: followup_url
         })
