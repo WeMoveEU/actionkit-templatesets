@@ -810,7 +810,7 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
         return api('GET', `page/${page_id}`);
     } );
     var p_patchpage = p_getpage.then( function(page) {
-        return api('PATCH', `${page_type}page/${page_id}/`, {
+        return api('PATCH', `${page_type}page/${page.id}/`, {
             name: page_name,
             title:`Enter a Title for ${page_name}`,
             // notes: page_name,
