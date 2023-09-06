@@ -809,7 +809,7 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
         api_log(`Created ${language} ${action_type} page ${page_id}`);
         return api('GET', `page/${page_id}`);
     } );
-    var p_patchpage = p_getpage.done( function(page) {
+    var p_patchpage = p_getpage.then( function(page) {
         return api('PATCH', `${page_type}page/${page_id}/`, {
             name: page_name,
             title:`Enter a Title for ${page_name}`,
@@ -819,7 +819,7 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
             fields: fields,
         })
     } );
-    var p_patchfup = p_patchpage.done( function (page) {
+    var p_patchfup = p_patchpage.then( function (page) {
         return api('PATCH', `pagefollowup/${page.followup.id}/`, {
             url: followup_url
         })
