@@ -783,7 +783,7 @@ function createPages(evt) {
             }
         });
         $.when(...calls).done(
-            // () => document.location = `?searched_name=${campaign.name}`
+            () => document.location = `?searched_name=${campaign.name}`
         );
     });
 }
