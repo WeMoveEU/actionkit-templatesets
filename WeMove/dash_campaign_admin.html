@@ -807,8 +807,8 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
     var p_getpage = p_copy.then( function(response) {
         const page_id = response.url.match(/\d+/)[0];
         api_log(`Created ${language} ${action_type} page ${page_id}`);
-        return api('GET', `page/${page_id}`));
-    });
+        return api('GET', `page/${page_id}`);
+    } );
     var p_patchpage = p_getpage.done( function(page) {
         return api('PATCH', `${page_type}page/${page_id}/`, {
             name: page_name,
