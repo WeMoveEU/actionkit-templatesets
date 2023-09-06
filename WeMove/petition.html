@@ -7,16 +7,14 @@
 
 	<div class="ak-grid-row">
 
-
 		<div class="advice-advice">
 			<div class="action-advice-col">
 				{% include "./language_picker.html" %}
 				<div class="advice-container">
 					<h1>{{ page.title }}</h1>
 
-                    {% cache_report "custom_field_from_page_or_campaign" with page.id as page_id "featured_image" as field_name %}
-                    {% if custom_field_from_page_or_campaign and custom_field_from_page_or_campaign != 'None' %}
-					{% if custom_field_from_page_or_campaign %}
+          {% cache_report "custom_field_from_page_or_campaign" with page.id as page_id "featured_image" as field_name %}
+          {% if custom_field_from_page_or_campaign and custom_field_from_page_or_campaign != 'None' %}
 					<img class="ak-featured-img {% if page.goal %}ak-margin-top-1{% endif %}" src="{{custom_field_from_page_or_campaign}}">
 					{% endif %}
 
