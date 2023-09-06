@@ -50,7 +50,8 @@
                   <a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"readMore_button" %}Read more{% endfilter %}</a>
 	              {% endif %}
 
-	              {% store as references %}{% report "custom_field_from_page_or_campaign" with page.id as page_id "references" as field_name %}{% endstore %}
+                  {% right_now %}
+	              {% store as references %}{% report "custom_field_from_page_or_campaign" with page.id as page_id "references" as field_name now as cache_buster %}{% endstore %}
 	              {% if references and references != 'None' %}
                   <div class="references">
                     <h4>{% filter ak_text:"references" %}References{% endfilter %}:</h4>
