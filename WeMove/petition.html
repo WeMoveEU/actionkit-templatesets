@@ -24,13 +24,13 @@
 					</div>
 					{% endif %}
 
-          {% if page.custom_fields.youmove_initiator_name %}
-          <div class="initiator">
-            <p data-initiator-name="{{ page.custom_fields.youmove_initiator_name }}">
-              {% filter ak_text:"statement_initiator" %}This petition is run by [% inititator_name %]{% endfilter %}
-            </p>
-          </div>
-          {% endif %}
+					{% if page.custom_fields.youmove_initiator_name %}
+					<div class="initiator">
+						<p data-initiator-name="{{ page.custom_fields.youmove_initiator_name }}">
+							{% filter ak_text:"statement_initiator" %}This petition is run by [% inititator_name %]{% endfilter %}
+						</p>
+					</div>
+					{% endif %}
 
 					<div id="sign-advice">
 						<div class="well">
@@ -43,31 +43,31 @@
 							<a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"readMore_button" %}Read more{% endfilter %}</a>
 						</div>
 
-              <div id="ak-petition-story">
-	              {% if form.about_text %}
-                  <h2>{% filter ak_text:"whyIsThisImportant_title" %}Why is this important?{% endfilter %}</h2>
-                  <div class="ak-text-expander-disabled">{% include_tmpl form.about_text %}</div>
-                  <a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"readMore_button" %}Read more{% endfilter %}</a>
-	              {% endif %}
+						<div id="ak-petition-story">
+							{% if form.about_text %}
+							<h2>{% filter ak_text:"whyIsThisImportant_title" %}Why is this important?{% endfilter %}</h2>
+							<div class="ak-text-expander-disabled">{% include_tmpl form.about_text %}</div>
+							<a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"readMore_button" %}Read more{% endfilter %}</a>
+							{% endif %}
 
-	              {% store as references %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "references" as field_name %}{% endstore %}
-	              {% if references %}
-                  <div class="references">
-                    <h4>{% filter ak_text:"references" %}References{% endfilter %}:</h4>
-                    <div class="unescape-html">{{ references }}</div>
-                  </div>
-	              {% endif %}
-              </div>
+							{% store as references %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "references" as field_name %}{% endstore %}
+							{% if references %}
+							<div class="references">
+								<h4>{% filter ak_text:"references" %}References{% endfilter %}:</h4>
+								<div class="unescape-html">{{ references }}</div>
+							</div>
+							{% endif %}
+						</div>
 
-			  {% store as partnership_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "partnership_icons" as field_name %}{% endstore %}
-			  {% if partnership_icons %}
-                <div class="partners">
-                  <h2>{% filter ak_text:"in_partnership_with" %}In partnership with{% endfilter %}:</h2>
-                  <div class="unescape-html partnership-icons">
-                    {{ partnership_icons }}
-                  </div>
-                </div>
-              {% endif %}
+						{% store as partnership_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "partnership_icons" as field_name %}{% endstore %}
+						{% if partnership_icons %}
+						<div class="partners">
+							<h2>{% filter ak_text:"in_partnership_with" %}In partnership with{% endfilter %}:</h2>
+							<div class="unescape-html partnership-icons">
+								{{ partnership_icons }}
+							</div>
+						</div>
+						{% endif %}
 					</div>
 				</div>
 			</div>
@@ -132,15 +132,15 @@
 			comment_elt.removeClass('hidden');
 			comment_elt.fadeIn('slow');
 			var duration = Math.ceil(comment[1].split(' ').length * 0.2);
-            if (duration < 3) { duration = 3; }
+			if (duration < 3) { duration = 3; }
 			setTimeout(cycleRecentComment, duration * 1000);
 		});
 	}
 </script>
 
 <div class="js-recent-action" style="display: none">
-    <i class="glyphicon glyphicon-thumbs-up"></i>
-		<span class="js-text"></span>
+	<i class="glyphicon glyphicon-thumbs-up"></i>
+	<span class="js-text"></span>
 </div>
 
 <script>
