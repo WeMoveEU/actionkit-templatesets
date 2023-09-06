@@ -13,9 +13,9 @@
 				<div class="advice-container">
 					<h1>{{ page.title }}</h1>
 
-          {% cache_report "custom_field_from_page_or_campaign" with page.id as page_id "featured_image" as field_name %}
-          {% if custom_field_from_page_or_campaign and custom_field_from_page_or_campaign != 'None' %}
-					<img class="ak-featured-img {% if page.goal %}ak-margin-top-1{% endif %}" src="{{custom_field_from_page_or_campaign}}">
+					{% store as featured_image %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_image" as field_name %}{% endstore %}
+					{% if featured_image %}
+					<img class="ak-featured-img {% if page.goal %}ak-margin-top-1{% endif %}" src="{{featured_image}}">
 					{% endif %}
 
 					{% if form.statement_leadin %}
@@ -50,9 +50,8 @@
                   <a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"readMore_button" %}Read more{% endfilter %}</a>
 	              {% endif %}
 
-                  {% right_now %}
-	              {% store as references %}{% report "custom_field_from_page_or_campaign" with page.id as page_id "references" as field_name now as cache_buster %}{% endstore %}
-	              {% if references and references != 'None' %}
+	              {% store as references %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "references" as field_name %}{% endstore %}
+	              {% if references %}
                   <div class="references">
                     <h4>{% filter ak_text:"references" %}References{% endfilter %}:</h4>
                     <div class="unescape-html">{{ references }}</div>
@@ -60,12 +59,12 @@
 	              {% endif %}
               </div>
 
-							{% cache_report "custom_field_from_page_or_campaign" with page.id as page_id "partnership_icons" as field_name %}
-							{% if custom_field_from_page_or_campaign and custom_field_from_page_or_campaign != 'None' %}
+			  {% store as partnership_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "partnership_icons" as field_name %}{% endstore %}
+			  {% if partnership_icons %}
                 <div class="partners">
                   <h2>{% filter ak_text:"in_partnership_with" %}In partnership with{% endfilter %}:</h2>
                   <div class="unescape-html partnership-icons">
-                    {{ custom_field_from_page_or_campaign }}
+                    {{ partnership_icons }}
                   </div>
                 </div>
               {% endif %}
