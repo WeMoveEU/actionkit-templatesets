@@ -709,7 +709,7 @@ function setCampaignMetadata(campaign_id) {
             }
         })
     }).done(function() {
-        document.location = "?searched_name=" + $('#name').val();
+        reload_dashboard( $('#name').val() );
     });
 }
 
@@ -793,7 +793,7 @@ function createPages(evt) {
             }
         });
         $.when(...calls).done(
-            () => document.location = `?searched_name=${campaign.name}`
+            () => reload_dashboard( campaign.name )
         );
     });
 }
@@ -877,8 +877,12 @@ function createMailings(evt) {
         }
     });
     $.when(...calls).then(
-        () => document.location = "?searched_name=" + campaign.name
+        () => reload_dashboard(campaign.name)
     );
+}
+
+function reload_dashboard ( campaign_name ) {
+    document.location = "?searched_name=" + campaign_name
 }
 
 </script>
