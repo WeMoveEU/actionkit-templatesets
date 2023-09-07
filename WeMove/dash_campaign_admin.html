@@ -853,8 +853,10 @@ function createMailings(evt) {
                 }));
             } else {
                 calls.push( api('POST', `mailer/${model_id}/copy/`) );
-                calls.push( calls.at(-1).done( function(result) {
-                    api('PATCH', `mailing/${result.id}/`, {
+                calls.push( calls.at(-1).done( function(result, _, jqXHR) {
+                    var mailing_url = jqXHR.getResponseHeader('Location');
+                    const mailing_id = mailing_url.match(/(\d+)/);
+                    api('PATCH', `mailing/${mailing_id}/`, {
                         notes: mailing_name + "-" + lang,
                         fields: fields
                     });
