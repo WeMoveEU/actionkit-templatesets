@@ -837,7 +837,7 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
     return [ p_copy, p_getpage, p_patchpage, p_patchfup ]
 }
 
-function createMailings(evt) {
+async function createMailings(evt) {
     evt.preventDefault();
     $form = $('#mailing_form');
     var mailmodel = $form.find('select[name=mailmodel]').val();
