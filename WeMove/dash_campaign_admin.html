@@ -859,16 +859,16 @@ function createMailings(evt) {
                 model_id = mailing_models[ mailmodel ][ lang ];
             }
             if ( ! model_id ) {
-                calls.push(api('POST', 'mailing', {
+                calls.push(  api('POST', 'mailing', {
                     notes: mailing_name + "-" + lang,
                     fields: fields
-                }));
+                }) );
             } else {
                 calls.push( api('POST', `mailer/${model_id}/copy/`) );
                 calls.push( calls.at(-1).done( function(result, _, jqXHR) {
                     var mailing_url = jqXHR.getResponseHeader('Location');
                     const mailing_id = mailing_url.match(/(\d+)\D$/);
-                    api('PATCH', `mailing/${mailing_id[1]}/`, {
+                    return api('PATCH', `mailing/${mailing_id[1]}/`, {
                         notes: mailing_name + "-" + lang,
                         fields: fields
                     });
