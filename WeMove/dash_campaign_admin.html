@@ -882,7 +882,9 @@ function createMailings(evt) {
 }
 
 function reload_dashboard ( campaign_name ) {
-    document.location = "?searched_name=" + campaign_name
+    setTimeout( function () {
+        document.location = "?searched_name=" + campaign_name        
+    }, 100 )
 }
 
 </script>
