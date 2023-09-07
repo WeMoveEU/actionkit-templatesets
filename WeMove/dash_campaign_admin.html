@@ -226,6 +226,7 @@
     <table style="min-width: 300px">
         <tr>
             <th scope="column">Name</th>
+            <th scope="column">Status</th>
             <th scope="column">Send date</th>
             <th scope="column">Wrapper</th>
             <th scope="column"></th>
@@ -621,21 +622,23 @@ function pageLink(page) {
 }
 
 function displayMailings(campaign) {
-    api('GET', "mailing/", { field__name: 'campaign', field__value: campaign.id } ).done(function(result) {
+    api('GET', "mailer/", { field__name: 'campaign', field__value: campaign.id } ).done(function(result) {
         var mailings = result.objects;
         mailings.sort((m1,m2) => m1.notes.localeCompare(m2.notes));
+        const mailing_table = $('#mailings_output table');
         if (mailings.length) {
             mailings.forEach(function(mailing) {
-                $('#mailings_output table').append(
+                mailing_table.append(
                     `<tr><td scope="row">${mailing.notes}</td>`
-                    + `<td>${mailing.started_at}</td>`
-                    + `<td>${mailing.wrapper}</td>`
+                    + `<td>${mailing.status}</td>`
+                    + `<td>${mailing.started_at || ''}</td>`
+                    + `<td>${mailing.emailwrapper}</td>`
                     + `<td>${mailingLink(mailing)}</td>`
                     + "</tr>"
                 );
             });
         } else {
-            $('#mailings_output table').html('<tr><td>No mailing yet</td></tr>');
+            mailing_table.html('<tr><td colspan="5">No mailing yet</td></tr>');
         }
         $('#mailing_form').data('campaign', campaign);
         $('#mailings_output').show();
