@@ -857,8 +857,8 @@ function createMailings(evt) {
                     api('PATCH', `mailing/${result.id}/`, {
                         notes: mailing_name + "-" + lang,
                         fields: fields
-                    })
-                } );
+                    });
+                } ) );
             }
         }
     });
