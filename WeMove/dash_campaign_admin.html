@@ -225,6 +225,7 @@
     <h2>Mailings</h2>
     <table style="min-width: 300px">
         <tr>
+            <th scope="column">ID</th>
             <th scope="column">Name</th>
             <th scope="column">Status</th>
             <th scope="column">Send date</th>
@@ -628,7 +629,8 @@ function displayMailings(campaign) {
         if (mailings.length) {
             mailings.forEach(function(mailing) {
                 mailing_table.append(
-                    `<tr><td scope="row">${mailing.notes}</td>`
+                    `<tr><td>${mailing.id}</td>`
+                    + `<td>${mailing.notes}</td>`
                     + `<td>${mailing.status}</td>`
                     + `<td>${mailing.started_at || ''}</td>`
                     + `<td>${mailingLink(mailing)}</td>`
