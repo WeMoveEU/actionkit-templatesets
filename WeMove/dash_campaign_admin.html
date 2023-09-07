@@ -224,7 +224,12 @@
 <section id="mailings_output">
     <h2>Mailings</h2>
     <table style="min-width: 300px">
-        <tr><th scope="column">Name</th><th scope="column">Send date</th><th scope="column"></th></tr>
+        <tr>
+            <th scope="column">Name</th>
+            <th scope="column">Send date</th>
+            <th scope="column">Wrapper</th>
+            <th scope="column"></th>
+        </tr>
     </table>
     <div class="button-row"><button id="add_mailing" class="button-small-alternate">Add Mailings</button></div>
 </section>
@@ -622,8 +627,9 @@ function displayMailings(campaign) {
         if (mailings.length) {
             mailings.forEach(function(mailing) {
                 $('#mailings_output table').append(
-                    `<tr><th scope="row">${mailing.notes}</th>`
+                    `<tr><td scope="row">${mailing.notes}</td>`
                     + `<td>${mailing.started_at}</td>`
+                    + `<td>${mailing.wrapper}</td>`
                     + `<td>${mailingLink(mailing)}</td>`
                     + "</tr>"
                 );
