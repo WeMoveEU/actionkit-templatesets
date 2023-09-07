@@ -837,7 +837,7 @@ function createPage(action_type, page_name, language, mcamp, fields, followup_ur
     return [ p_copy, p_getpage, p_patchpage, p_patchfup ]
 }
 
-async function createMailings(evt) {
+function createMailings(evt) {
     evt.preventDefault();
     $form = $('#mailing_form');
     var mailmodel = $form.find('select[name=mailmodel]').val();
@@ -865,14 +865,13 @@ async function createMailings(evt) {
                 }) );
             } else {
                 calls.push( api('POST', `mailer/${model_id}/copy/`) );
-                calls.push( calls.at(-1).done( function(result, _, jqXHR) {
+                calls.push( calls.at(-1).done( async function(result, _, jqXHR) {
                     var mailing_url = jqXHR.getResponseHeader('Location');
                     const mailing_id = mailing_url.match(/(\d+)\D$/);
-                    const patch = api('PATCH', `mailing/${mailing_id[1]}/`, {
+                    await api('PATCH', `mailing/${mailing_id[1]}/`, {
                         notes: mailing_name + "-" + lang,
                         fields: fields
                     });
-                    await patch;
                 } ) );
             }
         }
