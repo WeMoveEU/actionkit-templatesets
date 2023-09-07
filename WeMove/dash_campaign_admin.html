@@ -228,7 +228,6 @@
             <th scope="column">Name</th>
             <th scope="column">Status</th>
             <th scope="column">Send date</th>
-            <th scope="column">Wrapper</th>
             <th scope="column"></th>
         </tr>
     </table>
@@ -632,13 +631,12 @@ function displayMailings(campaign) {
                     `<tr><td scope="row">${mailing.notes}</td>`
                     + `<td>${mailing.status}</td>`
                     + `<td>${mailing.started_at || ''}</td>`
-                    + `<td>${mailing.emailwrapper}</td>`
                     + `<td>${mailingLink(mailing)}</td>`
                     + "</tr>"
                 );
             });
         } else {
-            mailing_table.html('<tr><td colspan="5">No mailing yet</td></tr>');
+            mailing_table.html('<tr><td colspan="4">No mailing yet</td></tr>');
         }
         $('#mailing_form').data('campaign', campaign);
         $('#mailings_output').show();
@@ -660,7 +658,7 @@ function displayMailings(campaign) {
 }
 
 function mailingLink(mailing) {
-    var label = "Edit", path = "drafts/compose";
+    var label = "✎ Edit", path = "drafts/compose";
     if (mailing.started_at) {
         label = "Report";
         path = "reports";
