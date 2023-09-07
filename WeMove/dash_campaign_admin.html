@@ -868,10 +868,11 @@ function createMailings(evt) {
                 calls.push( calls.at(-1).done( function(result, _, jqXHR) {
                     var mailing_url = jqXHR.getResponseHeader('Location');
                     const mailing_id = mailing_url.match(/(\d+)\D$/);
-                    await api('PATCH', `mailing/${mailing_id[1]}/`, {
+                    const patch = api('PATCH', `mailing/${mailing_id[1]}/`, {
                         notes: mailing_name + "-" + lang,
                         fields: fields
                     });
+                    await patch;
                 } ) );
             }
         }
