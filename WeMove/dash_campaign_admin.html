@@ -249,6 +249,14 @@
             <div class="form-label col span_1_of_4"><label>Ask type:</label></div>
             <div class="form-control col span_3_of_4"></div>
         </div>
+        <div class="form-row form-row-CheckboxInput ask_details-picker">
+            <div class="form-label col span_1_of_4"><label>Ask Details:</label></div>
+            <div class="form-control col span_3_of_4"></div>
+        </div>
+        <div class="form-row form-row-CheckboxInput target-picker">
+            <div class="form-label col span_1_of_4"><label>Target:</label></div>
+            <div class="form-control col span_3_of_4"></div>
+        </div>
         <div class="form-row">
             <div class="form-label col span_1_of_4"><label>Name: </label></div>
             <div class="form-control col span_3_of_4"><input type="text" name="notes" value="{{searched_name}}">-XX</div>
@@ -632,6 +640,8 @@ function displayMailings(campaign) {
             $('#mailing_form input[name=moment]:first').attr('checked', 'checked');
         });
         readFieldValues('ask_type', 'mailing', 'sign');
+        readFieldValues('ask_details', 'mailing');
+        readFieldValues('target', 'mailing');
         $('#create_mailings').on('click', createMailings);
         $('#add_mailing').on('click', function () {
                 $('#add_mailing').hide();
@@ -837,6 +847,8 @@ function createMailings(evt) {
         campaign: campaign.id,
         moment: $form.find('input[name=moment]:checked').val(),
         ask_type: $form.find('input[name=ask_type]:checked').val(),
+        ask_details: $form.find('input[name=ask_details]:checked').val(),
+        target: $form.find('input[name=target]:checked').val()
     };
     var calls = [];
     $form.find('.language-picker input').each(function() {
