@@ -797,8 +797,9 @@ function createPages(evt) {
                 }
 
                 if (action_type != 'share') {
-                    const promises = createPage(action_type, page_name, this.value, mcamp_uri, fields, followup_url);
-                    calls.push(...promises);
+                    calls.push( 
+                        createPage(action_type, page_name, this.value, mcamp_uri, fields, followup_url) 
+                    );
                 }
             }
         });
@@ -823,29 +824,22 @@ async function createPage(action_type, page_name, language, mcamp, fields, follo
         return;
     }
     const page_type = pageType(action_type);
-    var p_copy = fetch(`/admin/core/${page_type}page/copy/?id=${model_id}`);
-    var p_getpage = p_copy.then( function(response) {
-        const page_id = response.url.match(/\d+/)[0];
-        api_log(`Created ${language} ${action_type} page ${page_id}`);
-        return api('GET', `page/${page_id}`);
+    var p_copy = await fetch(`/admin/core/${page_type}page/copy/?id=${model_id}`);
+    const page_id = p_copy.url.match(/\d+/)[0];
+    api_log(`Created ${language} ${action_type} page ${page_id}`);
+    const page = await api('GET', `page/${page_id}`);
+
+    var p_patchpage = await api('PATCH', `${page_type}page/${page.id}/`, {
+        name: page_name,
+        title:`Enter a Title for ${page_name}`,
+        // notes: page_name,
+        language: language,
+        multilingual_campaign: mcamp,
+        fields: fields,
     } );
-    const page = await p_getpage;
-    var p_patchpage = p_getpage.then( function() {
-        return api('PATCH', `${page_type}page/${page.id}/`, {
-            name: page_name,
-            title:`Enter a Title for ${page_name}`,
-            // notes: page_name,
-            language: language,
-            multilingual_campaign: mcamp,
-            fields: fields,
-        })
+    var p_patchfup = await api('PATCH', `pagefollowup/${page.followup.id}/`, {
+        url: followup_url
     } );
-    var p_patchfup = p_patchpage.then( function () {
-        return api('PATCH', `pagefollowup/${page.followup.id}/`, {
-            url: followup_url
-        })
-    } );
-    return [ p_copy, p_getpage, p_patchpage, p_patchfup ]
 }
 
 function createMailings(evt) {
