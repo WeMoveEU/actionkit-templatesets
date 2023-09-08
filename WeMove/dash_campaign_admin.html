@@ -372,7 +372,7 @@ function readPageModels() {
     var prefix = window.models.campaign_name + ":";
     $.when(
         api('GET', "multilingualcampaign/", { name__startswith: prefix }),
-        api('GET', "page/", { field__name: 'campaign', field__value: window.models.campaign.id })
+        api('GET', "page/", { field__name: 'campaign', field__value: window.models.campaign.id, limit: 100 })
     ).done(function(mcamps, pages) {
         mcamp_types = {};
         mcamps[0].objects.forEach(function(mcamp) {
@@ -382,10 +382,14 @@ function readPageModels() {
         pages[0].objects.forEach(function(page) {
             const action_type = mcamp_types[page.multilingual_campaign];
             if (action_type) {
-                if (!window.models[action_type]) {
-                    window.models[action_type] = {};
+                if ( page.status != 'model' ) {
+                    console.log(`Page ${page.id} associated with model campaign but is not a model`)
+                } else {                    
+                    if (!window.models[action_type]) {
+                        window.models[action_type] = {};
+                    }
+                    window.models[action_type][page.language] = page.id;
                 }
-                window.models[action_type][page.language] = page.id;
             }
         });
     });
