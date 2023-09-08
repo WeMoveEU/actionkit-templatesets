@@ -335,7 +335,7 @@ function api(method, path, data) {
     }).done(function(result) {
         api_log("Results:", method, path, data, '=>', result);
     }).fail(function(xhr, rstatus, rerror) {
-        api_error("Error:", method, path, data, rstatus, rerror);
+        api_error("Error:", method, path, data, rstatus, rerror, xhr.status, xhr.responseText);
     });
 }
 
@@ -770,9 +770,9 @@ function createPages(evt) {
     var after_step = $form.find('select[name=after_step]').val();
     var campaign = $form.data('campaign');
     var fields = { campaign: campaign.id };
-    multilingualCampaignFor(campaign.name, action_type).done(function(mcamp, _, jqXHR) {
+    multilingualCampaignFor(campaign.name, action_type).done(function(mcamp, _, xhr) {
         var calls = [];
-        var mcamp_uri = mcamp || jqXHR.getResponseHeader('Location');
+        var mcamp_uri = mcamp || xhr.getResponseHeader('Location');
         $form.find('.language-picker input').each(function() {
             if (this.checked) {
                 var lang = this.dataset.iso_code;
@@ -875,8 +875,8 @@ function createMailings(evt) {
                 }) );
             } else {
                 calls.push( api('POST', `mailer/${model_id}/copy/`) );
-                calls.push( calls.at(-1).done( async function(result, _, jqXHR) {
-                    var mailing_url = jqXHR.getResponseHeader('Location');
+                calls.push( calls.at(-1).done( async function(result, _, xhr) {
+                    var mailing_url = xhr.getResponseHeader('Location');
                     const mailing_id = mailing_url.match(/(\d+)\D$/);
                     await api('PATCH', `mailing/${mailing_id[1]}/`, {
                         notes: mailing_name + "-" + lang,
