@@ -782,7 +782,7 @@ function createPages(evt) {
                 var lang = this.dataset.iso_code;
                 var page_name = page_prefix + '-' + lang;
                 var pages = window.journey.pages[this.value] || [];
-                var followup_url = pageViewUrl({name: page_name}, 'thanks');
+                var followup_url = pageViewUrl({name: page_name}, 'share');
                 if (pages.length)    {
                     var previous_page = pages.find((p) => p.multilingual_campaign == after_step);
                     if (previous_page && previous_page.followup) {
