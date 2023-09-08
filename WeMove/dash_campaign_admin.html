@@ -372,7 +372,7 @@ function readPageModels() {
     var prefix = window.models.campaign_name + ":";
     $.when(
         api('GET', "multilingualcampaign/", { name__startswith: prefix }),
-        api('GET', "page/", { field__name: 'campaign', field__value: window.models.campaign.id, limit: 100 })
+        api('GET', "page/", { field__name: 'campaign', field__value: window.models.campaign.id, _limit: 100 })
     ).done(function(mcamps, pages) {
         mcamp_types = {};
         mcamps[0].objects.forEach(function(mcamp) {
