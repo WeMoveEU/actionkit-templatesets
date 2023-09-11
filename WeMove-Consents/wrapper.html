@@ -70,6 +70,7 @@
           </button>
         </div>
 
+        {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
         {% if campaign_type == "youmove" %}
         <nav id="nav-bar" class="dropdown-menu" aria-labelledby="nav-button">
           <a data-link-translate-me href="https://youmoveeurope.eu/LANG_ISO">{% filter ak_text:"nav_ym_youmoveCampaigns" %}YouMove Campaigns{% endfilter %}</a>
@@ -173,6 +174,7 @@
     }
 </script>
 
+{% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
 {% if campaign_type == "youmove" %}
 <footer>
   <nav class="footer-nav">
