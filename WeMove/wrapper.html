@@ -16,7 +16,8 @@
     <meta property="og:type" content="article">
     <meta name="twitter:card" content="summary">
 
-    {% if page.custom_fields.campaign_type == "youmove" %}
+    {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
+    {% if campaign_type == "youmove" %}
     <link href="https://youmoveeurope.eu/favicon.png" rel="icon" />
     {% else %}
     <link href="https://www.wemove.eu/favicon.png" rel="icon" />
@@ -44,7 +45,7 @@
 
     {% block script_additions %}{% endblock %}
 </head>
-<body class="{% if page.custom_fields.campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %} ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
+<body class="{% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %} ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
     <script type="text/javascript">
         actionkit.forms.initPage()
     </script>
@@ -109,7 +110,7 @@
       <div class="header-wrapper">
         <div class="top-header-wrapper">
           <div class="logo">
-              {% if page.custom_fields.campaign_type == "youmove" %}
+              {% if campaign_type == "youmove" %}
               <a class="logo__link" data-link-translate-me href="https://youmoveeurope.eu/LANG_ISO">
                 <img alt="YouMove logo" src="https://static.wemove.eu/action-kit/out/svg/youmove-iso-logo.svg" width="242" height="112" decoding="async" class="logo__icon" loading="lazy" style="color:transparent">
               </a>
@@ -126,7 +127,7 @@
           </button>
         </div>
 
-        {% if page.custom_fields.campaign_type == "youmove" %}
+        {% if campaign_type == "youmove" %}
         <nav id="nav-bar" class="dropdown-menu" aria-labelledby="nav-button">
           <a data-link-translate-me href="https://youmoveeurope.eu/LANG_ISO">{% filter ak_text:"nav_ym_youmoveCampaigns" %}YouMove Campaigns{% endfilter %}</a>
           <a data-link-translate-me="ym-start-a-campaign" class="button-fill orange" href="https://www.wemove.eu/form/start-your-campaign">{% filter ak_text:"nav_ym_startCampaign" %}Start a campaign{% endfilter %}</a>
@@ -217,7 +218,7 @@
   </div>
 </div>
 
-{% if page.custom_fields.campaign_type == "youmove" %}
+{% if campaign_type == "youmove" %}
 <footer>
   <nav class="footer-nav">
     <a data-link-translate-me href="https://youmoveeurope.eu/LANG_ISO">{% filter ak_text:"nav_ym_youmoveCampaigns" %}YouMove Campaigns{% endfilter %}</a>
