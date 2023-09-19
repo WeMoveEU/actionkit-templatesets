@@ -82,7 +82,18 @@
 					<div class="ak-field-box ak-field-box-borderless">
 
 						<div id="petition-form" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
+
 							{% include "./user_form_wrapper.html" %}
+
+							<div class="ak-field floating-input-field hide-if-previously-signed">
+								<label for="id_comment">{% filter ak_text:"form_field_comments" %}Your comments{% endfilter %}:</label>
+								<textarea id="id_comment" name="action_comment"></textarea>
+							</div>
+
+						</div>
+
+						<div class="js-nav-buttons hide-if-previously-signed">
+							<button type="submit" class="btn btn-primary">{% if page.custom_fields.sign_petition_button %}{{ page.custom_fields.sign_petition_button }}{% else %}{% filter ak_text:"button_sign_petition" %}Sign the Petition{% endfilter %}{% endif %}</button>
 						</div>
 
 					</div>

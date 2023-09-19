@@ -1,14 +1,24 @@
 <ul class="compact" id="ak-errors"></ul>
 
 {% if user %}
-	{% store as previous_actions %}{% report "previous_user_actions_for_page" with user.id as user_id page.id as page_id %}{% endstore %}
+	{% store as previous_actions %}{% report "previous_user_actions_for_page" with 1 as refresh user.id as user_id page.id as page_id %}{% endstore %}
+	{% if previous_actions and previous_actions != "0" %}
+	<script>
+		$('form.ak-form').addClass('previously-signed');
+	</script>
+	{% endif %}
+	<style>
+		form.previously-signed .hide-if-previously-signed {
+			display: none;
+		}
+	</style>
 {% endif %}
 
 <div id="known_user" class="known-member">
   <div class="known-member-inner">
     <p>
       {% filter ak_text:"knownUser_signingAs" %}Sign this as {% endfilter %}
-      <strong id="known_user_name" data-user-full-name>lucas ramos</strong>
+      <strong id="known_user_name" data-user-full-name></strong>
       <br/>
       {% filter ak_text:"knownUser_notYou_button" %}Not you?{% endfilter %}
       <a href="#" onclick="return actionkit.forms.logOut()">
@@ -32,17 +42,7 @@
 
 <div id="unknown_user" class="ak-user-form">
     {% include "./user_form.html" %}
-    <div class="ak-field floating-input-field">
-      <label for="id_comment">{% filter ak_text:"form_field_comments" %}Your comments{% endfilter %}:</label>
-      <textarea id="id_comment" name="action_comment"></textarea>
-    </div>
 </div>
-
-{% if previous_actions|length == 0 or previous_actions == "0" %}
-    <div class="js-nav-buttons">
-      <button type="submit" class="btn btn-primary">{{ page.custom_fields.sign_petition_button }}</button>
-    </div>
-{% endif %}
 
 {% include "./privacy.html" %}
 

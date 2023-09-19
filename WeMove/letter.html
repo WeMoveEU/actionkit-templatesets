@@ -11,8 +11,10 @@
 		</div>
 	</div>
 
-	<div class="ak-grid-row">
+	<div class="ak-grid-row" style="background-color: var(--speakout-color-bg-form); padding: 1em">
 		<div class="ak-grid-col ak-grid-col-4-of-12">
+
+			{% include "./progress_meter.html" %}
 
 			<div id="letter-story">
 
@@ -34,25 +36,29 @@
 		</div>
 
 		<div class="ak-grid-col ak-grid-col-8-of-12">
-			{% include "./progress_meter.html" %}
 
 			{% if page.custom_fields.featured_image %}
 			<img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
 			{% endif %}
 
-			<div class="ak-margin-bottom-1 ak-styled-fields">
-				<textarea id="id_comment" name="action_comment" class="ak-letter-text ">{% include_tmpl form.letter_text escaped %}</textarea>
-			</div>
-
 			<div id="letter-form" class="ak-field-box ak-styled-fields ak-labels-overlaid ak-errs-below">
 
-				{% include "./user_form_wrapper.html" %}
+				<div class="ak-field ak-margin-bottom-1 ak-styled-fields floating-input-field">
+					<label for="id_comment">{% filter ak_text:"form_field_comments" %}Please write your message here{% endfilter %}</label>
+					<textarea id="id_comment" name="action_comment" class="ak-letter-text ">{% include_tmpl form.letter_text escaped %}</textarea>
+				</div>
 
-				<div><a style="width: 100%" href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a></div>
+				{% include "./user_form_wrapper.html" %}
 
 				<div class="privacy-statement">
 					{% filter ak_text:"form_signTerms_disclaimer" %}By clicking “Sign” you are supporting this campaign, and agreeing to WeMove Europe using your information for the purpose of this campaign. We might hand over your name, surname and country to the petition target. Unless you subscribe to receive personalised updates, we will delete your data after the campaign has ended. We will never share your data with any third parties without your permission. See our full privacy policy <a href="https://www.wemove.eu/privacy-policy" target="_blank">here</a>.{% endfilter %}
 				</div>
+
+				<div class="js-nav-buttons hide-if-previously-signed">
+					<button type="submit" class="btn btn-primary">{% filter ak_text:"button_send_email" %}Send Email{% endfilter %}</button>
+				</div>
+
+				<div><a style="width: 100%" href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a></div>
 
 			</div>
 
