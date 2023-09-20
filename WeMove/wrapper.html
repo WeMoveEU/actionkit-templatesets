@@ -195,10 +195,10 @@
 
     <div id="wrapper">
       <div id="content">
-        <div class="container-fluid" style="margin-bottom: 20px">
+        <div class="container-fluid">
 
-    {% block finished_alert %}
-        {% if page.custom_fields.finished_alert %}
+        {% block finished_alert %}
+          {% if page.custom_fields.finished_alert %}
             <div class="alert alert-warning alert-finished" role="alert">
                 {{ page.custom_fields.finished_alert |safe }}
             </div>
@@ -207,8 +207,8 @@
                     $('submit, button[type=submit], #unknown_user :input, .ak-field-box :input').attr('disabled', 'disabled')
                 } );
             </script>
-        {% endif %}
-    {% endblock %}
+          {% endif %}
+        {% endblock %}
 
         <div class="raction" id="rsign">
             <div class="raction-content">
