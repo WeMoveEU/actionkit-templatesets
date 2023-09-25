@@ -44,17 +44,6 @@
     {% end %}
 
     {% block script_additions %}{% endblock %}
-
-    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="162c81a4-03c4-483c-891c-188b89eaf09c" data-blockingmode="auto"></script>
-    <script id="CookieDeclaration" src="https://consent.cookiebot.com/162c81a4-03c4-483c-891c-188b89eaf09c/cd.js" async></script>
-    <script>
-      {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
-      {% if campaign_type == "youmove" %}
-        const MATOMO_SITE_ID = 3;
-      {% else %}
-        const MATOMO_SITE_ID = 1;
-      {% endif %}
-    </script>
 </head>
 {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
 <body class="{% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %} ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
@@ -351,17 +340,26 @@
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
 ga('create', '{{ analytics_key }}', 'auto');
 ga('send', 'pageview');
 </script>
 {% endif %}
+
+<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="162c81a4-03c4-483c-891c-188b89eaf09c" data-blockingmode="auto" defer></script>
+<script id="CookieDeclaration" src="https://consent.cookiebot.com/162c81a4-03c4-483c-891c-188b89eaf09c/cd.js" async></script>
 
 <script>
   window.language = {
     name: "{{ page.lang_or_en }}",
     iso: null,
   };
+
+  {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
+  {% if campaign_type == "youmove" %}
+    const MATOMO_SITE_ID = 3;
+  {% else %}
+    const MATOMO_SITE_ID = 1;
+  {% endif %}
 </script>
 <script src="//static.wemove.eu/action-kit/out/js/wemove-main.bundle.min.js" defer></script>
 </body>
