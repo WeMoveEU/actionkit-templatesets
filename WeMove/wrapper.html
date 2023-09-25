@@ -48,64 +48,12 @@
     <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="162c81a4-03c4-483c-891c-188b89eaf09c" data-blockingmode="auto"></script>
     <script id="CookieDeclaration" src="https://consent.cookiebot.com/162c81a4-03c4-483c-891c-188b89eaf09c/cd.js" async></script>
     <script>
-    // MATOMO COOKIEBOT SCRIPT
-    (() => {
-      let waitForTrackerCount = 0;
-
-      const matomoWaitForTracker = () => {
-        if (typeof _paq === 'undefined' || typeof Cookiebot === 'undefined') {
-          if (waitForTrackerCount < 40) {
-            setTimeout(matomoWaitForTracker, 250);
-            waitForTrackerCount++;
-            return;
-          }
-        } else {
-          window.addEventListener('CookiebotOnAccept', (e) => {
-              consentSet();
-          });
-          window.addEventListener('CookiebotOnDecline', (e) => {
-              consentSet();
-          })
-        }
-      };
-
-      const consentSet = () => {
-        if (Cookiebot.consent.statistics) {
-          _paq.push(['setCookieConsentGiven']);
-          _paq.push(['setConsentGiven']);
-        } else {
-          _paq.push(['forgetCookieConsentGiven']);
-          _paq.push(['forgetConsentGiven']);
-        }
-      };
-
-      document.addEventListener('DOMContentLoaded', matomoWaitForTracker());
-    })();
-    // End CookieBot script for Matomo Code
-
-    // Matomo
-      var _paq = window._paq = window._paq || [];
-
-      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-
-      _paq.push(['requireCookieConsent']);
-      _paq.push(['rememberCookieConsentGiven']);
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-
-      (() => {
-        var u = "https://wemove.matomo.cloud/";
-        _paq.push(['setTrackerUrl', u+'matomo.php']);
-        {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
-        {% if campaign_type == "youmove" %}
-        _paq.push(['setSiteId', '3']);
-        {% else %}
-        _paq.push(['setSiteId', '1']);
-        {% endif %}
-        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.async=true; g.src='//cdn.matomo.cloud/wemove.matomo.cloud/matomo.js'; s.parentNode.insertBefore(g,s);
-      })();
-    // End Matomo Code
+      {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
+      {% if campaign_type == "youmove" %}
+        const MATOMO_SITE_ID = 3;
+      {% else %}
+        const MATOMO_SITE_ID = 1;
+      {% endif %}
     </script>
 </head>
 {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
