@@ -36,6 +36,8 @@
     {% load_ak_context context %}
 
     <link rel="stylesheet" href="https://static.wemove.eu/action-kit/out/css/wemove.css">
+    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="162c81a4-03c4-483c-891c-188b89eaf09c" data-blockingmode="auto"></script>
+    <script id="CookieDeclaration" src="https://consent.cookiebot.com/162c81a4-03c4-483c-891c-188b89eaf09c/cd.js" async></script>
 
     {% load_js %}
         //ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
@@ -344,9 +346,6 @@ ga('create', '{{ analytics_key }}', 'auto');
 ga('send', 'pageview');
 </script>
 {% endif %}
-
-<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="162c81a4-03c4-483c-891c-188b89eaf09c" data-blockingmode="auto"></script>
-<script id="CookieDeclaration" src="https://consent.cookiebot.com/162c81a4-03c4-483c-891c-188b89eaf09c/cd.js" async></script>
 
 <script>
   window.language = {
