@@ -617,10 +617,11 @@ function sortJourney(pages) {
                 } else {
 					match = after_action.match(/^\/\w+\/([^\/\?]+)/);
 	                if ( match && match[1] ) {
-			            var linked_page = pages[lang].find( (p) => ( p.name == match[1] ) ;
+			            var linked_page = pages[lang].find( (p) => ( p.name == match[1] ) );
 			            if (linked_page) {
 			                page.next_step = linked_page;
 			                linked_page.previous_step = page;
+						}
 					}
                 }
             }
