@@ -614,6 +614,14 @@ function sortJourney(pages) {
                     if (action_type == "share") {
                         page.next_step.next_step = { id: page.id, type: page.type, action_label: "thanks", view_href: `/thanks/${page.name}/?done=1`, previous_step: page.next_step };
                     }
+                } else {
+					match = after_action.match(/^\/\w+\/([^\/\?]+)/);
+	                if ( match && match[1] ) {
+			            var linked_page = pages[lang].find( (p) => ( p.name == match[1] ) ;
+			            if (linked_page) {
+			                page.next_step = linked_page;
+			                linked_page.previous_step = page;
+					}
                 }
             }
         });
