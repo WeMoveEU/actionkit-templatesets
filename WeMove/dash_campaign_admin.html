@@ -603,13 +603,14 @@ function sortJourney(pages) {
             }
         });
         var lang_journey = [];
-        var cur_page = pages[lang].find((p) => !p.previous_step);
+        var first_page = pages[lang].find((p) => !p.previous_step);
         // Don't link a page to itself, or an earlier page in the chain!
+		var cur_page = first_page;
         while (cur_page) {
             lang_journey.push(cur_page);
             cur_page = cur_page.next_step;
         }
-        var orphans = pages[lang].filter((p) => !p.previous_step && !p.next_step);
+        var orphans = pages[lang].filter((p) => !p.previous_step && !p.next_step && p != first_page);
         pages[lang] = lang_journey.concat(orphans);
     });
 }
