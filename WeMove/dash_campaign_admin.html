@@ -556,13 +556,18 @@ function displayPages(campaign) {
         if (langs.length) {
             sortJourney(pages);
             langs.forEach(function(lang) {
+				var table_row = $(
+                    `<tr><th scope="row">${languages[lang].name}</th>`
+					+ "<td></td>"
+                    + "</tr>"
+                );
+				var lang_journey_list = table_row.find('td');
 	            pages[lang].forEach(function(journey) {
-	                $('#pages_output table').append(
-	                    `<tr><th scope="row">${languages[lang].name}</th>`
-	                    + journey.map((p) => `<td>${pageLink(p)}${p.next_step ? ' &nbsp; ➡ ' : ''}</td>`).join("")
-	                    + "</tr>"
-	                );
-	            });
+					lang_journey_list.append( 
+						'<div>' + journey.map((p) => `<span>${pageLink(p)}</span>`).join(" &nbsp; ➡ ") + '</div>'
+					)
+				});
+                $('#pages_output table').append( table_row );
             });
         } else {
             $('#pages_output table').html('<tr><td>No action pages yet</td></tr>');
