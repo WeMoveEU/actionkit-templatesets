@@ -615,6 +615,11 @@ function sortJourney(pages) {
     });
 }
 
+const non_viewable_action_types = {
+	'import': 1,
+	'donation-import': 1,
+};
+
 function pageLink(page) {
     var action_type = page.action_type;
     if (!action_type) {
@@ -622,9 +627,9 @@ function pageLink(page) {
         action_type = mcamp ? mcamp.split(':')[1].trim() : page.type;
     }
     var action_label = page.action_label || action_type;
-    var view_href = page.view_href || `/cms/view_by_page_id/${page.id}/`;
+    var view_href = page.view_href || ( non_viewable_action_types[ action_type ] ? '' : `/cms/view_by_page_id/${page.id}/` );
     var edit_href = page.edit_href || `/admin/core/page/${page.id}/change/`;
-    return `<a href="${view_href}">${action_label}</a> <a class="dash-icon-btn" href="${edit_href}">✎</a>`;
+    return ( view_href ? `<a href="${view_href}">${action_label}</a>` : action_label ) + ` <a class="dash-icon-btn" href="${edit_href}">✎</a>`;
 }
 
 function displayMailings(campaign) {
