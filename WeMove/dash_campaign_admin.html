@@ -591,7 +591,7 @@ function sortJourney(pages) {
                 page.next_step = linked_page;
                 linked_page.previous_step = page;
             } else {
-                var after_action = previous_page.followup ? previous_page.followup.url : '';
+                var after_action = page.followup ? page.followup.url : '';
                 var match = after_action.match(/thanks/);
                 if ( match && match[0] ) {
                     var action_type = after_action.endsWith("?done=1") ? "thanks" : "share";
