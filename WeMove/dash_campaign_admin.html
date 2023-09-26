@@ -556,11 +556,13 @@ function displayPages(campaign) {
         if (langs.length) {
             sortJourney(pages);
             langs.forEach(function(lang) {
-                $('#pages_output table').append(
-                    `<tr><th scope="row">${languages[lang].name}</th>`
-                    + pages[lang].map((p) => `<td>${pageLink(p)}${p.next_step ? ' &nbsp; ➡ ' : ''}</td>`).join("")
-                    + "</tr>"
-                );
+	            pages[lang].forEach(function(journey) {
+	                $('#pages_output table').append(
+	                    `<tr><th scope="row">${languages[lang].name}</th>`
+	                    + journey.map((p) => `<td>${pageLink(p)}${p.next_step ? ' &nbsp; ➡ ' : ''}</td>`).join("")
+	                    + "</tr>"
+	                );
+	            });
             });
         } else {
             $('#pages_output table').html('<tr><td>No action pages yet</td></tr>');
@@ -602,16 +604,19 @@ function sortJourney(pages) {
                 }
             }
         });
-        var lang_journey = [];
-        var first_page = pages[lang].find((p) => !p.previous_step);
+        var lang_journeys = [];
+        var start_pages = pages[lang].filter((p) => !p.previous_step);
         // Don't link a page to itself, or an earlier page in the chain!
-		var cur_page = first_page;
-        while (cur_page) {
-            lang_journey.push(cur_page);
-            cur_page = cur_page.next_step;
-        }
-        var orphans = pages[lang].filter((p) => !p.previous_step && !p.next_step && p != first_page);
-        pages[lang] = lang_journey.concat(orphans);
+        start_pages.forEach(function(first_page) {
+	        var journey = [];
+			var cur_page = first_page;
+	        while (cur_page) {
+	            journey.push(cur_page);
+	            cur_page = cur_page.next_step;
+	        }
+			lang_journeys.push( journey );
+		} );
+        pages[lang] = lang_journeys;
     });
 }
 
