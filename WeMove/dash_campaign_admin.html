@@ -34,6 +34,9 @@
     .button-row {
         margin-top: 0.5em;
     }
+	
+	#pages_output table th { vertical-align: top; }
+	#pages_output table .journey { min-height: 22px; }
     
     #api_debugging h2 {
         margin-top: 2em;
@@ -564,7 +567,7 @@ function displayPages(campaign) {
 				var lang_journey_list = table_row.find('td');
 	            pages[lang].forEach(function(journey) {
 					lang_journey_list.append( 
-						'<div>' + journey.map((p) => `<span>${pageLink(p)}</span>`).join(" &nbsp; ➡ ") + '</div>'
+						'<div class="journey">' + journey.map((p) => `<span>${pageLink(p)}</span>`).join(" &nbsp; ➡ &nbsp; ") + '</div>'
 					)
 				});
                 $('#pages_output table').append( table_row );
