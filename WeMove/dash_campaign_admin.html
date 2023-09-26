@@ -734,8 +734,13 @@ function createCampaignPage() {
             name: campaign_name
         }).done(function(result) {
             var campaign_id = result.objects[0].id;
+			raw_campaigns = raw_campaigns + "\n" +
+							campaign_id + "=" + campaign_name;
+            api('PATCH', "allowedmailingfield/campaign", {
+                field_choices: raw_campaigns
+            });
             api('PATCH', "allowedpagefield/campaign", {
-                field_choices: raw_campaigns + "\n" + campaign_id + "=" + campaign_name
+                field_choices: raw_campaigns
             }).done(() => setCampaignMetadata(campaign_id));
         });
     });
