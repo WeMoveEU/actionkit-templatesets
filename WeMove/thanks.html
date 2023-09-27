@@ -193,7 +193,7 @@
 
         </div>
 
-				<div class="col-md-12" style="text-align: center;">
+				<div class="col-md-12" style="text-align: center; pointer-events: none;">
 					<br>
 					<a href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default">
             {% filter ak_text:"thanks_skipStep_button" %}Skip this step{% endfilter %}
