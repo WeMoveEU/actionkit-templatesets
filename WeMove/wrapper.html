@@ -57,9 +57,11 @@
     <div class="modal fade js-share-popup in" style="display: none; padding-right: 15px;" aria-hidden="false">
         <div class="modal-backdrop fade in" style="height: 928px;"></div>
         <div class="modal-dialog" style="z-index:1041;">
-            <div class="modal-content">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-            </div>
+          <div class="modal-content">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+          </div>
         </div>
     </div>
 
@@ -77,8 +79,8 @@
         }
     </script>
 
-{% block pre_action_share %}
-    {% if page.custom_fields.pre_action_share %}
+    {% block pre_action_share %}
+      {% if page.custom_fields.pre_action_share %}
         {% store as share_page %}{% if page.custom_fields.pre_action_share == "1" %}{{ page.custom_fields.daisy_chain_action|default:page.name }}{% else %}{{ page.custom_fields.pre_action_share }}{% endif %}{% endstore %}
 
         <h1 id="share-banner" style="display: none">
@@ -86,24 +88,24 @@
             Can you spread the word?
             {% endfilter %}
         </h1>
-            <script>
-                init_modal();
+        <script>
+            init_modal();
 
-                $.get( '/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}', {},
-                    function ( data ) {
-                        const modal = $('.modal.fade');
-                        modal.find('.modal-content').append(
-                            $('#share-banner').show()
-                        );
-                        modal.find('.modal-content').append(
-                            $(data).find('.facebook-share-preview-container').parent().children()
-                        );
-                        modal.show();
-                    }
-                );
-            </script>
-    {% endif %}
-{% endblock %}
+            $.get( '/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}', {},
+                function ( data ) {
+                    const modal = $('.modal.fade');
+                    modal.find('.modal-content').append(
+                        $('#share-banner').show()
+                    );
+                    modal.find('.modal-content').append(
+                        $(data).find('.facebook-share-preview-container').parent().children()
+                    );
+                    modal.show();
+                }
+            );
+        </script>
+      {% endif %}
+    {% endblock %}
 
     <div id="alert-wrap" style="z-index: 1040; width: 40%; margin-left: -20%; left: 50%; position: absolute">
     </div>
@@ -194,7 +196,7 @@
       </div>
     </header>
 
-    <div id="wrapper" class="test">
+    <div id="wrapper">
       <div id="content">
         <div class="container-fluid">
           {% block finished_alert %}
@@ -217,7 +219,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div></div>
 
 {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
 {% if campaign_type == "youmove" %}
