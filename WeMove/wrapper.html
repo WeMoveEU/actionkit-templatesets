@@ -194,33 +194,30 @@
       </div>
     </header>
 
-    <div id="wrapper">
+    <div id="wrapper" class="test">
       <div id="content">
         <div class="container-fluid">
+          {% block finished_alert %}
+            {% if page.custom_fields.finished_alert %}
+              <div class="alert alert-warning alert-finished" role="alert">
+                  {{ page.custom_fields.finished_alert |safe }}
+              </div>
+              <script>
+                  $(document).on('ready', function () {
+                      $('submit, button[type=submit], #unknown_user :input, .ak-field-box :input').attr('disabled', 'disabled')
+                  } );
+              </script>
+            {% endif %}
+          {% endblock %}
 
-        {% block finished_alert %}
-          {% if page.custom_fields.finished_alert %}
-            <div class="alert alert-warning alert-finished" role="alert">
-                {{ page.custom_fields.finished_alert |safe }}
-            </div>
-            <script>
-                $(document).on('ready', function () {
-                    $('submit, button[type=submit], #unknown_user :input, .ak-field-box :input').attr('disabled', 'disabled')
-                } );
-            </script>
-          {% endif %}
-        {% endblock %}
-
-        <div class="raction" id="rsign">
+          <div class="raction" id="rsign">
             <div class="raction-content">
-
-            {% block content %}{% endblock %}
-
+              {% block content %}{% endblock %}
             </div>
+          </div>
         </div>
+      </div>
     </div>
-  </div>
-</div>
 
 {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
 {% if campaign_type == "youmove" %}
