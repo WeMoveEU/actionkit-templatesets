@@ -144,35 +144,33 @@
           </div>
         </div>
       </div>
-
-
-<div class="modal fade js-share-popup in" style="padding-right: 15px; display: block" aria-hidden="false">
-    <div class="modal-backdrop fade in" style="height: 928px;"></div>
-    <div class="modal-dialog" style="z-index:1041;">
-        <div class="modal-content">
-
-            {% block content %}{% endblock %}
-
-        </div>
     </div>
-</div>
+
+      <div class="modal fade js-share-popup in" style="padding-right: 15px; display: block" aria-hidden="false">
+          <div class="modal-backdrop fade in" style="height: 928px;"></div>
+          <div class="modal-dialog" style="z-index:1041;">
+              <div class="modal-content">
+                  {% block content %}{% endblock %}
+              </div>
+          </div>
+      </div>
 
 <script>
-    var modal = $('.modal.fade')
-    var modal_backdrop = modal.find('.modal-backdrop');
+var modal = $('.modal.fade')
+var modal_backdrop = modal.find('.modal-backdrop');
 
-    function resize_modal () {
-		modal_backdrop.height( $(window).height() );
-		$('#rsign').height( $('.modal-content').height() );
-	}
-    $(window).on( 'resize', resize_modal );
-    resize_modal();
+function resize_modal () {
+modal_backdrop.height( $(window).height() );
+$('#rsign').height( $('.modal-content').height() );
+}
+$(window).on( 'resize', resize_modal );
+resize_modal();
 
-    function init_modal () {
-        modal_backdrop.on( 'click', close_modal );
-        modal.find('.close').on( 'click', close_modal );
-        function close_modal () { modal.hide() }
-    }
+function init_modal () {
+    modal_backdrop.on( 'click', close_modal );
+    modal.find('.close').on( 'click', close_modal );
+    function close_modal () { modal.hide() }
+}
 </script>
 
 {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
