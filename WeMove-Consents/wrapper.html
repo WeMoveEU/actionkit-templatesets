@@ -29,6 +29,7 @@
     {% load_ak_context context %}
 
     <link rel="stylesheet" href="https://static.wemove.eu/action-kit/out/css/wemove.css">
+    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="162c81a4-03c4-483c-891c-188b89eaf09c" data-blockingmode="auto"></script>
 
     {% load_js %}
         //ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
@@ -275,25 +276,39 @@
 {% endif %}
 
 </div>
-    {% block below_form %}
-    <script type="text/javascript">
-        actionkit.forms.contextRoot = '/context/';
-        actionkit.forms.initForm('act');
-    </script>
-    {% endblock %}
 
-    {% if analytics_key %}
-    <script type="text/javascript">
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+{% block below_form %}
+<script type="text/javascript">
+    actionkit.forms.contextRoot = '/context/';
+    actionkit.forms.initForm('act');
+</script>
+{% endblock %}
 
-    ga('create', '{{ analytics_key }}', 'auto');
-    ga('send', 'pageview');
-    </script>
-    {% endif %}
+{% if analytics_key %}
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
+ga('create', '{{ analytics_key }}', 'auto');
+ga('send', 'pageview');
+</script>
+{% endif %}
+
+<script>
+  window.language = {
+    name: "{{ page.lang_or_en }}",
+    iso: null,
+  };
+
+  {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
+  {% if campaign_type == "youmove" %}
+    const MATOMO_SITE_ID = 3;
+  {% else %}
+    const MATOMO_SITE_ID = 1;
+  {% endif %}
+</script>
 <script>
   window.language = {
     name: "{{ page.lang_or_en }}",
@@ -301,5 +316,9 @@
   };
 </script>
 <script src="//static.wemove.eu/action-kit/out/js/wemove-main.bundle.min.js" defer></script>
+<!-- Meta Pixel Code -->
+<script type="text/plain" data-cookieconsent="marketing" src="https://static.wemove.eu/pixel/pixel.js"></script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=273754435565660&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel Code -->
 </body>
 </html>
