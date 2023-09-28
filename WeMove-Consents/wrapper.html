@@ -300,9 +300,9 @@ ga('send', 'pageview');
 
   {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
   {% if campaign_type == "youmove" %}
-    const MATOMO_SITE_ID = 3;
+    const MATOMO_SITE_ID = "3";
   {% else %}
-    const MATOMO_SITE_ID = 1;
+    const MATOMO_SITE_ID = "1";
   {% endif %}
 </script>
 <script src="//static.wemove.eu/action-kit/out/js/wemove-main.bundle.min.js" defer></script>
