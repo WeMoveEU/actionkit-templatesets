@@ -22,23 +22,19 @@
 
 	<div id="target_names"></div>
 	<script type="text/ak-template" for="target_names">
-	<p><b>Letter Recipients:</b></p>
-	[% if ( ! actionkit.context.recognized_user ) { %]
-		To see a list of letter recipients, enter your name, email address, and home address on the form and <a href="#" onclick="submit_incomplete()">click here</a>. (Note, this feature doesn't actually work yet.)
-	[% } else if ( ! actionkit.context.targets || ! actionkit.context.targets.targets ) { %]
-		There are no recipients in your region.
-	[% } else { %]
-		[% for ( var t of actionkit.context.targets.targets ) { %]
-			[%= t.title_full %]
+	[% if ( actionkit.context.recognized_user ) { %]
+		[% if ( ! actionkit.context.targets || ! actionkit.context.targets.targets ) { %]
+			<p><b>{% filter ak_text:"label_letter_recipients" %}Letter Recipients{% endfilter %}:</b></p>
+			{% filter ak_text:"msg_no_letter_recipients" %}There are no recipients in your region.{% endfilter %}
+		[% } else { %]
+			<p><b>{% filter ak_text:"label_letter_recipients" %}Letter Recipients{% endfilter %}:</b></p>
+			<ul>
+			[% for ( var t of actionkit.context.targets.targets ) { %]
+				<li>[%= t.title_full %]</li>
+			[% } %]
+			</ul>
 		[% } %]
 	[% } %]
-	</script>
-
-	<script>
-	function submit_incomplete () {
-		actionkit.utils.appendHiddenInput('required', 'incomplete');
-		$('form[name="act"]').submit();
-	}
 	</script>
 
   </div>
