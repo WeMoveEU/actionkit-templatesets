@@ -10,32 +10,32 @@
 
 <section class="letter-wrapper">
   <div id="letter-story">
-    {% if form.statement_leadin %}
-    <div class="recipients-list">
-      {% include_tmpl form.statement_leadin %}
-    </div>
-    {% endif %}
-
     <div class="form-explanation">
       {% include_tmpl form.about_text %}
     </div>
 
-	<div id="target_names"></div>
-	<script type="text/ak-template" for="target_names">
-	[% if ( actionkit.context.recognized_user ) { %]
-		[% if ( ! actionkit.context.targets || ! actionkit.context.targets.targets ) { %]
-			<p><b>{% filter ak_text:"label_letter_recipients" %}Letter Recipients{% endfilter %}:</b></p>
-			{% filter ak_text:"msg_no_letter_recipients" %}There are no recipients in your region.{% endfilter %}
-		[% } else { %]
-			<p><b>{% filter ak_text:"label_letter_recipients" %}Letter Recipients{% endfilter %}:</b></p>
-			<ul>
-			[% for ( var t of actionkit.context.targets.targets ) { %]
-				<li>[%= t.title_full %]</li>
-			[% } %]
-			</ul>
-		[% } %]
-	[% } %]
-	</script>
+    {% if form.statement_leadin %}
+    <div class="recipients-list">
+      {% include_tmpl form.statement_leadin %}
+
+      <div id="target_names"></div>
+      <script type="text/ak-template" for="target_names">
+      [% if ( actionkit.context.recognized_user ) { %]
+        [% if ( ! actionkit.context.targets || ! actionkit.context.targets.targets ) { %]
+          <p><b>{% filter ak_text:"label_letter_recipients" %}Letter Recipients{% endfilter %}:</b></p>
+          {% filter ak_text:"msg_no_letter_recipients" %}There are no recipients in your region.{% endfilter %}
+        [% } else { %]
+          <p><b>{% filter ak_text:"label_letter_recipients" %}Letter Recipients{% endfilter %}:</b></p>
+          <ul>
+          [% for ( var t of actionkit.context.targets.targets ) { %]
+            <li>[%= t.title_full %]</li>
+          [% } %]
+          </ul>
+        [% } %]
+      [% } %]
+      </script>
+    </div>
+    {% endif %}
 
   </div>
 
