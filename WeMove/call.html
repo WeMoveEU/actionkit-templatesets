@@ -55,11 +55,22 @@
           </div>
 
                   {% if page.custom_fields.call_page_mode == 'tweet' %}
-          
+
+					<script>
+						const twitter_targets_txt = {{ page.custom_fields.twitter_targets|json }};
+						const twitter_messages_txt = {{ page.custom_fields.twitter_messages|json }};
+						const twitter_fallback_txt = {{ page.custom_fields.twitter_fallback|json }};
+
+						$(actionkit.form).bind('actionkit.ready', function () {
+							const page_targets = actionkit.context.targets.targets;
+						} );
+					</script>
+					{% store as tweet_text %}x.@BrunoLeMaire choose to serve your citizens' and the planet's interest, not the fossil fuel industry. We need a European solution through an EU withdrawal from the toxic fossil fuel treaty. Vote down the modernised ECT! #VoteDownTheECT{% endstore %}
+
 					<div class="js-character-counter">
 						<div class="form-group floating-label" style="margin-bottom: 5px;"><label for="rtweet_body" class="control-label floated" style="left: 13px; width: 488px;">Tweet text: </label>
 							<div class="">
-								<textarea name="rtweet[body]" id="rtweet_body" rows="3" required="required" placeholder="Write your text tweet here." class="form-control" aria-required="true">.@BrunoLeMaire choose to serve your citizens' and the planet's interest, not the fossil fuel industry. We need a European solution through an EU withdrawal from the toxic fossil fuel treaty. Vote down the modernised ECT! #VoteDownTheECT</textarea>
+								<textarea name="rtweet[body]" id="rtweet_body" rows="3" required="required" placeholder="Write your text tweet here." class="form-control" aria-required="true">{{ tweet_text }}</textarea>
 							</div>
 						</div>
 						<div class="js-character-count-value">236</div>
