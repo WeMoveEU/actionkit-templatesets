@@ -23,7 +23,7 @@
       [% if ( actionkit.context.recognized_user ) { %]
         [% if ( actionkit.context.targets && actionkit.context.targets.targets ) { %]
           <div class="recipients-buttons">
-            <button class="visible" type="button" data-wemove-toggle-button="recipients-list">
+            <button class="is-visible" type="button" data-wemove-toggle-button="recipients-list">
               <span data-wemove-show>
                 {% filter ak_text:"show_recipients_button" %}show{% endfilter %}
               </span>
