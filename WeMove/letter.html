@@ -14,25 +14,6 @@
       {% include_tmpl form.about_text %}
     </div>
 
-    <div class="recipients-buttons">
-            <button class="visible" type="button" data-wemove-show="recipients-list">
-              {% filter ak_text:"show_recipients_button" %}show{% endfilter %}
-            </button>
-            <button type="button" data-wemove-hide="recipients-list">
-              {% filter ak_text:"hide_recipients_button" %}hide{% endfilter %}
-            </button>
-          </div>
-
-          <ul class="recipients-list" data-wemove-toggle="recipients-list">
-
-              <li>Someone</li>
-              <li>Someone</li>
-              <li>Someone</li>
-              <li>Someone</li>
-              <li>Someone</li>
-
-          </ul>
-
     {% if form.statement_leadin %}
     <div class="recipients">
       {% include_tmpl form.statement_leadin %}
