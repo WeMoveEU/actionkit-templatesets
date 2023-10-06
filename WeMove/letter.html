@@ -24,10 +24,10 @@
         [% if ( actionkit.context.targets && actionkit.context.targets.targets ) { %]
           <div class="recipients-buttons">
             <button class="is-visible" type="button" data-wemove-toggle-button="recipients-list">
-              <span data-wemove-show>
+              <span data-wemove-toggle-show-button>
                 {% filter ak_text:"show_recipients_button" %}show{% endfilter %}
               </span>
-              <span data-wemove-hide>
+              <span data-wemove-toggle-hide-button>
                 {% filter ak_text:"hide_recipients_button" %}hide{% endfilter %}
               </span>
             </button>
