@@ -18,9 +18,10 @@
     <div class="recipients">
       {% include_tmpl form.statement_leadin %}
 
+      <div id="recipients-wrapper"></div>
       <script type="text/ak-template" for="recipients-wrapper">
       [% if ( actionkit.context.recognized_user ) { %]
-        [% if (  actionkit.context.targets && actionkit.context.targets.targets ) { %]
+        [% if ( actionkit.context.targets && actionkit.context.targets.targets ) { %]
           <div class="recipients-buttons">
             <button class="visible" type="button" data-wemove-show="recipients-list">
               {% filter ak_text:"show_recipients_button" %}show{% endfilter %}
