@@ -23,15 +23,17 @@
       [% if ( actionkit.context.recognized_user ) { %]
         [% if ( actionkit.context.targets && actionkit.context.targets.targets ) { %]
           <div class="recipients-buttons">
-            <button class="visible" type="button" data-wemove-show="recipients-list">
-              {% filter ak_text:"show_recipients_button" %}show{% endfilter %}
-            </button>
-            <button type="button" data-wemove-hide="recipients-list">
-              {% filter ak_text:"hide_recipients_button" %}hide{% endfilter %}
+            <button class="visible" type="button" data-wemove-toggle-button="recipients-list">
+              <span data-wemove-show>
+                {% filter ak_text:"show_recipients_button" %}show{% endfilter %}
+              </span>
+              <span data-wemove-hide>
+                {% filter ak_text:"hide_recipients_button" %}hide{% endfilter %}
+              </span>
             </button>
           </div>
 
-          <ul class="recipients-list" data-wemove-toggle="recipients-list">
+          <ul class="recipients-list" data-wemove-toggle-content="recipients-list">
             [% for ( var t of actionkit.context.targets.targets ) { %]
               <li>[%= t.title_full %]</li>
             [% } %]
