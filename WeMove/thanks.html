@@ -40,12 +40,12 @@
 <script type="text/plain"
   {% if petition %}
     data-wm-pixel-event-type="Lead"
-    data-wm-pixel-content-id="{{ page.id }}"
+    data-wm-pixel-content-id="{{ page.type }}"
     data-wm-pixel-content-name="{{ page.title }}"
   {% else %}
     data-wm-pixel-event-type="Subscribe"
   {% endif %}
-  data-wm-pixel-track-type="track"
+  data-wm-pixel-track-type="{{ page.type }}"
   data-wm-pixel-trigger-event="landing">
 </script>
 
