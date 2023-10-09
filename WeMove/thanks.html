@@ -38,10 +38,14 @@
 {% endif %}
 
 <script type="text/plain"
-  data-wm-pixel-event-type="Lead"
+  {% if petition %}
+    data-wm-pixel-event-type="Lead"
+    data-wm-pixel-content-id="{{ page.id }}"
+    data-wm-pixel-content-name="{{ page.title }}"
+  {% else %}
+    data-wm-pixel-event-type="Subscribe"
+  {% endif %}
   data-wm-pixel-track-type="track"
-  data-wm-pixel-content-id="{{ page.id }}"
-  data-wm-pixel-content-name="{{ page.title }}"
   data-wm-pixel-trigger-event="landing">
 </script>
 
