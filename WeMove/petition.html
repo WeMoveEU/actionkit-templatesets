@@ -94,8 +94,11 @@
 							<button
                 type="submit"
                 class="btn btn-primary"
-                data-pixel-event-type="Lead"
-                data-pixel-content-id="SIGN_PETITION">
+                data-wm-pixel-event-type="ClickSubscribe"
+                data-wm-pixel-track-type="trackCustom"
+                data-wm-pixel-content-id="{{ page.id }}"
+                data-wm-pixel-content-name="{{ page.title }}"
+                data-wm-pixel-trigger-event="click">
                 {% if page.custom_fields.sign_petition_button %}
                   {{ page.custom_fields.sign_petition_button }}
                 {% else %}
