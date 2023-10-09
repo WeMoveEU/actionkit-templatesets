@@ -550,10 +550,11 @@ function displayPages(campaign) {
         var pages = {};
         result.objects.forEach(function(page) {
             if (page.id != campaign.id) {
-                if (!pages[page.language]) {
-                    pages[page.language] = [];
+                const language = page.language || "/rest/v1/language/100/";
+                if (!pages[language]) {
+                    pages[language] = [];
                 }
-                pages[page.language].push(page);
+                pages[language].push(page);
             }
         });
         var langs = Object.keys(pages);
