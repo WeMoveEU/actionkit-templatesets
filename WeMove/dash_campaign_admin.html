@@ -332,7 +332,8 @@ $('#api-log').on('click', 'div', function () {
 } );
 
 function api(method, path, data) {
-    api_log("Call:", method, path, data);
+    var data_string = new URLSearchParams(data).toString();
+    api_log("Call:", method, path, data_string);
     return $.ajax({
         type: method,
         url: `${apiRoot}/${path}`,
@@ -340,9 +341,9 @@ function api(method, path, data) {
         processData: ( method == 'GET' ? true : false ),
         data: ( method == 'GET' ? data : JSON.stringify(data) )
     }).done(function(result) {
-        api_log("Results:", method, path, data, '=>', result);
+        api_log("Results:", method, path, data_string, '=>', result);
     }).fail(function(xhr, rstatus, rerror) {
-        api_error("Error:", method, path, data, rstatus, rerror, xhr.status, xhr.responseText);
+        api_error("Error:", method, path, data_string, rstatus, rerror, xhr.status, xhr.responseText);
     });
 }
 
