@@ -195,7 +195,7 @@
 						</div>
 
 						{% if page.followup.send_taf %}
-						<div class="share-big email-share-container js-email-share-container  ">
+						<div class="share-big email-share-container js-email-share-container">
 							<a
                 class="btn btn-primary email"
                 href="mailto:?subject={{ page.followup.taf_subject|urlencode }}&amp;body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"

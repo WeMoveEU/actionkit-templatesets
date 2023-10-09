@@ -46,8 +46,9 @@
 							<button
                 type="submit"
                 class="btn btn-primary"
-                data-pixel-event-type="Lead"
-                data-pixel-content-id="JOIN_US_PAGE">
+                data-wm-pixel-event-type="ClickSubscribe"
+                data-wm-pixel-track-type="customTrack"
+                data-wm-pixel-trigger-event="click">
                 {% if page.custom_fields.sign_petition_button %}
                   {{ page.custom_fields.sign_petition_button }}
                 {% else %}
