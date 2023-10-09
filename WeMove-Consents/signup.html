@@ -42,8 +42,12 @@
           id="btn_optin"
           value="explicit_opt_in"
           class="btn optin js-popup-consent-button"
-          data-pixel-event-type="Subscribe"
-          data-pixel-content-id="OPT_IN">
+          data-wm-pixel-event-type="OptIn"
+          data-wm-pixel-track-type="trackCustom"
+          {% if tests.TEMP_CHANGE_ME.letter %}
+          data-wm-pixel-content-id="optin_{{ tests.TEMP_CHANGE_ME.letter }}"
+          {% endif %}
+          data-wm-pixel-trigger-event="click">
           {% filter ak_text:"consents_contactMeYes_button" %}Yes, keep me informed!{% endfilter %}
 				</button>
 
