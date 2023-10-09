@@ -344,7 +344,7 @@ function api(method, path, data) {
 }
 
 function readLanguages() {
-    api('GET', "language/").done(function(result) {
+    api('GET', "language/", { _limit: 100 } ).done(function(result) {
         result.objects.forEach(function(lang) {
             window.languages[lang.resource_uri] = lang;
             if (coreLanguages.includes(lang.name)) {
