@@ -1,13 +1,5 @@
 {% extends "./wrapper.html" %}
 
-<template
-  data-wm-pixel-event-type="Lead"
-  data-wm-pixel-track-type="track"
-  data-wm-pixel-content-id="{{ page.id }}"
-  data-wm-pixel-content-name="{{ page.title }}"
-  data-wm-pixel-trigger-event="landing">
-</template>
-
 {% block pre_action_share %}{% endblock %}
 
 {% block content %}
@@ -44,6 +36,14 @@
         </div>
     {% endif %}
 {% endif %}
+
+<span hidden
+  data-wm-pixel-event-type="Lead"
+  data-wm-pixel-track-type="track"
+  data-wm-pixel-content-id="{{ page.id }}"
+  data-wm-pixel-content-name="{{ page.title }}"
+  data-wm-pixel-trigger-event="landing">
+</span>
 
 {% if page.SUPPRESS_SHARING %}
     <div class="ak-grid-row">
