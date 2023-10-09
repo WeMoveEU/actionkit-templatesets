@@ -2,10 +2,16 @@
 
 {% block content %}
 
-<form class="ak-form" name="act" method="POST" action="/act/" accept-charset="utf-8">
+<form
+  class="ak-form"
+  name="act"
+  method="POST"
+  action="/act/"
+  accept-charset="utf-8"
+  data-wm-pixel-event-type="Subscribe"
+  data-wm-pixel-track-type="track"
+  data-wm-pixel-trigger-event="submit">
   <input type="hidden" name="page" value="{{ page.name }}">
-
-
 
 		<div class="advice-advice" id="signup-story">
 			<div class="action-advice-col">
@@ -43,12 +49,7 @@
 						</div>
 
             <div class="js-nav-buttons hide-if-previously-signed">
-							<button
-                type="submit"
-                class="btn btn-primary"
-                data-wm-pixel-event-type="ClickSubscribe"
-                data-wm-pixel-track-type="trackCustom"
-                data-wm-pixel-trigger-event="click">
+							<button type="submit" class="btn btn-primary">
                 {% if page.custom_fields.sign_petition_button %}
                   {{ page.custom_fields.sign_petition_button }}
                 {% else %}
