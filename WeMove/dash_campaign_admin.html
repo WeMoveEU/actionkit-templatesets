@@ -460,18 +460,23 @@ function fetchCampaigns() {
 
 function readCampaigns(searched_name) {
     fetchCampaigns().done( function() {
-        matches = campaign_list.filter(function(camp) {
-            return camp.name.includes(searched_name);
+		var matches = campaign_list.filter(function(camp) {
+            return camp.name == searched_name;
         });
-        if (matches.length == 0) {
-            displayCreateForm(searched_name);
-        } else if (matches.length == 1) {
+		if (matches.length == 1) {
             model_campaign = campaign_list.find((camp) => camp.name == window.models.campaign_name);
             window.models.campaign = model_campaign;
             displayCampaign(matches[0]);
         } else {
-            displayMatches(matches);
-        }
+    		matches = campaign_list.filter(function(camp) {
+                return camp.name.includes(searched_name);
+            });
+            if (matches.length == 0) {
+                displayCreateForm(searched_name);
+            } else {
+                displayMatches(matches);
+            }
+        } 
     });
 }
 
