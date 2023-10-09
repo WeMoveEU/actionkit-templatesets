@@ -364,11 +364,12 @@ function readLanguages() {
 function readCampaigners(default_value) {
     api('POST', 'report/run/ak_staff_list', { format: 'json' } ).done(function(result) {
         var $select = $('.lead_campaigner-picker .form-control select');
-        result.map( row => row[0])
-        .sort().forEach(function(staff_name) {
-            $select.append(
-                ` <option value="${staff_name}">${staff_name}</option>`
-            );
+        result.map( row => row[0]).sort().forEach(function(staff_name) {
+            if ( staff_name ) {
+                $select.append(
+                    ` <option value="${staff_name}">${staff_name}</option>`
+                );
+            }
         });
         if (default_value) {
             $select.val(default_value);
