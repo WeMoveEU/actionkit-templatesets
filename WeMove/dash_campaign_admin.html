@@ -74,14 +74,8 @@
 {% else %}
 
 <section id="campaign_matches">
+    <h2>Matching Campaigns</h2>
     <table cellspacing="0" class="changelist-table">
-        <thead>
-            <tr>
-                <th scope="col" class="column-name">
-                    Matching Campaign
-                </th>
-            </tr>
-        </thead>
         <tbody>
         </tbody>
     </table>
@@ -367,9 +361,9 @@ function readLanguages() {
 }
 
 function readCampaigners(default_value) {
-    api('GET', "authuser/", { is_active: 'true', order_by: '-id', _limit: 100 } ).done(function(result) {
+    api('POST', 'report/run/ak_staff_list', { format: 'json' } ).done(function(result) {
         var $select = $('.lead_campaigner-picker .form-control select');
-        result.objects.map( staff => `${staff.first_name} ${staff.last_name}`)
+        result.objects.map( row => row[0])
         .sort().forEach(function(staff_name) {
             $select.append(
                 ` <option value="${staff_name}">${staff_name}</option>`
