@@ -37,18 +37,6 @@
     {% endif %}
 {% endif %}
 
-<script type="text/plain"
-  {% if petition %}
-    data-wm-pixel-event-type="Lead"
-    data-wm-pixel-content-id="{{ page.type }}"
-    data-wm-pixel-content-name="{{ page.title }}"
-  {% else %}
-    data-wm-pixel-event-type="Subscribe"
-  {% endif %}
-  data-wm-pixel-track-type="{{ page.type }}"
-  data-wm-pixel-trigger-event="landing">
-</script>
-
 {% if page.SUPPRESS_SHARING %}
     <div class="ak-grid-row">
         <div class="ak-grid-col ak-grid-col-12-of-12">
