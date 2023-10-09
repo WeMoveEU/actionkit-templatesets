@@ -74,8 +74,17 @@
 {% else %}
 
 <section id="campaign_matches">
-    These campaigns match your search:
-    <ul></ul>
+    <table cellspacing="0" class="changelist-table">
+        <thead>
+            <tr>
+                <th scope="col" class="column-name">
+                    Matching Campaign
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 </section>
 
 <section id="campaign_output">
@@ -713,9 +722,9 @@ function mailingLink(mailing) {
 }
 
 function displayMatches(matches) {
-    $matchList = $('#campaign_matches ul');
+    $matchList = $('#campaign_matches tbody');
     matches.forEach(function(camp) {
-        $matchList.append('<li><a href="?searched_name=' + camp.name + '">' + camp.name + '</a></li>');
+        $matchList.append('<tr class="item"> <td><a href="?searched_name=' + camp.name + '">' + camp.name + '</a></td></tr>');
     });
     $('#campaign_matches').show();
 }
