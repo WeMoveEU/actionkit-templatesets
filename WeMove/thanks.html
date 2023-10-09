@@ -117,8 +117,10 @@
                 class="btn btn-primary popup facebook"
                 href="/share/link?type=fb&amp;page_name={{page.name}}&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
                 target="_blank"
-                data-pixel-event-type="Lead"
-                data-pixel-content-id="FACEBOOK_SHARE">
+                data-wm-pixel-event-type="Share"
+                data-wm-pixel-track-type="customTrack"
+                data-wm-pixel-content-name="Facebook"
+                data-wm-pixel-trigger-event="click">
 								<i class="fa fa-facebook-square"></i>
                 <span class="share-text">
                   {% filter ak_text:"thanks_shareFacebook_button" %}Share on Facebook{% endfilter %}
@@ -131,8 +133,10 @@
                 class="btn btn-primary popup twitter"
                 href="/share/link?type=tw&amp;page_name={{page.name}}&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
                 target="_blank"
-                data-pixel-event-type="Lead"
-                data-pixel-content-id="TWITTER_SHARE">
+                data-wm-pixel-event-type="Share"
+                data-wm-pixel-track-type="customTrack"
+                data-wm-pixel-content-name="Twitter"
+                data-wm-pixel-trigger-event="click">
 								<i class="fa fa-twitter"></i> <span class="share-text">
                   {% filter ak_text:"thanks_shareTwitter_button" %}Share on Twitter{% endfilter %}
                 </span>
@@ -163,8 +167,10 @@
                 class="btn btn-primary instagram"
                 href="{{page.custom_fields.instagram_share_link}}"
                 target="_blank"
-                data-pixel-event-type="Lead"
-                data-pixel-content-id="INSTAGRAM_SHARE">
+                data-wm-pixel-event-type="Share"
+                data-wm-pixel-track-type="customTrack"
+                data-wm-pixel-content-name="Instagram"
+                data-wm-pixel-trigger-event="click">
 								<i class="fa fa-instagram"></i>
                 <span class="share-text">
                   {% filter ak_text:"thanks_shareInstagram_button" %}Share Story on Instagram{% endfilter %}
@@ -178,8 +184,10 @@
                 class="btn btn-primary popup whatsapp-web"
                 href="/thanks/{{ page.name }}?share=whatsapp&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
                 target="_blank"
-                data-pixel-event-type="Lead"
-                data-pixel-content-id="WHATSAPP_SHARE">
+                data-wm-pixel-event-type="Share"
+                data-wm-pixel-track-type="customTrack"
+                data-wm-pixel-content-name="WhatsApp"
+                data-wm-pixel-trigger-event="click">
 								<i class="fa fa-whatsapp"></i> <span class="share-text">
                   {% filter ak_text:"thanks_shareWhatsApp_button" %}Share on WhatsApp{% endfilter %}
                 </span>
@@ -192,8 +200,10 @@
                 class="btn btn-primary email"
                 href="mailto:?subject={{ page.followup.taf_subject|urlencode }}&amp;body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"
                 target="_blank"
-                data-pixel-event-type="Lead"
-                data-pixel-content-id="TAF_SHARE">
+                data-wm-pixel-event-type="Share"
+                data-wm-pixel-track-type="customTrack"
+                data-wm-pixel-content-name="Taf"
+                data-wm-pixel-trigger-event="click">
 								<i class="fa fa-envelope-o"></i> <span class="share-text">{% filter ak_text:"thanks_shareEmail_button" %}Share by e-mail{% endfilter %}</span>
 							</a>
 						</div>
