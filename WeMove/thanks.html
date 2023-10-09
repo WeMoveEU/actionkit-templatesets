@@ -1,11 +1,5 @@
 {% extends "./wrapper.html" %}
 
-{% block pre_action_share %}{% endblock %}
-
-{% block content %}
-
-{% if args.done %}
-
 <template
   data-wm-pixel-event-type="Lead"
   data-wm-pixel-track-type="track"
@@ -13,6 +7,12 @@
   data-wm-pixel-content-name="{{ page.title }}"
   data-wm-pixel-trigger-event="landing">
 </template>
+
+{% block pre_action_share %}{% endblock %}
+
+{% block content %}
+
+{% if args.done %}
 
 <div class="raction " id="rthanks">
   <p><b>
