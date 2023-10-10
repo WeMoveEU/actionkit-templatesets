@@ -43,7 +43,6 @@
 
 					<div id="sign-advice">
 						<div class="well">
-
 							<h2>{% filter ak_text:"petition_title" %}Petition{% endfilter %}</h2>
 
 							<div class="ak-margin-bottom-1 ak-text-expander-disabled">
@@ -84,7 +83,7 @@
 
 		<div class="action-form-container-col ak-grid-col ak-grid-col-4-of-12" id="action-form-container-col">
 
-      <aside class="floating-progress-meter mobile-only">
+      <aside data-wm-floating-meter class="floating-progress-meter mobile-only">
         {% include "./progress_meter.html" with instance="2" %}
 
         <a href="#action-form-container-col" class="btn btn-primary fake-submit-button">
@@ -98,7 +97,7 @@
         </a>
       </aside>
 
-			{% include "./progress_meter.html" %}
+			{% include "./progress_meter.html" with instance="1" %}
 			<div class="action-form">
 				<div id="action-form-container-id" class="action-form-container">
 
