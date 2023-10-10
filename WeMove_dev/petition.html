@@ -84,6 +84,20 @@
 
 		<div class="action-form-container-col ak-grid-col ak-grid-col-4-of-12" id="action-form-container-col">
 
+      <aside class="floating-progress-meter mobile-only">
+        {% include "./progress_meter.html" with instance="2" %}
+
+        <a href="#action-form-container-col" class="btn btn-primary fake-submit-button">
+          {% if page.custom_fields.sign_petition_button %}
+            {{ page.custom_fields.sign_petition_button }}
+          {% else %}
+            {% filter ak_text:"button_sign_petition" %}
+              Sign the Petition
+            {% endfilter %}
+          {% endif %}
+        </a>
+      </aside>
+
 			{% include "./progress_meter.html" %}
 			<div class="action-form">
 				<div id="action-form-container-id" class="action-form-container">
@@ -132,7 +146,6 @@
 					<div class="recent-comment-text"></div>
 				</div>
 			</aside>
-
 		</div>
 </form>
 
