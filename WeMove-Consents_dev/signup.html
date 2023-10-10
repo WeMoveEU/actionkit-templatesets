@@ -1,161 +1,94 @@
-{% extends "./wrapper.html" %}
+{% extends "WeMove/signup.html" %}
 
 {% block content %}
 
-<form class="ak-form" name="act" method="POST" action="/act/" accept-charset="utf-8">
-  <input type="hidden" name="page" value="{{ page.name }}">
+<h2>{{ page.title }}</h2>
 
+<form class="action_form" name="act" method="POST" action="/act/" accept-charset="utf-8">
 
+	<div id="signup-story">
 
-		<div class="advice-advice" id="signup-story">
-			<div class="action-advice-col">
-				{% include "./language_picker.html" %}
-				<div class="advice-container">
-					<h1>{{ page.title }}</h1>
+		{% if page.custom_fields.featured_image %}
+		<img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
+		{% endif %}
 
-					{% if page.custom_fields.featured_image %}
-					  <img class="ak-featured-img {% if page.goal %}ak-margin-top-1{% endif %}" src="{{page.custom_fields.featured_image}}">
-					{% elif page.custom_fields.featured_video %}
-            <div class="video-container">
-                <iframe width="560" height="315" src="{{page.custom_fields.featured_video}}"></iframe>
-            </div>
-          {% endif %}
-
-          <div class="ak-abovefold">
-            <div class="well">
-              {% filter ak_text:"singup_well" %}I stand for a better Europe; for a European Union committed to social and economic justice, environmental sustainability and citizen-led democracy.{% endfilter %}
-            </div>
-
-            {% include_tmpl form.introduction_text %}
-          </div>
-			</div>
+		<div class="ak-abovefold">
+			{% include_tmpl form.introduction_text %}
 		</div>
 
-		<div class="action-form-container-col ak-grid-col ak-grid-col-4-of-12" id="action-form-container-col">
+		<div class="ak-mobile-lead"></div>
 
-			<div class="action-form">
-				<div id="action-form-container-id" class="action-form-container">
-
-					<div class="ak-field-box ak-field-box-borderless">
-
-						<div id="petition-form" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
-							{% include "./user_form_wrapper.html" %}
-						</div>
-
-            <div class="js-nav-buttons hide-if-previously-signed">
-							<button
-                type="submit"
-                class="btn btn-primary"
-                data-wm-pixel-event-type="ClickSubscribe"
-                data-wm-pixel-track-type="trackCustom"
-                data-wm-pixel-trigger-event="click">
-                {% if page.custom_fields.sign_petition_button %}
-                  {{ page.custom_fields.sign_petition_button }}
-                {% else %}
-                  {% filter ak_text:"button_sign_petition" %}
-                    I'm joining!
-                  {% endfilter %}
-                {% endif %}
-              </button>
-						</div>
-
-					</div>
-					<div class="privacy-statement">
-						{% filter ak_text:"form_signTerms_disclaimer" %}By clicking “Sign” you are supporting this campaign, and agreeing to WeMove Europe using your information for the purpose of this campaign. We might hand over your name, surname and country to the petition target. Unless you subscribe to receive personalised updates, we will delete your data after the campaign has ended. We will never share your data with any third parties without your permission. See our full privacy policy <a href="https://www.wemove.eu/privacy-policy" target="_blank">here</a>.{% endfilter %}
-					</div>
-				</div>
-
-			</div>
-
-			<aside class="recent-comments" style="display: none">
-				<h4>Recent comments</h4>
-				<div class="recent-comment">
-					<div class="recent-comment-by" style="font-style: italic;"></div>
-					<div class="recent-comment-text"></div>
-				</div>
-			</aside>
-		</div>
 	</div>
+
+	<div id="signup-form" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
+
+	    <input type="hidden" name="akid" value="{{ akid }}">
+	    <input type="hidden" name="redirect" value="{{ args.next_step }}">
+	    <input type="hidden" name="require_opt_in" value="">
+
+	    <input type="hidden" name="action_consent_version" value="{{ page.custom_fields.consent_version }}">
+	    <input type="hidden" name="action_consent_action" value="">
+	    <input type="hidden" name="action_via_email" value="">
+	    <input type="hidden" name="action_trigger_page" value="{{ args.trigger_page }}">
+	    <input type="hidden" name="action_trigger_action" value="{{ args.trigger_action }}">
+
+		<div id="consent-buttons">
+				<button type="button" id="btn_optout" value="none_given" class="btn optout js-popup-consent-button">
+          {% filter ak_text:"consents_contactMeNo_button" %}No, do not contact me{% endfilter %}
+				</button>
+
+        <button
+          type="button"
+          id="btn_optin"
+          value="explicit_opt_in"
+          class="btn optin js-popup-consent-button"
+          data-wm-pixel-event-type="OptIn"
+          data-wm-pixel-track-type="trackCustom"
+          {% if tests.TEMP_CHANGE_ME.letter %}
+          data-wm-pixel-content-id="optin_{{ tests.TEMP_CHANGE_ME.letter }}"
+          {% endif %}
+          data-wm-pixel-trigger-event="click">
+          {% filter ak_text:"consents_contactMeYes_button" %}Yes, keep me informed!{% endfilter %}
+				</button>
+
+				<button type="button" id="btn_email" value="email_opt_in" class="btn optemail js-popup-consent-button" hidden>
+					{% filter ak_text:"consents_confirmViaEmail_button" %}Confirm consent via email{% endfilter %}
+				</button>
+		</div>
+
+	</div>
+
+    <input type="hidden" name="page" value="{{ page.name }}">
 </form>
 
 <script>
-	var recent_comments = {% report "comments_recent_actions" with page.id as page_id %};
-	recent_comments.shift();
-
-	window.currentCommentIndex = 0;
-	window.recentCommentShown = false;
-	window.comment_elt = $('.recent-comments .recent-comment');
-	$( function () {
-		if (comment_elt.length > 0) {
-			if (recent_comments.length && !recentCommentShown) {
-				recentCommentShown = true;
-				comment_elt.parent().fadeIn('slow');
-				cycleRecentComment();
-			}
-		}
-	} );
-
-	function cycleRecentComment() {
-		comment_elt.fadeOut('slow', function() {
-			var comment = recent_comments[currentCommentIndex ++ % recent_comments.length];
-			comment_elt.find('.recent-comment-by').text(comment[0]);
-			comment_elt.find('.recent-comment-text').text(comment[1]);
-			comment_elt.removeClass('hidden');
-			comment_elt.fadeIn('slow');
-			var duration = Math.ceil(comment[1].split(' ').length * 0.2);
-            if (duration < 3) { duration = 3; }
-			setTimeout(cycleRecentComment, duration * 1000);
-		});
-	}
-</script>
-
-<div class="js-recent-action" style="display: none">
-    <i class="glyphicon glyphicon-thumbs-up"></i>
-		<span class="js-text"></span>
-</div>
-
-<script>
-	var recent_signers = {% report "names_recent_actions" with page.id as page_id %};
-	recent_signers.shift();
-	recent_signers = recent_signers.map( n => [ n[0], n[1] + " has just signed the petition" ] );
-
-	var recent_sharers = {% report "names_recent_shares" with page.id as page_id %};
-	recent_sharers.shift();
-	recent_sharers = recent_sharers.map( n => [ n[0], n[1] + " just shared this on " + n[2] ] );
-
-	var recent_actions = recent_signers.concat( recent_sharers );
-	recent_actions = recent_actions.sort( function compare(a,b) {
-		if ( a[0] < b[0] ) { return 1 }
-		if ( a[0] > b[0] ) { return -1 }
-		return 0
-	} );
-
-	window.recentActions = recent_actions.map( n => n[1] );
-
-	window.currentActionIndex = 0;
-	window.recentActionShown = false;
-	window.recent_action_elt = $('.js-recent-action');
-	$( function () {
-		if (recent_action_elt.length > 0) {
-			if (window.innerWidth > 1180) {
-				if (recentActions.length && ! recentActionShown) {
-					recentActionShown = true;
-					cycleRecentAction();
-				}
-			}
-		}
-	} );
-
-	function cycleRecentAction() {
-		recent_action_elt.fadeOut('slow', function() {
-			var signer = recentActions[currentActionIndex ++ % recentActions.length];
-			recent_action_elt.find('.js-text').text(signer);
-			recent_action_elt.removeClass('hidden');
-			recent_action_elt.fadeIn('slow');
-			setTimeout(cycleRecentAction, 5000);
-		});
-	}
-
+	{% if args.confirm %}
+		$('#consent-buttons div').toggle()
+		$('input[name="action_consent_action"]').val( 'y' );
+		$('input[name="action_via_email"]').val(1);
+		$('form.action_form').get(0).submit();
+	{% elif args.decline %}
+		$('#consent-buttons div').toggle()
+		$('input[name="action_consent_action"]').val( 'n' );
+		$('input[name="require_opt_in"]').val(1);
+		$('input[name="action_via_email"]').val(1);
+		$('form.action_form').get(0).submit();
+	{% elif user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
+		$('#consent-buttons div').toggle()
+		$('input[name="action_consent_action"]').val( 'e' );
+		$('input[name="require_opt_in"]').val(1);
+		$('form.action_form').get(0).submit();
+	{% else %}
+		$('#btn_optin').on('click', function () {
+			$('input[name="action_consent_action"]').val( 'y' );
+			$('form.action_form').get(0).submit();
+		} );
+		$('#btn_optout').on('click', function () {
+			$('input[name="action_consent_action"]').val( 'n' );
+			$('input[name="require_opt_in"]').val(1);
+			$('form.action_form').get(0).submit();
+		} );
+	{% endif %}
 </script>
 
 {% endblock %}

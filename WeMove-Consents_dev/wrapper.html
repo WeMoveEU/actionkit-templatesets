@@ -9,20 +9,13 @@
 
     {% block share_metatags %}
     {{ page.followup.share_title_tag }}
-    {% if form.id %}<meta name="description" property="og:description" content="{% block description %}{{ page.followup.share_description_value }}{% endblock %}">{% endif %}
+    {{ page.followup.share_description_tag }}
     {{ page.followup.share_image_tag }}
     {{ page.followup.share_url_tag }}
     <meta property="og:site_name" content="{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}">
     <meta property="og:type" content="article">
     <meta name="twitter:card" content="summary">
-
-    {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
-    {% if campaign_type == "youmove" %}
-    <link href="https://youmoveeurope.eu/favicon.png" rel="icon" />
-    {% else %}
     <link href="https://www.wemove.eu/favicon.png" rel="icon" />
-    {% endif %}
-
     {% endblock %}
 
     {% block meta_additions %}{% endblock %}
@@ -46,68 +39,14 @@
 
     {% block script_additions %}{% endblock %}
 </head>
-{% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
-<body class="{% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %} ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
+<body class="ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
     <script type="text/javascript">
         actionkit.forms.initPage()
     </script>
 
     <div id="fb-root"></div>
 
-    <div class="modal fade js-share-popup in" style="display: none; padding-right: 15px;" aria-hidden="false">
-        <div class="modal-backdrop fade in" style="height: 928px;"></div>
-        <div class="modal-dialog" style="z-index:1041;">
-          <div class="modal-content">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-          </div>
-        </div>
-    </div>
-
-    <script>
-        function init_modal () {
-            var modal = $('.modal.fade')
-            var modal_backdrop = modal.find('.modal-backdrop');
-            function resize_modal () { modal_backdrop.height( $(window).height() ) }
-            $(window).on( 'resize', resize_modal );
-            resize_modal();
-
-            modal_backdrop.on( 'click', close_modal );
-            modal.find('.close').on( 'click', close_modal );
-            function close_modal () { modal.hide() }
-        }
-    </script>
-
-    {% block pre_action_share %}
-      {% if page.custom_fields.pre_action_share %}
-        {% store as share_page %}{% if page.custom_fields.pre_action_share == "1" %}{{ page.custom_fields.daisy_chain_action|default:page.name }}{% else %}{{ page.custom_fields.pre_action_share }}{% endif %}{% endstore %}
-
-        <h1 id="share-banner" style="display: none">
-            {% filter ak_text:"tell_your_friends_banner" %}
-            Can you spread the word?
-            {% endfilter %}
-        </h1>
-        <script>
-            init_modal();
-
-            $.get( '/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}', {},
-                function ( data ) {
-                    const modal = $('.modal.fade');
-                    modal.find('.modal-content').append(
-                        $('#share-banner').show()
-                    );
-                    modal.find('.modal-content').append(
-                        $(data).find('.facebook-share-preview-container').parent().children()
-                    );
-                    modal.show();
-                }
-            );
-        </script>
-      {% endif %}
-    {% endblock %}
-
-    <div id="alert-wrap" style="z-index: 1040; width: 40%; margin-left: -20%; left: 50%; position: absolute">
+    <div id="alert-wrap" style="z-index: 1040; width: 40%; margin-left: -20%; left: 50%; position: absolute; ">
     </div>
 
     <header class="header">
@@ -198,28 +137,41 @@
 
     <div id="wrapper">
       <div id="content">
-        <div class="container-fluid">
-          {% block finished_alert %}
-            {% if page.custom_fields.finished_alert %}
-              <div class="alert alert-warning alert-finished" role="alert">
-                  {{ page.custom_fields.finished_alert |safe }}
-              </div>
-              <script>
-                  $(document).on('ready', function () {
-                      $('submit, button[type=submit], #unknown_user :input, .ak-field-box :input').attr('disabled', 'disabled')
-                  } );
-              </script>
-            {% endif %}
-          {% endblock %}
-
+        <div class="container-fluid" style="margin-bottom: 20px">
           <div class="raction" id="rsign">
             <div class="raction-content">
-              {% block content %}{% endblock %}
             </div>
           </div>
         </div>
       </div>
     </div>
+
+      <div class="modal fade js-share-popup in" style="padding-right: 15px; display: block" aria-hidden="false">
+          <div class="modal-backdrop fade in" style="height: 928px;"></div>
+          <div class="modal-dialog" style="z-index:1041;">
+              <div class="modal-content">
+                  {% block content %}{% endblock %}
+              </div>
+          </div>
+      </div>
+
+<script>
+var modal = $('.modal.fade')
+var modal_backdrop = modal.find('.modal-backdrop');
+
+function resize_modal () {
+modal_backdrop.height( $(window).height() );
+$('#rsign').height( $('.modal-content').height() );
+}
+$(window).on( 'resize', resize_modal );
+resize_modal();
+
+function init_modal () {
+    modal_backdrop.on( 'click', close_modal );
+    modal.find('.close').on( 'click', close_modal );
+    function close_modal () { modal.hide() }
+}
+</script>
 
 {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
 {% if campaign_type == "youmove" %}
@@ -304,12 +256,6 @@
               <path fill-rule="evenodd" clip-rule="evenodd" d="M17 0C26.3825 0 34 7.61746 34 17C34 26.3825 26.3825 34 17 34C7.61746 34 0 26.3825 0 17C0 7.61746 7.61746 0 17 0ZM11.685 26.5539V13.2779H7.27142V26.5539H11.685ZM27.5973 26.5539V18.9407C27.5973 14.8628 25.42 12.9658 22.5166 12.9658C20.1755 12.9658 19.1268 14.2533 18.5396 15.1576V13.2779H14.1271C14.1856 14.5235 14.1271 26.5539 14.1271 26.5539H18.5396V19.1397C18.5396 18.7428 18.5681 18.3461 18.6851 18.0625C19.0035 17.2699 19.7301 16.4489 20.9492 16.4489C22.5452 16.4489 23.1846 17.6668 23.1846 19.4507V26.5539H27.5973ZM9.50805 6.87637C7.99797 6.87637 7.01137 7.86914 7.01137 9.17037C7.01137 10.4442 7.96795 11.4643 9.44961 11.4643H9.4781C11.0171 11.4643 11.975 10.4442 11.975 9.17037C11.9464 7.86914 11.0171 6.87637 9.50805 6.87637Z" fill="white"></path>
             </svg>
           </a>
-          <a target="_blank" rel="noreferrer" class="social-link" href="https://www.instagram.com/wemove_europe/">
-            <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17 0C26.35 0 34 7.65 34 17C34 26.35 26.35 34 17 34C7.65 34 0 26.35 0 17C0 7.65 7.65 0 17 0Z" fill="white"></path>
-              <path d="M21.9938 6.375H11.9C8.81875 6.375 6.375 8.925 6.375 12.1125V21.8875C6.375 24.9688 8.81875 27.5187 12.0063 27.625H22.1C25.1812 27.625 27.7313 25.075 27.7313 21.8875V12.1125C27.625 8.925 25.1813 6.375 21.9938 6.375ZM25.7125 21.7812C25.7125 23.9062 24.0125 25.7125 21.7812 25.7125H12.1125C9.9875 25.7125 8.18125 23.9062 8.2875 21.7812V12.2188C8.2875 10.0938 9.9875 8.2875 12.1125 8.2875H21.7812C23.9062 8.2875 25.7125 10.0938 25.7125 12.2188V21.7812Z" fill="#21194F"></path><path d="M17 11.5815C14.025 11.4752 11.475 13.919 11.475 16.894C11.3688 19.869 13.8125 22.419 16.7875 22.419C19.7625 22.419 22.3125 20.0815 22.3125 17.1065V17.0002C22.4188 14.0252 19.975 11.5815 17 11.5815ZM17 20.5065C15.0875 20.5065 13.4938 19.019 13.3875 17.1065C13.3875 15.194 14.875 13.6002 16.7875 13.494C18.7 13.3877 20.2938 14.9815 20.4 16.894V17.0002C20.5063 18.9127 18.9125 20.5065 17 20.5065Z" fill="#21194F"></path><path d="M22.6312 9.9873C23.2687 9.9873 23.7999 10.5186 23.7999 11.2623C23.7999 12.0061 23.2687 12.5373 22.6312 12.5373C21.9937 12.5373 21.4624 12.0061 21.4624 11.2623C21.4624 10.5186 21.9937 9.9873 22.6312 9.9873Z" fill="#21194F"></path>
-            </svg>
-          </a>
         </div>
         <nav class="nav nav--bottom">
           <ul class="nav__main-list">
@@ -328,7 +274,7 @@
 {% endif %}
 
 {% block below_form %}
-<script>
+<script type="text/javascript">
     actionkit.forms.contextRoot = '/context/';
     actionkit.forms.initForm('act');
 </script>
