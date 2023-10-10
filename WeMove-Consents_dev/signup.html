@@ -48,7 +48,11 @@
           data-wm-pixel-content-id="optin_{{ tests.TEMP_CHANGE_ME.letter }}"
           {% endif %}
           data-wm-pixel-trigger-event="click">
-          {% filter ak_text:"consents_contactMeYes_button" %}Yes, keep me informed!{% endfilter %}
+          {% if test %}
+            {% page.custom_fields.opt_ab_test_confirm_button %}
+          {% else %}
+            {% filter ak_text:"consents_contactMeYes_button" %}Yes, keep me informed!{% endfilter %}
+          {% endif %}
 				</button>
 
 				<button type="button" id="btn_email" value="email_opt_in" class="btn optemail js-popup-consent-button" hidden>
