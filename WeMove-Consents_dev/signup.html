@@ -3,7 +3,7 @@
 {% block content %}
 
 <h2>{{ page.title }}</h2>
-<h3>Lucas</h3>
+
 <form class="action_form" name="act" method="POST" action="/act/" accept-charset="utf-8">
 
 	<div id="signup-story">
@@ -32,15 +32,15 @@
 	    <input type="hidden" name="action_trigger_page" value="{{ args.trigger_page }}">
 	    <input type="hidden" name="action_trigger_action" value="{{ args.trigger_action }}">
 
+
 		<div id="consent-buttons">
 				<button type="button" id="btn_optout" value="none_given" class="btn optout js-popup-consent-button">
-          {% filter ak_text:"consents_contactMeNo_button" %}No, do not contact me{% endfilter %}
+          {% if page.custom_fields.opt_ab_test_cancel_button %}
+            {{ page.custom_fields.opt_ab_test_cancel_button }}
+          {% else %}
+            {% filter ak_text:"consents_contactMeNo_button" %}No, do not contact me{% endfilter %}
+          {% endif %}
 				</button>
-
-        opt_ab_test_confirm_button
-        opt_ab_test_cancel_button
-        opt_ab_test_introduction_text
-        opt_ab_test_popup_title
 
         <button
           type="button"
@@ -53,11 +53,10 @@
           data-wm-pixel-content-id="optin_{{ tests.TEMP_CHANGE_ME.letter }}"
           {% endif %}
           data-wm-pixel-trigger-event="click">
-          test
-          {% if test %}
-            {% page.custom_fields.opt_ab_test_confirm_buttons %}
+          {% if page.custom_fields.opt_ab_test_confirm_button %}
+            {{ page.custom_fields.opt_ab_test_confirm_button }}
           {% else %}
-            {% filter ak_text:"consents_contactMeYes_buttons" %}Yes, keep me informed!{% endfilter %}
+            {% filter ak_text:"consents_contactMeYes_button" %}Yes, keep me informed!{% endfilter %}
           {% endif %}
 				</button>
 
