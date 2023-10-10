@@ -37,6 +37,11 @@
           {% filter ak_text:"consents_contactMeNo_button" %}No, do not contact me{% endfilter %}
 				</button>
 
+        opt_ab_test_confirm_button
+        opt_ab_test_cancel_button
+        opt_ab_test_introduction_text
+        opt_ab_test_popup_title
+
         <button
           type="button"
           id="btn_optin"
@@ -47,8 +52,12 @@
           {% if tests.TEMP_CHANGE_ME.letter %}
           data-wm-pixel-content-id="optin_{{ tests.TEMP_CHANGE_ME.letter }}"
           {% endif %}
-          data-wm-pixel-trigger-event="click">
-          {% filter ak_text:"consents_contactMeYes_button" %}Yes, keep me informed!{% endfilter %}
+          data-wm-pixel-trigger-event="click">test
+          {% if test %}
+            {% page.custom_fields.opt_ab_test_confirm_buttons %}
+          {% else %}
+            {% filter ak_text:"consents_contactMeYes_buttons" %}Yes, keep me informed!{% endfilter %}
+          {% endif %}
 				</button>
 
 				<button type="button" id="btn_email" value="email_opt_in" class="btn optemail js-popup-consent-button" hidden>
