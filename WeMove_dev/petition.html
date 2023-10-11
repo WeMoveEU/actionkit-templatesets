@@ -27,15 +27,23 @@
 					<img class="ak-featured-img {% if page.goal %}ak-margin-top-1{% endif %}" src="{{featured_image}}">
           {% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
 					{% else if featured_video %}
-          <div class="video-wrapper">
-            <div class=" cookieconsent-optout-marketing" style="display: block;">
-              <div class="placeholder">
+          <div class="video-container">
+            <div class="cookieconsent-optout-marketing">
+              <div class="video-placeholder">
                 <button type="button" onclick="Cookiebot.renew()">
                   Please accept marketing cookies to watch this video.
                 </button>
               </div>
             </div>
-            <iframe width="560" height="315" data-cookieblock-src="{{page.custom_fields.featured_video}}" data-cookieconsent="marketing"></iframe>
+            <iframe
+              width="560"
+              height="315"
+              data-cookieblock-src="{{page.custom_fields.featured_video}}"
+              data-cookieconsent="marketing"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen>
+            </iframe>
           </div>
 					{% endif %}
 
