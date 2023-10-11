@@ -27,7 +27,7 @@
                 [% } %]
                 [% progress.percent = parseInt(progress.current/goal*100); %]
 
-								<div class="counters-wrapper ">
+								<div class="counters-wrapper">
                   <div class="signature-counter">
                     [% if (goal_type == "dollars") { %]
                       $[%= add_commas(progress.current) %]
