@@ -31,7 +31,7 @@
             <div class="cookieconsent-optout-marketing">
               <div class="video-placeholder">
                 <button type="button" onclick="Cookiebot.renew()">
-                  Please accept marketing cookies to watch this video.
+                  {% filter ak_text:"videoPlaceholder_button" %}Please accept marketing cookies to watch this video{% endfilter %}
                 </button>
               </div>
             </div>
