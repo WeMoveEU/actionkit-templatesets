@@ -1,9 +1,9 @@
 {% if page.goal %}
 
     <!-- Begin progress meter code.-->
-    <div id="progress" class="ak-progress-meter"></div>
+    <div id="progress_{{ instance }}" class="ak-progress-meter"></div>
 
-    <script type="text/ak-template" for="progress">
+    <script type="text/ak-template" for="progress_{{ instance }}"">
         [% with (progress) { %]
             [% if ( goal && total ) { %]
                 [% progress.current = goal_type == 'dollars' ? total.dollars : goal_type == 'money' ? total.money : total.actions; %]
@@ -27,27 +27,29 @@
                 [% } %]
                 [% progress.percent = parseInt(progress.current/goal*100); %]
 
-								<div class="signature-counter">
-	                [% if (goal_type == "dollars") { %]
-										$[%= add_commas(progress.current) %]
-	                [% } else if (goal_type == "money") { %]
-										{{ page.currency|iso_currency_symbol }}[%= add_commas(progress.current) %]
-	                [% } else { %]
-	                        [%= add_commas(progress.current) %]
-	                [% } %]
-								  </div>
-								<div class="signature-counter-label">
-	                [% if (goal_type == "dollars") { %]
-	                        raised so far
-	                    of our goal of $[%= add_commas(goal)  %]!
-	                [% } else if (goal_type == "money") { %]
-	                         raised so far
-	                    of our goal of {{ page.currency|iso_currency_symbol }}[%= add_commas(goal)  %]!
-	                [% } else { %]
-	                        {% filter ak_text:"form_signatures_of" %}of{% endfilter %} [%= add_commas(goal) %]
-                            [%= progress.current != 1 ? '{% filter ak_text:"form_signaturesPlural" %}signatures{% endfilter %}' : '{% filter ak_text:"form_signaturesSingular" %}signature{% endfilter %}' %]
-	                [% } %]
-								  </div>
+								<div class="counters-wrapper">
+                  <div class="signature-counter">
+                    [% if (goal_type == "dollars") { %]
+                      $[%= add_commas(progress.current) %]
+                    [% } else if (goal_type == "money") { %]
+                      {{ page.currency|iso_currency_symbol }}[%= add_commas(progress.current) %]
+                    [% } else { %]
+                            [%= add_commas(progress.current) %]
+                    [% } %]
+                    </div>
+                  <div class="signature-counter-label">
+                    [% if (goal_type == "dollars") { %]
+                            raised so far
+                        of our goal of $[%= add_commas(goal)  %]!
+                    [% } else if (goal_type == "money") { %]
+                            raised so far
+                        of our goal of {{ page.currency|iso_currency_symbol }}[%= add_commas(goal)  %]!
+                    [% } else { %]
+                            {% filter ak_text:"form_signatures_of" %}of{% endfilter %} [%= add_commas(goal) %]
+                              [%= progress.current != 1 ? '{% filter ak_text:"form_signaturesPlural" %}signatures{% endfilter %}' : '{% filter ak_text:"form_signaturesSingular" %}signature{% endfilter %}' %]
+                    [% } %]
+                    </div>
+                  </div>
 
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped" style="width: [%= progress.current > goal ? 100 : progress.percent %]%;">&nbsp;</div>

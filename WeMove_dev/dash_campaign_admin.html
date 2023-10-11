@@ -30,7 +30,7 @@
 	a.dash-icon-btn { border: 1px solid #27BBDD; border-radius: 99px; padding: 0 4px;}
 
 	.form-row-CheckboxInput .form-control label { float: none }
- 
+
 	.button-row {
 		margin-top: 0.5em;
 	}
@@ -294,6 +294,7 @@
 
 <script>
 	var searched_name = "{{searched_name}}";
+searched_name = searched_name.replace(/^\s+|\s+$/g, '');
 	$( function () {
 		readCampaigns(searched_name);
 	} );
@@ -315,20 +316,20 @@
 
 function api_log() {
 	console.log( "AK API:", ...arguments );
-	$('<div>').text( [...arguments].map( 
-		(i) => typeof(i) == 'string' ? i : JSON.stringify(i, null, 2) 
+	$('<div>').text( [...arguments].map(
+		(i) => typeof(i) == 'string' ? i : JSON.stringify(i, null, 2)
 	).join(' ') ).appendTo('#api-log');
 }
 
 function api_error() {
 	api_log( 'Error:', ...arguments );
-	alert( [...arguments].map( 
-		(i) => typeof(i) == 'string' ? i : JSON.stringify(i, null, 2) 
+	alert( [...arguments].map(
+		(i) => typeof(i) == 'string' ? i : JSON.stringify(i, null, 2)
 	).join(' ') );
 }
 
-$('#api-log').on('click', 'div', function () { 
-	$(this).toggleClass('expanded') 
+$('#api-log').on('click', 'div', function () {
+	$(this).toggleClass('expanded')
 } );
 
 function api(method, path, data) {
@@ -481,7 +482,7 @@ function readCampaigns(searched_name) {
 			} else {
 				displayMatches(matches);
 			}
-		} 
+		}
 	});
 }
 
@@ -578,11 +579,11 @@ function displayPages(campaign) {
 				);
 				var lang_journey_list = table_row.find('td');
 				pages[lang].forEach(function(journey) {
-					lang_journey_list.append( 
-						'<div class="journey">' + 
+					lang_journey_list.append(
+						'<div class="journey">' +
 						journey.map(
 							(p) => `<span>${pageLink(p)}</span>`
-						).join(' <span class="next-arrow">➡</span> ') 
+						).join(' <span class="next-arrow">➡</span> ')
 						+ '</div>'
 					)
 				});
@@ -850,8 +851,8 @@ function createPages(evt) {
 				}
 
 				if (action_type != 'share') {
-					calls.push( 
-						createPage(action_type, page_name, this.value, mcamp_uri, fields, followup_url) 
+					calls.push(
+						createPage(action_type, page_name, this.value, mcamp_uri, fields, followup_url)
 					);
 				}
 			}
