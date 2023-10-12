@@ -3,7 +3,6 @@
 {% else %}
   {% firstof "en" as link_iso %}
 {% endif %}
-
 <!DOCTYPE html>
 <html lang="{{page.lang.iso_code|default:'en'}}"{% if page.lang.is_rtl %} dir="rtl"{% endif %}>
 <head>
