@@ -13,13 +13,13 @@
   data-wm-pixel-trigger-event="submit">
   <input type="hidden" name="page" value="{{ page.name }}">
 
-		<div class="advice-advice" id="signup-story ">
+		<div class="advice-advice" id="signup-story">
 			<div class="action-advice-col">
 				{% include "./language_picker.html" %}
 				<div class="advice-container">
 					<h1>{{ page.title }}</h1>
 
-          {% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
+					{% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
           {% store as featured_image %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_image" as field_name %}{% endstore %}
 					{% if featured_video %}
           <div class="video-container ">
