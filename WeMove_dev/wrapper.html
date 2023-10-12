@@ -1,4 +1,4 @@
-{% if page.lang.iso_code == 'de' or page.lang.iso_code == 'it' or page.lang.iso_code == 'nl' or page.lang.iso_code == 'es' or page.lang.iso_code == 'pl' or page.lang.iso_code == 'fr' %}
+{% if page.lang.iso_code in "de,it,nl,pl,fr,es" %}
   {% firstof page.lang.iso_code as link_iso %}
 {% else %}
   {% firstof "en" as link_iso %}
