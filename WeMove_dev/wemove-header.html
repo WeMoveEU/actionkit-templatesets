@@ -2,7 +2,7 @@
   <div class="header-wrapper">
     <div class="top-header-wrapper">
       <div class="logo">
-          <a class="logo__link" href="https://wemove.eu/{{page.lang.iso_code}}">
+          <a class="logo__link" href="https://wemove.eu/{{ link_iso }}">
             <img alt="WeMove Europe logo" src="https://static.wemove.eu/action-kit/out/svg/wemove-iso-logo__purple-text.svg" width="230" height="110" decoding="async" class="logo__icon" loading="lazy" style="color:transparent">
           </a>
       </div>
@@ -21,41 +21,41 @@
               <button class="btn dropdown-toggle" type="button" id="aboutUsDropdown" data-bs-toggle="dropdown" aria-expanded="false">{% filter ak_text:"nav_wm_aboutUS" %}About us{% endfilter %}</button>
               <ul class="dropdown-menu" aria-labelledby="aboutUsDropdown">
                 <li>
-                  <a class="dropdown-item" href="https://wemove.eu/{{page.lang.iso_code}}/community">{% filter ak_text:"nav_wm_community" %}Community{% endfilter %}</a>
+                  <a class="dropdown-item" href="https://wemove.eu/{{ link_iso }}/community">{% filter ak_text:"nav_wm_community" %}Community{% endfilter %}</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="https://wemove.eu/{{page.lang.iso_code}}/victories">{% filter ak_text:"nav_wm_victories" %}Victories{% endfilter %}</a>
+                  <a class="dropdown-item" href="https://wemove.eu/{{ link_iso }}/victories">{% filter ak_text:"nav_wm_victories" %}Victories{% endfilter %}</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="https://wemove.eu/{{page.lang.iso_code}}/team">{% filter ak_text:"nav_wm_team" %}Team{% endfilter %}</a>
+                  <a class="dropdown-item" href="https://wemove.eu/{{ link_iso }}/team">{% filter ak_text:"nav_wm_team" %}Team{% endfilter %}</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="https://wemove.eu/{{page.lang.iso_code}}/work-with-us">{% filter ak_text:"nav_wm_workWithUs" %}Work with us{% endfilter %}</a>
+                  <a class="dropdown-item" href="https://wemove.eu/{{ link_iso }}/work-with-us">{% filter ak_text:"nav_wm_workWithUs" %}Work with us{% endfilter %}</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="https://wemove.eu/{{page.lang.iso_code}}/how-we-are-funded">{% filter ak_text:"nav_wm_howWeAreFunded" %}How we are funded{% endfilter %}</a>
+                  <a class="dropdown-item" href="https://wemove.eu/{{ link_iso }}/how-we-are-funded">{% filter ak_text:"nav_wm_howWeAreFunded" %}How we are funded{% endfilter %}</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="https://wemove.eu/{{page.lang.iso_code}}/contact-us">{% filter ak_text:"nav_wm_contactUs" %}Contact us{% endfilter %}</a>
+                  <a class="dropdown-item" href="https://wemove.eu/{{ link_iso }}/contact-us">{% filter ak_text:"nav_wm_contactUs" %}Contact us{% endfilter %}</a>
                 </li>
               </ul>
             </div>
           </li>
           <li class="nav__item">
-            <a class="nav__link regular-link regular-link--default" href="https://wemove.eu/{{page.lang.iso_code}}/updates">{% filter ak_text:"nav_wm_updates" %}Updates{% endfilter %}</a>
+            <a class="nav__link regular-link regular-link--default" href="https://wemove.eu/{{ link_iso }}/updates">{% filter ak_text:"nav_wm_updates" %}Updates{% endfilter %}</a>
           </li>
           <li class="nav__item">
-            <a class="nav__link button-fill button-fill--light-blue" href="https://www.youmoveeurope.eu/{{page.lang.iso_code}}">YouMove</a>
+            <a class="nav__link button-fill button-fill--light-blue" href="https://www.youmoveeurope.eu/{{ link_iso }}">YouMove</a>
           </li>
         </ul>
       </nav>
       <nav class="nav nav--bottom">
         <ul class="nav__main-list">
           <li class="nav__item">
-            <a class="nav__link regular-link regular-link--default" href="https://wemove.eu/{{page.lang.iso_code}}/campaigns">{% filter ak_text:"nav_wm_campaigns" %}Campaigns{% endfilter %}</a>
+            <a class="nav__link regular-link regular-link--default" href="https://wemove.eu/{{ link_iso }}/campaigns">{% filter ak_text:"nav_wm_campaigns" %}Campaigns{% endfilter %}</a>
           </li>
           <li class="nav__item">
-            <a class="nav__link regular-link regular-link--default" href="https://action.wemove.eu/signup/wemove-join_{{page.lang.iso_code}}">{% filter ak_text:"nav_wm_joinUs" %}Join us{% endfilter %}</a>
+            <a class="nav__link regular-link regular-link--default" href="https://action.wemove.eu/signup/wemove-join_{{ link_iso }}">{% filter ak_text:"nav_wm_joinUs" %}Join us{% endfilter %}</a>
           </li>
           <li class="nav__item">
             <a data-link-translate-me="wm-donate" class="nav__link button-fill button-fill--pink" href="https://act.wemove.eu/campaigns/chip-in-wemove?utm_medium=ak&utm_source=nav&utm_campaign=en">{% filter ak_text:"nav_wm_donate" %}Donate{% endfilter %}</a>
