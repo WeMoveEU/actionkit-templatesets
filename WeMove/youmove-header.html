@@ -1,0 +1,24 @@
+<header class="header">
+  <div class="header-wrapper">
+    <div class="top-header-wrapper">
+      <div class="logo">
+          <a class="logo__link" data-link-translate-me href="https://youmoveeurope.eu/{{page.lang.iso_code}}">
+            <img alt="YouMove logo" src="https://static.wemove.eu/action-kit/out/svg/youmove-iso-logo.svg" width="242" height="112" decoding="async" class="logo__icon" loading="lazy" style="color:transparent">
+          </a>
+      </div>
+      <button id="nav-button" class="icon-hamburguer navbar-toggler" type="button" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#nav-bar" aria-controls="nav-bar" aria-haspopup="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15">
+          <path fill="#21194F" d="M20 3V0H0V3H20ZM20 9V6H0V9H20ZM20 15V12H0V15H20Z"></path>
+        </svg>
+      </button>
+    </div>
+
+    <nav id="nav-bar" class="dropdown-menu" aria-labelledby="nav-button">
+      <a href="https://youmoveeurope.eu/{{page.lang.iso_code|default:'en'}}">{% filter ak_text:"nav_ym_youmoveCampaigns" %}YouMove Campaigns{% endfilter %}</a>
+      <a class="button-fill orange" href="https://www.youmoveeurope.eu/{{page.lang.iso_code}}/campaign/create">{% filter ak_text:"nav_ym_startCampaign" %}Start a campaign{% endfilter %}</a>
+      <a href="https://www.youmoveeurope.eu/{{page.lang.iso_code}}/auth/login">{% filter ak_text:"nav_ym_login" %}Log-in{% endfilter %}</a>
+      <a href="https://www.youmoveeurope.eu/{{page.lang.iso_code}}/campaign/">{% filter ak_text:"nav_ym_myCampaigns" %}My campaigns{% endfilter %}</a>
+      <a href="https://youmoveeurope.eu/{{page.lang.iso_code}}/help">{% filter ak_text:"nav_ym_help" %}Help{% endfilter %}</a>
+    </nav>
+  </div>
+</header>
