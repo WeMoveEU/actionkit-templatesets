@@ -7,7 +7,7 @@
               aria-expanded="false"
               id="dropdownsiblings"
               class="btn btn-default dropdown-toggle">
-				      <img src="https://act.wemove.eu/images/icon-translate.svg">
+				      <img src="https://strapi.wemove.eu/uploads/icon_translate_eeaca63123.svg">
 	            {% for translated_page in translations %}
 	                {% if translated_page.id == page.id %}
 										{{ translated_page.lang.name|default:"English" }}
