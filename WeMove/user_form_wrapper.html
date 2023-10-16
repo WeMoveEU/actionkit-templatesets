@@ -17,20 +17,16 @@
 <div id="known_user" class="known-member">
   <div class="known-member-inner">
     <p>
-      {% filter ak_text:"knownUser_signingAs" %}Sign this as {% endfilter %}
-
-      <div style="display: none;">
       {% if page.type == 'Letter'%}
-        letterona
+        {% filter ak_text:"knownUser_writingAs" %}Writing this as {% endfilter %}
       {% else %}
-        {{ page.type }}
+        {% filter ak_text:"knownUser_signingAs" %}Sign this as {% endfilter %}
       {% endif %}
-      </div>
-
-
       <strong id="known_user_name" data-user-full-name></strong>
       <br/>
+
       {% filter ak_text:"knownUser_notYou_button" %}Not you?{% endfilter %}
+
       <a href="#" onclick="return actionkit.forms.logOut()">
         {% filter ak_text:"clickHere_button" %}Not you?{% endfilter %}
       </a>
@@ -39,7 +35,13 @@
 
 	{% if previous_actions and previous_actions != "0" %}
 	  <div class="already-signed" style="display: block">
-	    <p>{% filter ak_text:"alreadySigned_link" %}It seems you have already signed. However, you can do more. Click below for next step.{% endfilter %}</p>
+	    <p>
+        {% if page.type == 'Letter'%}
+        {% filter ak_text:"alreadyWrote_link" %}It seems you have already wrote. However, you can do more. Click below for next step.{% endfilter %}
+        {% else %}
+          {% filter ak_text:"alreadySigned_link" %}It seems you have already signed. However, you can do more. Click below for next step.{% endfilter %}
+        {% endif %}
+      </p>
 
 	    <a
 	      class="btn btn-danger"
