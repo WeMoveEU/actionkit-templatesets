@@ -1,9 +1,9 @@
 {% if page.goal %}
 
     <!-- Begin progress meter code.-->
-    <div id="progress_{{ instance }}" class="ak-progress-meter"></div>
+    <div id="progress" class="ak-progress-meter"></div>
 
-    <script type="text/ak-template" for="progress_{{ instance }}"">
+    <script type="text/ak-template" for="progress">
         [% with (progress) { %]
             [% if ( goal && total ) { %]
                 [% progress.current = goal_type == 'dollars' ? total.dollars : goal_type == 'money' ? total.money : total.actions; %]
