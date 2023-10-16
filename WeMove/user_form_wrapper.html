@@ -37,7 +37,7 @@
 	  <div class="already-signed" style="display: block">
 	    <p>
         {% if page.type == 'Letter'%}
-        {% filter ak_text:"alreadyWrote_link" %}It seems you have already wrote. However, you can do more. Click below for next step.{% endfilter %}
+        {% filter ak_text:"alreadyWrote_link" %}It seems you have already wrote this letter. However, you can do more. Click below for next step.{% endfilter %}
         {% else %}
           {% filter ak_text:"alreadySigned_link" %}It seems you have already signed. However, you can do more. Click below for next step.{% endfilter %}
         {% endif %}
