@@ -18,6 +18,16 @@
   <div class="known-member-inner">
     <p>
       {% filter ak_text:"knownUser_signingAs" %}Sign this as {% endfilter %}
+
+      <div style="display: none;">
+      {% if page.type == 'letter'%}
+        letter
+      {% else %}
+        {{ page.type }}
+      {% endif %}
+      </div>
+
+
       <strong id="known_user_name" data-user-full-name></strong>
       <br/>
       {% filter ak_text:"knownUser_notYou_button" %}Not you?{% endfilter %}
