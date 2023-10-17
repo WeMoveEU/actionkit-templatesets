@@ -8,10 +8,62 @@
 {% load_css %}
     //donate-ui.not-a2.eu/donate-main.css
 {% end %}
+{% comment %} Bootstrap conflict fixes {% endcomment %}
 <style type="text/css">
-html, body {
-    font-size: 14px;
-}
+    #donate-widget {
+        font-weight: 400 !important;
+    }
+    #donate-widget .gap-4 {
+        gap: 1rem !important;
+    }
+    #donate-widget .mb-3 {
+        margin-bottom: 0.75rem !important;
+    }
+    #donate-widget .mb-2 {
+        margin-bottom: 0.5rem !important;
+    }
+    #donate-widget .my-3 {
+        margin-top: 0.75rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+    #donate-widget .py-4 {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
+    #donate-widget .px-5 {
+        padding-left: 1.25rem !important;
+        padding-right: 1.25rem !important;
+    }
+    #donate-widget .px-3 {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+    #donate-widget .px-4 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    #donate-widget .p-5 {
+        padding: 1.25rem !important;
+    }
+    #donate-widget .pb-4 {
+        padding-bottom: 1rem !important;
+    }
+    #donate-widget .text-primary {
+        color: #bd39db !important;
+    }
+    #donate-widget .bg-primary {
+        background-color: #bd39db !important;
+    }
+    #donate-widget .disabled\:bg-primary-400:disabled {
+        background-color: #ebc3f4 !important;
+    }
+    #donate-widget input, #donate-widget select {
+        font-family: unset !important;
+        font-weight: unset !important;
+    }
+    #donate-widget .list-none {
+        list-style-type: none !important;
+    }
 </style>
 {% endblock %}
 
