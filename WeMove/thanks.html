@@ -26,7 +26,7 @@
 
 {% if actionkit_user %}
     {% if recurring_update or recurring_cancel %}
-        <div class="ak-grid-row">
+        <div class="ak-grid-row" style="padding: 0 1rem;">
             <div class="ak-grid-col ak-grid-col-12-of-12">
                 <p>
                     {% filter ak_text:"logged_in_as" %}You are logged in as{% endfilter %} <a href="/me/">{{ actionkit_user.name|escape }}</a>.
@@ -57,7 +57,7 @@
     </div>
 {% else %}
 
-    <div class="ak-grid-row">
+    <div class="ak-grid-row" style="padding: 0 1rem;">
         <div class="ak-grid-col ak-grid-col-6-of-12">
             <h1>
                 {% if page.followup.send_taf %}
