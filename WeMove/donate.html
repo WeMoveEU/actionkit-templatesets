@@ -126,6 +126,13 @@
 </script>
 {% endblock scriptadditions %}
 
+{% block cookiebot_js %}
+{% comment %}
+Disable loading of cookiebot because it's throwing errors, then the Stripe dependency won't load
+{% endcomment %}
+{% endblock cookiebot_js %}
+
+
 {% block content %}
 <section
   id="donate-widget"
