@@ -31,32 +31,6 @@
 					<legend class="accessiblyHidden">Form to send tweet</legend>
 					<div id="aria_live_errors" aria-live="assertive" role="alert" class="accessiblyHidden"></div>
 
-					{% if page.custom_fields.call_page_mode == 'tweet' %}
-
-					<script>
-						const twitter_targets_txt = {{ page.custom_fields.twitter_targets|json }};
-						const twitter_messages_txt = {{ page.custom_fields.twitter_messages|json }};
-						const twitter_fallback_txt = {{ page.custom_fields.twitter_fallback|json }};
-						var page_targets;
-						$(actionkit.form).bind('actionkit.ready', prepare_tweet );
-
-						function prepare_tweet () {
-							page_targets = actionkit.context.targets ? actionkit.context.targets.targets : [];
-							$('textarea[name="tweet_text"]').val(
-								choose_a_tweet()
-							);
-						}
-
-						function choose_a_tweet () {
-							const twitter_messages = twitter_messages_txt.split(/[\r\n]+/);
-							const twitter_fallback = twitter_fallback_txt.split(/[\r\n]+/);
-							const messages = twitter_messages.sort( ()=>Math.random()-0.5 ).concat( twitter_fallback );
-
-
-						}
-					</script>
-					{% endif %}
-
 					{% include "./progress_meter.html" %}
 
 					<form class="ak-form ak-styled-fields" name="act" method="POST" action="/act/" accept-charset="utf-8">
@@ -227,32 +201,102 @@
 {% endblock %}
 
 {% block script_additions %}
-<script type="text/javascript">
-	$(window).load(function() {
-		$('#target_checkboxes').appendTo('div#who_called');
 
-		var $window = $(window);
-		function call_page_steps_mobile() {
-			var windowSize = $window.width();
-			if (windowSize < 480) {
-				$('.ak-steps-area h3').addClass('clickable');
-			} else {
-				$('.ak-steps-area h3').removeClass('clickable');
-				$('.ak-steps-area h3').each( function () {
-					$(this).siblings('div').show();
-				});
-			}
+	{% if page.custom_fields.call_page_mode == 'tweet' %}
 
+	<script>
+		const targets_txt = {{ page.custom_fields.twitter_targets|json }};
+		const messages_txt = {{ page.custom_fields.twitter_messages|json }};
+		const fallback_txt = {{ page.custom_fields.twitter_fallback|json }};
+	
+		var page_targets;
+		$(actionkit.form).bind('actionkit.ready', prepare_tweet );
+		setTimeout( prepare_tweet, 1000 );
+
+		function prepare_tweet () {
+			page_targets = actionkit.context.targets ? actionkit.context.targets.targets : [];
+			$('textarea[name="tweet_text"]').val(
+				choose_a_tweet()
+			);
+			$('.btn-primary').attr('disabled', false);
+			$('.btn-primary').on('click', function () {
+				const tweet = $('textarea[name="tweet_text"]').val();
+				const params = new URLSearchParams({ text: tweet }).toString();
+				const handle = window.open( 'https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320' );
+			} );
 		}
-		$('.ak-steps-area').on('click', 'h3.clickable', function(e) {
-			e.stopPropagation();
-			$(this).toggleClass('active');
-			$(this).siblings('div').stop().slideToggle('fast');
+
+		function choose_a_tweet () {
+			const target_lines = targets_txt.split(/[\r\n]+/);
+			const target_data = target_lines.map( (s) => s.split(/\s+/) ).map( (s) => [ s.shift(), s.join(' ') ] );
+			const page_target_data = page_targets.map( 
+				(t) => [t.twitter, t.title_informal_full ] 
+			);
+		
+			const combined_targets = target_data.concat( page_target_data ).map(
+				(t) => [ t[0] ? '@' + t[0] : null, t[1] ]
+			);
+			const tweet_targets = combined_targets.filter( 
+				(t) => t[0]
+			);
+			const random_targets = tweet_targets.sort( ()=>Math.random()-0.5 );
+
+			const first_target = tweet_targets[0] || [];
+			const random_target = random_targets[0] || [];
+		
+			const variables = {
+				handle: first_target[0],
+				name: first_target[1],
+				handles: combined_targets.map( (t) => t[0] ).join( ', ' ),
+				targets: combined_targets,
+				rhandle: random_target[0],
+				rname: random_target[1],
+				rhandles: random_targets.map( (t) => t[0] ).join( ', ' ),
+				rtargets: random_targets,
+			};
+		
+			const messages = messages_txt.split(/[\r\n]+/);
+			const fallback = fallback_txt.split(/[\r\n]+/);
+			const randomized = messages.sort( ()=>Math.random()-0.5 ).concat( fallback );
+			randomized.push("An important message for [%= handles %]: ");
+
+			for ( const template of randomized ) {
+				var message = actionkit.utils.template( template, variables );
+				if ( message.match(/\S/) ) {
+					return message
+				}
+			}
+			return "No matching tweets were found"
+		}
+		</script>
+		{% endif %}
+
+	<script type="text/javascript">
+		$(window).load(function() {
+			$('#target_checkboxes').appendTo('div#who_called');
+
+			var $window = $(window);
+			function call_page_steps_mobile() {
+				var windowSize = $window.width();
+				if (windowSize < 480) {
+					$('.ak-steps-area h3').addClass('clickable');
+				} else {
+					$('.ak-steps-area h3').removeClass('clickable');
+					$('.ak-steps-area h3').each( function () {
+						$(this).siblings('div').show();
+					});
+				}
+
+			}
+			$('.ak-steps-area').on('click', 'h3.clickable', function(e) {
+				e.stopPropagation();
+				$(this).toggleClass('active');
+				$(this).siblings('div').stop().slideToggle('fast');
+			});
+
+			$(window).on('resize', call_page_steps_mobile);
+			call_page_steps_mobile();
+
 		});
-
-		$(window).on('resize', call_page_steps_mobile);
-		call_page_steps_mobile();
-
-	});
-</script>
+	</script>
 {% endblock %}
