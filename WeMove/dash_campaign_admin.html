@@ -30,7 +30,7 @@
 	a.dash-icon-btn { border: 1px solid #27BBDD; border-radius: 99px; padding: 0 4px;}
 
 	.form-row-CheckboxInput .form-control label { float: none }
-
+ 
 	.button-row {
 		margin-top: 0.5em;
 	}
@@ -48,21 +48,30 @@
 
 </style>
 
-{% store as campaign %}{% if campaign %}{{ campaign }}{% else %}{{ searched_name }}{% endif %}{% endstore %}
 <form method="GET" id="campaign_search">
 	Campaign:
-	<input id="campaign-search" type="search" name="campaign" value="{{ campaign }}" placeholder="Type a name to search or create a campaign" size="40">
-	<a class="clear-search" href="?" style="{% if not campaign %}display: none{% endif %}">&times;</a>
+	<input type="search" name="searched_name" value="{{searched_name}}" placeholder="Type a name to search or create a campaign" size="40">
+	{% if searched_name %}
+		<a class="clear-search" href="?">&times;</a>
+	{% endif %}
 	<input type="submit" value="&#x1F50D; Search">
 </form>
 
-<section id="campaign-list" style="display: none">
+{% if not searched_name %}
+
+<section id="campaign-list">
 	<h2>Campaigns</h2>
 	<table class="changelist-table">
 	</table>
 </section>
 
-<section id="campaign-detail" style="display: none">
+<script>
+	$( function () {
+		showCampaignList();
+	} );
+</script>
+
+{% else %}
 
 <section id="campaign_matches">
 	<h2>Matching Campaigns</h2>
@@ -89,14 +98,6 @@
 	<div id="camp_name" class="form-row form-row-CheckboxInput clearfix">
 		<div class="form-label col span_1_of_4">
 			<label>Name: </label>
-		</div>
-		<div class="form-control col span_3_of_4">
-			<span></span>
-		</div>
-	</div>
-	<div id="camp_title" class="form-row form-row-CheckboxInput clearfix">
-		<div class="form-label col span_1_of_4">
-			<label>Title: </label>
 		</div>
 		<div class="form-control col span_3_of_4">
 			<span></span>
@@ -218,7 +219,7 @@
 		<div class="form-row">
 			<div class="form-label col span_1_of_4"><label>Internal Name: </label></div>
 			<div class="form-control col span_3_of_4">
-				<input type="text" name="notes" value="">-XX<br/>
+				<input type="text" name="notes" value="{{searched_name}}-petition">-XX<br/>
 				<p class="help">This will be used to also initialise the URL slug (ActionKit's "short name"), so don't forget to change it!</p>
 			</div>
 		</div>
@@ -271,14 +272,12 @@
 		</div>
 		<div class="form-row">
 			<div class="form-label col span_1_of_4"><label>Name: </label></div>
-			<div class="form-control col span_3_of_4"><input type="text" name="notes" value="">-XX</div>
+			<div class="form-control col span_3_of_4"><input type="text" name="notes" value="{{searched_name}}">-XX</div>
 		</div>
 		<button id="create_mailings" class="button-main">Create Mailings</button>
 	</div>
 </fieldset>
 </form>
-
-</section>
 
 <div>
 	<fieldset id="api_debugging" class="collapse collapsed">
@@ -294,35 +293,16 @@
 </style>
 
 <script>
-
-	"use strict";
-
-	////////////////////////////////////////////////////////////////////
-	// Initial page load
-
+	var searched_name = "{{searched_name}}";
+	searched_name = searched_name.replace(/^\s+|\s+$/g, '');
 	$( function () {
-		fetchCampaigns().done( function() {
-			readLanguages();
-			readPageModels();
-			readMailingModels();
-
-			readFieldValues('moment', 'mailing').done(function() {
-				$('#mailing_form input[name=moment]').on('click', function() {
-					$('#mailing_form input[name=notes]').val(campaign.name + "-" + this.value);
-				});
-				$('#mailing_form input[name=moment]:first').attr('checked', 'checked');
-			});
-			readFieldValues('ask_type', 'mailing', 'sign');
-			readFieldValues('ask_details', 'mailing');
-			readFieldValues('target', 'mailing');
-
-			initialize_display( '{{campaign}}' );
-		});
+		readCampaigns(searched_name);
 	} );
+</script>
 
-	////////////////////////////////////////////////////////////////////
-	// Globals
+{% endif %}
 
+<script>
 	var apiRoot = "/rest/v1";
 	var models = {campaign_name: "models"};
 	var raw_campaigns = null;
@@ -330,713 +310,640 @@
 	var languages = {};
 	var coreLanguages = ["Dutch", "English", "French", "German", "Italian", "Polish", "Spanish"];
 	var multilingual_campaigns = {};
+</script>
 
-	////////////////////////////////////////////////////////////////////
-	// API Interface
+<script>
 
-	function api_log() {
-		console.log( "AK API:", ...arguments );
-		$('<div>').text( [...arguments].map(
-			(i) => typeof(i) == 'string' ? i : JSON.stringify(i, null, 2)
-		).join(' ') ).appendTo('#api-log');
-	}
+function api_log() {
+	console.log( "AK API:", ...arguments );
+	$('<div>').text( [...arguments].map( 
+		(i) => typeof(i) == 'string' ? i : JSON.stringify(i, null, 2) 
+	).join(' ') ).appendTo('#api-log');
+}
 
-	function api_error() {
-		api_log( 'Error:', ...arguments );
-		alert( [...arguments].map(
-			(i) => typeof(i) == 'string' ? i : JSON.stringify(i, null, 2)
-		).join(' ') );
-	}
+function api_error() {
+	api_log( 'Error:', ...arguments );
+	alert( [...arguments].map( 
+		(i) => typeof(i) == 'string' ? i : JSON.stringify(i, null, 2) 
+	).join(' ') );
+}
 
-	$('#api-log').on('click', 'div', function () {
-		$(this).toggleClass('expanded')
-	} );
+$('#api-log').on('click', 'div', function () { 
+	$(this).toggleClass('expanded') 
+} );
 
-	function api(method, path, data) {
-		var data_string = JSON.stringify(data);
-		api_log("Call:", method, path, data_string);
-		return $.ajax({
-			type: method,
-			url: `${apiRoot}/${path}`,
-			contentType: 'application/json',
-			processData: ( method == 'GET' ? true : false ),
-			data: ( method == 'GET' ? data : JSON.stringify(data) )
-		}).done(function(result) {
-			api_log("Results:", method, path, data_string, '=>', result);
-		}).fail(function(xhr, rstatus, rerror) {
-			api_error("Error:", method, path, data_string, rstatus, rerror, xhr.status, xhr.responseText);
+function api(method, path, data) {
+	var data_string = new URLSearchParams(data).toString();
+	api_log("Call:", method, path, data_string);
+	return $.ajax({
+		type: method,
+		url: `${apiRoot}/${path}`,
+		contentType: 'application/json',
+		processData: ( method == 'GET' ? true : false ),
+		data: ( method == 'GET' ? data : JSON.stringify(data) )
+	}).done(function(result) {
+		api_log("Results:", method, path, data_string, '=>', result);
+	}).fail(function(xhr, rstatus, rerror) {
+		api_error("Error:", method, path, data_string, rstatus, rerror, xhr.status, xhr.responseText);
+	});
+}
+
+function readLanguages() {
+	api('GET', "language/", { _limit: 100 } ).done(function(result) {
+		result.objects.forEach(function(lang) {
+			window.languages[lang.resource_uri] = lang;
+			if (coreLanguages.includes(lang.name)) {
+				var checked_attr = ( 1 || lang.iso_code == 'en' || lang.iso_code == 'fr' ) ? 'checked="checked"' : '';
+				$('.language-picker .form-control').append(
+					` <label><input type="checkbox" value="${lang.resource_uri}" data-iso_code="${lang.iso_code.toUpperCase()}" ${checked_attr}> ${lang.name}</label>`
+				);
+			}
 		});
-	}
+	});
+}
 
-	////////////////////////////////////////////////////////////////////
-	// Read Global State
+function readCampaigners(default_value) {
+	api('POST', 'report/run/ak_staff_list', { format: 'json' } ).done(function(result) {
+		var $select = $('.lead_campaigner-picker .form-control select');
+		result.map( row => row[0]).sort().forEach(function(staff_name) {
+			if ( staff_name ) {
+				$select.append(
+					` <option value="${staff_name}">${staff_name}</option>`
+				);
+			}
+		});
+		if (default_value) {
+			$select.val(default_value);
+		}
+	});
+}
 
-	function fetchCampaigns() {
-		return api('GET', "allowedpagefield/campaign")
-		.done(function(results) {
-			raw_campaigns = results.field_choices;
-			campaign_list = results.choices.map(
-				(opt) => ( {id: opt[0], name: opt[1]} )
-			).sort( (c1,c2) => c2.id - c1.id );
-			window.models.campaign = campaign_list.find(
-				(camp) => camp.name == window.models.campaign_name
-			);
+function readPageModels() {
+	var prefix = window.models.campaign_name + ":";
+	$.when(
+		api('GET', "multilingualcampaign/", { name__startswith: prefix }),
+		api('GET', "page/", { field__name: 'campaign', field__value: window.models.campaign.id, _limit: 100 })
+	).done(function(mcamps, pages) {
+		mcamp_types = {};
+		mcamps[0].objects.forEach(function(mcamp) {
+			const action_type = mcamp.name.slice(prefix.length);
+			mcamp_types[mcamp.resource_uri] = action_type;
+		});
+		pages[0].objects.forEach(function(page) {
+			const action_type = mcamp_types[page.multilingual_campaign];
+			if (action_type) {
+				if ( page.status != 'model' ) {
+					console.log(`Page ${page.id} associated with model campaign but is not a model`)
+				} else {
+					if (!window.models[action_type]) {
+						window.models[action_type] = {};
+					}
+					window.models[action_type][page.language] = page.id;
+				}
+			}
+		});
+	});
+}
+
+var mailing_models = {};
+function readMailingModels() {
+	api('GET', "mailer/", { status: 'model' }).done( function(result) {
+		result.objects.forEach( function ( mailmodel ) {
+			const model_id = mailmodel.id;
+			const subject = mailmodel.subjects[0];
+			const match = subject.match(/^(.*?) *[-] *(\w\w)$/);
+			if ( match ) {
+				const lang_code = match[2];
+				const mailtype = match[1];
+				if ( ! mailing_models[ mailtype ] ) {
+					mailing_models[ mailtype ] = {};
+				}
+				mailing_models[ mailtype ][ lang_code ] = model_id;
+			}
 		} );
-	}
-
-	function readLanguages() {
-		api('GET', "language/", { _limit: 100 } ).done(function(result) {
-			result.objects.forEach(function(lang) {
-				window.languages[lang.resource_uri] = lang;
-				if (coreLanguages.includes(lang.name)) {
-					var checked_attr = ( 1 || lang.iso_code == 'en' || lang.iso_code == 'fr' ) ? 'checked="checked"' : '';
-					$('.language-picker .form-control').append(
-						` <label><input type="checkbox" value="${lang.resource_uri}" data-iso_code="${lang.iso_code.toUpperCase()}" ${checked_attr}> ${lang.name}</label>`
-					);
-				}
-			});
+		const new_select = $('<select name="mailmodel"> <option value="">Blank Mailing</option>');
+		Object.keys(mailing_models).forEach(function(model_name) {
+			new_select.append(
+				` <option value="${model_name}">${model_name}</option>`
+			);
 		});
-	}
+		$('#mailing_form .mailmodel-picker .form-control').append( new_select );
+	} );
+}
 
-	function readCampaigners(default_value) {
-		api('POST', 'report/run/ak_staff_list', { format: 'json' } ).done(function(result) {
-			var $select = $('.lead_campaigner-picker .form-control select');
-			result.map( row => row[0]).sort().forEach(function(staff_name) {
-				if ( staff_name ) {
-					$select.append(
-						` <option value="${staff_name}">${staff_name}</option>`
-					);
-				}
-			});
-			if (default_value) {
+function readFieldValues(field_name, entity, default_value) {
+	return api('GET', `allowed${entity}field/${field_name}`).done(function(field) {
+		var $formControl = $(`.${field_name}-picker .form-control`);
+		var $select = $formControl.find('select');
+		field.choices.forEach(function(opt) {
+			if ($select.length) {
+				$select.append(`<option value="${opt[0]}">${opt[1]}</option>`);
+			} else {
+				$formControl.append(
+					` <label><input type="radio" name="${field_name}" value="${opt[0]}"> ${opt[1]}</label>`
+				);
+			}
+		});
+		if (default_value) {
+			if ($select.length) {
 				$select.val(default_value);
-			}
-		});
-	}
-
-	function readPageModels() {
-		var prefix = window.models.campaign_name + ":";
-		$.when(
-			api('GET', "multilingualcampaign/", { name__startswith: prefix }),
-			api('GET', "page/", { field__name: 'campaign', field__value: window.models.campaign.id, _limit: 100 })
-		).done(function(mcamps, pages) {
-			var mcamp_types = {};
-			mcamps[0].objects.forEach(function(mcamp) {
-				const action_type = mcamp.name.slice(prefix.length);
-				mcamp_types[mcamp.resource_uri] = action_type;
-			});
-			pages[0].objects.forEach(function(page) {
-				const action_type = mcamp_types[page.multilingual_campaign];
-				if (action_type) {
-					if ( page.status != 'model' ) {
-						console.log(`Page ${page.id} associated with model campaign but is not a model`)
-					} else {
-						if (!window.models[action_type]) {
-							window.models[action_type] = {};
-						}
-						window.models[action_type][page.language] = page.id;
-					}
-				}
-			});
-		});
-	}
-
-	var mailing_models = {};
-	function readMailingModels() {
-		api('GET', "mailer/", { status: 'model' }).done( function(result) {
-			result.objects.forEach( function ( mailmodel ) {
-				const model_id = mailmodel.id;
-				const subject = mailmodel.subjects[0];
-				const match = subject.match(/^(.*?) *[-] *(\w\w)$/);
-				if ( match ) {
-					const lang_code = match[2];
-					const mailtype = match[1];
-					if ( ! mailing_models[ mailtype ] ) {
-						mailing_models[ mailtype ] = {};
-					}
-					mailing_models[ mailtype ][ lang_code ] = model_id;
-				}
-			} );
-			const new_select = $('<select name="mailmodel"> <option value="">Blank Mailing</option>');
-			Object.keys(mailing_models).forEach(function(model_name) {
-				new_select.append(
-					` <option value="${model_name}">${model_name}</option>`
-				);
-			});
-			$('#mailing_form .mailmodel-picker .form-control').append( new_select );
-		} );
-	}
-
-	function readFieldValues(field_name, entity, default_value) {
-		return api('GET', `allowed${entity}field/${field_name}`).done(function(field) {
-			var $formControl = $(`.${field_name}-picker .form-control`);
-			var $select = $formControl.find('select');
-			field.choices.forEach(function(opt) {
-				if ($select.length) {
-					$select.append(`<option value="${opt[0]}">${opt[1]}</option>`);
-				} else {
-					$formControl.append(
-						` <label><input type="radio" name="${field_name}" value="${opt[0]}"> ${opt[1]}</label>`
-					);
-				}
-			});
-			if (default_value) {
-				if ($select.length) {
-					$select.val(default_value);
-				} else {
-					$(`input[name="${field_name}"][value="${default_value}"]`)
+			} else {
+				$(`input[name="${field_name}"][value="${default_value}"]`)
 					.attr('checked', 'checked');
-				}
-			}
-		});
-	}
-
-	function readMultilingualCampaigns(prefix) {
-		return api('GET', "multilingualcampaign/", { name__startswith: prefix } ).done(function(camps) {
-			const step_picker = $('.step-picker .form-control select');
-			step_picker.find('option:not(:first-child)').remove();
-			camps.objects.forEach(function(camp) {
-				multilingual_campaigns[camp.resource_uri] = camp.name;
-				step_picker.append(
-					` <option value="${camp.resource_uri}">After ${camp.name}</option>`
-				);
-			});
-		});
-	}
-
-	////////////////////////////////////////////////////////////////////
-	// Navigation between List / Detail / Create views
-
-	function initialize_display(search_q) {
-		search_q = search_q.replace(/^\s+|\s+$/g, '');
-		if ( ! search_q ) {
-			displayMatches( 'All Campaigns', campaign_list )
-		} else {
-			var exact = campaign_list.find(function(camp) {
-				return camp.name == search_q;
-			});
-			if (exact) {
-				displayCampaign(exact);
-			} else {
-				var matches = campaign_list.filter(function(camp) {
-					return camp.name.includes(search_q);
-				});
-				if (matches.length == 0) {
-					displayCreateForm(search_q);
-				} else {
-					displayMatches( `Campaigns matching ${search_q}`, matches);
-				}
 			}
 		}
-	}
+	});
+}
 
-	function reinitialize_display( search_q ) {
-		history.pushState( { campaign: search_q }, null, `?campaign=${search_q}` );
-		$('input[name="campaign"]').val(search_q);
-		$('.clear-search').css( 'display', ( search_q ? '' : 'none' ) );
-		initialize_display( search_q );
-	}
+function fetchCampaigns() {
+	return api('GET', "allowedpagefield/campaign")
+		.done(function(field) {
+			raw_campaigns = field.field_choices;
+			campaign_list = field.choices.map((opt) => ({id: opt[0], name: opt[1]}))
+												.sort( (c1,c2) => c2.id - c1.id );
+		} );
+}
 
-	$('#campaign-search').on( 'input', function (event) {
-		const search_q = $(this).val();
+function readCampaigns(searched_name) {
+	fetchCampaigns().done( function() {
 		var matches = campaign_list.filter(function(camp) {
-			return camp.name.includes(search_q);
+			return camp.name == searched_name;
 		});
-		displayMatches( `Campaigns matching ${search_q}`, matches);
-	} );
+		if (matches.length == 1) {
+			model_campaign = campaign_list.find((camp) => camp.name == window.models.campaign_name);
+			window.models.campaign = model_campaign;
+			displayCampaign(matches[0]);
+		} else {
+			matches = campaign_list.filter(function(camp) {
+				return camp.name.includes(searched_name);
+			});
+			if (matches.length == 0) {
+				displayCreateForm(searched_name);
+			} else {
+				displayMatches(matches);
+			}
+		} 
+	});
+}
 
-	$('#campaign_search').on( 'submit', function (event) {
-		event.preventDefault();
-		reinitialize_display( $('#campaign-search').val() );
-		return false;
-	} );
-
-	$('a.clear-search').on( 'click', function (event) {
-		event.preventDefault();
-		reinitialize_display('');
-		return false
-	} );
-
-	$('#campaign-list table').on('click', 'a[data-campaign-name]', function (event) {
-		event.preventDefault();
-		var campaign_name = $(this).data('campaign-name');
-		reinitialize_display( campaign_name );
-	} );
-
-	$(window).on('popstate', function (event) {
-		const state = event.originalEvent.state;
-		if ( state && 'campaign' in state ) {
-			reinitialize_display( state.campaign );
-		}
-	} );
-
-	function reload_dashboard ( campaign_name ) {
-		setTimeout( function () {
-			document.location = "?campaign=" + campaign_name
-		}, 1000 )
-	}
-
-	////////////////////////////////////////////////////////////////////
-	// List View
-
-	function displayMatches(title, matches) {
-		$('#campaign-list').show();
-		$('#campaign-detail').hide();
-		$('#campaign-list h2').text( title );
+function showCampaignList() {
+	fetchCampaigns().done( function() {
 		const table = $('#campaign-list table');
-		table.find('tr').remove();
-		matches.forEach( function(cmp) {
+		campaign_list.forEach( function(cmp) {
 			table.append(
-				` <tr class="item"><td><a data-campaign-name="${cmp.name}" href="?campaign=${cmp.name}">${cmp.name}</a></td></tr>`
+				` <tr class="item"><td><a href="?searched_name=${cmp.name}">${cmp.name}</a></td></tr>`
 			);
 		} );
-	}
+	} );
+}
 
-	////////////////////////////////////////////////////////////////////
-	// Detail View
-
-	function displayCampaign(camp) {
-		api('GET', "page/" + camp.id).done(function(page) {
-			$('#campaign-detail').show();
-			$('#campaign-list').hide();
-			$('#campaign_form').hide();
-			$('#not_found').hide();
-			$('#add_step').show();
-			$('#page_form').hide();
-			$('#add_mailing').show();
-			$('#mailing_form').hide();
-			$('#page_form input[name="notes"]').val( `${camp.name}-petition` );
-			$('#mailing_form input[name="notes"]').val( `${camp.name}-petition` );
-			$('#campaign_output #camp_id span').text(camp.id);
-			$('#campaign_output #camp_id a, #campaign_output #camp_custom_field_names a').attr('href', `/admin/core/page/${camp.id}/change`);
-			$('#campaign_output #camp_name span').text(camp.name);
-			$('#campaign_output #camp_title span').text(page.title);
-			$('#campaign_output #camp_topic span').text(page.fields.topic);
-			$('#campaign_output #camp_campaign_type span').text(page.fields.campaign_type);
-			$('#campaign_output #camp_lead_campaigner span').text(page.fields.lead_campaigner);
-			const skipped_field_names = { campaign: 1, topic:1, campaign_type: 1, lead_campaigner: 1 };
-			$('#campaign_output #camp_custom_field_names span').text(
-				Object.keys(page.fields).filter( (k) => ! skipped_field_names[k] ).join(", ") || 'None'
+function readMultilingualCampaigns(prefix) {
+	return api('GET', "multilingualcampaign/", { name__startswith: prefix } ).done(function(camps) {
+		camps.objects.forEach(function(camp) {
+			multilingual_campaigns[camp.resource_uri] = camp.name;
+			$('.step-picker .form-control select').append(
+				` <option value="${camp.resource_uri}">After ${camp.name}</option>`
 			);
-			$('#campaign_output').show();
-			$('#open_edit').on('click', function() {
-				displayEditForm(page);
-				return false;
-			});
 		});
-		readMultilingualCampaigns(camp.name).done(function() {
-			displayPages(camp);
-			displayMailings(camp);
-		});
-	}
+	});
+}
 
-	function displayPages(campaign) {
-		api('GET', "page/", { field__name: 'campaign', field__value: campaign.id })
-		.done(function(result) {
-			var lang_journeys = {};
-			result.objects.forEach(function(page) {
-				if (page.id != campaign.id) {
-					const language = page.language || "/rest/v1/language/100/";
-					if (!lang_journeys[language]) {
-						lang_journeys[language] = [];
-					}
-					lang_journeys[language].push(page);
+function displayCreateForm(default_name) {
+	readFieldValues('topic', 'page');
+	readFieldValues('campaign_type', 'page');
+	readCampaigners();
+	$('#save_campaign').on('click', saveCampaignPage);
+	$('#campaign_form').show().find('#name').val(default_name);
+	$('#not_found').show();
+}
+
+function displayEditForm(page) {
+	readFieldValues('topic', 'page', page.fields.topic);
+	readFieldValues('campaign_type', 'page', page.fields.campaign_type);
+	readCampaigners(page.fields.lead_campaigner);
+	$('#campaign_form').data('campaign_id', page.id);
+	$('#campaign_form #name').val(page.name).attr('readonly', 'readonly');
+	$('#save_campaign').on('click', saveCampaignPage);
+	$('#campaign_output').hide();
+	$('#campaign_form').show();
+}
+
+function displayCampaign(camp) {
+	readLanguages();
+	readPageModels();
+	readMailingModels();
+	api('GET', "page/" + camp.id).done(function(page) {
+		$('#campaign_output #camp_id span').text(camp.id);
+		$('#campaign_output #camp_id a, #campaign_output #camp_custom_field_names a').attr('href', `/admin/core/page/${camp.id}/change`);
+		$('#campaign_output #camp_name span').text(camp.name);
+		$('#campaign_output #camp_topic span').text(page.fields.topic);
+		$('#campaign_output #camp_campaign_type span').text(page.fields.campaign_type);
+		$('#campaign_output #camp_lead_campaigner span').text(page.fields.lead_campaigner);
+		const skipped_field_names = { campaign: 1, topic:1, campaign_type: 1, lead_campaigner: 1 };
+		$('#campaign_output #camp_custom_field_names span').text(
+			Object.keys(page.fields).filter( (k) => ! skipped_field_names[k] ).join(", ") || 'None'
+		);
+		$('#campaign_output').show();
+		$('#open_edit').on('click', function() {
+			displayEditForm(page);
+			return false;
+		});
+	});
+	readMultilingualCampaigns(camp.name).done(function() {
+		displayPages(camp);
+		displayMailings(camp);
+	});
+}
+
+function displayPages(campaign) {
+	api('GET', "page/", { field__name: 'campaign', field__value: campaign.id })
+	.done(function(result) {
+		var pages = {};
+		result.objects.forEach(function(page) {
+			if (page.id != campaign.id) {
+				const language = page.language || "/rest/v1/language/100/";
+				if (!pages[language]) {
+					pages[language] = [];
 				}
-			});
-			var langs = Object.keys(lang_journeys);
-			if (! langs.length) {
-				$('#pages_output table').html('<tr><td>No action pages yet</td></tr>');
-			} else {
-				sortJourney(lang_journeys);
-				langs.forEach(function(lang) {
-					var table_row = $(
-						`<tr><th scope="row">${languages[lang].name}</th>`
-						+ "<td></td>"
-						+ "</tr>"
-					);
-					var lang_journey_list = table_row.find('td');
-					lang_journeys[lang].forEach(function(journey) {
-						lang_journey_list.append(
-							'<div class="journey">' +
-							journey.map(
-								(p) => `<span>${pageLink(p)}</span>`
-							).join(' <span class="next-arrow">➡</span> ')
-							+ '</div>'
-						)
-					});
-					$('#pages_output table').append( table_row );
+				pages[language].push(page);
+			}
+		});
+		var langs = Object.keys(pages);
+		if (langs.length) {
+			sortJourney(pages);
+			langs.forEach(function(lang) {
+				var table_row = $(
+					`<tr><th scope="row">${languages[lang].name}</th>`
+					+ "<td></td>"
+					+ "</tr>"
+				);
+				var lang_journey_list = table_row.find('td');
+				pages[lang].forEach(function(journey) {
+					lang_journey_list.append( 
+						'<div class="journey">' + 
+						journey.map(
+							(p) => `<span>${pageLink(p)}</span>`
+						).join(' <span class="next-arrow">➡</span> ') 
+						+ '</div>'
+					)
 				});
-			}
-			window.journeys = lang_journeys;
-			if (langs.length) {
-				$('#page_form input[value=share]').removeAttr('disabled');
-			}
-			$('#page_form').data('campaign', campaign);
-			$('#pages_output').show();
-			$('#page_form input[name=action_type]').on('click', function() {
-				$('#page_form input[name=notes]').val(campaign.name + "-" + this.value);
+				$('#pages_output table').append( table_row );
 			});
-			$('#create_pages').on('click', createPages);
-			$('#add_step').on('click', function () {
+		} else {
+			$('#pages_output table').html('<tr><td>No action pages yet</td></tr>');
+		}
+		window.journey = { pages: pages };
+		if (langs.length) {
+			$('#page_form input[value=share]').removeAttr('disabled');
+		}
+		$('#page_form').data('campaign', campaign);
+		$('#pages_output').show();
+		$('#page_form input[name=action_type]').on('click', function() {
+			$('#page_form input[name=notes]').val(campaign.name + "-" + this.value);
+		});
+		$('#create_pages').on('click', createPages);
+		$('#add_step').on('click', function () {
 				$('#add_step').hide();
 				$('#page_form').show();
-			});
 		});
-	}
+	});
+}
 
-	function sortJourney(pages) {
-		Object.keys(pages).forEach(function(lang) {
-			pages[lang].forEach(function(page) {
-				var next_step = page.fields ? page.fields.next_step : null;
-				var linked_page = next_step ? pages[lang].find( (p) => ( p.name == next_step || p.name == next_step.match("/" + p.name + "/?($|\\?)") ) ) : null;
-				if (linked_page) {
-					page.next_step = linked_page;
-					linked_page.previous_step = page;
+function sortJourney(pages) {
+	Object.keys(pages).forEach(function(lang) {
+		pages[lang].forEach(function(page) {
+			var next_step = page.fields ? page.fields.next_step : null;
+			var linked_page = next_step ? pages[lang].find( (p) => ( p.name == next_step || p.name == next_step.match("/" + p.name + "/?($|\\?)") ) ) : null;
+			if (linked_page) {
+				page.next_step = linked_page;
+				linked_page.previous_step = page;
+			} else {
+				var after_action = page.followup ? page.followup.url : '';
+				var match = after_action.match(/thanks/);
+				if ( match && match[0] ) {
+					var action_type = after_action.endsWith("?done=1") ? "thanks" : "share";
+					page.next_step = { id: page.id, type: page.type, action_label: action_type, view_href: `/thanks/${page.name}/?share=1`, edit_href: `/admin/core/pagefollowup/add_or_change/?page=${page.id}`, previous_step: page };
+					if (action_type == "share") {
+						page.next_step.next_step = { id: page.id, type: page.type, action_label: "thanks", view_href: `/thanks/${page.name}/?done=1`, previous_step: page.next_step };
+					}
 				} else {
-					var after_action = page.followup ? page.followup.url : '';
-					var match = after_action.match(/thanks/);
-					if ( match && match[0] ) {
-						var action_type = after_action.endsWith("?done=1") ? "thanks" : "share";
-						const daisy_action = page.fields.daisy_chain_action;
-						const daisy_page = daisy_action ? pages[lang].find( (p) => p.name == daisy_action ) : null;
-						const daisy_thanks = daisy_page ? daisy_page.name : page.name;
-						const daisy_id = daisy_page ? daisy_page.id : page.id;
-						page.next_step = { id: daisy_id, type: page.type, action_label: action_type, view_href: `/thanks/${daisy_thanks}/?share=1`, edit_href: `/admin/core/pagefollowup/add_or_change/?page=${daisy_id}`, previous_step: page };
-						if (action_type == "share") {
-							page.next_step.next_step = { id: daisy_id, type: page.type, action_label: "thanks", view_href: `/thanks/${daisy_thanks}/?done=1`, previous_step: page.next_step };
-						}
-					} else {
-						match = after_action.match(/^\/\w+\/([^\/\?]+)/);
-						if ( match && match[1] ) {
-							var linked_page = pages[lang].find( (p) => ( p.name == match[1] ) );
-							if (linked_page) {
-								page.next_step = linked_page;
-								linked_page.previous_step = page;
-							}
+					match = after_action.match(/^\/\w+\/([^\/\?]+)/);
+					if ( match && match[1] ) {
+						var linked_page = pages[lang].find( (p) => ( p.name == match[1] ) );
+						if (linked_page) {
+							page.next_step = linked_page;
+							linked_page.previous_step = page;
 						}
 					}
 				}
-			});
-			var lang_journeys = [];
-			var start_pages = pages[lang].filter((p) => !p.previous_step);
-			// Don't link a page to itself, or an earlier page in the chain!
-			start_pages.forEach(function(first_page) {
-				var journey = [];
-				var cur_page = first_page;
-				while (cur_page) {
-					journey.push(cur_page);
-					cur_page = cur_page.next_step;
-				}
-				lang_journeys.push( journey );
-			} );
-			pages[lang] = lang_journeys;
-		});
-	}
-
-	const non_viewable_action_types = {
-		'import': 1,
-		'donation-import': 1,
-	};
-
-	function pageLink(page) {
-		var action_type = page.action_type;
-		if (!action_type) {
-			var mcamp = multilingual_campaigns[page.multilingual_campaign];
-			action_type = mcamp ? mcamp.split(':')[1].trim() : page.type;
-		}
-		var action_label = page.action_label || action_type;
-		var view_href = page.view_href || ( non_viewable_action_types[ action_type ] ? '' : `/cms/view_by_page_id/${page.id}/` );
-		var edit_href = page.edit_href || `/admin/core/page/${page.id}/change/`;
-		return ( view_href ? `<a href="${view_href}">${action_label}</a>` : action_label ) + ` <a class="dash-icon-btn" href="${edit_href}">✎</a>`;
-	}
-
-	function displayMailings(campaign) {
-		api('GET', "mailer/", { field__name: 'campaign', field__value: campaign.id, _limit: 200 } ).done(function(result) {
-			var mailings = result.objects;
-			mailings.sort((m1,m2) => m1.notes.localeCompare(m2.notes));
-			const mailing_table = $('#mailings_output table');
-			if (mailings.length) {
-				mailings.forEach(function(mailing) {
-					mailing_table.append(
-						`<tr><td>${mailing.id}</td>`
-						+ `<td>${mailing.notes}</td>`
-						+ `<td>${mailing.status}</td>`
-						+ `<td>${mailing.started_at || ''}</td>`
-						+ `<td>${mailingLink(mailing)}</td>`
-						+ "</tr>"
-					);
-				});
-			} else {
-				mailing_table.html('<tr><td colspan="4">No mailing yet</td></tr>');
 			}
-			$('#mailing_form').data('campaign', campaign);
-			$('#mailings_output').show();
-			$('#create_mailings').on('click', createMailings);
-			$('#add_mailing').on('click', function () {
+		});
+		var lang_journeys = [];
+		var start_pages = pages[lang].filter((p) => !p.previous_step);
+		// Don't link a page to itself, or an earlier page in the chain!
+		start_pages.forEach(function(first_page) {
+			var journey = [];
+			var cur_page = first_page;
+			while (cur_page) {
+				journey.push(cur_page);
+				cur_page = cur_page.next_step;
+			}
+			lang_journeys.push( journey );
+		} );
+		pages[lang] = lang_journeys;
+	});
+}
+
+const non_viewable_action_types = {
+	'import': 1,
+	'donation-import': 1,
+};
+
+function pageLink(page) {
+	var action_type = page.action_type;
+	if (!action_type) {
+		var mcamp = multilingual_campaigns[page.multilingual_campaign];
+		action_type = mcamp ? mcamp.split(':')[1].trim() : page.type;
+	}
+	var action_label = page.action_label || action_type;
+	var view_href = page.view_href || ( non_viewable_action_types[ action_type ] ? '' : `/cms/view_by_page_id/${page.id}/` );
+	var edit_href = page.edit_href || `/admin/core/page/${page.id}/change/`;
+	return ( view_href ? `<a href="${view_href}">${action_label}</a>` : action_label ) + ` <a class="dash-icon-btn" href="${edit_href}">✎</a>`;
+}
+
+function displayMailings(campaign) {
+	api('GET', "mailer/", { field__name: 'campaign', field__value: campaign.id, _limit: 200 } ).done(function(result) {
+		var mailings = result.objects;
+		mailings.sort((m1,m2) => m1.notes.localeCompare(m2.notes));
+		const mailing_table = $('#mailings_output table');
+		if (mailings.length) {
+			mailings.forEach(function(mailing) {
+				mailing_table.append(
+					`<tr><td>${mailing.id}</td>`
+					+ `<td>${mailing.notes}</td>`
+					+ `<td>${mailing.status}</td>`
+					+ `<td>${mailing.started_at || ''}</td>`
+					+ `<td>${mailingLink(mailing)}</td>`
+					+ "</tr>"
+				);
+			});
+		} else {
+			mailing_table.html('<tr><td colspan="4">No mailing yet</td></tr>');
+		}
+		$('#mailing_form').data('campaign', campaign);
+		$('#mailings_output').show();
+		readFieldValues('moment', 'mailing').done(function() {
+			$('#mailing_form input[name=moment]').on('click', function() {
+				$('#mailing_form input[name=notes]').val(campaign.name + "-" + this.value);
+			});
+			$('#mailing_form input[name=moment]:first').attr('checked', 'checked');
+		});
+		readFieldValues('ask_type', 'mailing', 'sign');
+		readFieldValues('ask_details', 'mailing');
+		readFieldValues('target', 'mailing');
+		$('#create_mailings').on('click', createMailings);
+		$('#add_mailing').on('click', function () {
 				$('#add_mailing').hide();
 				$('#mailing_form').show();
-			});
 		});
+	});
+}
+
+function mailingLink(mailing) {
+	var label = "✎ Edit", path = "drafts/compose";
+	if (mailing.started_at) {
+		label = "Report";
+		path = "reports";
 	}
+	return `<a href="/mailings/${path}/${mailing.id}">${label}</a>`;
+}
 
-	function mailingLink(mailing) {
-		var label = "✎ Edit", path = "drafts/compose";
-		if (mailing.started_at) {
-			label = "Report";
-			path = "reports";
-		}
-		return `<a href="/mailings/${path}/${mailing.id}">${label}</a>`;
+function displayMatches(matches) {
+	$matchList = $('#campaign_matches tbody');
+	matches.forEach(function(camp) {
+		$matchList.append('<tr class="item"> <td><a href="?searched_name=' + camp.name + '">' + camp.name + '</a></td></tr>');
+	});
+	$('#campaign_matches').show();
+}
+
+function saveCampaignPage() {
+	var campaign_id = $('#campaign_form').data('campaign_id');
+	if (campaign_id) {
+		setCampaignMetadata(campaign_id);
+	} else {
+		createCampaignPage();
 	}
+}
 
-	function displayEditForm(page) {
-		readFieldValues('topic', 'page', page.fields.topic);
-		readFieldValues('campaign_type', 'page', page.fields.campaign_type);
-		readCampaigners(page.fields.lead_campaigner);
-		$('#title').val( page.title );
-		$('#campaign_form').data('campaign_id', page.id);
-		$('#campaign_form #name').val(page.name).attr('readonly', 'readonly');
-		$('#save_campaign').on('click', saveCampaignPage);
-		$('#campaign_output').hide();
-		$('#campaign_form').show();
-	}
-
-	function saveCampaignPage() {
-		var campaign_id = $('#campaign_form').data('campaign_id');
-		if (campaign_id) {
-			setCampaignMetadata(campaign_id);
-		} else {
-			createCampaignPage();
-		}
-	}
-
-	////////////////////////////////////////////////////////////////////
-	// Create View
-
-	function displayCreateForm(default_name) {
-		$('#campaign-detail').show();
-		$('#campaign-list').hide();
-		readFieldValues('topic', 'page');
-		readFieldValues('campaign_type', 'page');
-		readCampaigners();
-		$('#save_campaign').on('click', saveCampaignPage);
-		$('#campaign_form').show().find('#name').val(default_name);
-		$('#not_found').show();
-	}
-
-	function createCampaignPage() {
+function createCampaignPage() {
+	var campaign_name = $('#name').val();
+	api('POST', 'signuppage/', {
+		name: campaign_name,
+		title: $('#title').val()
+	}).done(function () {
 		var campaign_name = $('#name').val();
-		api('POST', 'signuppage/', {
-			name: campaign_name,
-			title: $('#title').val()
-		}).done(function () {
-			var campaign_name = $('#name').val();
-			api('GET', "signuppage/", {
-				name: campaign_name
-			}).done(function(result) {
-				var campaign_id = result.objects[0].id;
-				raw_campaigns = raw_campaigns + "\n" +
-				campaign_id + "=" + campaign_name;
-				api('PATCH', "allowedmailingfield/campaign", {
-					field_choices: raw_campaigns
-				});
-				api('PATCH', "allowedpagefield/campaign", {
-					field_choices: raw_campaigns
-				}).done(() => setCampaignMetadata(campaign_id));
+		api('GET', "signuppage/", {
+			name: campaign_name
+		}).done(function(result) {
+			var campaign_id = result.objects[0].id;
+			raw_campaigns = raw_campaigns + "\n" +
+							campaign_id + "=" + campaign_name;
+			api('PATCH', "allowedmailingfield/campaign", {
+				field_choices: raw_campaigns
 			});
+			api('PATCH', "allowedpagefield/campaign", {
+				field_choices: raw_campaigns
+			}).done(() => setCampaignMetadata(campaign_id));
 		});
-	}
+	});
+}
 
-	function setCampaignMetadata(campaign_id) {
-		$.ajax({
-			type: 'PATCH',
-			url: apiRoot + '/signuppage/' + campaign_id,
-			contentType: 'application/json',
-			processData: false,
-			data: JSON.stringify({
-				title: $('#title').val(),
-				fields: {
-					campaign: campaign_id,
-					topic: $('#topic').val(),
-					lead_campaigner: $('#lead_campaigner').val(),
-					campaign_type: $('#campaign_type').val()
-				}
-			})
-		}).done(function() {
-			reload_dashboard( $('#name').val() );
-		});
-	}
-
-	////////////////////////////////////////////////////////////////////
-	// Create Pages / Mailings
-
-	function multilingualCampaignFor(campaign_name, action_type) {
-		if (action_type == 'share' && window.journeys.length) {
-			// This assumes that the share step is defined in the first step of the journey (for any language)
-			var first_language = Object.keys(journey.pages)[0];
-			var mcamp_uri = journey.pages[first_language][0].multilingual_campaign ;
-			return $.Deferred().resolve(mcamp_uri);
-		}
-		//If the action type is share but there is no page yet in the journey, this will create a multilingual campaign for it
-		//TODO Maybe not what we want?
-		var mcamp_name = campaign_name + ': ' + action_type;
-		var mcamp = Object.keys(multilingual_campaigns).find((uri) => multilingual_campaigns[uri].toLowerCase() == mcamp_name);
-		if (mcamp) {
-			return $.Deferred().resolve(mcamp);
-		} else {
-			return api('POST', 'multilingualcampaign/', { name: mcamp_name });
-		}
-	}
-
-	function pageViewUrl(page, special_step) {
-		var path = 'act', query = '';
-		if (special_step == 'thanks' || special_step == 'share') {
-			path = 'thanks';
-			if (special_step == 'thanks') {
-				query = '?done=1';
+function setCampaignMetadata(campaign_id) {
+	$.ajax({
+		type: 'PATCH',
+		url: apiRoot + '/signuppage/' + campaign_id,
+		contentType: 'application/json',
+		processData: false,
+		data: JSON.stringify({
+			fields: {
+				campaign: campaign_id,
+				topic: $('#topic').val(),
+				lead_campaigner: $('#lead_campaigner').val(),
+				campaign_type: $('#campaign_type').val()
 			}
-		}
-		return `/${path}/${page.name}/${query}`;
+		})
+	}).done(function() {
+		reload_dashboard( $('#name').val() );
+	});
+}
+
+function pageType(actionType) {
+	if (actionType == 'tweet') {
+		return 'call';
+	} else if (actionType == 'share') {
+		return 'petition';
+	} else {
+		return actionType;
 	}
+}
 
-	function createPages(evt) {
-		evt.preventDefault();
-		const $form = $('#page_form');
-		var page_prefix = $form.find('input[name=notes]').val();
-		var action_type = $form.find('input[name=action_type]:checked').val();
-		var after_step = $form.find('select[name=after_step]').val();
-		var campaign = $form.data('campaign');
-		multilingualCampaignFor(campaign.name, action_type).done(function(mcamp, _, xhr) {
-			var calls = [];
-			var mcamp_uri = mcamp || xhr.getResponseHeader('Location');
-			$form.find('.language-picker input').each(function() {
-				var fields = { campaign: campaign.id };
-				if (this.checked) {
-					var lang = this.dataset.iso_code;
-					var page_name = page_prefix + '-' + lang;
-					var journeys = window.journeys[this.value] || [];
-					var pages = [];
-					for ( const journey of journeys ) {
-						pages.push( ...journey );
-					}
-					if (pages.length) {
-						var previous_page = pages.find((p) => p.multilingual_campaign == after_step);
-						if (! previous_page) {
-							fields.next_step = pages[0].name;
-							for ( const page of pages ) {
-								if ( page.status ) {
-									calls.push(api('PATCH', `${page.type.toLowerCase()}page/${page.id}`, {
-										fields: {
-											daisy_chain_action: page_name
-										}
-									}));
-								}
-							}
-						} else {
-							fields.next_step = previous_page.fields.next_step;
-							fields.daisy_chain_action = previous_page.fields.daisy_chain_action || pages[0].name;
-							calls.push(api('PATCH', `${previous_page.type.toLowerCase()}page/${previous_page.id}`, {
-								fields: {
-									next_step: page_name
-								}
-							}));
-						}
-					}
-
-					if (action_type != 'share') {
-						calls.push(
-							createPage(action_type, page_name, this.value, mcamp_uri, fields)
-						);
-					}
-				}
-			});
-			$.when(...calls).done(
-				() => reload_dashboard( campaign.name )
-			);
-		});
+function multilingualCampaignFor(campaign_name, action_type) {
+	if (action_type == 'share' && window.journey.pages.length) {
+		// This assumes that the share step is defined in the first step of the journey (for any language)
+		var first_language = Object.keys(journey.pages)[0];
+		var mcamp_uri = journey.pages[first_language][0].multilingual_campaign ;
+		return $.Deferred().resolve(mcamp_uri);
 	}
-
-	async function createPage(action_type, page_name, language, mcamp, fields) {
-		if ( ! action_type ) {
-			window.alert("No action type specified when creating page");
-			return;
-		}
-		if ( ! language ) {
-			window.alert("No language specified when creating page");
-			return;
-		}
-		const model_id = window.models[action_type][language];
-		if ( ! model_id ) {
-			window.alert(`Can't find a model ID for action ${action_type} in language ${language}`);
-			return;
-		}
-		const page_type = pageType(action_type);
-		var p_copy = await fetch(`/admin/core/${page_type}page/copy/?id=${model_id}`);
-		const page_id = p_copy.url.match(/\d+/)[0];
-		api_log(`Created ${language} ${action_type} page ${page_id}`);
-		const page = await api('GET', `page/${page_id}`);
-
-		var p_patchpage = await api('PATCH', `${page_type}page/${page.id}/`, {
-			name: page_name,
-			title:`Enter a Title for ${page_name}`,
-			// notes: page_name,
-			language: language,
-			multilingual_campaign: mcamp,
-			fields: fields,
-		} );
+	//If the action type is share but there is no page yet in the journey, this will create a multilingual campaign for it
+	//TODO Maybe not what we want?
+	var mcamp_name = campaign_name + ': ' + action_type;
+	mcamp = Object.keys(multilingual_campaigns).find((uri) => multilingual_campaigns[uri].toLowerCase() == mcamp_name);
+	if (mcamp) {
+		return $.Deferred().resolve(mcamp);
+	} else {
+		return api('POST', 'multilingualcampaign/', { name: mcamp_name });
 	}
+}
 
-	function pageType(actionType) {
-		if (actionType == 'tweet') {
-			return 'call';
-		} else if (actionType == 'share') {
-			return 'petition';
-		} else {
-			return actionType;
+function pageViewUrl(page, special_step) {
+	var path = 'act', query = '';
+	if (special_step == 'thanks' || special_step == 'share') {
+		path = 'thanks';
+		if (special_step == 'thanks') {
+			query = '?done=1';
 		}
 	}
+	return `/${path}/${page.name}/${query}`;
+}
 
-	function createMailings(evt) {
-		evt.preventDefault();
-		const $form = $('#mailing_form');
-		var mailmodel = $form.find('select[name=mailmodel]').val();
-		var mailing_name = $form.find('input[name=notes]').val();
-		var campaign = $form.data('campaign');
-		var fields = {
-			campaign: campaign.id,
-			moment: $form.find('input[name=moment]:checked').val(),
-			ask_type: $form.find('input[name=ask_type]:checked').val(),
-			ask_details: $form.find('input[name=ask_details]:checked').val(),
-			target: $form.find('input[name=target]:checked').val()
-		};
+function createPages(evt) {
+	evt.preventDefault();
+	$form = $('#page_form');
+	var page_prefix = $form.find('input[name=notes]').val();
+	var action_type = $form.find('input[name=action_type]:checked').val();
+	var after_step = $form.find('select[name=after_step]').val();
+	var campaign = $form.data('campaign');
+	var fields = { campaign: campaign.id };
+	multilingualCampaignFor(campaign.name, action_type).done(function(mcamp, _, xhr) {
 		var calls = [];
+		var mcamp_uri = mcamp || xhr.getResponseHeader('Location');
 		$form.find('.language-picker input').each(function() {
 			if (this.checked) {
 				var lang = this.dataset.iso_code;
-				var model_id;
-				if ( mailmodel ) {
-					model_id = mailing_models[ mailmodel ][ lang ];
+				var page_name = page_prefix + '-' + lang;
+				var pages = window.journey.pages[this.value] || [];
+				var followup_url = pageViewUrl({name: page_name}, 'share');
+				if (pages.length)	{
+					var previous_page = pages.find((p) => p.multilingual_campaign == after_step);
+					if (previous_page && previous_page.followup) {
+						followup_url = previous_page.followup ? previous_page.followup.url : null;
+						var prev_followup_url = pageViewUrl({name: page_name});
+						if (action_type == 'share') {
+							// Assuming the share step is defined in first step of the journey
+							prev_followup_url = pageViewUrl(pages[0], 'share');
+						}
+						calls.push(api('PATCH', `pagefollowup/${previous_page.followup.id}`, {
+							url: prev_followup_url
+						}));
+					} else if (!previous_page) {
+						followup_url = pageViewUrl(pages[0]);
+					}
 				}
-				if ( ! model_id ) {
-					calls.push( api('POST', 'mailing', {
-						notes: mailing_name + "-" + lang,
-						fields: fields
-					}) );
-				} else {
-					calls.push( api('POST', `mailer/${model_id}/copy/`) );
-					calls.push( calls.at(-1).done( async function(result, _, xhr) {
-						var mailing_url = xhr.getResponseHeader('Location');
-						const mailing_id = mailing_url.match(/(\d+)\D$/);
-						await api('PATCH', `mailing/${mailing_id[1]}/`, {
-							notes: mailing_name + "-" + lang,
-							fields: fields
-						});
-					} ) );
+
+				if (action_type != 'share') {
+					calls.push( 
+						createPage(action_type, page_name, this.value, mcamp_uri, fields, followup_url) 
+					);
 				}
 			}
 		});
-		$.when(...calls).then(
-			() => reload_dashboard(campaign.name)
+		$.when(...calls).done(
+			() => reload_dashboard( campaign.name )
 		);
+	});
+}
+
+async function createPage(action_type, page_name, language, mcamp, fields, followup_url) {
+	if ( ! action_type ) {
+			window.alert("No action type specified when creating page");
+			return;
 	}
+	if ( ! language ) {
+			window.alert("No language specified when creating page");
+			return;
+	}
+	const model_id = window.models[action_type][language];
+	if ( ! model_id ) {
+		window.alert(`Can't find a model ID for action ${action_type} in language ${language}`);
+		return;
+	}
+	const page_type = pageType(action_type);
+	var p_copy = await fetch(`/admin/core/${page_type}page/copy/?id=${model_id}`);
+	const page_id = p_copy.url.match(/\d+/)[0];
+	api_log(`Created ${language} ${action_type} page ${page_id}`);
+	const page = await api('GET', `page/${page_id}`);
+
+	var p_patchpage = await api('PATCH', `${page_type}page/${page.id}/`, {
+		name: page_name,
+		title:`Enter a Title for ${page_name}`,
+		// notes: page_name,
+		language: language,
+		multilingual_campaign: mcamp,
+		fields: fields,
+	} );
+	var p_patchfup = await api('PATCH', `pagefollowup/${page.followup.id}/`, {
+		url: followup_url
+	} );
+}
+
+function createMailings(evt) {
+	evt.preventDefault();
+	$form = $('#mailing_form');
+	var mailmodel = $form.find('select[name=mailmodel]').val();
+	var mailing_name = $form.find('input[name=notes]').val();
+	var campaign = $form.data('campaign');
+	var fields = {
+		campaign: campaign.id,
+		moment: $form.find('input[name=moment]:checked').val(),
+		ask_type: $form.find('input[name=ask_type]:checked').val(),
+		ask_details: $form.find('input[name=ask_details]:checked').val(),
+		target: $form.find('input[name=target]:checked').val()
+	};
+	var calls = [];
+	$form.find('.language-picker input').each(function() {
+		if (this.checked) {
+			var lang = this.dataset.iso_code;
+			var model_id;
+			if ( mailmodel ) {
+				model_id = mailing_models[ mailmodel ][ lang ];
+			}
+			if ( ! model_id ) {
+				calls.push( api('POST', 'mailing', {
+					notes: mailing_name + "-" + lang,
+					fields: fields
+				}) );
+			} else {
+				calls.push( api('POST', `mailer/${model_id}/copy/`) );
+				calls.push( calls.at(-1).done( async function(result, _, xhr) {
+					var mailing_url = xhr.getResponseHeader('Location');
+					const mailing_id = mailing_url.match(/(\d+)\D$/);
+					await api('PATCH', `mailing/${mailing_id[1]}/`, {
+						notes: mailing_name + "-" + lang,
+						fields: fields
+					});
+				} ) );
+			}
+		}
+	});
+	$.when(...calls).then(
+		() => reload_dashboard(campaign.name)
+	);
+}
+
+function reload_dashboard ( campaign_name ) {
+	setTimeout( function () {
+		document.location = "?searched_name=" + campaign_name
+	}, 1000 )
+}
 
 </script>
