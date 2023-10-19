@@ -34,7 +34,7 @@
     {% load_ak_context context %}
 
     <link rel="stylesheet" href="https://static.wemove.eu/action-kit/out/css/wemove.css">
-    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="162c81a4-03c4-483c-891c-188b89eaf09c" data-blockingmode="auto" data-culture="{{page.lang.iso_code}}" type="text/javascript"></script>
+    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="162c81a4-03c4-483c-891c-188b89eaf09c" data-blockingmode="auto" data-culture="{{page.lang.iso_code}}"></script>
 
     {% load_js %}
         //ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
@@ -45,7 +45,7 @@
     {% block script_additions %}{% endblock %}
 </head>
 <body class="ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
-    <script type="text/javascript">
+    <script>
         actionkit.forms.initPage()
     </script>
 
@@ -107,7 +107,7 @@ function init_modal () {
     {% endif %}
 
 {% block below_form %}
-<script type="text/javascript">
+<script>
     actionkit.forms.contextRoot = '/context/';
     actionkit.forms.initForm('act');
 </script>

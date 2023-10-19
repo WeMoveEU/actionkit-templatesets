@@ -9,15 +9,15 @@
         <input type="hidden" name="required" value="taf_emails">
 
         <div class="ak-styled-fields ak-errs-below ak-field-box">
-        
+
             <h3>Invite friends</h3>
 
             <p id="taf-confirmation" class="ak-confirmation">
                 Sent!  If you like, you can send more messages below.
             </p>
-    
+
             <ul id="ak-errors"></ul>
-            
+
 
             <table class="ak-clearfix ak-message-form">
                 <tr>
@@ -35,7 +35,7 @@
                         <td><input class="ak-btn-short" type="submit" value="Send invitations"></td>
                 </tr>
             </table>
-    
+
             <div id="ak-taf-form">
 
                 <table class="ak-nodisplay-if-js ak-message-form" id="taf_preview">
@@ -81,7 +81,7 @@
     </form>
 
     {% block script_additions %}
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             $('.ak-emailalt').on('click', function() {
                 $('#ak-taf-form').slideToggle(function() {

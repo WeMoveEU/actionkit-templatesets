@@ -2,7 +2,7 @@
 
 {% block script_additions %}
 
-<script type="text/javascript">
+<script>
     function toggleChooser(on) {
         var name,
             to_row = $("#to_target_row"),
@@ -21,7 +21,7 @@
             $("#to_target_name").html("Editor, " + name);
             $("html body").scrollTop($("form.ak-form").position().top);
         }
-    }    
+    }
 
     // adapted from http://blog.themeforest.net/tutorials/creating-a-jquery-word-counter/
     function countWords(textarea) {
@@ -29,39 +29,39 @@
         var countControl = ( '' + $(textarea).data('wordcount') ).split(',');
         var minWords = 0;
         var maxWords = 0;
-    
+
         if(countControl.length > 1) {
             minWords = countControl[0];
             maxWords = countControl[1];
         } else {
             maxWords = countControl[0];
         }
-        
+
         var countArea = $(textarea).siblings(".ak-counter-area");
         var countDigits = countArea.children('.ak-counter-words');
-                
+
         var update_func = function() {
             // console.log('countWords update_func');
             var numWords = jQuery.trim($(textarea).val()).split(/\s+/).length;
             if($(textarea).val() === '') {
                 numWords = 0;
-            } 
+            }
             countDigits.text(numWords);
 
             if(numWords < minWords || (numWords > maxWords && maxWords != 0)) {
                 countDigits.addClass('ak-color-error');
             } else {
-                countDigits.removeClass('ak-color-error');    
+                countDigits.removeClass('ak-color-error');
             }
 
         };
-        
+
         update_func();
-    
+
         $(textarea).bind('keyup click blur focus change paste', update_func);
     }
     function abbreviate(name, maxLength) {
-        return name.length <= maxLength ? 
+        return name.length <= maxLength ?
             name : name.substring(0, maxLength - 3) + "...";
     }
 
@@ -77,12 +77,12 @@
         $('.ak-accordion .ak-accordion-head').append(
             '<span class="ak-arrow-holder"><span class="ak-arrow"></span></span>'
         );
-        
-        $("input[name=media_target]").change( function() { 
+
+        $("input[name=media_target]").change( function() {
             toggleChooser(false);
             return false;
         } );
-        $('#ak-newspaper-change').click( function() { 
+        $('#ak-newspaper-change').click( function() {
             toggleChooser(true);
             return false;
         } );
@@ -109,7 +109,7 @@
 
     <div class="ak-grid-row">
         <div class="ak-grid-col ak-grid-col-6-of-12">
-            
+
             {% if page.custom_fields.featured_image %}
             <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
             {% endif %}
@@ -145,7 +145,7 @@
                         </div>
                     </li>
                     {% endif %}
-                    {% for letter in form.cannedletter_set.all %}       
+                    {% for letter in form.cannedletter_set.all %}
                     <li>
                         <div class="ak-accordion-head">
                             Sample: {{ letter.subject|truncateletters:"20" }}
@@ -167,7 +167,7 @@
             {% include "./progress_meter.html" %}
 
             <div class="ak-styled-fields ak-labels-overlaid ak-errs-below">
-                
+
                 <div id="ak-need-contact-info"></div>
                 <script type="text/ak-template" for="ak-need-contact-info">
                     [% if (incomplete) { %]
@@ -178,7 +178,7 @@
                         </div>
                     [% } %]
                 </script>
-                
+
                 {% include "./user_form_wrapper.html" %}
             </div>
 
@@ -188,7 +188,7 @@
 
                 [% if (!incomplete) { %]
                     <p>Choose a newspaper to send a letter to:</p>
-                [%  
+                [%
                 var headers = {
                     "local": "Local Newspapers",
                     "regional": "Regional Newspapers",
@@ -205,7 +205,7 @@
                         <div class="ak-newspaper">
                             <h3>[%=headers[mediaTargetType]%]</h3>
                         </div>
-                        [%        
+                        [%
                         var shade = true;
                         for (var i = 0; i < targetsOfType.length; i++) {
                             var mediaTarget = targetsOfType[i],
@@ -229,7 +229,7 @@
                                 </div>
                                 <div class="ak-faded-text">
                                     <div class="number">
-                                        <strong>Circulation:</strong> 
+                                        <strong>Circulation:</strong>
                                         [%= actionkit.utils.add_commas(mediaTarget.circulation) %]
                                     </div>
                                     [% if (actionkit.context.show_phones && mediaTarget.phone) { %]
@@ -288,7 +288,7 @@
                             <td>
                                 <textarea id="letter_text" name="letter_text" class="ak-large-message" data-wordcount="250,350"></textarea>
                                 <div class="ak-counter-area">
-                                    <span style="font-weight: bold" class="ak-counter-words">0</span> Words.  
+                                    <span style="font-weight: bold" class="ak-counter-words">0</span> Words.
                                     Most newspapers only consider letters of 250 to 350 words.
                                 </div>
                             </td>

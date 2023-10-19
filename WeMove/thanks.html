@@ -302,7 +302,7 @@
 {% endblock %}
 
 {% block script_additions %}
-<script type="text/javascript">
+<script>
     $(document).ready(function() {
         $('.ak-emailalt').on('click', function() {
             $(this).parent('p').toggleClass('active');
@@ -318,7 +318,7 @@
 
 {% block below_form %}
 
-<script type="text/javascript">
+<script>
     actionkit.forms.contextRoot = '/context/';
     actionkit.forms.initTafForm('taf');
     actionkit.sharing.initShareTools();
