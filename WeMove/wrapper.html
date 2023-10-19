@@ -1,8 +1,4 @@
-{% if page.lang.iso_code in ["de","it","nl","pl","fr","es"] %}
-  {% firstof page.lang.iso_code as link_iso %}
-{% else %}
-  {% firstof "en" as link_iso %}
-{% endif %}
+{% firstof page.lang.iso_code as link_iso %}
 <!DOCTYPE html>
 <html lang="{{page.lang.iso_code|default:'en'}}"{% if page.lang.is_rtl %} dir="rtl"{% endif %}>
 <head>
