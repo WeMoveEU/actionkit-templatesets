@@ -183,7 +183,7 @@ $(actionkit.form).bind('actionkit.ready', prepare_tweet);
 setTimeout( prepare_tweet, 1000 );
 
 function prepare_tweet () {
-  page_targets = actionkit.context.targets ? actionkit.context.targets.targets : [];
+  page_targets = actionkit.context.targets?.targets ? actionkit.context.targets.targets : [];
   $('textarea[name="tweet_text"]').val(
     choose_a_tweet()
   );
