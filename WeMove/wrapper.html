@@ -22,6 +22,7 @@
     <meta property="og:site_name" content="{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}">
     <meta property="og:type" content="article">
     <meta name="twitter:card" content="summary">
+    {% endblock %}
 
     {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
     {% if campaign_type == "youmove" %}
@@ -29,8 +30,6 @@
     {% else %}
     <link href="https://www.wemove.eu/favicon.png" rel="icon" />
     {% endif %}
-
-    {% endblock %}
 
     {% block meta_additions %}{% endblock %}
 

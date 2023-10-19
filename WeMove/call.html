@@ -22,15 +22,11 @@
 			<div class="action-form-container-col ak-grid-col ak-grid-col-4-of-12">
 				<div class="action-form-container member-is-known">
 					{% if page.custom_fields.call_page_mode == 'tweet' %}
-					  <h2>Send a tweet</h2>
+					  <h2 class="send-tweet-title">Send a tweet</h2>
 					{% endif %}
 
-					<form class="ak-form ak-styled-fields" name="act" method="POST" action="/act/" accept-charset="utf-8">
+					<form class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below" name="act" method="POST" action="/act/" accept-charset="utf-8">
 						<input type="hidden" name="page" value="{{ page.name }}">
-
-						<div id="call-form" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
-								<!-- {% include "./user_form_wrapper.html" %} -->
-						</div>
 
 						{% if page.custom_fields.call_page_mode == 'tweet' %}
               <div class="form-group floating-label">
@@ -41,123 +37,125 @@
                 <div data-wm-tweet-char-count></div>
               </div>
 						{% endif %}
+
             {% include "./user_form_wrapper.html" %}
 
-            <div>
-              {% if page.custom_fields.call_page_mode == 'tweet' %}
-              <button class="btn btn-primary js-track-action js-submit" data-js-event-category="tweet" data-js-event-action="action" disabled="">Tweet</button>
-              {% else %}
+            {% if page.custom_fields.call_page_mode == 'tweet' %}
+              <button
+                class="btn btn-primary js-track-action js-submit"
+                data-js-event-category="tweet"
+                data-js-event-action="action"
+                disabled>
+                  {% filter ak_text:"sendTweet_button" %}Tweet{% endfilter %}
+              </button>
+            {% else %}
               <button class="btn btn-lg btn-primary btn-block js-track-action js-dial-representative" data-js-event-category="call" data-js-event-action="action" data-decision-id="105346" data-campaign-id="3562">
                 <i style="position: relative; top: -1px" class="fa fa-phone call-icon"></i>
                 <i class="fa fa-spinner fa-pulse fa-fw hidden call-in-progress-icon"></i>CONNECTION TO <strong>SIMON CAVALLETTO</strong><br>FREE SERVICE
               </button>
-              <div id="call-status"></div>
-              <style>
-                #call-status {
-                  text-align: center;
-                }
-              </style>
-              <script>
-                var current_call_recipient;
-                var current_call_action;
-                var current_call_akid;
-                $('.js-dial-representative').on('click', function(evt) {
-                  evt.preventDefault();
-                  $('#call-status').html('Calling...');
-                  $('.js-dial-representative').attr('disabled', 'disabled');
+            {% endif %}
 
-                  var ak_form = $('form[name="act"]');
-                  $.ajax( {
-                    "method": "POST",
-                    "url": '/rest/v1/action/',
-                    "data": ak_form.serialize(),
-                    "success": function (response) {
-                      console.log('AK Response', response);
-                      current_call_action = response.action_id;
-                      current_call_akid = response.akid;
+            <a href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}" class="skip btn btn-default">
+              {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}
+            </a>
 
-                      $.ajax( {
-                        "method": "POST",
-                        "url": 'https://act.not-a2.eu/twilio/api/call/start',
-                        "data": {
-                          'decision_id': '{{ page.custom_fields.call_decision_id }}',
-                          'campaign_id': '{{ page.custom_fields.call_campaign_id }}',
-                          'source_id': '{{ page.custom_fields.call_source_id }}',
-                          'rcall_id': '',
-                          'use_known_member_data': 'true',
-                          'known_member_data': '',
-                          'email': $('#id_email').val(),
-                          'firstname': $('#id_name').val(),
-                          'lastname': '',
-                          'phone': $('#id_phone').val(),
-                          'country':  $('#id_country').val(),
-                          'postcode': $('#id_postal').val()
-                        },
-                        "success": function (response) {
-                          console.log('Response', response);
-                          current_call_recipient = response.rcall_recipient_id;
-                          check_call_status();
-                        }
-                      } );
+            <div id="call-status" style="text-align: center;"></div>
+            <script>
+              var current_call_recipient;
+              var current_call_action;
+              var current_call_akid;
+              $('.js-dial-representative').on('click', function(evt) {
+                evt.preventDefault();
+                $('#call-status').html('Calling...');
+                $('.js-dial-representative').attr('disabled', 'disabled');
 
-                    }
-                  } );
+                var ak_form = $('form[name="act"]');
+                $.ajax( {
+                  "method": "POST",
+                  "url": '/rest/v1/action/',
+                  "data": ak_form.serialize(),
+                  "success": function (response) {
+                    console.log('AK Response', response);
+                    current_call_action = response.action_id;
+                    current_call_akid = response.akid;
 
+                    $.ajax( {
+                      "method": "POST",
+                      "url": 'https://act.not-a2.eu/twilio/api/call/start',
+                      "data": {
+                        'decision_id': '{{ page.custom_fields.call_decision_id }}',
+                        'campaign_id': '{{ page.custom_fields.call_campaign_id }}',
+                        'source_id': '{{ page.custom_fields.call_source_id }}',
+                        'rcall_id': '',
+                        'use_known_member_data': 'true',
+                        'known_member_data': '',
+                        'email': $('#id_email').val(),
+                        'firstname': $('#id_name').val(),
+                        'lastname': '',
+                        'phone': $('#id_phone').val(),
+                        'country':  $('#id_country').val(),
+                        'postcode': $('#id_postal').val()
+                      },
+                      "success": function (response) {
+                        console.log('Response', response);
+                        current_call_recipient = response.rcall_recipient_id;
+                        check_call_status();
+                      }
+                    } );
+
+                  }
                 } );
 
-                function check_call_status () {
-                  poll_for_status( function ( status ) {
-                    if ( ! status ) {
-                      console.log('Call status is null, checking again');
-                      check_again()
-                    } else if ( status == 'interstitial' ) {
-                      console.log('Call status is interstitial, checking again');
-                      check_again()
-                    } else if ( status == 'failed' ) {
-                      $('#call-status').html('Call failed.');
-                      $('.js-dial-representative').removeAttr('disabled');
-                      console.log('Call status is failed');
+              } );
 
-                    } else if ( status == 'success' ) {
-                      $('#call-status').html('Call connected!');
-                      console.log('Call status is success');
-                      check_again()
+              function check_call_status () {
+                poll_for_status( function ( status ) {
+                  if ( ! status ) {
+                    console.log('Call status is null, checking again');
+                    check_again()
+                  } else if ( status == 'interstitial' ) {
+                    console.log('Call status is interstitial, checking again');
+                    check_again()
+                  } else if ( status == 'failed' ) {
+                    $('#call-status').html('Call failed.');
+                    $('.js-dial-representative').removeAttr('disabled');
+                    console.log('Call status is failed');
 
-                    } else if ( status == 'completed' ) {
-                      $('#call-status').html('Call completed');
-                      $('.js-dial-representative').removeAttr('disabled');
-                      console.log('Call status is completed');
+                  } else if ( status == 'success' ) {
+                    $('#call-status').html('Call connected!');
+                    console.log('Call status is success');
+                    check_again()
 
-                    } else {
-                      console.log('Call status is unexpected:', status);
-                      $('#call-status').html('Call failed. (' + status + ')');
-                      $('.js-dial-representative').removeAttr('disabled');
-                    }
-                  } );
-                }
+                  } else if ( status == 'completed' ) {
+                    $('#call-status').html('Call completed');
+                    $('.js-dial-representative').removeAttr('disabled');
+                    console.log('Call status is completed');
 
-                function check_again () {
-                  setTimeout( function () {
-                    check_call_status()
-                  }, 100 );
-                }
+                  } else {
+                    console.log('Call status is unexpected:', status);
+                    $('#call-status').html('Call failed. (' + status + ')');
+                    $('.js-dial-representative').removeAttr('disabled');
+                  }
+                } );
+              }
 
-                function poll_for_status ( status_callback ) {
-                  $.ajax( {
-                    "method": "GET",
-                    "url":                             'https://act.not-a2.eu/twilio/rcall_recipient/' + current_call_recipient + '/status',
-                    "success": function (response) {
-                      console.log('Status', response);
-                      status_callback( response.call_status );
-                    }
-                  } );
-                }
+              function check_again () {
+                setTimeout( function () {
+                  check_call_status()
+                }, 100 );
+              }
 
-              </script>
-
-              {% endif %}
-              <a href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
-            </div>
+              function poll_for_status ( status_callback ) {
+                $.ajax( {
+                  "method": "GET",
+                  "url": 'https://act.not-a2.eu/twilio/rcall_recipient/' + current_call_recipient + '/status',
+                  "success": function (response) {
+                    console.log('Status', response);
+                    status_callback( response.call_status );
+                  }
+                } );
+              }
+            </script>
 					</form>
 				</div>
 			</div>
@@ -165,7 +163,7 @@
 
 	<div class="action-feedback-bar">
 		<div class="fade in alert alert-success alert-dismissable feedback-alert">
-			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+			<button type="button" class="close" data-dismiss="alert">×</button>
 			Thanks for tweeting!
 		</div>
 	</div>
@@ -173,75 +171,74 @@
 {% endblock %}
 
 {% block script_additions %}
+{% if page.custom_fields.call_page_mode == 'tweet' %}
+<script>
+const targets_txt = {{ page.custom_fields.twitter_targets|json }};
+const messages_txt = {{ page.custom_fields.twitter_messages|json }};
+const fallback_txt = {{ page.custom_fields.twitter_fallback|json }};
 
-	{% if page.custom_fields.call_page_mode == 'tweet' %}
+var page_targets;
 
-	<script>
-		const targets_txt = {{ page.custom_fields.twitter_targets|json }};
-		const messages_txt = {{ page.custom_fields.twitter_messages|json }};
-		const fallback_txt = {{ page.custom_fields.twitter_fallback|json }};
+$(actionkit.form).bind('actionkit.ready', prepare_tweet);
+setTimeout( prepare_tweet, 1000 );
 
-		var page_targets;
-		$(actionkit.form).bind('actionkit.ready', prepare_tweet );
-		setTimeout( prepare_tweet, 1000 );
+function prepare_tweet () {
+  page_targets = actionkit.context.targets ? actionkit.context.targets.targets : [];
+  $('textarea[name="tweet_text"]').val(
+    choose_a_tweet()
+  );
+  $('.btn-primary').attr('disabled', false);
+  $('.btn-primary').on('click', function () {
+    const tweet = $('textarea[name="tweet_text"]').val();
+    const params = new URLSearchParams({ text: tweet }).toString();
+    const handle = window.open( 'https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320' );
+  } );
+}
 
-		function prepare_tweet () {
-			page_targets = actionkit.context.targets ? actionkit.context.targets.targets : [];
-			$('textarea[name="tweet_text"]').val(
-				choose_a_tweet()
-			);
-			$('.btn-primary').attr('disabled', false);
-			$('.btn-primary').on('click', function () {
-				const tweet = $('textarea[name="tweet_text"]').val();
-				const params = new URLSearchParams({ text: tweet }).toString();
-				const handle = window.open( 'https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320' );
-			} );
-		}
+function choose_a_tweet () {
+  const target_lines = targets_txt.split(/[\r\n]+/);
+  const target_data = target_lines.map( (s) => s.split(/\s+/) ).map( (s) => [ s.shift(), s.join(' ') ] );
+  const page_target_data = page_targets.map(
+    (t) => [t.twitter, t.title_informal_full ]
+  );
 
-		function choose_a_tweet () {
-			const target_lines = targets_txt.split(/[\r\n]+/);
-			const target_data = target_lines.map( (s) => s.split(/\s+/) ).map( (s) => [ s.shift(), s.join(' ') ] );
-			const page_target_data = page_targets.map(
-				(t) => [t.twitter, t.title_informal_full ]
-			);
+  const combined_targets = target_data.concat( page_target_data ).map(
+    (t) => [ t[0] ? '@' + t[0] : null, t[1] ]
+  );
+  const tweet_targets = combined_targets.filter(
+    (t) => t[0]
+  );
+  const random_targets = tweet_targets.sort( ()=>Math.random()-0.5 );
 
-			const combined_targets = target_data.concat( page_target_data ).map(
-				(t) => [ t[0] ? '@' + t[0] : null, t[1] ]
-			);
-			const tweet_targets = combined_targets.filter(
-				(t) => t[0]
-			);
-			const random_targets = tweet_targets.sort( ()=>Math.random()-0.5 );
+  const first_target = tweet_targets[0] || [];
+  const random_target = random_targets[0] || [];
 
-			const first_target = tweet_targets[0] || [];
-			const random_target = random_targets[0] || [];
+  const variables = {
+    handle: first_target[0],
+    name: first_target[1],
+    handles: combined_targets.map( (t) => t[0] ).join( ', ' ),
+    targets: combined_targets,
+    rhandle: random_target[0],
+    rname: random_target[1],
+    rhandles: random_targets.map( (t) => t[0] ).join( ', ' ),
+    rtargets: random_targets,
+  };
 
-			const variables = {
-				handle: first_target[0],
-				name: first_target[1],
-				handles: combined_targets.map( (t) => t[0] ).join( ', ' ),
-				targets: combined_targets,
-				rhandle: random_target[0],
-				rname: random_target[1],
-				rhandles: random_targets.map( (t) => t[0] ).join( ', ' ),
-				rtargets: random_targets,
-			};
+  const messages = messages_txt.split(/[\r\n]+/);
+  const fallback = fallback_txt.split(/[\r\n]+/);
+  const randomized = messages.sort( ()=>Math.random()-0.5 ).concat( fallback );
+  randomized.push("An important message for [%= handles %]: ");
 
-			const messages = messages_txt.split(/[\r\n]+/);
-			const fallback = fallback_txt.split(/[\r\n]+/);
-			const randomized = messages.sort( ()=>Math.random()-0.5 ).concat( fallback );
-			randomized.push("An important message for [%= handles %]: ");
-
-			for ( const template of randomized ) {
-				var message = actionkit.utils.template( template, variables );
-				if ( message.match(/\S/) ) {
-					return message
-				}
-			}
-			return "No matching tweets were found"
-		}
-		</script>
-		{% endif %}
+  for ( const template of randomized ) {
+    var message = actionkit.utils.template( template, variables );
+    if ( message.match(/\S/) ) {
+      return message
+    }
+  }
+  return "No matching tweets were found"
+}
+</script>
+{% endif %}
 
 	<script>
 		$(window).load(function() {
