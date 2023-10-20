@@ -205,7 +205,7 @@
 
       <div class="skip-step-wrapper" style="margin-top: 1rem; text-align: center;">
         <a href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default" style="margin-top: 1rem;">
-          {% filter ak_text:"thanks_skipStep_button" %}Skip this step{% endfilter %}
+          {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
           </a>
       </div>
 {% endif %}
