@@ -42,6 +42,7 @@
                   {% filter ak_text:"twitter_field" %}Tweet text{% endfilter %}
                 </label>
                 <textarea
+                  data-wm-tweet-message
                   name="tweet_text"
                   id="tweet_body"
                   rows="3"
@@ -54,24 +55,28 @@
 
             {% include "./user_form_wrapper.html" %}
 
-            {% if page.custom_fields.call_page_mode == 'tweet' %}
-              <button
-                class="btn btn-primary js-track-action js-submit"
-                data-js-event-category="tweet"
-                data-js-event-action="action"
-                disabled>
-                  {% filter ak_text:"sendTweet_button" %}Tweet{% endfilter %}
-              </button>
-            {% else %}
-              <button class="btn btn-lg btn-primary btn-block js-track-action js-dial-representative" data-js-event-category="call" data-js-event-action="action" data-decision-id="105346" data-campaign-id="3562">
-                <i style="position: relative; top: -1px" class="fa fa-phone call-icon"></i>
-                <i class="fa fa-spinner fa-pulse fa-fw hidden call-in-progress-icon"></i>CONNECTION TO <strong>SIMON CAVALLETTO</strong><br>FREE SERVICE
-              </button>
-            {% endif %}
+            <div class="buttons-wrapper">
+              {% if page.custom_fields.call_page_mode == 'tweet' %}
+                <button
+                  class="btn btn-primary js-track-action js-submit"
+                  data-js-event-category="tweet"
+                  data-js-event-action="action"
+                  disabled>
+                    {% filter ak_text:"sendTweet_button" %}Tweet{% endfilter %}
+                </button>
+              {% else %}
+                <button class="btn btn-lg btn-primary btn-block js-track-action js-dial-representative" data-js-event-category="call" data-js-event-action="action" data-decision-id="105346" data-campaign-id="3562">
+                  <i style="position: relative; top: -1px" class="fa fa-phone call-icon"></i>
+                  <i class="fa fa-spinner fa-pulse fa-fw hidden call-in-progress-icon"></i>CONNECTION TO <strong>SIMON CAVALLETTO</strong><br>FREE SERVICE
+                </button>
+              {% endif %}
 
-            <a href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}" class="skip btn btn-default">
-              {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}
-            </a>
+              <a
+                href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
+                class="skip btn btn-default">
+                {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}
+              </a>
+            </div>
 
             <div id="call-status" style="text-align: center;"></div>
             <script>
@@ -199,13 +204,17 @@ function prepare_tweet () {
   page_targets = actionkit.context.targets?.targets ? actionkit.context.targets.targets : [];
 
   const textArea = $('textarea[name="tweet_text"]');
+  const shouldPrimaryButtonBeDisabled = () => {
+    return textArea.val().length < 1;
+  };
 
   textArea.val(choose_a_tweet());
   textArea.trigger('change');
+  textArea.on('keyup', shouldPrimaryButtonBeDisabled);
 
   const buttonPrimary = $('.btn-primary');
 
-  buttonPrimary.attr('disabled', false);
+  buttonPrimary.attr('disabled', shouldPrimaryButtonBeDisabled());
   buttonPrimary.on('click', () => {
     const tweet = textArea.val();
     const params = new URLSearchParams({ text: tweet }).toString();
