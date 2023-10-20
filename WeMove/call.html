@@ -25,7 +25,14 @@
 					  <h2 class="send-tweet-title">Send a tweet</h2>
 					{% endif %}
 
-					<form class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below" name="act" method="POST" action="/act/" accept-charset="utf-8">
+					<form
+            class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below"
+            name="act"
+            method="POST"
+            action="/act/"
+            accept-charset="utf-8"
+            id="call-form"
+            data-wm-floating-labels-form>
 						<input type="hidden" name="page" value="{{ page.name }}">
 
 						{% if page.custom_fields.call_page_mode == 'tweet' %}
