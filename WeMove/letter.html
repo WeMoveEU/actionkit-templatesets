@@ -48,7 +48,7 @@
   </div>
 
   <div class="form-wrapper">
-    <form class="ak-form letter-form-wrapper" name="act" method="POST" action="/act/" accept-charset="utf-8">
+    <form data-wm-floating-labels-form class="ak-form letter-form-wrapper" name="act" method="POST" action="/act/" accept-charset="utf-8">
         <input type="hidden" name="page" value="{{ page.name }}">
 
         {% if page.custom_fields.featured_image %}
@@ -64,7 +64,7 @@
 
           {% include "./user_form_wrapper.html" %}
 
-          <div class="js-nav-buttons hide-if-previously-signed">
+          <div class="form-field js-nav-buttons hide-if-previously-signed">
             <button type="submit" class="btn btn-primary">
               {% filter ak_text:"button_send_email" %}Send Email{% endfilter %}
             </button>
