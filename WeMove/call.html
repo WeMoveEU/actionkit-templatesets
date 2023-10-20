@@ -61,6 +61,7 @@
                   class="btn btn-primary js-track-action js-submit"
                   data-js-event-category="tweet"
                   data-js-event-action="action"
+                  data-wm-tweet-submit
                   disabled>
                     {% filter ak_text:"sendTweet_button" %}Tweet{% endfilter %}
                 </button>
@@ -195,31 +196,39 @@ const targets_txt = {{ page.custom_fields.twitter_targets|json }};
 const messages_txt = {{ page.custom_fields.twitter_messages|json }};
 const fallback_txt = {{ page.custom_fields.twitter_fallback|json }};
 
-var page_targets;
+let page_targets;
 
 $(actionkit.form).bind('actionkit.ready', prepare_tweet);
-setTimeout( prepare_tweet, 1000 );
+setTimeout(prepare_tweet, 1000);
+
+const updateTweetForm = () => {
+  const textArea = document.querySelector("[data-wm-tweet-message]");
+  const counter = document.querySelector("[data-wm-tweet-char-count]");
+  const tweetSubmit = document.querySelector("[data-wm-tweet-submit]");
+
+  counter.innerHTML = 280 - textArea.value.length;
+  tweetSubmit.disabled = textArea.value.length < 1;
+};
+
+const submitTweet = () => {
+  const tweet = document.querySelector("[data-wm-tweet-message]").value;
+  const params = new URLSearchParams({ text: tweet }).toString();
+  const handle = window.open( 'https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320' );
+}
 
 function prepare_tweet () {
   page_targets = actionkit.context.targets?.targets ? actionkit.context.targets.targets : [];
 
-  const textArea = $('textarea[name="tweet_text"]');
-  const shouldPrimaryButtonBeDisabled = () => {
-    return textArea.val().length < 1;
-  };
+  const textArea = document.querySelector("[data-wm-tweet-message]");
+  textArea.value = choose_a_tweet();
+  textArea.addEventListener('keyup', updateTweetForm, false);
+  textArea.addEventListener('change', updateTweetForm, false);
+  textArea.dispatchEvent(new Event('change'));
 
-  textArea.val(choose_a_tweet());
-  textArea.trigger('change');
-  textArea.on('keyup', shouldPrimaryButtonBeDisabled);
+  const tweetSubmit = document.querySelector("[data-wm-tweet-submit]");
+  tweetSubmit.addEventListener('click', submitTweet);
 
-  const buttonPrimary = $('.btn-primary');
-
-  buttonPrimary.attr('disabled', shouldPrimaryButtonBeDisabled());
-  buttonPrimary.on('click', () => {
-    const tweet = textArea.val();
-    const params = new URLSearchParams({ text: tweet }).toString();
-    const handle = window.open( 'https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320' );
-  });
+  updateTweetForm();
 }
 
 function choose_a_tweet () {
