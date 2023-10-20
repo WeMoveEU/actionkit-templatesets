@@ -37,12 +37,18 @@
 						<input type="hidden" name="page" value="{{ page.name }}">
 
 						{% if page.custom_fields.call_page_mode == 'tweet' %}
-              <div class="form-group floating-label">
-                <label for="rtweet_body" class="control-label floated">
+              <div class="form-field">
+                <label for="rtweet_body">
                   {% filter ak_text:"twitter_field" %}Tweet text{% endfilter %}
                 </label>
-                <textarea name="tweet_text" id="tweet_body" rows="3" required="required" placeholder="Write your tweet here." class="form-control"></textarea>
-                <div data-wm-tweet-char-count></div>
+                <textarea
+                  name="tweet_text"
+                  id="tweet_body"
+                  rows="3"
+                  required
+                  class="form-control"></textarea>
+
+                <div data-wm-tweet-char-count>280</div>
               </div>
 						{% endif %}
 
