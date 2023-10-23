@@ -60,6 +60,8 @@
 
     <div id="fb-root"></div>
 
+	{% if not page.custom_fields.consent_version %}
+
     <div class="modal fade js-share-popup in" style="display: none; padding-right: 15px;" aria-hidden="false">
         <div class="modal-backdrop fade in" style="height: 928px;"></div>
         <div class="modal-dialog" style="z-index:1041;">
@@ -113,6 +115,8 @@
       {% endif %}
     {% endblock %}
 
+    {% endif %}
+
     <div id="alert-wrap" style="z-index: 1040; width: 40%; margin-left: -20%; left: 50%; position: absolute">
     </div>
 
@@ -138,11 +142,44 @@
             {% endif %}
           {% endblock %}
 
-          <div class="raction" id="rsign">
-            <div class="raction-content">
+
+          {% if page.custom_fields.consent_version %}
+          <div class="modal fade js-share-popup in" style="padding-right: 15px; display: block" aria-hidden="false">
+            <div class="modal-backdrop fade in" style="height: 928px;"></div>
+            <div class="modal-dialog" style="z-index:1041;">
+              <div class="modal-content">
+          {% else %}
+            <div class="raction" id="rsign">
+              <div class="raction-content">
+          {% endif %}
+
               {% block content %}{% endblock %}
+
+          {% if page.custom_fields.consent_version %}
+                  </div>
+                </div>
+              </div>
+              <script>
+                var modal = $('.modal.fade')
+                var modal_backdrop = modal.find('.modal-backdrop');
+
+                function resize_modal () {
+                  modal_backdrop.height( $(window).height() );
+                  $('#rsign').height( $('.modal-content').height() );
+                }
+                $(window).on( 'resize', resize_modal );
+                resize_modal();
+
+                function init_modal () {
+                  modal_backdrop.on( 'click', close_modal );
+                  modal.find('.close').on( 'click', close_modal );
+                  function close_modal () { modal.hide() }
+                }
+              </script>
+          {% else %}
             </div>
           </div>
+          {% endif %}
         </div>
       </div>
     </div>
