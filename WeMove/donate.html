@@ -1,15 +1,129 @@
 {% extends "./wrapper.html" %}
 {% block body_extra_classes %}wemove {{ block.super }}{% endblock %}
+
 {% block css_additions %}
-{% load_css %}
-    //actionkit-stripe-api.wemove.support/stripe/static/index.0e2b4833.css
-{% end %}
 {% load_css %}
     //donate-ui.not-a2.eu/donate-main.css
 {% end %}
+{% comment %} Bootstrap conflict fixes {% endcomment %}
+<style type="text/css">
+    #donate-widget {
+        font-weight: 400 !important;
+    }
+    #donate-widget .gap-4 {
+        gap: 1rem !important;
+    }
+    #donate-widget .mt-4 {
+        margin-top: 1rem !important;
+    }
+    #donate-widget .mb-2 {
+        margin-bottom: 0.5rem !important;
+    }
+    #donate-widget .mb-3 {
+        margin-bottom: 0.75rem !important;
+    }
+    #donate-widget .mb-4 {
+        margin-bottom: 1rem !important;
+    }
+    #donate-widget .my-3 {
+        margin-top: 0.75rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+    #donate-widget .py-4 {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
+    #donate-widget .px-5 {
+        padding-left: 1.25rem !important;
+        padding-right: 1.25rem !important;
+    }
+    #donate-widget .px-3 {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+    #donate-widget .px-4 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    #donate-widget .p-5 {
+        padding: 1.25rem !important;
+    }
+    #donate-widget .pb-4 {
+        padding-bottom: 1rem !important;
+    }
+    #donate-widget .text-primary {
+        color: #bd39db !important;
+    }
+    #donate-widget .text-wm-gray {
+        color: rgb(73 73 73 / var(--tw-text-opacity)) !important;
+    }
+    #donate-widget .bg-primary {
+        background-color: #bd39db !important;
+    }
+    #donate-widget .disabled\:bg-primary-400:disabled {
+        background-color: #ebc3f4 !important;
+    }
+    #donate-widget input, #donate-widget select {
+        font-family: unset !important;
+        font-weight: unset !important;
+    }
+    #donate-widget .list-none {
+        list-style-type: none !important;
+    }
+    #donate-widget .shadow {
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow) !important;
+    }
+    #donate-widget .hover\:text-white:hover {
+        color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
+    }
+    #donate-widget .cursor-not-allowed {
+        cursor: not-allowed !important;
+    }
+</style>
 {% endblock %}
-{% block content %}
 
+{% block scriptadditions %}
+{% load_js %}
+    //cdn.tailwindcss.com
+{% end %}
+<script>
+    {% comment %}
+    https://tailwindcss.com/docs/installation/play-cdn
+    These customisations are brought in via the fundraiser widget app as well, along with some
+    plugins to define form components and so on. So these theme customimisations here are
+    most likely redundant, but have been put here for explicitness, since they are customisations
+    that could be used in other pages if we decide to go with a full tailwind CSS solution across
+    all templates.
+    {% endcomment %}
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    primary: {
+                        DEFAULT: '#BD39DBff',
+                        800: '#C655E0ff',
+                        700: '#CF70E5ff',
+                        600: '#D98CEAff',
+                        500: '#E2A7EFff',
+                        400: '#EBC3F4ff',
+                        300: '#F4DEF9ff'
+                    },
+                    'wm-gray': {
+                        extralight: '#fbfbfb',
+                        light: '#999999',
+                        DEFAULT: '#494949'
+                    }
+                },
+                fontFamily: {
+                    sans: ['Open Sans', 'Helvetica Neue', 'Arial', 'Verdana', 'Droid Sans', 'sans-serif']
+                }
+            }
+        },
+    }
+</script>
+{% endblock scriptadditions %}
+
+{% block content %}
 <section
   id="donate-widget"
   data-config_override="{{ page.custom_fields.config_override }}"
@@ -73,7 +187,6 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
 
 {% block below_form %}

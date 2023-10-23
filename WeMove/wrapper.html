@@ -30,6 +30,7 @@
     {% else %}
     <link href="https://www.wemove.eu/favicon.png" rel="icon" />
     {% endif %}
+    {% endblock share_metatags %}
 
     {% block meta_additions %}{% endblock %}
 
@@ -39,6 +40,7 @@
     {% end %}
 
     {% block css_additions %}{% endblock %}
+    {% block script_additions %}{% endblock %}
 
     {% load_prefill %}
     {% load_ak_context context %}
@@ -50,8 +52,6 @@
         //static.wemove.eu/action-kit/out/js/assets/boostrap-5.1.3.min.js
         /resources/actionkit.js
     {% end %}
-
-    {% block script_additions %}{% endblock %}
 </head>
 {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
 <body class="{% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %} ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
@@ -177,11 +177,11 @@ const MATOMO_SITE_ID = "1";
 {% endif %}
 </script>
 
-<script src="//static.wemove.eu/action-kit/out/js/wemove-main.bundle.min.js" defer></script>
 <!-- Meta Pixel Code -->
 <script type="text/plain" data-cookieconsent="marketing" src="https://static.wemove.eu/shared-scripts/pixel-loader.js"></script>
 <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=273754435565660&ev=PageView&noscript=1"/></noscript>
 <!-- End Meta Pixel Code -->
 <script type="text/plain" data-cookieconsent="marketing" src="https://static.wemove.eu/shared-scripts/matomo-loader.js" async></script>
+<script src="//static.wemove.eu/action-kit/out/js/wemove-main.bundle.min.js"></script>
 </body>
 </html>
