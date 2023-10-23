@@ -714,6 +714,10 @@
 								page.next_step = linked_page;
 								linked_page.previous_step = page;
 							}
+						} else {
+							match = after_action.match(/\/\/(.*?)\//);
+							var label = ( match && match[1] ) ? match[1] : 'external';
+							page.next_step = { id: null, type: 'redirect', action_label: label, view_href: after_action, previous_step: page };
 						}
 					}
 				}
@@ -747,6 +751,9 @@
 		}
 		var action_label = page.action_label || action_type;
 		var view_href = page.view_href || ( non_viewable_action_types[ action_type ] ? '' : `/cms/view_by_page_id/${page.id}/` );
+		if ( page.type == 'redirect' ) {
+			return `<a href="${view_href}">${action_label}</a>`
+		}
 		var edit_href = page.edit_href || `/admin/core/page/${page.id}/change/`;
 		return ( view_href ? `<a href="${view_href}">${action_label}</a>` : action_label ) + ` <a class="dash-icon-btn" href="${edit_href}">✎</a>`;
 	}
