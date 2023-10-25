@@ -176,12 +176,14 @@ const MATOMO_SITE_ID = "4";
 const MATOMO_SITE_ID = "1";
 {% endif %}
 </script>
-<div>{% log_context %}</div>
+
 <!-- Meta Pixel Code -->
 <script type="text/plain" data-cookieconsent="marketing" src="https://static.wemove.eu/shared-scripts/pixel-loader.js"></script>
 <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=273754435565660&ev=PageView&noscript=1"/></noscript>
 <!-- End Meta Pixel Code -->
 <script type="text/plain" data-cookieconsent="marketing" src="https://static.wemove.eu/shared-scripts/matomo-loader.js" async></script>
 <script src="//static.wemove.eu/action-kit/out/js/wemove-main.bundle.min.js"></script>
+
+<div class="test">{% log_context %}</div>
 </body>
 </html>
