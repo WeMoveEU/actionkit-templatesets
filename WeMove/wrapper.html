@@ -55,7 +55,9 @@
 </head>
 {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
 <body class="{% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %} ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
-    <script>
+
+<div class="lucas-test" hidden>test</div>
+<script>
         actionkit.forms.initPage()
     </script>
 
@@ -183,7 +185,5 @@ const MATOMO_SITE_ID = "1";
 <!-- End Meta Pixel Code -->
 <script type="text/plain" data-cookieconsent="marketing" src="https://static.wemove.eu/shared-scripts/matomo-loader.js" async></script>
 <script src="//static.wemove.eu/action-kit/out/js/wemove-main.bundle.min.js"></script>
-
-<div class="test" hidden>test</div>
 </body>
 </html>
