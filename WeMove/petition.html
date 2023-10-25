@@ -65,7 +65,7 @@
 							{% store as references %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "references" as field_name %}{% endstore %}
 							{% if references %}
 							<div class="references">
-								<h4>{% filter ak_text:"references" %}References{% endfilter %}:</h4>
+								<h4>{% filter ak_text:"references" %}References{% endfilter %}</h4>
 								<div class="unescape-html">{{ references }}</div>
 							</div>
 							{% endif %}
