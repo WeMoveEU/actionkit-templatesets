@@ -75,8 +75,18 @@
 						{% if partnership_icons %}
 						<div class="partners">
 							<h2>{% filter ak_text:"in_partnership_with" %}In partnership with{% endfilter %}:</h2>
-							<div class="unescape-html partnership-icons">
+							<div class="partnership-icons">
 								{{ partnership_icons }}
+							</div>
+						</div>
+						{% endif %}
+
+            {% store as supporters_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "supporters_icons" as field_name %}{% endstore %}
+						{% if supporters_icons %}
+						<div class="supporters">
+							<h2>{% filter ak_text:"supported_by" %}Supported by:{% endfilter %}:</h2>
+							<div class="supporters-icons">
+								{{ supporters_icons }}
 							</div>
 						</div>
 						{% endif %}
