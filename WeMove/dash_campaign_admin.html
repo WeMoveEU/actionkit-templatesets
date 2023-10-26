@@ -631,7 +631,7 @@
 	}
 
 	function displayPages(campaign) {
-		api('GET', "page/", { field__name: 'campaign', field__value: campaign.id })
+		api('GET', "page/", { field__name: 'campaign', field__value: campaign.id, _limit: 100 })
 		.done(function(result) {
 			var lang_journeys = {};
 			result.objects.forEach(function(page) {
@@ -714,7 +714,7 @@
 								page.next_step = linked_page;
 								linked_page.previous_step = page;
 							}
-						} else {
+						} else if ( after_action ) {
 							match = after_action.match(/\/\/(.*?)\//);
 							var label = ( match && match[1] ) ? match[1] : 'external';
 							page.next_step = { id: null, type: 'redirect', action_label: label, view_href: after_action, previous_step: page };
