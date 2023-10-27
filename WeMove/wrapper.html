@@ -47,7 +47,7 @@
     {% block script_additions %}{% endblock %}
     <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="162c81a4-03c4-483c-891c-188b89eaf09c" data-blockingmode="auto" data-culture="{{page.lang.iso_code}}"></script>
 
-    {% load_prefill %}
+    {% load_prefill %}<!-- TODO: Ask Simon -->
     {% load_ak_context context %}
 </head>
 <body class="{% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %} ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
@@ -56,6 +56,7 @@
     </script>
 
 	{% if not page.custom_fields.consent_version %}
+    <!-- TODO: Ask Simon -->
     <div class="modal fade js-share-popup in" style="display: none; padding-right: 15px;" aria-hidden="false">
         <div class="modal-backdrop fade in" style="height: 928px;"></div>
         <div class="modal-dialog" style="z-index:1041;">
@@ -67,6 +68,7 @@
         </div>
     </div>
 
+    <!-- TODO: Ask Simon -->
     <script>
         function init_modal () {
             var modal = $('.modal.fade')
@@ -85,6 +87,7 @@
       {% if page.custom_fields.pre_action_share %}
         {% store as share_page %}{% if page.custom_fields.pre_action_share == "1" %}{{ page.custom_fields.daisy_chain_action|default:page.name }}{% else %}{{ page.custom_fields.pre_action_share }}{% endif %}{% endstore %}
 
+        <!-- TODO: Ask Simon -->
         <h1 id="share-banner" style="display: none">
             {% filter ak_text:"tell_your_friends_banner" %}
             Can you spread the word?
@@ -109,6 +112,7 @@
     {% endblock %}
   {% endif %}
 
+    <!-- TODO: Ask Simon -->
     <div id="alert-wrap" style="z-index: 1040; width: 40%; margin-left: -20%; left: 50%; position: absolute">
     </div>
 
@@ -121,12 +125,12 @@
     <div id="wrapper">
       <div id="content">
         <div class="container-fluid">
-          {% block finished_alert %}
+          {% block finished_alert %}<!-- TODO: Ask Simon -->
             {% if page.custom_fields.finished_alert %}
               <div class="alert alert-warning alert-finished" role="alert">
                   {{ page.custom_fields.finished_alert |safe }}
               </div>
-              <script>
+              <script><!-- TODO: Ask Simon -->
                   $(document).on('ready', function () {
                     $('submit, button[type=submit], #unknown_user :input, .ak-field-box :input').attr('disabled', 'disabled')
                   });
@@ -167,8 +171,8 @@
 
 {% block below_form %}
 <script>
-    actionkit.forms.contextRoot = '/context/';
-    actionkit.forms.initForm('act');
+actionkit.forms.contextRoot = '/context/';
+actionkit.forms.initForm('act');
 </script>
 {% endblock %}
 
