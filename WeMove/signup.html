@@ -2,6 +2,10 @@
 
 {% block content %}
 
+{% if page.custom_fields.consent_version %}
+	{% include "./consent.html" %}
+{% else %}
+
 <form
   class="ak-form"
   name="act"
@@ -159,5 +163,7 @@
 	}
 
 </script>
+
+{% endif %}
 
 {% endblock %}
