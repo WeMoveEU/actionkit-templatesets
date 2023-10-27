@@ -57,9 +57,7 @@
         actionkit.forms.initPage()
     </script>
 
-
 	{% if not page.custom_fields.consent_version %}
-
     <div class="modal fade js-share-popup in" style="display: none; padding-right: 15px;" aria-hidden="false">
         <div class="modal-backdrop fade in" style="height: 928px;"></div>
         <div class="modal-dialog" style="z-index:1041;">
@@ -97,23 +95,21 @@
         <script>
             init_modal();
 
-            $.get( '/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}', {},
-                function ( data ) {
-                    const modal = $('.modal.fade');
-                    modal.find('.modal-content').append(
-                        $('#share-banner').show()
-                    );
-                    modal.find('.modal-content').append(
-                        $(data).find('.facebook-share-preview-container').parent().children()
-                    );
-                    modal.show();
-                }
-            );
+            $.get('/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}', {},
+              function (data) {
+                const modal = $('.modal.fade');
+                modal.find('.modal-content').append(
+                    $('#share-banner').show()
+                );
+                modal.find('.modal-content').append(
+                    $(data).find('.facebook-share-preview-container').parent().children()
+                );
+                modal.show();
+            });
         </script>
       {% endif %}
     {% endblock %}
-
-    {% endif %}
+  {% endif %}
 
     <div id="alert-wrap" style="z-index: 1040; width: 40%; margin-left: -20%; left: 50%; position: absolute">
     </div>
@@ -134,16 +130,16 @@
               </div>
               <script>
                   $(document).on('ready', function () {
-                      $('submit, button[type=submit], #unknown_user :input, .ak-field-box :input').attr('disabled', 'disabled')
-                  } );
+                    $('submit, button[type=submit], #unknown_user :input, .ak-field-box :input').attr('disabled', 'disabled')
+                  });
               </script>
             {% endif %}
           {% endblock %}
 
 
           {% if page.custom_fields.consent_version %}
-          <div class="modal fade js-share-popup in" style="padding-right: 15px; display: block" aria-hidden="false">
-            <div class="modal-backdrop fade in" style="height: 928px;"></div>
+          <div class="modal" style="display: block">
+            <div class="modal-backdrop"></div>
             <div class="modal-dialog" style="z-index:1041;">
               <div class="modal-content">
           {% else %}
@@ -157,23 +153,6 @@
                   </div>
                 </div>
               </div>
-              <script>
-                var modal = $('.modal.fade')
-                var modal_backdrop = modal.find('.modal-backdrop');
-
-                function resize_modal () {
-                  modal_backdrop.height( $(window).height() );
-                  $('#rsign').height( $('.modal-content').height() );
-                }
-                $(window).on( 'resize', resize_modal );
-                resize_modal();
-
-                function init_modal () {
-                  modal_backdrop.on( 'click', close_modal );
-                  modal.find('.close').on( 'click', close_modal );
-                  function close_modal () { modal.hide() }
-                }
-              </script>
           {% else %}
             </div>
           </div>
