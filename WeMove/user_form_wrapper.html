@@ -7,11 +7,6 @@
 		$('form.ak-form').addClass('previously-signed');
 	</script>
 	{% endif %}
-	<style>
-		form.previously-signed .hide-if-previously-signed {
-			display: none;
-		}
-	</style>
 {% endif %}
 
 <div id="known_user" class="known-member">
@@ -27,9 +22,9 @@
 
       {% filter ak_text:"knownUser_notYou_button" %}Not you?{% endfilter %}
 
-      <a href="#" onclick="return actionkit.forms.logOut()">
+      <button class="not-you--button" type="button" onclick="return actionkit.forms.logOut()">
         {% filter ak_text:"clickHere_button" %}Not you?{% endfilter %}
-      </a>
+      </button>
     </p>
   </div>
 
