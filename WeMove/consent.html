@@ -1,7 +1,3 @@
-{% extends "WeMove/signup.html" %}
-
-{% block content %}
-
 <h2>{{ page.title }}</h2>
 
 <form class="action_form" name="act" method="POST" action="/act/" accept-charset="utf-8">
@@ -32,9 +28,14 @@
 	    <input type="hidden" name="action_trigger_page" value="{{ args.trigger_page }}">
 	    <input type="hidden" name="action_trigger_action" value="{{ args.trigger_action }}">
 
+
 		<div id="consent-buttons">
 				<button type="button" id="btn_optout" value="none_given" class="btn optout js-popup-consent-button">
-          {% filter ak_text:"consents_contactMeNo_button" %}No, do not contact me{% endfilter %}
+          {% if page.custom_fields.opt_ab_test_cancel_button %}
+            {{ page.custom_fields.opt_ab_test_cancel_button }}
+          {% else %}
+            {% filter ak_text:"consents_contactMeNo_button" %}No, do not contact me{% endfilter %}
+          {% endif %}
 				</button>
 
         <button
@@ -44,11 +45,15 @@
           class="btn optin js-popup-consent-button"
           data-wm-pixel-event-type="OptIn"
           data-wm-pixel-track-type="trackCustom"
-          {% if tests.TEMP_CHANGE_ME.letter %}
-          data-wm-pixel-content-id="optin_{{ tests.TEMP_CHANGE_ME.letter }}"
+          {% if tests %}
+          data-wm-pixel-content-id="optin_{{ tests.1.letter }}"
           {% endif %}
           data-wm-pixel-trigger-event="click">
-          {% filter ak_text:"consents_contactMeYes_button" %}Yes, keep me informed!{% endfilter %}
+          {% if page.custom_fields.opt_ab_test_confirm_button %}
+            {{ page.custom_fields.opt_ab_test_confirm_button }}
+          {% else %}
+            {% filter ak_text:"consents_contactMeYes_button" %}Yes, keep me informed!{% endfilter %}
+          {% endif %}
 				</button>
 
 				<button type="button" id="btn_email" value="email_opt_in" class="btn optemail js-popup-consent-button" hidden>
@@ -90,5 +95,3 @@
 		} );
 	{% endif %}
 </script>
-
-{% endblock %}

@@ -4,7 +4,7 @@
 
 {{ block.super }}
 
-<script type="text/javascript">
+<script>
 function handleModeratorJumpLink() {
     if (this.id == 'email-hosts-link'){
 	targetEl = $('div.contact-hosts')
@@ -44,7 +44,7 @@ function initModeratorTools(){
   actionkit.forms.setForm("act");
 }
 
-$(initModeratorTools); 
+$(initModeratorTools);
 
 </script>
 {% endblock %}
@@ -304,7 +304,7 @@ $(initModeratorTools);
 {% endblock %}
 {% block find_another_event %}<div><a href="/event/{{ campaign.local_name }}/moderator_search/">Search for more events</a></div>{% endblock %}
 {% block below_form %}
-    <script type="text/javascript">
+    <script>
         actionkit.forms.contextRoot = '/context/';
         actionkit.forms.initForm('act');
     </script>

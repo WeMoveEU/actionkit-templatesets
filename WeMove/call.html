@@ -1,258 +1,309 @@
 {% extends "./wrapper.html" %}
+
 {% block content %}
-
-<div class="raction" id="rtweet" style="">
+<div class="raction" id="rtweet">
 	<div class="raction-content">
-
-		<div class="row">
-			<div class="col-md-6">
+			<div class="action-advice-col">
 				<div class="advice-container">
-					<div class="lead">{{ page.title }}</div>
+					<h1>{{ page.title }}</h1>
 
-					{% if page.custom_fields.featured_image %}
-					<img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
-					{% endif %}
+          {% if page.custom_fields.featured_video %}
+            {% include "./featured-video.html" with featured_video=page.custom_fields.featured_video %}
+          {% elif page.custom_fields.featured_image %}
+            {% include "./featured-image.html" with featured_image=page.custom_fields.featured_image %}
+          {% endif %}
 
-					<div>
-						<div class="ak-text-expander-disabled">
-							{% include_tmpl form.introduction_text %}
-						</div>
-						<a href="#" class="ak-read-more ak-mobile">Read more</a>
-					</div>
+          <div class="call-text">
+					  {% include_tmpl form.introduction_text %}
+          </div>
 				</div>
 			</div>
-			<div class="col-md-6">
+
+			<div class="action-form-container-col ak-grid-col ak-grid-col-4-of-12">
 				<div class="action-form-container member-is-known">
-
 					{% if page.custom_fields.call_page_mode == 'tweet' %}
-					<h2>Send a tweet</h2>
+					  <h2 class="send-tweet-title">Send a tweet</h2>
 					{% endif %}
 
-					<legend class="accessiblyHidden">Form to send tweet</legend>
-					<div id="aria_live_errors" aria-live="assertive" role="alert" class="accessiblyHidden"></div>
+					<form
+            class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below"
+            name="act"
+            method="POST"
+            action="/act/"
+            accept-charset="utf-8"
+            id="call-form"
+            data-wm-floating-labels-form>
 
-					{% if page.custom_fields.call_page_mode == 'tweet' %}
-
-					<script>
-						const twitter_targets_txt = {{ page.custom_fields.twitter_targets|json }};
-						const twitter_messages_txt = {{ page.custom_fields.twitter_messages|json }};
-						const twitter_fallback_txt = {{ page.custom_fields.twitter_fallback|json }};
-						var page_targets;
-						$(actionkit.form).bind('actionkit.ready', prepare_tweet );
-
-						function prepare_tweet () {
-							page_targets = actionkit.context.targets ? actionkit.context.targets.targets : [];
-							$('textarea[name="tweet_text"]').val(
-								choose_a_tweet()
-							);
-						}
-
-						function choose_a_tweet () {
-							const twitter_messages = twitter_messages_txt.split(/[\r\n]+/);
-							const twitter_fallback = twitter_fallback_txt.split(/[\r\n]+/);
-							const messages = twitter_messages.sort( ()=>Math.random()-0.5 ).concat( twitter_fallback );
-
-
-						}
-					</script>
-					{% endif %}
-
-					{% include "./progress_meter.html" %}
-
-					<form class="ak-form ak-styled-fields" name="act" method="POST" action="/act/" accept-charset="utf-8">
 						<input type="hidden" name="page" value="{{ page.name }}">
 
+						{% if page.custom_fields.call_page_mode == 'tweet' %}
+              <div class="form-field">
+                <label for="rtweet_body">
+                  {% filter ak_text:"twitter_field" %}Tweet text{% endfilter %}
+                </label>
+                <textarea
+                  data-wm-tweet-message
+                  name="tweet_text"
+                  id="tweet_body"
+                  rows="3"
+                  required
+                  class="form-control"></textarea>
 
-						<div id="call-form" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
+                <div data-wm-tweet-char-count>280</div>
+              </div>
+						{% endif %}
 
-							<div id="ak-need-contact-info"></div>
-							<script type="text/ak-template" for="ak-need-contact-info">
-								[% if (incomplete) { %]
-									<div class="ak-instructions ak-faded-text">
-									{% filter ak_text:"call_needs_contact_info" %}
-									Fill out the form below so we can find the number for you to call.
-									{% endfilter %}
-									</div>
-									[% } %]
-								</script>
+            {% include "./user_form_wrapper.html" %}
 
-								{% include "./user_form_wrapper.html" %}
+            <div class="buttons-wrapper">
+              {% if page.custom_fields.call_page_mode == 'tweet' %}
+                <button
+                  class="btn btn-primary js-track-action js-submit"
+                  data-js-event-category="tweet"
+                  data-js-event-action="action"
+                  data-wm-tweet-submit
+                  disabled>
+                    {% filter ak_text:"sendTweet_button" %}Tweet{% endfilter %}
+                </button>
+              {% else %}
+                <button class="btn btn-lg btn-primary btn-block js-track-action js-dial-representative" data-js-event-category="call" data-js-event-action="action" data-decision-id="105346" data-campaign-id="3562">
+                  <i style="position: relative; top: -1px" class="fa fa-phone call-icon"></i>
+                  <i class="fa fa-spinner fa-pulse fa-fw hidden call-in-progress-icon"></i>CONNECTION TO <strong>SIMON CAVALLETTO</strong><br>FREE SERVICE
+                </button>
+              {% endif %}
 
-							</div>
+              <a
+                href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
+                class="skip btn btn-default">
+                {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
+              </a>
+            </div>
 
-							{% if page.custom_fields.call_page_mode == 'tweet' %}
+            <div id="call-status" style="text-align: center;"></div>
+            <script>
+              var current_call_recipient;
+              var current_call_action;
+              var current_call_akid;
 
-							<div class="js-character-counter">
-								<div class="form-group floating-label" style="margin-bottom: 5px;"><label for="rtweet_body" class="control-label floated" style="left: 13px; width: 488px;">Tweet text: </label>
-									<div class="">
-										<textarea name="tweet_text" id="tweet_body" rows="3" required="required" placeholder="Write your tweet here." class="form-control" aria-required="true"></textarea>
-									</div>
-								</div>
-								<div class="js-character-count-value">236</div>
-							</div>
-							{% endif %}
+              $('.js-dial-representative').on('click', function (evt) {
+                evt.preventDefault();
+                $('#call-status').html('Calling...');
+                $('.js-dial-representative').attr('disabled', 'disabled');
 
-							<div>
-								{% if page.custom_fields.call_page_mode == 'tweet' %}
-								<button class="btn btn-primary js-track-action js-submit" data-js-event-category="tweet" data-js-event-action="action" disabled="">Tweet</button>
-								{% else %}
-								<button class="btn btn-lg btn-primary btn-block js-track-action js-dial-representative" data-js-event-category="call" data-js-event-action="action" data-decision-id="105346" data-campaign-id="3562"> 
-									<i style="position: relative; top: -1px" class="fa fa-phone call-icon"></i> 
-									<i class="fa fa-spinner fa-pulse fa-fw hidden call-in-progress-icon"></i>CONNECTION TO <strong>SIMON CAVALLETTO</strong><br>FREE SERVICE
-								</button>
-								<div id="call-status"></div>
-								<style>
-									#call-status {
-										text-align: center;
-									}
-								</style>
-								<script>
-									var current_call_recipient;
-									var current_call_action;
-									var current_call_akid;
-									$('.js-dial-representative').on('click', function(evt) {
-										evt.preventDefault();
-										$('#call-status').html('Calling...');
-										$('.js-dial-representative').attr('disabled', 'disabled');
+                var ak_form = $('form[name="act"]');
+                $.ajax({
+                  "method": "POST",
+                  "url": '/rest/v1/action/',
+                  "data": ak_form.serialize(),
+                  "success": function (response) {
+                    console.log('AK Response', response);
+                    current_call_action = response.action_id;
+                    current_call_akid = response.akid;
 
-										var ak_form = $('form[name="act"]');
-										$.ajax( {
-											"method": "POST",
-											"url": '/rest/v1/action/', 
-											"data": ak_form.serialize(),
-											"success": function (response) {
-												console.log('AK Response', response);
-												current_call_action = response.action_id;
-												current_call_akid = response.akid;
+                    $.ajax({
+                      "method": "POST",
+                      "url": 'https://act.not-a2.eu/twilio/api/call/start',
+                      "data": {
+                        'decision_id': '{{ page.custom_fields.call_decision_id }}',
+                        'campaign_id': '{{ page.custom_fields.call_campaign_id }}',
+                        'source_id': '{{ page.custom_fields.call_source_id }}',
+                        'rcall_id': '',
+                        'use_known_member_data': 'true',
+                        'known_member_data': '',
+                        'email': $('#id_email').val(),
+                        'firstname': $('#id_name').val(),
+                        'lastname': '',
+                        'phone': $('#id_phone').val(),
+                        'country':  $('#id_country').val(),
+                        'postcode': $('#id_postal').val()
+                      },
+                      "success": function (response) {
+                        console.log('Response', response);
+                        current_call_recipient = response.rcall_recipient_id;
+                        check_call_status();
+                      }
+                    });
+                  }
+                });
+              });
 
-												$.ajax( {
-													"method": "POST",
-													"url": 'https://act.not-a2.eu/twilio/api/call/start', 
-													"data": {
-														'decision_id': '{{ page.custom_fields.call_decision_id }}',
-														'campaign_id': '{{ page.custom_fields.call_campaign_id }}',
-														'source_id': '{{ page.custom_fields.call_source_id }}',
-														'rcall_id': '',
-														'use_known_member_data': 'true',
-														'known_member_data': '',
-														'email': $('#id_email').val(),
-														'firstname': $('#id_name').val(),
-														'lastname': '',
-														'phone': $('#id_phone').val(),
-														'country':  $('#id_country').val(),
-														'postcode': $('#id_postal').val()
-													},
-													"success": function (response) {
-														console.log('Response', response);
-														current_call_recipient = response.rcall_recipient_id;
-														check_call_status();
-													} 
-												} );
+              function check_call_status () {
+                poll_for_status((status) => {
+                  if (!status) {
+                    console.log('Call status is null, checking again');
+                    check_again()
+                  } else if (status == 'interstitial') {
+                    console.log('Call status is interstitial, checking again');
+                    check_again()
+                  } else if (status == 'failed') {
+                    $('#call-status').html('Call failed.');
+                    $('.js-dial-representative').removeAttr('disabled');
+                    console.log('Call status is failed');
 
-											} 
-										} );
+                  } else if (status == 'success') {
+                    $('#call-status').html('Call connected!');
+                    console.log('Call status is success');
+                    check_again()
 
-									} );
+                  } else if (status == 'completed') {
+                    $('#call-status').html('Call completed');
+                    $('.js-dial-representative').removeAttr('disabled');
+                    console.log('Call status is completed');
 
-									function check_call_status () {
-										poll_for_status( function ( status ) {
-											if ( ! status ) {
-												console.log('Call status is null, checking again');
-												check_again()
-											} else if ( status == 'interstitial' ) {
-												console.log('Call status is interstitial, checking again');
-												check_again()
-											} else if ( status == 'failed' ) {
-												$('#call-status').html('Call failed.');
-												$('.js-dial-representative').removeAttr('disabled');
-												console.log('Call status is failed');
+                  } else {
+                    console.log('Call status is unexpected:', status);
+                    $('#call-status').html('Call failed. (' + status + ')');
+                    $('.js-dial-representative').removeAttr('disabled');
+                  }
+                });
+              }
 
-											} else if ( status == 'success' ) {
-												$('#call-status').html('Call connected!');
-												console.log('Call status is success');
-												check_again()
+              function check_again () {
+                setTimeout(function () {
+                  check_call_status()
+                }, 100);
+              }
 
-											} else if ( status == 'completed' ) {
-												$('#call-status').html('Call completed');
-												$('.js-dial-representative').removeAttr('disabled');
-												console.log('Call status is completed');
-
-											} else {
-												console.log('Call status is unexpected:', status);
-												$('#call-status').html('Call failed. (' + status + ')');
-												$('.js-dial-representative').removeAttr('disabled');
-											}
-										} );
-									}
-
-									function check_again () {
-										setTimeout( function () {
-											check_call_status()
-										}, 100 );
-									}
-
-									function poll_for_status ( status_callback ) {
-										$.ajax( {
-											"method": "GET",
-											"url":                             'https://act.not-a2.eu/twilio/rcall_recipient/' + current_call_recipient + '/status', 
-											"success": function (response) {
-												console.log('Status', response);
-												status_callback( response.call_status );
-											} 
-										} );
-									}
-
-								</script>
-                                
-								{% endif %}
-								<a href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
-							</div>
-						</fieldset>
+              function poll_for_status ( status_callback ) {
+                $.ajax({
+                  "method": "GET",
+                  "url": 'https://act.not-a2.eu/twilio/rcall_recipient/' + current_call_recipient + '/status',
+                  "success": function (response) {
+                    console.log('Status', response);
+                    status_callback( response.call_status );
+                  }
+                });
+              }
+            </script>
 					</form>
 				</div>
 			</div>
-		</div>
-
 	</div>
 
 	<div class="action-feedback-bar">
 		<div class="fade in alert alert-success alert-dismissable feedback-alert">
-			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+			<button type="button" class="close" data-dismiss="alert">×</button>
 			Thanks for tweeting!
 		</div>
 	</div>
-
-</form>
-
+</div>
 {% endblock %}
 
 {% block script_additions %}
-<script type="text/javascript">
-	$(window).load(function() {
-		$('#target_checkboxes').appendTo('div#who_called');
+{% if page.custom_fields.call_page_mode == 'tweet' %}
+<script>
+const targets_txt = {{ page.custom_fields.twitter_targets|json }};
+const messages_txt = {{ page.custom_fields.twitter_messages|json }};
+const fallback_txt = {{ page.custom_fields.twitter_fallback|json }};
 
-		var $window = $(window);
-		function call_page_steps_mobile() {
-			var windowSize = $window.width();
-			if (windowSize < 480) {
-				$('.ak-steps-area h3').addClass('clickable');
-			} else {
-				$('.ak-steps-area h3').removeClass('clickable');
-				$('.ak-steps-area h3').each( function () {
-					$(this).siblings('div').show();
-				});
-			}
+let page_targets;
 
-		}
-		$('.ak-steps-area').on('click', 'h3.clickable', function(e) {
-			e.stopPropagation();
-			$(this).toggleClass('active');
-			$(this).siblings('div').stop().slideToggle('fast');
-		});
+$(actionkit.form).bind('actionkit.ready', prepare_tweet);
+setTimeout(prepare_tweet, 1000);
 
-		$(window).on('resize', call_page_steps_mobile);
-		call_page_steps_mobile();
+const updateTweetForm = () => {
+  const textArea = document.querySelector("[data-wm-tweet-message]");
+  const counter = document.querySelector("[data-wm-tweet-char-count]");
+  const tweetSubmit = document.querySelector("[data-wm-tweet-submit]");
 
-	});
+  counter.innerHTML = 280 - textArea.value.length;
+  tweetSubmit.disabled = textArea.value.length < 1;
+};
+
+const submitTweet = () => {
+  const tweet = document.querySelector("[data-wm-tweet-message]").value;
+  const params = new URLSearchParams({ text: tweet }).toString();
+  const handle = window.open( 'https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320' );
+}
+
+function prepare_tweet () {
+  page_targets = actionkit.context.targets?.targets ? actionkit.context.targets.targets : [];
+
+  const textArea = document.querySelector("[data-wm-tweet-message]");
+  textArea.value = choose_a_tweet();
+  textArea.addEventListener('keyup', updateTweetForm, false);
+  textArea.addEventListener('change', updateTweetForm, false);
+  textArea.dispatchEvent(new Event('change'));
+
+  const tweetSubmit = document.querySelector("[data-wm-tweet-submit]");
+  tweetSubmit.addEventListener('click', submitTweet);
+
+  updateTweetForm();
+}
+
+function choose_a_tweet () {
+  const target_lines = targets_txt.split(/[\r\n]+/);
+  const target_data = target_lines.map( (s) => s.split(/\s+/) ).map((s) => [s.shift(), s.join(' ')]);
+  const page_target_data = page_targets.map(
+    (t) => [t.twitter, t.title_informal_full]
+  );
+
+  const combined_targets = target_data.concat(page_target_data).map(
+    (t) => [t[0] ? '@' + t[0] : null, t[1]]
+  );
+  const tweet_targets = combined_targets.filter(
+    (t) => t[0]
+  );
+  const random_targets = tweet_targets.sort(()=>Math.random()-0.5);
+
+  const first_target = tweet_targets[0] || [];
+  const random_target = random_targets[0] || [];
+
+  const variables = {
+    handle: first_target[0],
+    name: first_target[1],
+    handles: combined_targets.map((t) => t[0]).join(', '),
+    targets: combined_targets,
+    rhandle: random_target[0],
+    rname: random_target[1],
+    rhandles: random_targets.map((t) => t[0]).join(', '),
+    rtargets: random_targets,
+  };
+
+  const messages = messages_txt.split(/[\r\n]+/);
+  const fallback = fallback_txt.split(/[\r\n]+/);
+  const randomized = messages.sort(() => Math.random()-0.5).concat(fallback);
+  randomized.push("An important message for [%= handles %]: ");
+
+  for (const template of randomized) {
+    const message = actionkit.utils.template(template, variables);
+
+    if (message.match(/\S/)) {
+      return message;
+    }
+  }
+
+  return "No matching tweets were found";
+}
+</script>
+{% endif %}
+
+<script>
+$(window).load(function () {
+  $('#target_checkboxes').appendTo('div#who_called');
+
+  const $window = $(window);
+
+  function call_page_steps_mobile() {
+    const windowSize = $window.width();
+
+    if (windowSize < 480) {
+      $('.ak-steps-area h3').addClass('clickable');
+    } else {
+      $('.ak-steps-area h3').removeClass('clickable');
+      $('.ak-steps-area h3').each( function () {
+        $(this).siblings('div').show();
+      });
+    }
+  }
+  $('.ak-steps-area').on('click', 'h3.clickable', function (e) {
+    e.stopPropagation();
+    $(this).toggleClass('active');
+    $(this).siblings('div').stop().slideToggle('fast');
+  });
+
+  $(window).on('resize', call_page_steps_mobile);
+  call_page_steps_mobile();
+});
 </script>
 {% endblock %}

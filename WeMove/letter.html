@@ -48,7 +48,7 @@
   </div>
 
   <div class="form-wrapper">
-    <form class="ak-form letter-form-wrapper" name="act" method="POST" action="/act/" accept-charset="utf-8">
+    <form data-wm-floating-labels-form class="ak-form letter-form-wrapper" name="act" method="POST" action="/act/" accept-charset="utf-8">
         <input type="hidden" name="page" value="{{ page.name }}">
 
         {% if page.custom_fields.featured_image %}
@@ -57,18 +57,14 @@
 
         <div id="letter-form" class="ak-field-box ak-styled-fields ak-labels-overlaid ak-errs-below">
 
-          <div class="ak-field ak-margin-bottom-1 ak-styled-fields floating-input-field">
-            <label for="id_comment">{% filter ak_text:"form_field_comments" %}Please write your message here{% endfilter %}</label>
+          <div class="ak-field ak-margin-bottom-1 ak-styled-fields form-field">
+            <label for="id_comment">{% filter ak_text:"form_field_message" %}Please write your message here{% endfilter %}</label>
             <textarea id="id_comment" name="action_comment" class="ak-letter-text ">{% include_tmpl form.letter_text escaped %}</textarea>
           </div>
 
           {% include "./user_form_wrapper.html" %}
 
-          <div class="privacy-statement">
-            {% filter ak_text:"form_signTerms_disclaimer" %}By clicking “Sign” you are supporting this campaign, and agreeing to WeMove Europe using your information for the purpose of this campaign. We might hand over your name, surname and country to the petition target. Unless you subscribe to receive personalised updates, we will delete your data after the campaign has ended. We will never share your data with any third parties without your permission. See our full privacy policy <a href="https://www.wemove.eu/privacy-policy" target="_blank">here</a>.{% endfilter %}
-          </div>
-
-          <div class="js-nav-buttons hide-if-previously-signed">
+          <div class="form-field js-nav-buttons hide-if-previously-signed">
             <button type="submit" class="btn btn-primary">
               {% filter ak_text:"button_send_email" %}Send Email{% endfilter %}
             </button>
@@ -77,7 +73,7 @@
           <a
             href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
             class="skip btn btn-default">
-            {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}
+            {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
           </a>
       </div>
     </form>

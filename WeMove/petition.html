@@ -8,6 +8,7 @@
   method="POST"
   action="/act/"
   accept-charset="utf-8"
+  data-wm-floating-labels-form
   data-wm-pixel-event-type="Lead"
   data-wm-pixel-track-type="track"
   data-wm-pixel-content-id="{{ page.id }}"
@@ -25,26 +26,9 @@
 					{% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
           {% store as featured_image %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_image" as field_name %}{% endstore %}
 					{% if featured_video %}
-          <div class="video-container ">
-            <div class="cookieconsent-optout-marketing">
-              <div class="video-placeholder">
-                <button type="button" onclick="Cookiebot.renew()">
-                  {% filter ak_text:"videoPlaceholder_button" %}Please accept marketing cookies to watch this video{% endfilter %}
-                </button>
-              </div>
-            </div>
-            <iframe
-              width="560"
-              height="315"
-              data-cookieblock-src="{{page.custom_fields.featured_video}}"
-              data-cookieconsent="marketing"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen>
-            </iframe>
-          </div>
-					{% elif featured_image %}
-					<img class="ak-featured-img {% if page.goal %}ak-margin-top-1{% endif %}" src="{{featured_image}}">
+            {% include "./featured-video.html" with featured_video=featured_video %}
+          {% elif featured_image %}
+            {% include "./featured-image.html" with featured_image=featured_image %}
           {% endif %}
 
 					{% if form.statement_leadin %}
@@ -81,7 +65,7 @@
 							{% store as references %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "references" as field_name %}{% endstore %}
 							{% if references %}
 							<div class="references">
-								<h4>{% filter ak_text:"references" %}References{% endfilter %}:</h4>
+								<h4>{% filter ak_text:"references" %}References:{% endfilter %}</h4>
 								<div class="unescape-html">{{ references }}</div>
 							</div>
 							{% endif %}
@@ -90,9 +74,19 @@
 						{% store as partnership_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "partnership_icons" as field_name %}{% endstore %}
 						{% if partnership_icons %}
 						<div class="partners">
-							<h2>{% filter ak_text:"in_partnership_with" %}In partnership with{% endfilter %}:</h2>
-							<div class="unescape-html partnership-icons">
+							<h2>{% filter ak_text:"in_partnership_with" %}In partnership with{% endfilter %}</h2>
+							<div class="partnership-icons">
 								{{ partnership_icons }}
+							</div>
+						</div>
+						{% endif %}
+
+            {% store as supporters_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "supporters_icons" as field_name %}{% endstore %}
+						{% if supporters_icons %}
+						<div class="supporters">
+							<h2>{% filter ak_text:"supported_by" %}Supported by{% endfilter %}</h2>
+							<div class="supporters-icons">
+								{{ supporters_icons }}
 							</div>
 						</div>
 						{% endif %}
@@ -101,10 +95,12 @@
 			</div>
 		</div>
 
-		<div class="action-form-container-col ak-grid-col ak-grid-col-4-of-12" id="action-form-container-col">
-
-      <aside data-wm-floating-meter class="floating-progress-meter mobile-only">
-        {% include "./progress_meter.html" with instance="2" %}
+		<div
+      class="action-form-container-col ak-grid-col ak-grid-col-4-of-12 is-floating"
+      id="action-form-container-col"
+      data-wm-form-container>
+      <div data-wm-floating-meter class="floating-progress-meter">
+        {% include "./progress_meter.html" %}
 
         <a href="#action-form-container-col" class="btn btn-primary fake-submit-button">
           {% if page.custom_fields.sign_petition_button %}
@@ -115,26 +111,21 @@
             {% endfilter %}
           {% endif %}
         </a>
-      </aside>
+      </div>
 
-			{% include "./progress_meter.html" with instance="1" %}
 			<div class="action-form">
 				<div id="action-form-container-id" class="action-form-container">
-
 					<div class="ak-field-box ak-field-box-borderless">
-
 						<div id="petition-form" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
-
 							{% include "./user_form_wrapper.html" %}
 
-							<div class="ak-field floating-input-field hide-if-previously-signed">
+							<div class="ak-field form-field hide-if-previously-signed">
 								<label for="id_comment">{% filter ak_text:"form_field_comments" %}Your comments{% endfilter %}:</label>
 								<textarea id="id_comment" name="action_comment"></textarea>
 							</div>
-
 						</div>
 
-						<div class="js-nav-buttons hide-if-previously-signed">
+						<div class="form-field js-nav-buttons hide-if-previously-signed">
 							<button type="submit" class="btn btn-primary">
                 {% if page.custom_fields.sign_petition_button %}
                   {{ page.custom_fields.sign_petition_button }}
@@ -155,7 +146,6 @@
             {% endif %}
 					</div>
 				</div>
-
 			</div>
 
 			<aside class="recent-comments" style="display: none">
@@ -220,10 +210,10 @@
 	} );
 
 	window.recentActions = recent_actions.map( n => n[1] );
-
 	window.currentActionIndex = 0;
 	window.recentActionShown = false;
 	window.recent_action_elt = $('.js-recent-action');
+
 	$( function () {
 		if (recent_action_elt.length > 0) {
 			if (window.innerWidth > 1180) {
@@ -244,7 +234,6 @@
 			setTimeout(cycleRecentAction, 5000);
 		});
 	}
-
 </script>
 
 {% endblock %}

@@ -5,7 +5,7 @@
 	<style type="text/css">
 		#ak-map {
 			height: 250px;
-		}	
+		}
 		.ak-marker {
 			width: 10px;
 			position: relative;
@@ -19,18 +19,18 @@
 {% endblock %}
 
 {% block script_additions %}
-<script type="text/javascript" src="/resources/leaflet/leaflet.js"></script>
-<script type="text/javascript">
+<script src="/resources/leaflet/leaflet.js"></script>
+<script>
 $( function () {
-    var have_events = $('#id_have_events').val(); 
+    var have_events = $('#id_have_events').val();
     if ( ! have_events ) {
         var args = actionkit.utils.getArgs();
         actionkit.forms.eventSearch(null, {
-            event_id: args.event_id, 
-            zip: args.zip, 
+            event_id: args.event_id,
+            zip: args.zip,
             page: $('#id_page').val()
         });
-    }                    
+    }
 });
 
 $(window).on('load', function (){
@@ -49,7 +49,7 @@ $(window).on('load', function (){
 
 
 {% endblock %}
-	
+
 
 {% block content %}
 
@@ -113,14 +113,14 @@ $(window).on('load', function (){
                     {% endwith %}
                     <!-- ...to here -->
                 </div>
-                
+
                 {% if event.search_show_map %}
                 <!--<img src="http://maps.google.com/maps/api/staticmap?sensor=false&size=500x300&markers={{ event.address1|urlencode }}, {{ event.city_etc|urlencode }}">-->
                 {% if not event.is_virtual %}
                 <h5><a href="https://www.google.com/maps/place/{{ event.address1|urlencode }},%20{{ event.city_etc|urlencode }}" target="_blank" class="ak-larger-text"><small><img src="/media/modern/blue_marker.png" class="ak-marker"/> Click to see larger</a></small></h5>
                 {% endif %}
                 <div id="ak-map"></div>
-                
+
                 <p class="caption">
                     {% if event.is_virtual %}
                         Sign up to get event updates and more.
@@ -144,7 +144,7 @@ $(window).on('load', function (){
                         {% else %}
                         <div id="user-info">
                             {% include "./user_form_wrapper.html" %}
-                            <script type="text/javascript">
+                            <script>
                             $('#user-info input[name=email]').attr('disabled','disabled');
                             </script>
                             <!-- If they want to "update email", they should do a new signup instead. -->
@@ -153,12 +153,12 @@ $(window).on('load', function (){
                         {% endif %}
 
                     </div>
-            
+
                     {% if form.ground_rules|is_nonblank and not update %}
                         <div style="margin: 10px 0">
                             <input id="id_event_signup_ground_rules" type="checkbox" name="event_signup_ground_rules" value="1">
                             <label class="ak-checkbox-label" for="id_event_signup_ground_rules">
-                                <strong>Required:</strong>  
+                                <strong>Required:</strong>
                                 I agree to <a href="#" onclick="$('#id_ground_rules_text').show(); $(this).before(this.innerHTML + ' (below)').hide(); return false;">the rules</a> for signing up for an event.
                             </label>
                         </div>
@@ -172,10 +172,10 @@ $(window).on('load', function (){
                     <div>
                     <button type="submit" class="ak-submit-button">{% if update %}Update signup{% else %}Sign up for event{% endif %}</button>
                     </div>
-                </div>           
+                </div>
             </div>
         </div>
-    
+
     {% else %}
 
         <div class="ak-grid-row">
@@ -189,7 +189,7 @@ $(window).on('load', function (){
                     {% endif %}
                     {% if event.is_in_past %}
                         <h2>Sorry, it's too late to sign up for this event.</h2>
-                         
+
                     {% endif %}
                     {% if event.is_awaiting_confirmation %}
                         <h2>Sorry, the event host has not yet confirmed this event.</h2>
@@ -208,7 +208,7 @@ $(window).on('load', function (){
                 <hr />
                 <p>If you already signed up to attend the event, here are the event details:</p>
                 {% include "./event_attendee_details.html" %}
-        
+
             </div>
         </div><!--grid-row-->
 

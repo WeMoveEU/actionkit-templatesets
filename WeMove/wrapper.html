@@ -1,7 +1,7 @@
-{% if page.lang.iso_code == 'de' or page.lang.iso_code == 'it' or page.lang.iso_code == 'nl' or page.lang.iso_code == 'es' or page.lang.iso_code == 'pl' or page.lang.iso_code == 'fr' %}
-  {% firstof page.lang.iso_code as link_iso %}
+{% if page.lang.iso_code in "de,it,nl,pl,fr,es" %}
+  {% remember page.lang.iso_code as link_iso %}
 {% else %}
-  {% firstof "en" as link_iso %}
+  {% remember "en" as link_iso %}
 {% endif %}
 <!DOCTYPE html>
 <html lang="{{page.lang.iso_code|default:'en'}}"{% if page.lang.is_rtl %} dir="rtl"{% endif %}>
@@ -22,6 +22,7 @@
     <meta property="og:site_name" content="{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}">
     <meta property="og:type" content="article">
     <meta name="twitter:card" content="summary">
+    {% endblock %}
 
     {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
     {% if campaign_type == "youmove" %}
@@ -29,23 +30,22 @@
     {% else %}
     <link href="https://www.wemove.eu/favicon.png" rel="icon" />
     {% endif %}
-    {% endblock share_metatags %}
 
     {% block meta_additions %}{% endblock %}
 
     {% load_css %}
         /media/modern/actionkit.css?1=22
+        //static.wemove.eu/action-kit/out/css/wemove.css
     {% end %}
+
+
     {% block css_additions %}{% endblock %}
     {% block script_additions %}{% endblock %}
 
     {% load_prefill %}
     {% load_ak_context context %}
 
-    <link rel="stylesheet" href="https://static.wemove.eu/action-kit/out/css/wemove.css">
-    {% block cookiebot_js %}
-    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="162c81a4-03c4-483c-891c-188b89eaf09c" data-blockingmode="auto" type="text/javascript"></script>
-    {% endblock cookiebot_js %}
+    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="162c81a4-03c4-483c-891c-188b89eaf09c" data-blockingmode="auto" data-culture="{{page.lang.iso_code}}"></script>
 
     {% load_js %}
         //ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
@@ -53,13 +53,14 @@
         /resources/actionkit.js
     {% end %}
 </head>
-{% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
 <body class="{% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %} ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
-    <script type="text/javascript">
+    <script>
         actionkit.forms.initPage()
     </script>
 
     <div id="fb-root"></div>
+
+	{% if not page.custom_fields.consent_version %}
 
     <div class="modal fade js-share-popup in" style="display: none; padding-right: 15px;" aria-hidden="false">
         <div class="modal-backdrop fade in" style="height: 928px;"></div>
@@ -114,10 +115,11 @@
       {% endif %}
     {% endblock %}
 
+    {% endif %}
+
     <div id="alert-wrap" style="z-index: 1040; width: 40%; margin-left: -20%; left: 50%; position: absolute">
     </div>
 
-    {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
     {% if campaign_type == "youmove" %}
       {% include "./youmove-header.html" %}
     {% else %}
@@ -140,16 +142,48 @@
             {% endif %}
           {% endblock %}
 
-          <div class="raction" id="rsign">
-            <div class="raction-content">
+
+          {% if page.custom_fields.consent_version %}
+          <div class="modal fade js-share-popup in" style="padding-right: 15px; display: block" aria-hidden="false">
+            <div class="modal-backdrop fade in" style="height: 928px;"></div>
+            <div class="modal-dialog" style="z-index:1041;">
+              <div class="modal-content">
+          {% else %}
+            <div class="raction" id="rsign">
+              <div class="raction-content">
+          {% endif %}
+
               {% block content %}{% endblock %}
+
+          {% if page.custom_fields.consent_version %}
+                  </div>
+                </div>
+              </div>
+              <script>
+                var modal = $('.modal.fade')
+                var modal_backdrop = modal.find('.modal-backdrop');
+
+                function resize_modal () {
+                  modal_backdrop.height( $(window).height() );
+                  $('#rsign').height( $('.modal-content').height() );
+                }
+                $(window).on( 'resize', resize_modal );
+                resize_modal();
+
+                function init_modal () {
+                  modal_backdrop.on( 'click', close_modal );
+                  modal.find('.close').on( 'click', close_modal );
+                  function close_modal () { modal.hide() }
+                }
+              </script>
+          {% else %}
             </div>
           </div>
+          {% endif %}
         </div>
       </div>
     </div>
 
-    {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
     {% if campaign_type == "youmove" %}
       {% include "./youmove-footer.html" %}
     {% else %}
@@ -163,24 +197,12 @@
 </script>
 {% endblock %}
 
-{% if analytics_key %}
-<script type="text/plain" data-cookieconsent="marketing">
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-ga('create', '{{ analytics_key }}', 'auto');
-ga('send', 'pageview');
-</script>
-{% endif %}
-
 <script>
 window.language = {
   name: "{{ page.lang_or_en }}",
   iso: "{{page.lang.iso_code|default:'en'}}",
 };
 
-{% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
 {% if campaign_type == "youmove" %}
 const MATOMO_SITE_ID = "4";
 {% else %}

@@ -26,7 +26,7 @@
 
 {% if actionkit_user %}
     {% if recurring_update or recurring_cancel %}
-        <div class="ak-grid-row">
+        <div class="ak-grid-row" style="padding: 0 1rem;">
             <div class="ak-grid-col ak-grid-col-12-of-12">
                 <p>
                     {% filter ak_text:"logged_in_as" %}You are logged in as{% endfilter %} <a href="/me/">{{ actionkit_user.name|escape }}</a>.
@@ -38,7 +38,7 @@
 {% endif %}
 
 {% if page.SUPPRESS_SHARING %}
-    <div class="ak-grid-row">
+    <div class="ak-grid-row" style="padding: 0 1rem;">
         <div class="ak-grid-col ak-grid-col-12-of-12">
           <div class="thanks-header">
             <img src="/media/modern/stance-supportive.svg" height="34" width="34" class="ak-checkmark-icon" alt="&#10003;">
@@ -57,7 +57,7 @@
     </div>
 {% else %}
 
-    <div class="ak-grid-row">
+    <div class="ak-grid-row" style="padding: 0 1rem;">
         <div class="ak-grid-col ak-grid-col-6-of-12">
             <h1>
                 {% if page.followup.send_taf %}
@@ -200,19 +200,15 @@
 							</a>
 						</div>
 						{% endif %}
-
         </div>
-
-				<div class="col-md-12" style="text-align: center;">
-					<br>
-					<a href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default">
-            {% filter ak_text:"thanks_skipStep_button" %}Skip this step{% endfilter %}
-            </a>
-				</div>
 			</div>
 
+      <div class="skip-step-wrapper" style="margin-top: 1rem; text-align: center;">
+        <a href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default" style="margin-top: 1rem;">
+          {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
+          </a>
+      </div>
 {% endif %}
-
 </form>
 
 {% else %}
@@ -306,7 +302,7 @@
 {% endblock %}
 
 {% block script_additions %}
-<script type="text/javascript">
+<script>
     $(document).ready(function() {
         $('.ak-emailalt').on('click', function() {
             $(this).parent('p').toggleClass('active');
@@ -322,7 +318,7 @@
 
 {% block below_form %}
 
-<script type="text/javascript">
+<script>
     actionkit.forms.contextRoot = '/context/';
     actionkit.forms.initTafForm('taf');
     actionkit.sharing.initShareTools();

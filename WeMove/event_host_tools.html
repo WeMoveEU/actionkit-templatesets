@@ -2,7 +2,7 @@
 
 {% block script_additions %}
 
-<script type="text/javascript">
+<script>
     // Roster toggle-all checkbox
     function toggleSignups() {
         $(this)
@@ -72,14 +72,14 @@
     function validateRoster(form) {
         var action = form.action.value;
         // Nobody to remove/promote/demote
-        if ( /(change-role|remove)/.test(action) 
+        if ( /(change-role|remove)/.test(action)
             && !($(form).find('input.toggle:checked').length) )
-            actionkit.errors['user_id:missing'] = 
+            actionkit.errors['user_id:missing'] =
             actionkit.forms.errorMessage('event_roster_user_ids:missing');
         // No message to send
-        if ( action == 'send_email' 
+        if ( action == 'send_email'
             && !form.body.value )
-            actionkit.errors['body:missing'] = 
+            actionkit.errors['body:missing'] =
             actionkit.forms.errorMessage('event_contact_body:missing');
     }
     // Confirm removing folks
@@ -87,7 +87,7 @@
         var action = form.action.value;
         var actionButton = $(form).find('input[name="' + action + '"]');
         var confirmMessage = actionButton.attr('confirm-message');
-        if ( confirmMessage ) 
+        if ( confirmMessage )
             return confirm(confirmMessage);
         else
             return true;
@@ -261,13 +261,13 @@
             {% block find_another_event %}<div><a href="/event/{{ campaign.local_name }}/?akid={{args.akid}}&amp;zip={{args.zip}}">Search for another event</a></div>{% endblock %}
         </div>
     </div>
-    
+
 {% endif %}
 
 {% endblock %}
 
 {% block below_form %}
-    <script type="text/javascript">
+    <script>
         actionkit.forms.contextRoot = '/context/';
         actionkit.forms.initTafForm('taf');
     </script>

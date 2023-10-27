@@ -33,7 +33,7 @@
         <div id="event-attendee-details">
             {% include "./event_attendee_details.html" %}
         </div>
-        
+
         {% if event.attendee_show_map %}
         <div class="event-attendee-sidebar">
             <div id="map">
@@ -91,7 +91,7 @@
 {% endblock %}
 
 {% block below_form %}
-<script type="text/javascript">
+<script>
 actionkit.forms.contextRoot = '/context/';
 actionkit.forms.initTafForm('taf');
 </script>

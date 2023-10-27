@@ -63,7 +63,7 @@
                             {% include "./date_picker.html" %}
                         </div>
 
-                        <script type="text/javascript">
+                        <script>
                             // Replace animation w/instant show, because anim
                             // breaks tabbing quickly past the date field.
                             jQuery.fn.showFast = function(speed, callback) {
@@ -119,7 +119,7 @@
 							<option value="{{ choice.0 }}">{{ choice.1 }}</option>
                         {% endfor %}
 					</select>
-				</div>				
+				</div>
                 <div class="unknown_user">
                     <!--
                         This only shows if the user form includes all of the
@@ -312,13 +312,13 @@
 {% if campaign.timezone %}
 	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.14/moment-timezone-with-data.min.js"></script>
-	<script type="text/javascript">
+	<script>
 		$(function() {
 			actionkit.forms.update_event_time("{{campaign.starts_at}}", "{{campaign.timezone}}");
 		});
 	</script>
 {% endif %}
-<script type="text/javascript">
+<script>
     isEventUnitedStates = function () {
         var country = actionkit.form && actionkit.form.event_country
         && actionkit.utils.val(actionkit.form.event_country)
@@ -361,7 +361,7 @@
             }
         }
     };
-    
+
     reflectEventMode = function () {
         var mode = actionkit.utils.val( actionkit.form.event_mode ) || 'onsite';
         $('.for-mode-onsite, .for-mode-local, .for-mode-regional, .for-mode-global').hide();
@@ -405,14 +405,14 @@
 </script>
 
 {% if update %}
-    <script type="text/javascript">
+    <script>
     $( function() {
         $('#ak-user-info input[name=email]').attr('disabled','disabled')
     } );
     </script>
 {% endif %}
 
-<script type="text/javascript">	
+<script>
 
 var address_fields = [
     'address1', 'address2', 'city', 'state', 'zip', 'postal', 'country'
