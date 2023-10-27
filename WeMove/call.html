@@ -37,7 +37,7 @@
 						<input type="hidden" name="page" value="{{ page.name }}">
 
 						{% if page.custom_fields.call_page_mode == 'tweet' %}
-              <div class="form-field">
+              <div class="form-field hide-if-previously-signed">
                 <label for="rtweet_body">
                   {% filter ak_text:"twitter_field" %}Tweet text{% endfilter %}
                 </label>
@@ -56,6 +56,7 @@
             {% include "./user_form_wrapper.html" %}
 
             <div class="buttons-wrapper">
+              <div class="hide-if-previously-signed">
               {% if page.custom_fields.call_page_mode == 'tweet' %}
                 <button
                   class="btn btn-primary js-track-action js-submit"
@@ -71,7 +72,7 @@
                   <i class="fa fa-spinner fa-pulse fa-fw hidden call-in-progress-icon"></i>CONNECTION TO <strong>SIMON CAVALLETTO</strong><br>FREE SERVICE
                 </button>
               {% endif %}
-
+              </div>
               <a
                 href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
                 class="skip btn btn-default">
