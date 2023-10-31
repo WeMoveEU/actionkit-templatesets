@@ -47,7 +47,6 @@
     {% block script_additions %}{% endblock %}
     <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="162c81a4-03c4-483c-891c-188b89eaf09c" data-blockingmode="auto" data-culture="{{page.lang.iso_code}}"></script>
 
-    {% load_prefill %}<!-- TODO: Ask Simon -->
     {% load_ak_context context %}
 </head>
 <body class="{% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %} ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
@@ -68,7 +67,6 @@
         </div>
     </div>
 
-    <!-- TODO: Ask Simon -->
     <script>
         function init_modal () {
             var modal = $('.modal.fade')
@@ -112,10 +110,6 @@
     {% endblock %}
   {% endif %}
 
-    <!-- TODO: Ask Simon -->
-    <div id="alert-wrap" style="z-index: 1040; width: 40%; margin-left: -20%; left: 50%; position: absolute">
-    </div>
-
     {% if campaign_type == "youmove" %}
       {% include "./youmove-header.html" %}
     {% else %}
@@ -125,19 +119,18 @@
     <div id="wrapper">
       <div id="content">
         <div class="container-fluid">
-          {% block finished_alert %}<!-- TODO: Ask Simon -->
+          {% block finished_alert %}
             {% if page.custom_fields.finished_alert %}
               <div class="alert alert-warning alert-finished" role="alert">
                   {{ page.custom_fields.finished_alert |safe }}
               </div>
               <script><!-- TODO: Ask Simon -->
                   $(document).on('ready', function () {
-                    $('submit, button[type=submit], #unknown_user :input, .ak-field-box :input').attr('disabled', 'disabled')
+                    $('submit, button[type=submit], #unknown_user :input, .ak-field-box :input').attr('disabled', 'disabled');
                   });
               </script>
             {% endif %}
           {% endblock %}
-
 
           {% if page.custom_fields.consent_version %}
           <div class="modal" style="display: block">
