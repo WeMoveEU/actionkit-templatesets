@@ -89,117 +89,117 @@
             </div>
         </div>
 
-        <div class="ak-grid-col ak-grid-col-6-of-12">
+        <div class="ak-grid-col ak-grid-col-6-of-12" data-wm-share-buttons>
 
-					<div class="facebook-share-preview-container">
-					    <h3 class="facebook-share-preview--title">{{ page.followup.share_title_value }}</h3>
-							{% if page.custom_fields.featured_image or page.followup.share_image_value %}
-							<div class="facebook-share-preview-image">
-								<img src="{{ page.custom_fields.featured_image|default:page.followup.share_image_value }}">
-							</div>
-							{% endif %}
-					    <div class="facebook-share-preview-description">
-					      {{ page.followup.share_description_value }}
-					    </div>
-					    <div style="clear: both;"></div>
-					  </div>
-
-						<div class="share-big facebook-share-container js-facebook-share-container">
-							<a
-                class="btn btn-primary popup facebook"
-                href="/share/link?type=fb&amp;page_name={{page.name}}&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
-                target="_blank"
-                data-wm-pixel-event-type="Share"
-                data-wm-pixel-track-type="trackCustom"
-                data-wm-pixel-content-name="Facebook"
-                data-wm-pixel-trigger-event="click">
-								<i class="fa fa-facebook-square"></i>
-                <span class="share-text">
-                  {% filter ak_text:"thanks_shareFacebook_button" %}Share on Facebook{% endfilter %}
-                </span>
-							</a>
-						</div>
-
-						<div class="share-big twitter-share-container js-twitter-share-container">
-							<a
-                class="btn btn-primary popup twitter"
-                href="/share/link?type=tw&amp;page_name={{page.name}}&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
-                target="_blank"
-                data-wm-pixel-event-type="Share"
-                data-wm-pixel-track-type="trackCustom"
-                data-wm-pixel-content-name="Twitter"
-                data-wm-pixel-trigger-event="click">
-								<i class="fa fa-twitter"></i> <span class="share-text">
-                  {% filter ak_text:"thanks_shareTwitter_button" %}Share on Twitter{% endfilter %}
-                </span>
-							</a>
-							<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-						</div>
-
-						<script>
-							const url_params = new URLSearchParams(window.location.search);
-							if ( url_params.get('share') == 'whatsapp' ) {
-								const wa_message = "{{ page.followup.twitter_message|default:page.title }}";
-								const request_url = "/share/link?type=ot&source=whatsapp&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}";
-								$.get( request_url, "", function (response) {
-									const message_link = wa_message + ' ' + response;
-									var has_hover = window.matchMedia("(any-hover: hover)").matches;
-									if ( has_hover ) {
-										window.location = 'https://web.whatsapp.com/send?text=' + encodeURIComponent(message_link);
-									} else {
-										window.location = 'whatsapp://send?text=' + encodeURIComponent(message_link);
-									}
-								} );
-							}
-						</script>
-
-            {% if page.custom_fields.instagram_share_link %}
-            <div class="share-big instagram-share-container">
-							<a
-                class="btn btn-primary instagram"
-                href="{{page.custom_fields.instagram_share_link}}"
-                target="_blank"
-                data-wm-pixel-event-type="Share"
-                data-wm-pixel-track-type="trackCustom"
-                data-wm-pixel-content-name="Instagram"
-                data-wm-pixel-trigger-event="click">
-								<i class="fa fa-instagram"></i>
-                <span class="share-text">
-                  {% filter ak_text:"thanks_shareInstagram_button" %}Share Story on Instagram{% endfilter %}
-                </span>
-							</a>
-						</div>
+					<div class="facebook-share-preview-container" data-wm-share-buttons>
+            <h3 class="facebook-share-preview--title">{{ page.followup.share_title_value }}</h3>
+            {% if page.custom_fields.featured_image or page.followup.share_image_value %}
+            <div class="facebook-share-preview-image">
+              <img src="{{ page.custom_fields.featured_image|default:page.followup.share_image_value }}">
+            </div>
             {% endif %}
+            <div class="facebook-share-preview-description">
+              {{ page.followup.share_description_value }}
+            </div>
+            <div style="clear: both;"></div>
+          </div>
 
-						<div class="share-big whatsapp-share-container js-whatsapp-share-container">
-							<a
-                class="btn btn-primary popup whatsapp-web"
-                href="/thanks/{{ page.name }}?share=whatsapp&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
-                target="_blank"
-                data-wm-pixel-event-type="Share"
-                data-wm-pixel-track-type="trackCustom"
-                data-wm-pixel-content-name="WhatsApp"
-                data-wm-pixel-trigger-event="click">
-								<i class="fa fa-whatsapp"></i> <span class="share-text">
-                  {% filter ak_text:"thanks_shareWhatsApp_button" %}Share on WhatsApp{% endfilter %}
-                </span>
-							</a>
-						</div>
+          <div class="share-big facebook-share-container js-facebook-share-container">
+            <a
+              class="btn btn-primary popup facebook"
+              href="/share/link?type=fb&amp;page_name={{page.name}}&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
+              target="_blank"
+              data-wm-pixel-event-type="Share"
+              data-wm-pixel-track-type="trackCustom"
+              data-wm-pixel-content-name="Facebook"
+              data-wm-pixel-trigger-event="click">
+              <i class="fa fa-facebook-square"></i>
+              <span class="share-text">
+                {% filter ak_text:"thanks_shareFacebook_button" %}Share on Facebook{% endfilter %}
+              </span>
+            </a>
+          </div>
 
-						{% if page.followup.send_taf %}
-						<div class="share-big email-share-container js-email-share-container">
-							<a
-                class="btn btn-primary email"
-                href="mailto:?subject={{ page.followup.taf_subject|urlencode }}&amp;body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"
-                target="_blank"
-                data-wm-pixel-event-type="Share"
-                data-wm-pixel-track-type="trackCustom"
-                data-wm-pixel-content-name="Taf"
-                data-wm-pixel-trigger-event="click">
-								<i class="fa fa-envelope-o"></i> <span class="share-text">{% filter ak_text:"thanks_shareEmail_button" %}Share by e-mail{% endfilter %}</span>
-							</a>
-						</div>
-						{% endif %}
+          <div class="share-big twitter-share-container js-twitter-share-container">
+            <a
+              class="btn btn-primary popup twitter"
+              href="/share/link?type=tw&amp;page_name={{page.name}}&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
+              target="_blank"
+              data-wm-pixel-event-type="Share"
+              data-wm-pixel-track-type="trackCustom"
+              data-wm-pixel-content-name="Twitter"
+              data-wm-pixel-trigger-event="click">
+              <i class="fa fa-twitter"></i> <span class="share-text">
+                {% filter ak_text:"thanks_shareTwitter_button" %}Share on Twitter{% endfilter %}
+              </span>
+            </a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          </div>
+
+          <script>
+            const url_params = new URLSearchParams(window.location.search);
+            if ( url_params.get('share') == 'whatsapp' ) {
+              const wa_message = "{{ page.followup.twitter_message|default:page.title }}";
+              const request_url = "/share/link?type=ot&source=whatsapp&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}";
+              $.get( request_url, "", function (response) {
+                const message_link = wa_message + ' ' + response;
+                var has_hover = window.matchMedia("(any-hover: hover)").matches;
+                if ( has_hover ) {
+                  window.location = 'https://web.whatsapp.com/send?text=' + encodeURIComponent(message_link);
+                } else {
+                  window.location = 'whatsapp://send?text=' + encodeURIComponent(message_link);
+                }
+              } );
+            }
+          </script>
+
+          {% if page.custom_fields.instagram_share_link %}
+          <div class="share-big instagram-share-container">
+            <a
+              class="btn btn-primary instagram"
+              href="{{page.custom_fields.instagram_share_link}}"
+              target="_blank"
+              data-wm-pixel-event-type="Share"
+              data-wm-pixel-track-type="trackCustom"
+              data-wm-pixel-content-name="Instagram"
+              data-wm-pixel-trigger-event="click">
+              <i class="fa fa-instagram"></i>
+              <span class="share-text">
+                {% filter ak_text:"thanks_shareInstagram_button" %}Share Story on Instagram{% endfilter %}
+              </span>
+            </a>
+          </div>
+          {% endif %}
+
+          <div class="share-big whatsapp-share-container js-whatsapp-share-container">
+            <a
+              class="btn btn-primary popup whatsapp-web"
+              href="/thanks/{{ page.name }}?share=whatsapp&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
+              target="_blank"
+              data-wm-pixel-event-type="Share"
+              data-wm-pixel-track-type="trackCustom"
+              data-wm-pixel-content-name="WhatsApp"
+              data-wm-pixel-trigger-event="click">
+              <i class="fa fa-whatsapp"></i> <span class="share-text">
+                {% filter ak_text:"thanks_shareWhatsApp_button" %}Share on WhatsApp{% endfilter %}
+              </span>
+            </a>
+          </div>
+
+          {% if page.followup.send_taf %}
+          <div class="share-big email-share-container js-email-share-container">
+            <a
+              class="btn btn-primary email"
+              href="mailto:?subject={{ page.followup.taf_subject|urlencode }}&amp;body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"
+              target="_blank"
+              data-wm-pixel-event-type="Share"
+              data-wm-pixel-track-type="trackCustom"
+              data-wm-pixel-content-name="Taf"
+              data-wm-pixel-trigger-event="click">
+              <i class="fa fa-envelope-o"></i> <span class="share-text">{% filter ak_text:"thanks_shareEmail_button" %}Share by e-mail{% endfilter %}</span>
+            </a>
+          </div>
+          {% endif %}
         </div>
 			</div>
 
