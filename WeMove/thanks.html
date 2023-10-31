@@ -5,9 +5,8 @@
 {% block content %}
 
 {% if args.done %}
-
 <div class="raction " id="rthanks">
-  <p><b>
+  <p>
 		{% if page.custom_fields.final_message %}
 			<div>{{ page.custom_fields.final_message|safe }}</div>
 		{% else %}
@@ -15,8 +14,7 @@
 				Thank you for standing for democracy with us. It is only together that we can truly be a force to be reckoned with.
 			{% endfilter %}
 		{% endif %}
-	</b></p>
-
+  </p>
 </div>
 
 {% elif args.share %}
@@ -24,7 +22,7 @@
 <form name="taf" method="POST" action="/update_action/" accept-charset="utf-8" class="ak-thanks ak-styled-fields">
     <input type="hidden" name="page" value="{{ page.name }}">
 
-{% if actionkit_user %}
+  {% if actionkit_user %}
     {% if recurring_update or recurring_cancel %}
         <div class="ak-grid-row" style="padding: 0 1rem;">
             <div class="ak-grid-col ak-grid-col-12-of-12">
@@ -35,9 +33,9 @@
             </div>
         </div>
     {% endif %}
-{% endif %}
+  {% endif %}
 
-{% if page.SUPPRESS_SHARING %}
+  {% if page.SUPPRESS_SHARING %}
     <div class="ak-grid-row" style="padding: 0 1rem;">
         <div class="ak-grid-col ak-grid-col-12-of-12">
           <div class="thanks-header">
@@ -55,8 +53,7 @@
 
         </div>
     </div>
-{% else %}
-
+  {% else %}
     <div class="ak-grid-row" style="padding: 0 1rem;">
         <div class="ak-grid-col ak-grid-col-6-of-12">
             <h1>
