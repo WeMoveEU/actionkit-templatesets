@@ -68,9 +68,6 @@
               <div class="alert alert-warning alert-finished" role="alert">
                   {{ page.custom_fields.finished_alert |safe }}
               </div>
-              <script>
-                const SHOULD_DISABLE_FORM = true;
-              </script>
             {% endif %}
           {% endblock %}
 
@@ -140,6 +137,10 @@ window.language = {
 const MATOMO_SITE_ID = "4";
 {% else %}
 const MATOMO_SITE_ID = "1";
+{% endif %}
+
+{% if page.custom_fields.finished_alert %}
+const SHOULD_DISABLE_FORM = true;
 {% endif %}
 </script>
 
