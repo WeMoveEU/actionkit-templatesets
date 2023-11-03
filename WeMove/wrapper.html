@@ -68,10 +68,8 @@
               <div class="alert alert-warning alert-finished" role="alert">
                   {{ page.custom_fields.finished_alert |safe }}
               </div>
-              <script async>
-                  $(document).on('ready', () => {
-                    $('submit, button[type=submit], #unknown_user :input, .ak-field-box :input').attr('disabled', 'disabled');
-                  });
+              <script>
+                const SHOULD_DISABLE_FORM = true;
               </script>
             {% endif %}
           {% endblock %}
