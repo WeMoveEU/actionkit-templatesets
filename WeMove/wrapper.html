@@ -4,7 +4,7 @@
   {% remember "en" as link_iso %}
 {% endif %}
 <!DOCTYPE html>
-<html lang="Test {{page.lang.iso_code|default:'en'}}"{% if page.lang.is_rtl %} dir="rtl"{% endif %}>
+<html lang="{{page.lang.iso_code|default:'en'}}"{% if page.lang.is_rtl %} dir="rtl"{% endif %}>
 <head>
     <meta charset="utf-8">
     <title>{% block title %}{{ page.title }} | {% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}{% endblock %}</title>
@@ -69,7 +69,7 @@ http://127.0.0.1:8081/out/css/wemove.css
           <span class="visually-hidden">
             {% filter ak_text:"closePopup_button" %}Close popup{% endfilter %}
           </span>
-          <span aria-hidden="true">X</span>
+          <span aria-hidden="true">x</span>
         </button>
         <div class="modal-content" data-wm-popup-content></div>
       </div>
@@ -80,8 +80,8 @@ http://127.0.0.1:8081/out/css/wemove.css
         {% if page.custom_fields.pre_action_share %}
           {% store as share_page %}{% if page.custom_fields.pre_action_share == "1" %}{{ page.custom_fields.daisy_chain_action|default:page.name }}{% else %}{{ page.custom_fields.pre_action_share }}{% endif %}{% endstore %}
           <template data-wm-popup-content-template>
-            <h1>{% filter ak_text:"tell_your_friends_banner" %}Can you spread the word?{% endfilter %}</h1>
-            <div data-wm-external-content></div>
+            <h1 class="popup-title">{% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}</h1>
+            <div data-wm-external-content class="is-loading"></div>
           </template>
           <script>
             const PRE_SHARE_URL = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
