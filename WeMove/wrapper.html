@@ -7,7 +7,7 @@
 <html lang="Test {{page.lang.iso_code|default:'en'}}"{% if page.lang.is_rtl %} dir="rtl"{% endif %}>
 <head>
     <meta charset="utf-8">
-    <title>Testss {% block title %}{{ page.title }} | {% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}{% endblock %}</title>
+    <title>testsa {% block title %}{{ page.title }} | {% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}{% endblock %}</title>
     <script>startTime=new Date()</script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -33,9 +33,11 @@
 
     {% block meta_additions %}{% endblock %}
 
+        <!-- //static.wemove.eu/action-kit/out/css/wemove.css -->
+
     {% load_css %}
         /media/modern/actionkit.css?1=22
-        //static.wemove.eu/action-kit/out/css/wemove.css
+http://127.0.0.1:8081/out/css/wemove.css
     {% end %}
     {% block css_additions %}{% endblock %}
 
@@ -60,18 +62,33 @@
       {% include "./wemove-header.html" %}
     {% endif %}
 
-    <div class="modal" style="display: block;" data-wm-modal-popup>
+    <div class="modal popup" data-wm-modal-popup hidden>
       <div class="modal-backdrop"></div>
       <div class="modal-dialog">
-        <button type="button" class="close-popup--button">
+        <button type="button" class="close-popup--button" hidden data-wm-close-popup-button>
           <span class="visually-hidden">
             {% filter ak_text:"closePopup_button" %}Close popup{% endfilter %}
           </span>
-          <span>X</span>
+          <span aria-hidden="true">X</span>
         </button>
         <div class="modal-content" data-wm-popup-content></div>
       </div>
     </div>
+
+    {% if not page.custom_fields.consent_version %}
+      {% block pre_action_share %}
+        {% if page.custom_fields.pre_action_share %}
+          {% store as share_page %}{% if page.custom_fields.pre_action_share == "1" %}{{ page.custom_fields.daisy_chain_action|default:page.name }}{% else %}{{ page.custom_fields.pre_action_share }}{% endif %}{% endstore %}
+          <template data-wm-popup-content-template>
+            <h1>{% filter ak_text:"tell_your_friends_banner" %}Can you spread the word?{% endfilter %}</h1>
+            <div data-wm-external-content></div>
+          </template>
+          <script>
+            const PRE_SHARE_URL = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
+          </script>
+        {% endif %}
+      {% endblock %}
+    {% endif %}
 
     <div id="wrapper">
       <div id="content">
@@ -86,7 +103,15 @@
 
           <div class="raction" id="rsign">
             <div class="raction-content">
+              {% if page.custom_fields.consent_version %}
+              <template data-wm-popup-content-template data-wm-popup-hide-close-button="true">
+              {% endif %}
+
               {% block content %}{% endblock %}
+
+              {% if page.custom_fields.consent_version %}
+              </template>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -128,6 +153,7 @@ const SHOULD_DISABLE_FORM = true;
 <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=273754435565660&ev=PageView&noscript=1"/></noscript>
 <!-- End Meta Pixel Code -->
 <script type="text/plain" data-cookieconsent="marketing" src="https://static.wemove.eu/shared-scripts/matomo-loader.js" async></script>
-<script src="//static.wemove.eu/action-kit/out/js/wemove-main.bundle.min.js"></script>
+<!-- <script src="//static.wemove.eu/action-kit/out/js/wemove-main.bundle.min.js"></script> -->
+<script src="http://127.0.0.1:8081/out/js/wemove-main.bundle.min.js"></script>
 </body>
 </html>
