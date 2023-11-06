@@ -52,7 +52,7 @@
 
     {% load_ak_context context %}
 </head>
-<body class="{% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %}ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
+<body class="{% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %} ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
     <script>
       actionkit.forms.initPage()
     </script>
