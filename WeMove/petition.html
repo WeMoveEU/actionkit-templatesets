@@ -39,7 +39,7 @@
 
           {% if page.custom_fields.youmove_initiator_name %}
 					<div class="initiator">
-						<p data-initiator-name="{{ page.custom_fields.youmove_initiator_name }}">
+						<p data-wm-initiator-name="{{ page.custom_fields.youmove_initiator_name }}">
 							{% filter ak_text:"statement_initiator" %}This petition is run by [% inititator_name %]{% endfilter %}
 						</p>
 					</div>
