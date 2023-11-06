@@ -13,7 +13,8 @@
     border: 1px solid #ccc;
     background-color: white;
 }
-</style>{% endonce %}
+</style>
+{% endonce %}
 {% endif %}
 {% if profile.payment_processor_information.use_vzero %}
 {% once %}
@@ -37,7 +38,7 @@
 
 {% block script_additions %}
 
-<script language="javascript">
+<script>
     function ak_recurring_change_amount(profile_id) {
         var profile_el = $('#change_profile_' + profile_id);
         profile_el.find('.ak-show-amount').hide();

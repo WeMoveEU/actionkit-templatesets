@@ -49,71 +49,32 @@
 
     {% load_ak_context context %}
 </head>
-<body class="{% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %} ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
+<body class="{% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %}ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
     <script>
-        actionkit.forms.initPage()
+      actionkit.forms.initPage()
     </script>
-
-	{% if not page.custom_fields.consent_version %}
-    <!-- TODO: Ask Simon -->
-    <div class="modal fade js-share-popup in" style="display: none; padding-right: 15px;" aria-hidden="false">
-        <div class="modal-backdrop fade in" style="height: 928px;"></div>
-        <div class="modal-dialog" style="z-index:1041;">
-          <div class="modal-content">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-          </div>
-        </div>
-    </div>
-
-    <script>
-        function init_modal () {
-            var modal = $('.modal.fade')
-            var modal_backdrop = modal.find('.modal-backdrop');
-            function resize_modal () { modal_backdrop.height( $(window).height() ) }
-            $(window).on( 'resize', resize_modal );
-            resize_modal();
-
-            modal_backdrop.on( 'click', close_modal );
-            modal.find('.close').on( 'click', close_modal );
-            function close_modal () { modal.hide() }
-        }
-    </script>
-
-    {% block pre_action_share %}
-      {% if page.custom_fields.pre_action_share %}
-        {% store as share_page %}{% if page.custom_fields.pre_action_share == "1" %}{{ page.custom_fields.daisy_chain_action|default:page.name }}{% else %}{{ page.custom_fields.pre_action_share }}{% endif %}{% endstore %}
-
-        <!-- TODO: Ask Simon -->
-        <h1 id="share-banner" style="display: none">
-            {% filter ak_text:"tell_your_friends_banner" %}
-            Can you spread the word?
-            {% endfilter %}
-        </h1>
-        <script>
-            init_modal();
-
-            $.get('/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}', {},
-              function (data) {
-                const modal = $('.modal.fade');
-                modal.find('.modal-content').append(
-                    $('#share-banner').show()
-                );
-                modal.find('.modal-content').append(
-                    $(data).find('.facebook-share-preview-container').parent().children()
-                );
-                modal.show();
-            });
-        </script>
-      {% endif %}
-    {% endblock %}
-  {% endif %}
 
     {% if campaign_type == "youmove" %}
       {% include "./youmove-header.html" %}
     {% else %}
       {% include "./wemove-header.html" %}
+    {% endif %}
+
+    {% include "./modal-popup.html" %}
+
+    {% if not page.custom_fields.consent_version %}
+      {% block pre_action_share %}
+        {% if page.custom_fields.pre_action_share %}
+          {% store as share_page %}{% if page.custom_fields.pre_action_share == "1" %}{{ page.custom_fields.daisy_chain_action|default:page.name }}{% else %}{{ page.custom_fields.pre_action_share }}{% endif %}{% endstore %}
+          <template data-wm-popup-content-template>
+            <h1 class="popup-title">{% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}</h1>
+            <div data-wm-external-content class="is-loading"></div>
+          </template>
+          <script>
+            const PRE_SHARE_URL = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
+          </script>
+        {% endif %}
+      {% endblock %}
     {% endif %}
 
     <div id="wrapper">
@@ -124,34 +85,22 @@
               <div class="alert alert-warning alert-finished" role="alert">
                   {{ page.custom_fields.finished_alert |safe }}
               </div>
-              <script><!-- TODO: Ask Simon -->
-                  $(document).on('ready', function () {
-                    $('submit, button[type=submit], #unknown_user :input, .ak-field-box :input').attr('disabled', 'disabled');
-                  });
-              </script>
             {% endif %}
           {% endblock %}
 
-          {% if page.custom_fields.consent_version %}
-          <div class="modal" style="display: block">
-            <div class="modal-backdrop"></div>
-            <div class="modal-dialog" style="z-index:1041;">
-              <div class="modal-content">
-          {% else %}
-            <div class="raction" id="rsign">
-              <div class="raction-content">
-          {% endif %}
+          <div class="raction" id="rsign">
+            <div class="raction-content">
+              {% if page.custom_fields.consent_version %}
+              <template data-wm-popup-content-template data-wm-popup-hide-close-button="true">
+              {% endif %}
 
               {% block content %}{% endblock %}
 
-          {% if page.custom_fields.consent_version %}
-                  </div>
-                </div>
-              </div>
-          {% else %}
+              {% if page.custom_fields.consent_version %}
+              </template>
+              {% endif %}
             </div>
           </div>
-          {% endif %}
         </div>
       </div>
     </div>
@@ -179,6 +128,10 @@ window.language = {
 const MATOMO_SITE_ID = "4";
 {% else %}
 const MATOMO_SITE_ID = "1";
+{% endif %}
+
+{% if page.custom_fields.finished_alert %}
+const SHOULD_DISABLE_FORM = true;
 {% endif %}
 </script>
 

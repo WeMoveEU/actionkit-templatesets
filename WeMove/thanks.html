@@ -3,59 +3,49 @@
 {% block pre_action_share %}{% endblock %}
 
 {% block content %}
-
 {% if args.done %}
-
-<div class="raction " id="rthanks">
-  <p><b>
-		{% if page.custom_fields.final_message %}
-			<div>{{ page.custom_fields.final_message|safe }}</div>
-		{% else %}
-			{% filter ak_text:"final_message" %}
-				Thank you for standing for democracy with us. It is only together that we can truly be a force to be reckoned with.
-			{% endfilter %}
-		{% endif %}
-	</b></p>
-
-</div>
-
+  <div class="raction" id="rthanks">
+    {% if page.custom_fields.final_message %}
+      <div>{{ page.custom_fields.final_message|safe }}</div>
+    {% else %}
+      {% filter ak_text:"final_message" %}
+        Thank you for standing for democracy with us. It is only together that we can truly be a force to be reckoned with.
+      {% endfilter %}
+    {% endif %}
+  </div>
 {% elif args.share %}
-
-<form name="taf" method="POST" action="/update_action/" accept-charset="utf-8" class="ak-thanks ak-styled-fields">
+  <form name="taf" method="POST" action="/update_action/" accept-charset="utf-8" class="ak-thanks ak-styled-fields">
     <input type="hidden" name="page" value="{{ page.name }}">
 
-{% if actionkit_user %}
-    {% if recurring_update or recurring_cancel %}
+    {% if actionkit_user %}
+      {% if recurring_update or recurring_cancel %}
         <div class="ak-grid-row" style="padding: 0 1rem;">
-            <div class="ak-grid-col ak-grid-col-12-of-12">
-                <p>
-                    {% filter ak_text:"logged_in_as" %}You are logged in as{% endfilter %} <a href="/me/">{{ actionkit_user.name|escape }}</a>.
-                    <a href="/logout">{% filter ak_text:"logout" %}Click to log out.{% endfilter %}</a>
-                </p>
-            </div>
+          <div class="ak-grid-col ak-grid-col-12-of-12">
+            <p>
+              {% filter ak_text:"logged_in_as" %}You are logged in as{% endfilter %} <a href="/me/">{{ actionkit_user.name|escape }}</a>.
+              <a href="/logout">{% filter ak_text:"logout" %}Click to log out.{% endfilter %}</a>
+            </p>
+          </div>
         </div>
+      {% endif %}
     {% endif %}
-{% endif %}
 
-{% if page.SUPPRESS_SHARING %}
-    <div class="ak-grid-row" style="padding: 0 1rem;">
+    {% if page.SUPPRESS_SHARING %}
+      <div class="ak-grid-row" style="padding: 0 1rem;">
         <div class="ak-grid-col ak-grid-col-12-of-12">
           <div class="thanks-header">
             <img src="/media/modern/stance-supportive.svg" height="34" width="34" class="ak-checkmark-icon" alt="&#10003;">
             <h2>{% filter ak_text:"noshare_thanks_banner" %}Thanks!{% endfilter %}</h2>
           </div>
 
-          <div>
-                {% include_tmpl form.thank_you_text %}
-          </div>
+          <div>{% include_tmpl form.thank_you_text %}</div>
 
-            {% if not page.type == 'Unsubscribe' %}
-						<a href="{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
-            {% endif %}
-
+          {% if not page.type == 'Unsubscribe' %}
+          <a href="{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
+          {% endif %}
         </div>
-    </div>
-{% else %}
+      </div>
+    {% else %}
 
     <div class="ak-grid-row" style="padding: 0 1rem;">
         <div class="ak-grid-col ak-grid-col-6-of-12">
@@ -89,73 +79,76 @@
             </div>
         </div>
 
-        <div class="ak-grid-col ak-grid-col-6-of-12">
+        <div class="ak-grid-col ak-grid-col-6-of-12" data-wm-share-buttons>
 
-					<div class="facebook-share-preview-container">
-					    <h3 class="facebook-share-preview--title">{{ page.followup.share_title_value }}</h3>
-							{% if page.custom_fields.featured_image or page.followup.share_image_value %}
-							<div class="facebook-share-preview-image">
-								<img src="{{ page.custom_fields.featured_image|default:page.followup.share_image_value }}">
-							</div>
-							{% endif %}
-					    <div class="facebook-share-preview-description">
-					      {{ page.followup.share_description_value }}
-					    </div>
-					    <div style="clear: both;"></div>
-					  </div>
+          <div class="facebook-share-preview-container">
+              <h3 class="facebook-share-preview--title">{{ page.followup.share_title_value }}</h3>
+              {% if page.custom_fields.featured_image or page.followup.share_image_value %}
+              <div class="facebook-share-preview-image">
+                <img src="{{ page.custom_fields.featured_image|default:page.followup.share_image_value }}">
+              </div>
+              {% endif %}
+              <div class="facebook-share-preview-description">
+                {{ page.followup.share_description_value }}
+              </div>
+              <div style="clear: both;"></div>
+            </div>
 
-						<div class="share-big facebook-share-container js-facebook-share-container">
-							<a
-                class="btn btn-primary popup facebook"
+            <div class="share-big facebook-share-container js-facebook-share-container">
+              <a
+                class="btn btn-primary facebook"
                 href="/share/link?type=fb&amp;page_name={{page.name}}&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
                 target="_blank"
                 data-wm-pixel-event-type="Share"
                 data-wm-pixel-track-type="trackCustom"
                 data-wm-pixel-content-name="Facebook"
                 data-wm-pixel-trigger-event="click">
-								<i class="fa fa-facebook-square"></i>
+                <i class="fa fa-facebook-square"></i>
                 <span class="share-text">
                   {% filter ak_text:"thanks_shareFacebook_button" %}Share on Facebook{% endfilter %}
                 </span>
-							</a>
-						</div>
+              </a>
+            </div>
 
-						<div class="share-big twitter-share-container js-twitter-share-container">
-							<a
-                class="btn btn-primary popup twitter"
+            <div class="share-big twitter-share-container js-twitter-share-container">
+              <a
+                class="btn btn-primary twitter"
                 href="/share/link?type=tw&amp;page_name={{page.name}}&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
                 target="_blank"
                 data-wm-pixel-event-type="Share"
                 data-wm-pixel-track-type="trackCustom"
                 data-wm-pixel-content-name="Twitter"
                 data-wm-pixel-trigger-event="click">
-								<i class="fa fa-twitter"></i> <span class="share-text">
+                <i class="fa fa-twitter"></i> <span class="share-text">
                   {% filter ak_text:"thanks_shareTwitter_button" %}Share on Twitter{% endfilter %}
                 </span>
-							</a>
-							<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-						</div>
+              </a>
+              <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+            </div>
 
-						<script>
-							const url_params = new URLSearchParams(window.location.search);
-							if ( url_params.get('share') == 'whatsapp' ) {
-								const wa_message = "{{ page.followup.twitter_message|default:page.title }}";
-								const request_url = "/share/link?type=ot&source=whatsapp&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}";
-								$.get( request_url, "", function (response) {
-									const message_link = wa_message + ' ' + response;
-									var has_hover = window.matchMedia("(any-hover: hover)").matches;
-									if ( has_hover ) {
-										window.location = 'https://web.whatsapp.com/send?text=' + encodeURIComponent(message_link);
-									} else {
-										window.location = 'whatsapp://send?text=' + encodeURIComponent(message_link);
-									}
-								} );
-							}
-						</script>
+            <script>
+              const url_params = new URLSearchParams(window.location.search);
+
+              if (url_params.get('share') == 'whatsapp') {
+                const wa_message = "{{ page.followup.twitter_message|default:page.title }}";
+                const request_url = "/share/link?type=ot&source=whatsapp&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}";
+
+                $.get(request_url, "", function (response) {
+                  const message_link = wa_message + ' ' + response;
+                  const has_hover = window.matchMedia("(any-hover: hover)").matches;
+
+                  if (has_hover) {
+                    window.location = 'https://web.whatsapp.com/send?text=' + encodeURIComponent(message_link);
+                  } else {
+                    window.location = 'whatsapp://send?text=' + encodeURIComponent(message_link);
+                  }
+                });
+              }
+            </script>
 
             {% if page.custom_fields.instagram_share_link %}
             <div class="share-big instagram-share-container">
-							<a
+              <a
                 class="btn btn-primary instagram"
                 href="{{page.custom_fields.instagram_share_link}}"
                 target="_blank"
@@ -163,32 +156,32 @@
                 data-wm-pixel-track-type="trackCustom"
                 data-wm-pixel-content-name="Instagram"
                 data-wm-pixel-trigger-event="click">
-								<i class="fa fa-instagram"></i>
+                <i class="fa fa-instagram"></i>
                 <span class="share-text">
                   {% filter ak_text:"thanks_shareInstagram_button" %}Share Story on Instagram{% endfilter %}
                 </span>
-							</a>
-						</div>
+              </a>
+            </div>
             {% endif %}
 
-						<div class="share-big whatsapp-share-container js-whatsapp-share-container">
-							<a
-                class="btn btn-primary popup whatsapp-web"
+            <div class="share-big whatsapp-share-container js-whatsapp-share-container">
+              <a
+                class="btn btn-primary whatsapp-web"
                 href="/thanks/{{ page.name }}?share=whatsapp&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
                 target="_blank"
                 data-wm-pixel-event-type="Share"
                 data-wm-pixel-track-type="trackCustom"
                 data-wm-pixel-content-name="WhatsApp"
                 data-wm-pixel-trigger-event="click">
-								<i class="fa fa-whatsapp"></i> <span class="share-text">
+                <i class="fa fa-whatsapp"></i> <span class="share-text">
                   {% filter ak_text:"thanks_shareWhatsApp_button" %}Share on WhatsApp{% endfilter %}
                 </span>
-							</a>
-						</div>
+              </a>
+            </div>
 
-						{% if page.followup.send_taf %}
-						<div class="share-big email-share-container js-email-share-container">
-							<a
+            {% if page.followup.send_taf %}
+            <div class="share-big email-share-container js-email-share-container">
+              <a
                 class="btn btn-primary email"
                 href="mailto:?subject={{ page.followup.taf_subject|urlencode }}&amp;body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"
                 target="_blank"
@@ -196,132 +189,101 @@
                 data-wm-pixel-track-type="trackCustom"
                 data-wm-pixel-content-name="Taf"
                 data-wm-pixel-trigger-event="click">
-								<i class="fa fa-envelope-o"></i> <span class="share-text">{% filter ak_text:"thanks_shareEmail_button" %}Share by e-mail{% endfilter %}</span>
-							</a>
-						</div>
-						{% endif %}
+                <i class="fa fa-envelope-o"></i> <span class="share-text">{% filter ak_text:"thanks_shareEmail_button" %}Share by e-mail{% endfilter %}</span>
+              </a>
+            </div>
+            {% endif %}
         </div>
-			</div>
+      </div>
 
       <div class="skip-step-wrapper" style="margin-top: 1rem; text-align: center;">
         <a href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default" style="margin-top: 1rem;">
           {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
           </a>
       </div>
-{% endif %}
-</form>
-
+  {% endif %}
+  </form>
 {% else %}
 
-<!-- Let AK know that we support sharing by including this: /share/link?type=fb /share/link?type=tw -->
+  <!-- Let AK know that we support sharing by including this: /share/link?type=fb /share/link?type=tw -->
+  {% store as next_step %}{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}?{% else %}/thanks/{{ page.name }}?share=1&{% endif %}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% endstore %}
+  <!-- Next Step: {{ next_step }} -->
+  <!-- Substatus: {{ user.subscription_status }} -->
 
-{% store as next_step %}{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}?{% else %}/thanks/{{ page.name }}?share=1&{% endif %}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% endstore %}
+  {% if not user %}
 
-<!-- Next Step: {{ next_step }} -->
+    {# We don't know who you are, so we can't deal with consents. #}
+    <a href="{{ next_step }}">Please continue to the next step.</a>
+    <script>
+      window.location = '{{ next_step }}&consent=anonymous';
+    </script>
 
-<!-- Substatus: {{ user.subscription_status }} -->
+  {% elif user.subscription_status == 'subscribed' %}
 
-{% if not user %}
+    {# You already subscribed, so jump to the next step. #}
+    <a href="{{ next_step }}">Please continue to the next step.</a>
+    <script>
+      window.location = '{{ next_step }}&consent=already';
+    </script>
 
-	{# We don't know who you are, so we can't deal with consents. #}
+  {% else %}
 
-	<a href="{{ next_step }}">Please continue to the next step.</a>
-	<script>
-		window.location = '{{ next_step }}&consent=anonymous';
-	</script>
+    {% if page.type == 'Unsubscribe' %}
 
-{% elif user.subscription_status == 'subscribed' %}
-
-	{# You already subscribed, so jump to the next step. #}
-
-	<a href="{{ next_step }}">Please continue to the next step.</a>
-	<script>
-		window.location = '{{ next_step }}&consent=already';
-	</script>
-
-{% else %}
-
-	{% if page.type == 'Unsubscribe' %}
-
-		{# You're taking action on a page that doesn't require consents. #}
-
-		<a href="{{ next_step }}">Please continue to the next step.</a>
-		<script>
-			window.location = '{{ next_step }}&consent=nolang';
-		</script>
+      {# You're taking action on a page that doesn't require consents. #}
+      <a href="{{ next_step }}">Please continue to the next step.</a>
+      <script>
+        window.location = '{{ next_step }}&consent=nolang';
+      </script>
 
     {% else %}
 
-	{% store as previous_consents %}{% report "previous_user_consent_for_list" with 1 as refresh user.id as user_id page.list_id as list_id %}{% endstore %}
-	<!-- Previous consents: {{ previous_consents }} -->
+      {% store as previous_consents %}{% report "previous_user_consent_for_list" with 1 as refresh user.id as user_id page.list_id as list_id %}{% endstore %}
+      <!-- Previous consents: {{ previous_consents }} -->
 
-    {% if previous_consents > 0 %}
+      {% if previous_consents > 0 %}
 
-		{# You have already been asked to consent, so jump to the next step. #}
+      {# You have already been asked to consent, so jump to the next step. #}
 
-		<a href="{{ next_step }}">Please continue to the next step.</a>
-		<script>
-			window.location = '{{ next_step }}&consent=previous';
-		</script>
+      <a href="{{ next_step }}">Please continue to the next step.</a>
+      <script>
+        window.location = '{{ next_step }}&consent=previous';
+      </script>
 
-	{% else %}
+      {% else %}
+        <!-- Lang ID: {{ user.lang_id }} -->
+        {% store as signup_page_name %}{% report "signup_page_for_list_language" with 1 as refresh page.list_id as list_id user.lang_id|default:100 as lang_id %}{% endstore %}
+        <!-- Signup Page: {{ signup_page_name }} -->
+        {% if not signup_page_name %}
+          {% comment %}
+            You should be asked to consent, but we don't have a consent page for that list
+            in your language, so jump to the next step.
+          {% endcomment %}
 
-	<!-- Lang ID: {{ user.lang_id }} -->
+          <a href="{{ next_step }}">Please continue to the next step.</a>
+          <script>
+            window.location = '{{ next_step }}&consent=nolang';
+          </script>
 
-		{% store as signup_page_name %}{% report "signup_page_for_list_language" with 1 as refresh page.list_id as list_id user.lang_id|default:100 as lang_id %}{% endstore %}
-		<!-- Signup Page: {{ signup_page_name }} -->
+        {% else %}
 
-		{% if not signup_page_name %}
+          {% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&trigger_page={{ page.name }}&trigger_action={{ action.id }}{% endif %}&next_step={{ next_step|urlencode }}{% endstore %}
+          <a href="{{ consent_link }}">Please continue to the next step.</a>
+          <script>
+            window.location = '{{ consent_link }}';
+          </script>
 
-			{# You should be asked to consent, but we don't have a consent page for that list in your language, so jump to the next step. #}
-
-			<a href="{{ next_step }}">Please continue to the next step.</a>
-			<script>
-				window.location = '{{ next_step }}&consent=nolang';
-			</script>
-
-		{% else %}
-
-			{% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&trigger_page={{ page.name }}&trigger_action={{ action.id }}{% endif %}&next_step={{ next_step|urlencode }}{% endstore %}
-
-			<a href="{{ consent_link }}">Please continue to the next step.</a>
-			<script>
-				window.location = '{{ consent_link }}';
-			</script>
-
-		{% endif %}
-
-	{% endif %}
-
-	{% endif %}
-
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
 {% endif %}
-
-{% endif %}
-
-{% endblock %}
-
-{% block script_additions %}
-<script>
-    $(document).ready(function() {
-        $('.ak-emailalt').on('click', function() {
-            $(this).parent('p').toggleClass('active');
-            $('#ak-taf-form').slideToggle(function() {
-                $('#taf_form').toggleClass('ak-closed');
-            });
-            $('#copy-and-paste').slideToggle();
-            return false;
-        });
-    });
-</script>
 {% endblock %}
 
 {% block below_form %}
-
 <script>
     actionkit.forms.contextRoot = '/context/';
     actionkit.forms.initTafForm('taf');
     actionkit.sharing.initShareTools();
 </script>
-
 {% endblock %}
