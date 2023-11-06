@@ -82,9 +82,7 @@ document.addEventListener("wm-popupReady", function () {
     $('input[name="action_consent_action"]').val('y');
     $('form.action_form').get(0).submit();
   });
-
   $('#btn_optout').on('click', function () {
-    debugger
     $('input[name="action_consent_action"]').val('n');
     $('input[name="require_opt_in"]').val(1);
     $('form.action_form').get(0).submit();
