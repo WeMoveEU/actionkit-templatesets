@@ -60,6 +60,7 @@
 </form>
 
 <script>
+document.addEventListener("wm-popupReady", function () {
 {% if args.confirm %}
   $('#consent-buttons div').toggle()
   $('input[name="action_consent_action"]').val('y');
@@ -77,17 +78,17 @@
   $('input[name="require_opt_in"]').val(1);
   $('form.action_form').get(0).submit();
 {% else %}
-  document.addEventListener("wm-popupReady", function(event) {
-    $('#btn_optin').on('click', function () {
-      $('input[name="action_consent_action"]').val('y');
-      $('form.action_form').get(0).submit();
-    });
+  $('#btn_optin').on('click', function () {
+    $('input[name="action_consent_action"]').val('y');
+    $('form.action_form').get(0).submit();
+  });
 
-    $('#btn_optout').on('click', function () {
-      $('input[name="action_consent_action"]').val('n');
-      $('input[name="require_opt_in"]').val(1);
-      $('form.action_form').get(0).submit();
-    });
+  $('#btn_optout').on('click', function () {
+    debugger
+    $('input[name="action_consent_action"]').val('n');
+    $('input[name="require_opt_in"]').val(1);
+    $('form.action_form').get(0).submit();
   });
 {% endif %}
+});
 </script>
