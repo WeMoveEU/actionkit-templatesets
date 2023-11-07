@@ -17,6 +17,7 @@
 
 	<input type="hidden" name="page" value="{{ page.name }}">
 
+    {% if not isEmbbeded %}
     <div class="advice-advice">
 			<div class="action-advice-col">
 				{% include "./language_picker.html" %}
@@ -94,9 +95,10 @@
 				</div>
 			</div>
 		</div>
+    {% endif %}
 
 		<div
-      class="action-form-container-col ak-grid-col ak-grid-col-4-of-12 is-floating"
+      class="action-form-container-col ak-grid-col ak-grid-col-4-of-12{% if isEmbbeded != "true" %} is-floating{% endif %}"
       id="action-form-container-col"
       data-wm-form-container>
       <div data-wm-floating-meter class="floating-progress-meter">
@@ -165,7 +167,7 @@
 	window.currentCommentIndex = 0;
 	window.recentCommentShown = false;
 	window.comment_elt = $('.recent-comments .recent-comment');
-	$( function () {
+	$(function () {
 		if (comment_elt.length > 0) {
 			if (recent_comments.length && ! recentCommentShown) {
 				recentCommentShown = true;
@@ -173,18 +175,22 @@
 				cycleRecentComment();
 			}
 		}
-	} );
+	});
 
-	function cycleRecentComment() {
-		comment_elt.fadeOut('slow', function() {
+	function cycleRecentComment () {
+		comment_elt.fadeOut('slow', function () {
 			var comment = recent_comments[currentCommentIndex ++ % recent_comments.length];
 			comment_elt.find('.recent-comment-by').text(comment[0]);
 			comment_elt.find('.recent-comment-text').text(comment[1]);
 			comment_elt.removeClass('hidden');
 			comment_elt.fadeIn('slow');
 			var duration = Math.ceil(comment[1].split(' ').length * 0.2);
-			if (duration < 3) { duration = 3; }
-			setTimeout(cycleRecentComment, duration * 1000);
+
+			if (duration < 3) {
+        duration = 3;
+      }
+
+      setTimeout(cycleRecentComment, duration * 1000);
 		});
 	}
 </script>

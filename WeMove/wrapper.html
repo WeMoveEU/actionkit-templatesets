@@ -3,6 +3,10 @@
 {% else %}
   {% remember "en" as link_iso %}
 {% endif %}
+
+{% if args.embed %}
+  {% remember "true" as isEmbbeded %}
+{% endif %}
 <!DOCTYPE html>
 <html lang="{{page.lang.iso_code|default:'en'}}"{% if page.lang.is_rtl %} dir="rtl"{% endif %}>
 <head>
@@ -52,66 +56,76 @@
 
     {% load_ak_context context %}
 </head>
-<body class="{% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %} ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
+<body
+  {% if isEmbbeded == "true" %}data-wm-is-embbeded{% endif %}
+  class="{% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %} ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
     <script>
       actionkit.forms.initPage()
     </script>
 
-    {% if campaign_type == "youmove" %}
-      {% include "./youmove-header.html" %}
-    {% else %}
-      {% include "./wemove-header.html" %}
-    {% endif %}
+    {% if not isEmbbeded %}
+      {% if campaign_type == "youmove" %}
+        {% include "./youmove-header.html" %}
+      {% else %}
+        {% include "./wemove-header.html" %}
+      {% endif %}
 
-    <div class="modal popup" data-wm-modal-popup hidden>
-      <div class="modal-backdrop"></div>
-      <div class="modal-dialog">
-        <button type="button" class="close-popup--button" hidden data-wm-close-popup-button>
-          <span class="visually-hidden">
-            {% filter ak_text:"closePopup_button" %}Close popup{% endfilter %}
-          </span>
-          <span aria-hidden="true">x</span>
-        </button>
-        <div class="modal-content" data-wm-popup-content></div>
+      <div class="modal popup" data-wm-modal-popup hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-dialog">
+          <button type="button" class="close-popup--button" hidden data-wm-close-popup-button>
+            <span class="visually-hidden">
+              {% filter ak_text:"closePopup_button" %}Close popup{% endfilter %}
+            </span>
+            <span aria-hidden="true">x</span>
+          </button>
+          <div class="modal-content" data-wm-popup-content></div>
+        </div>
       </div>
-    </div>
 
-    {% if not page.custom_fields.consent_version %}
-      {% block pre_action_share %}
-        {% if page.custom_fields.pre_action_share %}
-          {% store as share_page %}{% if page.custom_fields.pre_action_share == "1" %}{{ page.custom_fields.daisy_chain_action|default:page.name }}{% else %}{{ page.custom_fields.pre_action_share }}{% endif %}{% endstore %}
-          <div data-wm-popup-content-template hidden>
-            <h1 class="popup-title">{% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}</h1>
-            <div data-wm-external-content class="is-loading"></div>
-          </div>
-          <script>
-            const PRE_SHARE_URL = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
-          </script>
-        {% endif %}
-      {% endblock %}
+      {% if not page.custom_fields.consent_version %}
+        {% block pre_action_share %}
+          {% if page.custom_fields.pre_action_share %}
+            {% store as share_page %}{% if page.custom_fields.pre_action_share == "1" %}{{ page.custom_fields.daisy_chain_action|default:page.name }}{% else %}{{ page.custom_fields.pre_action_share }}{% endif %}{% endstore %}
+            <div data-wm-popup-content-template hidden>
+              <h1 class="popup-title">{% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}</h1>
+              <div data-wm-external-content class="is-loading"></div>
+            </div>
+            <script>
+              const PRE_SHARE_URL = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
+            </script>
+          {% endif %}
+        {% endblock %}
+      {% endif %}
     {% endif %}
 
     <div id="wrapper">
       <div id="content">
         <div class="container-fluid">
-          {% block finished_alert %}
-            {% if page.custom_fields.finished_alert %}
-              <div class="alert alert-warning alert-finished" role="alert">
-                  {{ page.custom_fields.finished_alert |safe }}
-              </div>
-            {% endif %}
-          {% endblock %}
+          {% if not isEmbbeded %}
+            {% block finished_alert %}
+              {% if page.custom_fields.finished_alert %}
+                <div class="alert alert-warning alert-finished" role="alert">
+                    {{ page.custom_fields.finished_alert |safe }}
+                </div>
+              {% endif %}
+            {% endblock %}
+          {% endif %}
 
           <div class="raction" id="rsign">
             <div class="raction-content">
-              {% if page.custom_fields.consent_version %}
-              <div data-wm-popup-content-template data-wm-popup-hide-close-button="true" hidden>
+              {% if not isEmbbeded %}
+                {% if page.custom_fields.consent_version %}
+                  <div data-wm-popup-content-template data-wm-popup-hide-close-button="true" hidden>
+                {% endif %}
               {% endif %}
 
               {% block content %}{% endblock %}
 
-              {% if page.custom_fields.consent_version %}
-              </div>
+              {% if not isEmbbeded %}
+                {% if page.custom_fields.consent_version %}
+                  </div>
+                {% endif %}
               {% endif %}
             </div>
           </div>
@@ -119,10 +133,12 @@
       </div>
     </div>
 
-    {% if campaign_type == "youmove" %}
-      {% include "./youmove-footer.html" %}
-    {% else %}
-      {% include "./wemove-footer.html" %}
+    {% if not isEmbbeded %}
+      {% if campaign_type == "youmove" %}
+        {% include "./youmove-footer.html" %}
+      {% else %}
+        {% include "./wemove-footer.html" %}
+      {% endif %}
     {% endif %}
 
 {% block below_form %}
