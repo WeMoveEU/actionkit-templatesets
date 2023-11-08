@@ -1,4 +1,3 @@
-{% block script_additions %}
 <script>
   const getPageIso = () => {
     const supportedLanguages = ['en', 'it', 'es', 'nl', 'pl', 'de', 'fr']
@@ -9,6 +8,5 @@
   };
 
   const pageIso = getPageIso();
-  // window.location.replace(`https://wemove.eu/${pageIso}/404`);
+  window.location.replace(`https://wemove.eu/${pageIso}/404`);
 </script>
-{% endblock %}
