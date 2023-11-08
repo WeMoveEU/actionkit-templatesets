@@ -22,7 +22,9 @@
 			<div class="action-form-container-col ak-grid-col ak-grid-col-4-of-12">
 				<div class="action-form-container member-is-known">
 					{% if page.custom_fields.call_page_mode == 'tweet' %}
-					  <h2 class="send-tweet-title">Send a tweet</h2>
+					  <h2 class="send-tweet-title">
+              {% filter ak_text:"twitter_title" %}Send a tweet{% endfilter %}
+            </h2>
 					{% endif %}
 
 					<form
