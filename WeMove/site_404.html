@@ -3,7 +3,7 @@
 {% block title %} | {% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}{% endblock %}
 
 {% block content %}
-<main data-wm-error-page style="text-align: center; margin: 2rem 0 4rem 0">
+<main data-wm-error-page="404" style="text-align: center; margin: 2rem 0 4rem 0">
   <h1 data-wm-error-title></h1>
   <p data-wm-error-content></p>
   <a data-wm-error-link href="https://wemove.eu/"></a>
@@ -35,7 +35,7 @@
     const content = errorWrapper.querySelector('[data-wm-error-content]');
     const link = errorWrapper.querySelector('[data-wm-error-link]');
 
-    document.title = `404 - ${translations[language].title} ${document.title}`;
+    document.title = `${errorWrapper.dataset.wmErrorPage} - ${translations[language].title} ${document.title}`;
     title.innerHTML = translations[language].title;
     content.innerHTML = translations[language].content;
     link.innerHTML = translations[language].link;
