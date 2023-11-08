@@ -1,3 +1,14 @@
+{% block script_additions %}
 <script>
-window.location.replace(`https://wemove.eu/${navigator.language.substring(0, 2)}/404`);
+  const getPageIso = () => {
+    const supportedLanguages = ['en', 'it', 'es', 'nl', 'pl', 'de', 'fr']
+    const browserIso = navigator.language.substring(0, 2);
+    const iso = supportedLanguages.find((iso) => iso === browserIso);
+
+    return iso ? iso : 'en';
+  };
+
+  const pageIso = getPageIso();
+  window.location.replace(`https://wemove.eu/${pageIso}/404`);
 </script>
+{% endblock %}
