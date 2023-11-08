@@ -13,12 +13,12 @@
     en: {
       title: '{% filter ak_text:"404_en_title" %}Page not found{% endfilter %}',
       content: '{% filter ak_text:"404_en_content" %}Sorry 😔, we couldn’t find what you were looking for.{% endfilter %}',
-      homeLink: '{% filter ak_text:"404_en_title" %}Go to the homepage{% endfilter %}',
+      link: '{% filter ak_text:"404_en_title" %}Go to the homepage{% endfilter %}',
     },
     it: {
       title: '{% filter ak_text:"404_en_title" %}Pagina non trovata{% endfilter %}',
       content: `{% filter ak_text:"404_en_content" %}Ci dispiace 😔, non abbiamo trovato la pagina richiesta.{% endfilter %}`,
-      homeLink: '{% filter ak_text:"404_en_title" %}Torna alla homepage{% endfilter %}',
+      link: '{% filter ak_text:"404_en_title" %}Torna alla homepage{% endfilter %}',
     },
   };
 
@@ -29,7 +29,7 @@
       return;
     }
 
-    const language = 'en';
+    const language = navigator.language.substring(0,2);
 
     const title = errorWrapper.querySelector('[data-wm-error-title]');
     const content = errorWrapper.querySelector('[data-wm-error-content]');
