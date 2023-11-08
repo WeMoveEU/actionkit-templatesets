@@ -1,10 +1,10 @@
 {% extends "./wrapper.html" %}
 
-<html>
-<body>
+{% block content %}
+<h1>Page not found</h1>
 <p>
-    Sorry, the URL you tried to load doesn't exist.  Check that it's typed
-correctly.
+    Sorry😔,we couldn’t find what you were looking for.
+    <br/>
+    <a href="https://wemove.eu/{{ link_iso }}">Go to the homepage</a>
 </p>
-</body>
-</html>
+{% endblock %}
