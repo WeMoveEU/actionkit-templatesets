@@ -16,32 +16,35 @@
       link: '{% filter ak_text:"404_en_title" %}Go to the homepage{% endfilter %}',
     },
     it: {
-      title: '{% filter ak_text:"404_en_title" %}Pagina non trovata{% endfilter %}',
-      content: `{% filter ak_text:"404_en_content" %}Ci dispiace 😔, non abbiamo trovato la pagina richiesta.{% endfilter %}`,
-      link: '{% filter ak_text:"404_en_title" %}Torna alla homepage{% endfilter %}',
+      title: '{% filter ak_text:"404_it_title" %}Pagina non trovata{% endfilter %}',
+      content: `{% filter ak_text:"404_it_content" %}Ci dispiace 😔, non abbiamo trovato la pagina richiesta.{% endfilter %}`,
+      link: '{% filter ak_text:"404_it_title" %}Torna alla homepage{% endfilter %}',
+    },
+    es: {
+      title: '{% filter ak_text:"404_es_title" %}Pagina non trovata{% endfilter %}',
+      content: `{% filter ak_text:"404_es_content" %}Ci dispiace 😔, non abbiamo trovato la pagina richiesta.{% endfilter %}`,
+      link: '{% filter ak_text:"404_es_title" %}Torna alla homepage{% endfilter %}',
+    },
+    nl: {
+      title: '{% filter ak_text:"404_nl_title" %}Pagina non trovata{% endfilter %}',
+      content: `{% filter ak_text:"404_nl_content" %}Ci dispiace 😔, non abbiamo trovato la pagina richiesta.{% endfilter %}`,
+      link: '{% filter ak_text:"404_nl_title" %}Torna alla homepage{% endfilter %}',
+    },
+    de: {
+      title: '{% filter ak_text:"404_de_title" %}Pagina non trovata{% endfilter %}',
+      content: `{% filter ak_text:"404_de_content" %}Ci dispiace 😔, non abbiamo trovato la pagina richiesta.{% endfilter %}`,
+      link: '{% filter ak_text:"404_de_title" %}Torna alla homepage{% endfilter %}',
+    },
+    pl: {
+      title: '{% filter ak_text:"404_pl_title" %}Pagina non trovata{% endfilter %}',
+      content: `{% filter ak_text:"404_pl_content" %}Ci dispiace 😔, non abbiamo trovato la pagina richiesta.{% endfilter %}`,
+      link: '{% filter ak_text:"404_pl_title" %}Torna alla homepage{% endfilter %}',
+    },
+    fr: {
+      title: '{% filter ak_text:"404_fr_title" %}Pagina non trovata{% endfilter %}',
+      content: `{% filter ak_text:"404_fr_content" %}Ci dispiace 😔, non abbiamo trovato la pagina richiesta.{% endfilter %}`,
+      link: '{% filter ak_text:"404_fr_title" %}Torna alla homepage{% endfilter %}',
     },
   };
-
-  const translateErrorPage = () => {
-    const errorWrapper = document.querySelector('[data-wm-error-page]');
-
-    if (!errorWrapper) {
-      return;
-    }
-
-    const language = navigator.language.substring(0,2);
-
-    const title = errorWrapper.querySelector('[data-wm-error-title]');
-    const content = errorWrapper.querySelector('[data-wm-error-content]');
-    const link = errorWrapper.querySelector('[data-wm-error-link]');
-
-    document.title = `${errorWrapper.dataset.wmErrorPage} - ${translations[language].title} ${document.title}`;
-    title.innerHTML = translations[language].title;
-    content.innerHTML = translations[language].content;
-    link.innerHTML = translations[language].link;
-    link.href = `https://wemove.eu/${language}`;
-  };
-
-  translateErrorPage();
 </script>
 {% endblock %}
