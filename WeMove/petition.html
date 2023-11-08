@@ -160,6 +160,7 @@
 		</div>
 </form>
 
+{% if not isEmbbeded %}
 <script>
 	var recent_comments = {% report "comments_recent_actions" with 1 as refresh page.id as page_id %};
 	recent_comments.shift();
@@ -241,5 +242,6 @@
 		});
 	}
 </script>
+{% endif %}
 
 {% endblock %}
