@@ -24,7 +24,7 @@
 
   const translateErrorPage = () => {
     const errorWrapper = document.querySelector('[data-wm-error-page]');
-debugger
+
     if (!errorWrapper) {
       return;
     }
@@ -35,10 +35,10 @@ debugger
     const content = errorWrapper.querySelector('[data-wm-error-content]');
     const link = errorWrapper.querySelector('[data-wm-error-link]');
 
-    document.title = '404' + translations[language][title] + document.title;
-    title.innerHTML = translations[language][title];
-    content.innerHTML = translations[language][content];
-    link.innerHTML = translations[language][link];
+    document.title = '404' + translations[language].title + document.title;
+    title.innerHTML = translations[language].title;
+    content.innerHTML = translations[language].content;
+    link.innerHTML = translations[language].link;
     link.href = `https://wemove.eu/${language}`;
   };
 
