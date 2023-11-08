@@ -12,12 +12,12 @@
   const translations = {
     en: {
       title: '{% filter ak_text:"404_en_title" %}Page not found{% endfilter %}',
-      content: '{% filter ak_text:"404_en_content" %}Sorry 😔, we couldn’t find what you were looking for.<br/><br/><a href="https://wemove.eu/[% iso %]">Go to the homepage</a>{% endfilter %}',
+      content: '{% filter ak_text:"404_en_content" %}Sorry 😔, we couldn’t find what you were looking for.{% endfilter %}',
       homeLink: '{% filter ak_text:"404_en_title" %}Go to the homepage{% endfilter %}',
     },
     it: {
       title: '{% filter ak_text:"404_en_title" %}Pagina non trovata{% endfilter %}',
-      content: `{% filter ak_text:"404_en_content" %}Ci dispiace 😔, non abbiamo trovato la pagina richiesta.<br/><br/><a href="https://wemove.eu/[% iso %]">Go to the homepage</a>{% endfilter %}`,
+      content: `{% filter ak_text:"404_en_content" %}Ci dispiace 😔, non abbiamo trovato la pagina richiesta.{% endfilter %}`,
       homeLink: '{% filter ak_text:"404_en_title" %}Torna alla homepage{% endfilter %}',
     },
   };
@@ -41,5 +41,7 @@ debugger
     link.innerHTML = translations[language][link];
     link.href = `https://wemove.eu/${language}`;
   };
+
+  translateErrorPage();
 </script>
 {% endblock %}
