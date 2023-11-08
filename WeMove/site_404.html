@@ -3,7 +3,7 @@
 {% block title %} | {% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}{% endblock %}
 
 {% block content %}
-<main data-wm-error-page="404" style="text-align: center; margin: 2rem 0 4rem 0">
+<main data-wm-error-page="500" style="text-align: center; margin: 2rem 0 4rem 0">
   <h1 data-wm-error-title></h1>
   <p data-wm-error-content></p>
   <a data-wm-error-link href="https://wemove.eu/"></a>
@@ -11,39 +11,39 @@
 <script>
   const translations = {
     en: {
-      title: '{% filter ak_text:"404_en_title" %}Page not found{% endfilter %}',
-      content: '{% filter ak_text:"404_en_content" %}Sorry 😔, we couldn’t find what you were looking for.{% endfilter %}',
-      link: '{% filter ak_text:"404_en_link" %}Go to the homepage{% endfilter %}',
+      title: `{% filter ak_text:"500_en_title" %} - Server error{% endfilter %}`,
+      content: `{% filter ak_text:"500_en_content" %}Sorry 😔, we're having trouble handling your request at the moment. Please give us a few minutes and try again.{% endfilter %}`,
+      link: `{% filter ak_text:"500_en_link" %}Go to the homepage{% endfilter %}`,
     },
     it: {
-      title: '{% filter ak_text:"404_it_title" %}Page not found{% endfilter %}',
-      content: `{% filter ak_text:"404_it_content" %}Sorry 😔, we couldn’t find what you were looking for.{% endfilter %}`,
-      link: '{% filter ak_text:"404_it_link" %}Go to the homepage{% endfilter %}',
+      title: `{% filter ak_text:"500_it_title" %} - Server error{% endfilter %}`,
+      content: `{% filter ak_text:"500_it_content" %}Sorry 😔, we're having trouble handling your request at the moment. Please give us a few minutes and try again.{% endfilter %}`,
+      link: `{% filter ak_text:"500_it_link" %}Go to the homepage{% endfilter %}`,
     },
     es: {
-      title: '{% filter ak_text:"404_es_title" %}Page not found{% endfilter %}',
-      content: `{% filter ak_text:"404_es_content" %}Sorry 😔, we couldn’t find what you were looking for.{% endfilter %}`,
-      link: '{% filter ak_text:"404_es_link" %}Go to the homepage{% endfilter %}',
+      title: `{% filter ak_text:"500_es_title" %} - Server error{% endfilter %}`,
+      content: `{% filter ak_text:"500_es_content" %}Sorry 😔, we're having trouble handling your request at the moment. Please give us a few minutes and try again.{% endfilter %}`,
+      link: `{% filter ak_text:"500_es_link" %}Go to the homepage{% endfilter %}`,
     },
     nl: {
-      title: '{% filter ak_text:"404_nl_title" %}Page not found{% endfilter %}',
-      content: `{% filter ak_text:"404_nl_content" %}Sorry 😔, we couldn’t find what you were looking for.{% endfilter %}`,
-      link: '{% filter ak_text:"404_nl_link" %}Go to the homepage{% endfilter %}',
+      title: `{% filter ak_text:"500_nl_title" %} - Server error{% endfilter %}`,
+      content: `{% filter ak_text:"500_nl_content" %}Sorry 😔, we're having trouble handling your request at the moment. Please give us a few minutes and try again.{% endfilter %}`,
+      link: `{% filter ak_text:"500_nl_link" %}Go to the homepage{% endfilter %}`,
     },
     de: {
-      title: '{% filter ak_text:"404_de_title" %}Page not found{% endfilter %}',
-      content: `{% filter ak_text:"404_de_content" %}Sorry 😔, we couldn’t find what you were looking for.{% endfilter %}`,
-      link: '{% filter ak_text:"404_de_link" %}Go to the homepage{% endfilter %}',
+      title: `{% filter ak_text:"500_de_title" %} - Server error{% endfilter %}`,
+      content: `{% filter ak_text:"500_de_content" %}Sorry 😔, we're having trouble handling your request at the moment. Please give us a few minutes and try again.{% endfilter %}`,
+      link: `{% filter ak_text:"500_de_link" %}Go to the homepage{% endfilter %}`,
     },
     pl: {
-      title: '{% filter ak_text:"404_pl_title" %}Page not found{% endfilter %}',
-      content: `{% filter ak_text:"404_pl_content" %}Sorry 😔, we couldn’t find what you were looking for.{% endfilter %}`,
-      link: '{% filter ak_text:"404_pl_link" %}Go to the homepage{% endfilter %}',
+      title: `{% filter ak_text:"500_pl_title" %} - Server error{% endfilter %}`,
+      content: `{% filter ak_text:"500_pl_content" %}Sorry 😔, we're having trouble handling your request at the moment. Please give us a few minutes and try again.{% endfilter %}`,
+      link: `{% filter ak_text:"500_pl_link" %}Go to the homepage{% endfilter %}`,
     },
     fr: {
-      title: '{% filter ak_text:"404_fr_title" %}Page not found{% endfilter %}',
-      content: `{% filter ak_text:"404_fr_content" %}Sorry 😔, we couldn’t find what you were looking for.{% endfilter %}`,
-      link: '{% filter ak_text:"404_fr_link" %}Go to the homepage{% endfilter %}',
+      title: `{% filter ak_text:"500_fr_title" %} - Server error{% endfilter %}`,
+      content: `{% filter ak_text:"500_fr_content" %}Sorry 😔, we're having trouble handling your request at the moment. Please give us a few minutes and try again.{% endfilter %}`,
+      link: `{% filter ak_text:"500_fr_link" %}Go to the homepage{% endfilter %}`,
     },
   };
 </script>
