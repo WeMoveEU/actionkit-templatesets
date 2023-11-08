@@ -1,5 +1,7 @@
 {% extends "./wrapper.html" %}
 
+{% block title %}404 - Page not found | {% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}{% endblock %}
+
 {% block content %}
 <div class="error-wrapper" style="text-align: center; margin: 2rem 0 4rem 0">
   <h1>Page not found</h1>
