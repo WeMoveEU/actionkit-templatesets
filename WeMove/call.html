@@ -265,6 +265,10 @@ function choose_a_tweet () {
   randomized.push("An important message for [%= handles %]: ");
 
   for (const template of randomized) {
+    if (template === "") {
+      continue;
+    }
+
     const message = actionkit.utils.template(template, variables);
 
     if (message.match(/\S/)) {
