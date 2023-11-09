@@ -191,91 +191,89 @@
 {% block script_additions %}
 {% if page.custom_fields.call_page_mode == 'tweet' %}
 <script>
-$(document).ready(function () {
-  const targets_txt = {{ page.custom_fields.twitter_targets|json }};
-  const messages_txt = {{ page.custom_fields.twitter_messages|json }};
-  const fallback_txt = {{ page.custom_fields.twitter_fallback|json }};
+const targets_txt = {{ page.custom_fields.twitter_targets|json }};
+const messages_txt = {{ page.custom_fields.twitter_messages|json }};
+const fallback_txt = {{ page.custom_fields.twitter_fallback|json }};
 
-  let page_targets;
+let page_targets;
 
-  $(actionkit.form).bind('actionkit.ready', prepare_tweet);
-  setTimeout(prepare_tweet, 1000);
+$(actionkit.form).bind('actionkit.ready', prepare_tweet);
+setTimeout(prepare_tweet, 1000);
 
-  const updateTweetForm = () => {
-    const textArea = document.querySelector("[data-wm-tweet-message]");
-    const counter = document.querySelector("[data-wm-tweet-char-count]");
-    const tweetSubmit = document.querySelector("[data-wm-tweet-submit]");
+const updateTweetForm = () => {
+  const textArea = document.querySelector("[data-wm-tweet-message]");
+  const counter = document.querySelector("[data-wm-tweet-char-count]");
+  const tweetSubmit = document.querySelector("[data-wm-tweet-submit]");
 
-    counter.innerHTML = 280 - textArea.value.length;
-    tweetSubmit.disabled = textArea.value.length < 1;
+  counter.innerHTML = 280 - textArea.value.length;
+  tweetSubmit.disabled = textArea.value.length < 1;
+};
+
+const submitTweet = () => {
+  const tweet = document.querySelector("[data-wm-tweet-message]").value;
+  const params = new URLSearchParams({ text: tweet }).toString();
+  const handle = window.open( 'https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320' );
+}
+
+function prepare_tweet () {
+  page_targets = actionkit.context.targets?.targets ? actionkit.context.targets.targets : [];
+
+  const textArea = document.querySelector("[data-wm-tweet-message]");
+  textArea.value = choose_a_tweet();
+  textArea.addEventListener('keyup', updateTweetForm, false);
+  textArea.addEventListener('change', updateTweetForm, false);
+  textArea.dispatchEvent(new Event('change'));
+
+  const tweetSubmit = document.querySelector("[data-wm-tweet-submit]");
+  tweetSubmit.addEventListener('click', submitTweet);
+
+  updateTweetForm();
+}
+
+function choose_a_tweet () {
+  const target_lines = targets_txt.split(/[\r\n]+/);
+  const target_data = target_lines.map( (s) => s.split(/\s+/) ).map((s) => [s.shift(), s.join(' ')]);
+  const page_target_data = page_targets.map(
+    (t) => [t.twitter, t.title_informal_full]
+  );
+
+  const combined_targets = target_data.concat(page_target_data).map(
+    (t) => [t[0] ? '@' + t[0] : null, t[1]]
+  );
+  const tweet_targets = combined_targets.filter(
+    (t) => t[0]
+  );
+  const random_targets = tweet_targets.sort(()=>Math.random()-0.5);
+
+  const first_target = tweet_targets[0] || [];
+  const random_target = random_targets[0] || [];
+
+  const variables = {
+    handle: first_target[0],
+    name: first_target[1],
+    handles: combined_targets.map((t) => t[0]).join(', '),
+    targets: combined_targets,
+    rhandle: random_target[0],
+    rname: random_target[1],
+    rhandles: random_targets.map((t) => t[0]).join(', '),
+    rtargets: random_targets,
   };
 
-  const submitTweet = () => {
-    const tweet = document.querySelector("[data-wm-tweet-message]").value;
-    const params = new URLSearchParams({ text: tweet }).toString();
-    const handle = window.open( 'https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320' );
-  }
+  const messages = messages_txt.split(/[\r\n]+/);
+  const fallback = fallback_txt.split(/[\r\n]+/);
+  const randomized = messages.sort(() => Math.random()-0.5).concat(fallback);
+  randomized.push("An important message for [%= handles %]: ");
 
-  function prepare_tweet () {
-    page_targets = actionkit.context.targets?.targets ? actionkit.context.targets.targets : [];
+  for (const template of randomized) {
+    const message = actionkit.utils.template(template, variables);
 
-    const textArea = document.querySelector("[data-wm-tweet-message]");
-    textArea.value = choose_a_tweet();
-    textArea.addEventListener('keyup', updateTweetForm, false);
-    textArea.addEventListener('change', updateTweetForm, false);
-    textArea.dispatchEvent(new Event('change'));
-
-    const tweetSubmit = document.querySelector("[data-wm-tweet-submit]");
-    tweetSubmit.addEventListener('click', submitTweet);
-
-    updateTweetForm();
-  }
-
-  function choose_a_tweet () {
-    const target_lines = targets_txt.split(/[\r\n]+/);
-    const target_data = target_lines.map( (s) => s.split(/\s+/) ).map((s) => [s.shift(), s.join(' ')]);
-    const page_target_data = page_targets.map(
-      (t) => [t.twitter, t.title_informal_full]
-    );
-
-    const combined_targets = target_data.concat(page_target_data).map(
-      (t) => [t[0] ? '@' + t[0] : null, t[1]]
-    );
-    const tweet_targets = combined_targets.filter(
-      (t) => t[0]
-    );
-    const random_targets = tweet_targets.sort(()=>Math.random()-0.5);
-
-    const first_target = tweet_targets[0] || [];
-    const random_target = random_targets[0] || [];
-
-    const variables = {
-      handle: first_target[0],
-      name: first_target[1],
-      handles: combined_targets.map((t) => t[0]).join(', '),
-      targets: combined_targets,
-      rhandle: random_target[0],
-      rname: random_target[1],
-      rhandles: random_targets.map((t) => t[0]).join(', '),
-      rtargets: random_targets,
-    };
-
-    const messages = messages_txt.split(/[\r\n]+/);
-    const fallback = fallback_txt.split(/[\r\n]+/);
-    const randomized = messages.sort(() => Math.random()-0.5).concat(fallback);
-    randomized.push("An important message for [%= handles %]: ");
-
-    for (const template of randomized) {
-      const message = actionkit.utils.template(template, variables);
-
-      if (message.match(/\S/)) {
-        return message;
-      }
+    if (message.match(/\S/)) {
+      return message;
     }
-
-    return "No matching tweets were found";
   }
-});
+
+  return "No matching tweets were found";
+}
 </script>
 {% endif %}
 
