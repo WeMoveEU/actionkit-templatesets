@@ -241,7 +241,7 @@
       {% store as previous_consents %}{% report "previous_user_consent_for_list" with 1 as refresh user.id as user_id page.list_id as list_id %}{% endstore %}
       <!-- Previous consents: {{ previous_consents }} -->
 
-      {% if previous_consents > 0 %}
+      {% if previous_consents != "" and previous_consents != "0" %}
 
       {# You have already been asked to consent, so jump to the next step. #}
 
