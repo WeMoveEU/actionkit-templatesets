@@ -162,6 +162,8 @@ const MATOMO_SITE_ID = "1";
 
 {% if page.custom_fields.finished_alert %}
 const SHOULD_DISABLE_FORM = true;
+{% else %}
+const SHOULD_DISABLE_FORM = false;
 {% endif %}
 </script>
 
