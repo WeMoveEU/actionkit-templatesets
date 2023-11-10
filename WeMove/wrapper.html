@@ -95,7 +95,7 @@
               <div data-wm-external-content class="is-loading"></div>
             </div>
             <script>
-              const PRE_SHARE_URL = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
+              window.wemove.page.preShareUrl = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
             </script>
           {% endif %}
         {% endblock %}
@@ -152,21 +152,26 @@ actionkit.forms.initForm('act');
 {% endblock %}
 
 <script>
-window.language = {
+if (!window.wemove) {
+  window.wemove = {
+    site: {},
+    page: {},
+  };
+}
+
+window.wemove.page.language = {
   name: "{{ page.lang_or_en }}",
   iso: "{{page.lang.iso_code|default:'en'}}",
 };
 
 {% if campaign_type == "youmove" %}
-const MATOMO_SITE_ID = "4";
+window.matomoSiteId = { siteId = "4" };
 {% else %}
-const MATOMO_SITE_ID = "1";
+window.matomoSiteId = { siteId = "1" };
 {% endif %}
 
 {% if page.custom_fields.finished_alert %}
-const SHOULD_DISABLE_FORM = true;
-{% else %}
-const SHOULD_DISABLE_FORM = false;
+window.wemove.page.shouldDisableForm = true
 {% endif %}
 </script>
 
