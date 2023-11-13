@@ -177,7 +177,9 @@
 
     const messages = messages_txt.split(/[\r\n]+/);
     const fallback = fallback_txt.split(/[\r\n]+/);
-    const randomized = messages.sort(() => Math.random()-0.5).concat(fallback);
+    const randomized = messages.sort(() => Math.random()-0.5)
+                      .concat(fallback)
+                      .filter( (s) => s && s.match(/\S/) );
     randomized.push("An important message for [%= handles %]: ");
 
     for (const template of randomized) {
