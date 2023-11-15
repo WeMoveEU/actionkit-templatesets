@@ -35,8 +35,8 @@ There are a few tools in ActionKit that make developing template sets easier. He
 See the [actionkit stripe integration](https://gitlab.wemove.eu/internal/actionkit-stripe-integration/) for setting up the development environment for this work.
 
 ## Local assets proxy
-<script src="http://127.0.0.1:8081/out/js/wemove-main.bundle.min.js"></script>
-http://127.0.0.1:8081/out/css/wemove.css
+<script src="http://127.0.0.1:8081/js/wemove-main.bundle.min.js"></script>
+http://127.0.0.1:8081/css/wemove.css
 
 # TODOs
 
