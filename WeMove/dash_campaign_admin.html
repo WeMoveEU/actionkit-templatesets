@@ -203,6 +203,7 @@
 				<label><input type="radio" name="action_type" value="donation"> Donation</label>
 				<label><input type="radio" name="action_type" value="letter"> Email</label>
 				<label><input type="radio" name="action_type" value="tweet"> Tweet</label>
+				<label><input type="radio" name="action_type" value="facebook"> Facebook</label>
 				<label><input type="radio" name="action_type" value="call" disabled> Call</label>
 				<label><input type="radio" name="action_type" value="facebook" disabled> Facebook</label>
 			</div>
@@ -977,7 +978,18 @@
 			window.alert(`Can't find a model ID for action ${action_type} in language ${language}`);
 			return;
 		}
-		const page_type = pageType(action_type);
+		const page_type = action_type;
+		if (action_type == 'tweet') {
+			page_type = 'call';
+			fields.call_mode = 'twitter'
+		} else if (action_type == 'facebook') {
+			page_type = 'call';
+			fields.call_mode = 'facebook'
+		} else if (action_type == 'call') {
+			fields.call_mode = 'call'
+		} else if (action_type == 'share') {
+			page_type = 'signup';
+		}
 		var p_copy = await fetch(`/admin/core/${page_type}page/copy/?id=${model_id}`);
 		const page_id = p_copy.url.match(/\d+/)[0];
 		api_log(`Created ${language} ${action_type} page ${page_id}`);
@@ -991,16 +1003,6 @@
 			multilingual_campaign: mcamp,
 			fields: fields,
 		} );
-	}
-
-	function pageType(actionType) {
-		if (actionType == 'tweet') {
-			return 'call';
-		} else if (actionType == 'share') {
-			return 'petition';
-		} else {
-			return actionType;
-		}
 	}
 
 	function createMailings(evt) {
