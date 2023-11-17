@@ -61,18 +61,16 @@
     </style>
     {% if 'postal'|is_in:fields %}
       <div data-wm-other-country-label hidden>
-        {% filter ak_text:"otherCountryName_label" %}Country:{% endfilter %}
+        {{ field.label_text }}
         {% if field.field_name|is_in:context.required %}<span class="ak-required-flag">*</span>{% endif %}
       </div>
       <div data-wm-other-country-error-required hidden>
         <ul class="custom-ak-err">
           <li>
-            {% filter ak_text:"error_otherCountry:missing" %}Country name is required{% endfilter %}
+            {% filter ak_text:"error_country:missing" %}Country is required{% endfilter %}
           </li>
         </ul>
       </div>
-
     {% endif %}
 {% endif %}
-
 {% endfilter %}
