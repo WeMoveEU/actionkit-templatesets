@@ -76,6 +76,48 @@
               </div>
 						{% endif %}
 
+            {% if page.custom_fields.call_page_mode == 'facebook' %}
+              <h2 class="send-tweet-title">Post to Facebook</h2>
+
+              <div class="form-field hide-if-previously-signed">
+                <label for="rtweet_body">
+                  {% filter ak_text:"facebook_message" %}Suggested message{% endfilter %}
+                </label>
+                <textarea
+                  data-wm-tweet-message
+                  name="tweet_text"
+                  id="tweet_body"
+                  rows="3"
+                  required
+                  class="form-control"></textarea>
+
+              </div>
+
+              {% include "./user_form_wrapper.html" %}
+
+              <div class="buttons-wrapper hide-if-previously-signed">
+                  <button
+                    class="btn btn-primary js-track-action js-submit"
+                    data-js-event-category="tweet"
+                    data-js-event-action="action"
+                    data-wm-tweet-submit
+                    disabled>
+                      {% filter ak_text:"sendTweet_button" %}Open Facebook{% endfilter %}
+                  </button>
+                <a
+                  href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
+                  class="skip btn btn-default">
+                  {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
+                </a>
+              </div>
+              <div class="action-feedback-bar">
+                <div class="fade in alert alert-success alert-dismissable feedback-alert">
+                  <button type="button" class="close" data-dismiss="alert">×</button>
+                  Thanks for posting!
+                </div>
+              </div>
+						{% endif %}
+
             {% if page.custom_fields.call_page_mode == 'call' %}
               {% include "./user_form_wrapper.html" %}
 
@@ -167,8 +209,8 @@
     const variables = {
       handle: first_target[0],
       name: first_target[1],
-      handles: combined_targets.map((t) => t[0]).join(', '),
-      targets: combined_targets,
+      handles: tweet_targets.map((t) => t[0]).join(', '),
+      targets: tweet_targets,
       rhandle: random_target[0],
       rname: random_target[1],
       rhandles: random_targets.map((t) => t[0]).join(', '),
@@ -193,6 +235,83 @@
     }
 
     return "No matching tweets were found";
+  }
+  </script>
+{% endif %}
+
+{% if page.custom_fields.call_page_mode == 'facebook' %}
+<script>
+  const targets_txt = {{ page.custom_fields.facebook_targets|json }};
+  const messages_txt = {{ page.custom_fields.facebook_messages|json }};
+
+  let page_targets;
+
+  $(actionkit.form).bind('actionkit.ready', prepare_post);
+  setTimeout(prepare_post, 1000);
+
+  const submit_post = () => {
+    const post = document.querySelector("[data-wm-tweet-message]").value;
+    const params = new URLSearchParams({ u: '{% client_domain_url %}/act/{{ page.name }}' }).toString();
+    const handle = window.open( 'https://www.facebook.com/sharer/sharer.php?' + params, 'facebook', 'popup,innerWidth=600,innerHeight=320' );
+  }
+
+  function prepare_post () {
+    page_targets = actionkit.context.targets?.targets ? actionkit.context.targets.targets : [];
+
+    const textArea = document.querySelector("[data-wm-tweet-message]");
+    textArea.value = choose_a_post();
+    textArea.dispatchEvent(new Event('change'));
+
+    const post_submit = document.querySelector("[data-wm-tweet-submit]");
+    post_submit.addEventListener('click', submit_post);
+    post_submit.disabled = 0;
+  }
+
+  function choose_a_post () {
+    const target_lines = targets_txt.split(/[\r\n]+/);
+    const target_data = target_lines.map( (s) => s.split(/\s+/) ).map((s) => [s.shift(), s.join(' ')]);
+    const page_target_data = page_targets.map(
+      (t) => [t.facebook, t.title_informal_full]
+    );
+
+    const combined_targets = target_data.concat(page_target_data).map(
+      (t) => [t[0] ? '@' + t[0] : null, t[1]]
+    );
+    const facebook_targets = combined_targets.filter(
+      (t) => t[0]
+    );
+    const random_targets = facebook_targets.sort(()=>Math.random()-0.5);
+
+    const first_target = facebook_targets[0] || [];
+    const random_target = random_targets[0] || [];
+
+    const variables = {
+      handle: first_target[0],
+      name: first_target[1],
+      handles: facebook_targets.map((t) => t[0]).join(', '),
+      targets: facebook_targets,
+      rhandle: random_target[0],
+      rname: random_target[1],
+      rhandles: random_targets.map((t) => t[0]).join(', '),
+      rtargets: random_targets,
+    };
+
+    const messages = messages_txt.split(/[\r\n]+/);
+    const randomized = messages.sort(() => Math.random()-0.5)
+    .filter( (s) => s && s.match(/\S/) );
+    if ( variables['handles'].match(/\S/) ) {
+      randomized.push("An important message for [%= handles %]: ");
+    }
+
+    for (const template of randomized) {
+      const message = actionkit.utils.template(template, variables);
+
+      if (message.match(/\S/)) {
+        return message;
+      }
+    }
+
+    return "No suggested Facebook messages were found";
   }
   </script>
 {% endif %}
