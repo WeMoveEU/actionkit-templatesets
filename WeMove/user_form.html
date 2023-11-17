@@ -27,10 +27,7 @@
 {% hide_by_default prefix first_name middle_name last_name suffix country phone address1 address2 city state region postal %}
 
 {% for field in user_fields %}
-    <div
-      data-wm-form-field="{{ field.field_name }}"
-      id="ak-fieldbox-{{ field.field_name }}"
-      class="form-field{% if field.field_name|is_in:context.required %} required{% endif %}">
+    <div data-wm-form-field="{{ field.field_name }}" id="ak-fieldbox-{{ field.field_name }}" class="form-field{% if field.field_name|is_in:context.required %} required{% endif %}"></div>
         <label for="id_{{ field.field_name }}">
             {{ field.label_text }}:{% if field.field_name|is_in:context.required %}<span class="ak-required-flag">*</span>{% endif %}
         </label>
