@@ -60,17 +60,17 @@
         {% endif %}
     </style>
     {% if 'postal'|is_in:fields %}
-      <template data-wm-other-country-label>
+      <div data-wm-other-country-label hidden>
         {% filter ak_text:"otherCountryName_label" %}Country name:{% endfilter %}
         <span class="ak-required-flag">*</span>
-      </template>
-      <template data-wm-other-country-error-required>
+      </div>
+      <div data-wm-other-country-error-required hidden>
         <ul class="custom-ak-err">
           <li>
             {% filter ak_text:"error_otherCountry:missing" %}Country name is required{% endfilter %}
           </li>
         </ul>
-      </template>
+      </div>
 
     {% endif %}
 {% endif %}
