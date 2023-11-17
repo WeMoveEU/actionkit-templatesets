@@ -228,7 +228,7 @@
 
 	{# --- VIEW UNCERTAIN; DETERMINE NEXT STEP #}
 
-	{% store as next_step %}{% filter strip %}
+	{% store as destination %}{% filter strip %}
 		{% if page.custom_fields.next_step %}
 			{% if "//" in page.custom_fields.next_step %}
 				{{ page.custom_fields.next_step }}{% if "?" not in page.custom_fields.next_step %}?{% endif %}
@@ -236,7 +236,12 @@
 				/act/{{ page.custom_fields.next_step }}?
 			{% endif %}
 		{% else %}
-			/thanks/{{ page.custom_fields.daisy_chain_action|default:page.name }}?share=1&{% endif %}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}
+			/thanks/{{ page.custom_fields.daisy_chain_action|default:page.name }}?share=1&
+		{% endif %}
+	{% endfilter %}{% endstore %}
+
+	{% store as next_step %}{% filter strip %}
+		{{ destination }}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}
 	{% endfilter %}{% endstore %}
 	<!-- Daisy Chain: {{ page.custom_fields.daisy_chain_action }} -->
 	<!-- Next Step: {{ next_step }} -->
