@@ -180,7 +180,7 @@
     const randomized = messages.sort(() => Math.random()-0.5)
                       .concat(fallback)
                       .filter( (s) => s && s.match(/\S/) );
-    if ( handles && handles.match(/\S/) ) {
+    if ( variables['handles'].match(/\S/) ) {
       randomized.push("An important message for [%= handles %]: ");
     }
 
