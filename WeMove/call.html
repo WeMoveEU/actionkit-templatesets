@@ -180,7 +180,9 @@
     const randomized = messages.sort(() => Math.random()-0.5)
                       .concat(fallback)
                       .filter( (s) => s && s.match(/\S/) );
-    randomized.push("An important message for [%= handles %]: ");
+    if ( handles && handles.match(/\S/) ) {
+      randomized.push("An important message for [%= handles %]: ");
+    }
 
     for (const template of randomized) {
       const message = actionkit.utils.template(template, variables);
