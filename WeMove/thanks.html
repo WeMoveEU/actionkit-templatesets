@@ -145,28 +145,6 @@
               <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
             </div>
 
-            <script>
-              const url_params = new URLSearchParams(window.location.search);
-
-              if (url_params.get('share') == 'whatsapp') {
-                const wa_message = "{{ page.followup.twitter_message|default:page.title }}";
-                const request_url = "/share/link?type=ot&source=whatsapp&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}";
-
-                $.get(request_url, "", function (response) {
-                  const message = encodeURIComponent(wa_message + ' ' + response);
-                  let whatsapp_url;
-
-                  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                    whatsapp_url = ".whatsapp://send?text=" + message;
-                  } else {
-                    whatsapp_url = "https://wa.me/?text=" + message;
-                  }
-
-                  window.location.href =  whatsapp_url;
-                });
-              }
-            </script>
-
             {% if page.custom_fields.instagram_share_link %}
             <div class="share-big instagram-share-container">
               <a
@@ -198,6 +176,31 @@
                   {% filter ak_text:"thanks_shareWhatsApp_button" %}Share on WhatsApp{% endfilter %}
                 </span>
               </a>
+
+              <script async>
+                (async () => {
+                  const urlParams = new URLSearchParams(window.location.search);
+
+                  if (urlParams.get('share') !== 'whatsapp') {
+                    return;
+                  }
+
+                  const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                  const whatsAppURL = isMobile()
+                    ? ".whatsapp://send"
+                    : "https://wa.me/";
+
+                  const title = "{{ page.followup.twitter_message|default:page.title }}";
+                  const sharePageURL = "/share/link?type=ot&source=whatsapp&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}";
+                  const whatsAppText = await fetch(sharePageURL)
+                    .then(async (result) => {
+                      const urlToShare = await result.text();
+                      return encodeURIComponent(`${title} ${urlToShare}`);
+                    });
+
+                  window.location.href = `${whatsAppURL}?text=${whatsAppText}`;
+                })();
+              </script>
             </div>
 
             {% if page.followup.send_taf %}
