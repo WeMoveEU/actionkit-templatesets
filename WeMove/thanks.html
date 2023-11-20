@@ -153,14 +153,16 @@
                 const request_url = "/share/link?type=ot&source=whatsapp&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}";
 
                 $.get(request_url, "", function (response) {
-                  const message_link = wa_message + ' ' + response;
-                  const has_hover = window.matchMedia("(any-hover: hover)").matches;
+                  const message = encodeURIComponent(wa_message + ' ' + response);
+                  let whatsapp_url;
 
-                  if (has_hover) {
-                    window.location = 'https://web.whatsapp.com/send?text=' + encodeURIComponent(message_link);
+                  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                    whatsapp_url = ".whatsapp://send?text=" + message;
                   } else {
-                    window.location = 'whatsapp://send?text=' + encodeURIComponent(message_link);
+                    whatsapp_url = "https://wa.me/?text=" + message;
                   }
+
+                  window.location.href =  whatsapp_url;
                 });
               }
             </script>
@@ -245,22 +247,22 @@
 	{% endfilter %}{% endstore %}
 	<!-- Daisy Chain: {{ page.custom_fields.daisy_chain_action }} -->
 	<!-- Next Step: {{ next_step }} -->
-  
-  
+
+
   {# --- BEFORE GOING TO NEXT STEP, ASK FOR CONSENT TO SUBSCRIBE NEW USERS #}
-	
+
   {% comment %}
-		There are five cases where we skip consent and go to your next destination: 
+		There are five cases where we skip consent and go to your next destination:
 		1. unidentified user, so we can't subscribe
 		2. already subscribed, so don't ask again
 		3. is an unsubscribe page, so we shouldn't re-subscribe
 		4. user was recently shown this consent page, so don't ask again
 		5. we can't figure out which consent page to use.
-  
+
 		If you pass all of those, we send you to the consent page along with
 		a link to your next destination.
   {% endcomment %}
-  
+
   <!-- Substatus: {{ user.subscription_status }} -->
 
   {% if not user %}
@@ -308,7 +310,7 @@
       <!-- Signup Page: {{ signup_page_name }} -->
       {% if not signup_page_name %}
         {% comment %}
-          5. You should be asked to consent, but we don't have a consent page 
+          5. You should be asked to consent, but we don't have a consent page
           for that list in your language, so jump to the next step.
         {% endcomment %}
 
@@ -337,4 +339,8 @@
     actionkit.forms.initTafForm('taf');
     actionkit.sharing.initShareTools();
 </script>
+{% endblock %}
+
+{% block wemove_scripts %}
+<script src="//static.wemove.eu/action-kit/js/wemove-thanks.bundle.min.js"></script>
 {% endblock %}
