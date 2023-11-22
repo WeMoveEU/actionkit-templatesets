@@ -168,7 +168,6 @@
                 class="btn btn-primary whatsapp-web"
                 href="/thanks/{{ page.name }}?share=whatsapp&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
                 target="_blank"
-                data-wm-whatsapp-button=""
                 data-wm-pixel-event-type="Share"
                 data-wm-pixel-track-type="trackCustom"
                 data-wm-pixel-content-name="WhatsApp"
@@ -178,8 +177,14 @@
                 </span>
               </a>
 
-              <script async>
+              <script>
                 (async () => {
+                  const urlParams = new URLSearchParams(window.location.search);
+
+                  if (urlParams.get('share') !== 'whatsapp') {
+                    return;
+                  }
+
                   const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
                   const whatsAppURL = isMobile()
                     ? "whatsapp://send"
@@ -193,7 +198,7 @@
                       return encodeURIComponent(`${title} ${urlToShare}`);
                     });
 
-                  document.querySelector('[data-wm-whatsapp-button]').href = `${whatsAppURL}?text=${whatsAppText}`;
+                  window.location.href = `${whatsAppURL}?text=${whatsAppText}`;
                 })();
               </script>
             </div>
