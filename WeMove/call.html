@@ -251,8 +251,14 @@
 
   const submit_post = () => {
     const post = document.querySelector("[data-wm-tweet-message]").value;
-    const params = new URLSearchParams({ u: '{% client_domain_url %}/act/{{ page.name }}' }).toString();
-    const handle = window.open( 'https://www.facebook.com/sharer/sharer.php?' + params, 'facebook', 'popup,innerWidth=600,innerHeight=320' );
+    const params = new URLSearchParams({ u: window.fb_link || '{% client_domain_url %}/act/{{ page.name }}' }).toString();
+    if ( ! window.fb_target ) {
+      const handle = window.open( 'https://www.facebook.com/sharer/sharer.php?' + params, 'facebook', 'popup,innerWidth=600,innerHeight=320' );
+    } else if ( window.fb_target.match(/\/\//) ) {
+      const handle = window.open( window.fb_target, 'facebook', 'popup,innerWidth=940,innerHeight=600' );
+    } else {
+      const handle = window.open( 'https://www.facebook.com/' + window.fb_target.replace('@', ''), 'facebook', 'popup,innerWidth=940,innerHeight=600' );
+    }
   }
 
   function prepare_post () {
@@ -298,15 +304,27 @@
 
     const messages = messages_txt.split(/[\r\n]+/);
     const randomized = messages.sort(() => Math.random()-0.5)
-    .filter( (s) => s && s.match(/\S/) );
+				       .filter( (s) => s && s.match(/\S/) );
     if ( variables['handles'].match(/\S/) ) {
       randomized.push("An important message for [%= handles %]: ");
     }
 
     for (const template of randomized) {
-      const message = actionkit.utils.template(template, variables);
+      var message = actionkit.utils.template(template, variables);
 
       if (message.match(/\S/)) {
+        const initial_target = message.match(/^(@\S+|https?:\S+)\s(.*)/);
+        if ( initial_target && initial_target[1] ) {
+          window.fb_target = initial_target[1];
+          message = initial_target[2];
+        }
+
+        const trailing_link = message.match(/^(.*)\s(https?:\S+)$/);
+        if ( trailing_link && trailing_link[2] ) {
+          window.fb_link = trailing_link[2];
+          message = trailing_link[1];
+        }
+
         return message;
       }
     }
