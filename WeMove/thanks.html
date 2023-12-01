@@ -193,6 +193,11 @@
                     return;
                   }
 
+                  const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                  const whatsAppURL = isMobile()
+                    ? "whatsapp://send/"
+                    : "https://wa.me/";
+
                   const title = `{{ page.followup.twitter_message|default:page.title|escapeall }}`;
                   const sharePageURL = "/share/link?type=ot&source=whatsapp&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}";
                   const whatsAppText = await fetch(sharePageURL)
@@ -201,7 +206,7 @@
                       return encodeURIComponent(`${title} ${urlToShare}`);
                     });
 
-                  window.location.href = `https://wa.me/?text=${whatsAppText}`;
+                  window.location.href = `${whatsAppURL}?text=${whatsAppText}`;
                 })();
               </script>
             </div>
