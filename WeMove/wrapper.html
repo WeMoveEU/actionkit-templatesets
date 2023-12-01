@@ -17,14 +17,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     {% block share_metatags %}
-    {{ page.followup.share_title_tag }}
     {% if form.id %}
       <meta name="description" property="og:description" content="{% block description %}{{ page.followup.share_description_value }}{% endblock %}">
     {% endif %}
     <meta property="og:site_name" content="{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}">
     <meta property="og:type" content="article">
-    <meta name="twitter:card" content="summary_large_image">
     {{ page.followup.share_title_tag }}
+    <meta name="twitter:card" content="summary_large_image">
     {{ page.followup.share_image_tag }}
     {{ page.followup.share_url_tag }}
     {% endblock %}
