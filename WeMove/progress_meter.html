@@ -12,7 +12,7 @@
                 {% cache_report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "external_signature_extras" as field_name %}
                 {% remember custom_field_from_page_or_campaign as ext_sig_extras %}
                 [% progress.current = parseInt(progress.current) + {{ ext_sig_count|default:"0" }} + {{ ext_sig_extras|default:"0" }}; %]
-                [% if ( goal_type == 'users' ) { %]
+                [% if ( goal_type == 'users' || goal_type == 'actions' ) { %]
                     [% const refval = progress.current * 1.111; %]
                     [% if ( refval > goal || goal == 1 ) { %]
                         [% const cutoffs = [ 100, 200, 500, 1000, 2000, 5000, 10000, 25000, 50000, 75000, 100000, 125000, 150000, 175000, 200000, 250000, 300000, 350000, 400000, 450000 ]; %]
