@@ -693,39 +693,44 @@
 				if ( redirect ) {
 					page.next_step = { id: null, type: 'redirect', action_label: 'external', view_href: redirect, previous_step: page };
 				} else {
-				var next_step = page.fields ? page.fields.next_step : null;
-				var linked_page = next_step ? pages[lang].find( (p) => ( p.name == next_step || p.name == next_step.match("/" + p.name + "/?($|\\?)") ) ) : null;
-				if (linked_page) {
-					page.next_step = linked_page;
-					linked_page.previous_step = page;
-				} else {
-					var after_action = page.followup ? page.followup.url : '';
-					var match = after_action.match(/thanks/);
-					if ( match && match[0] ) {
-						var action_type = after_action.endsWith("?done=1") ? "thanks" : "share";
-						const daisy_action = page.fields.daisy_chain_action;
-						const daisy_page = daisy_action ? pages[lang].find( (p) => p.name == daisy_action ) : null;
-						const daisy_thanks = daisy_page ? daisy_page.name : page.name;
-						const daisy_id = daisy_page ? daisy_page.id : page.id;
-						page.next_step = { id: daisy_id, type: page.type, action_label: action_type, view_href: `/thanks/${daisy_thanks}/?share=1`, edit_href: `/admin/core/pagefollowup/add_or_change/?page=${daisy_id}`, previous_step: page };
-						if (action_type == "share") {
-							page.next_step.next_step = { id: daisy_id, type: page.type, action_label: "thanks", view_href: `/thanks/${daisy_thanks}/?done=1`, previous_step: page.next_step };
-						}
+					var sharing_step = page.fields ? page.fields.sharing_step : null;
+					if ( sharing_step ) {
+						page.type = 'sharing'
+					}
+
+					var next_step = page.fields ? page.fields.next_step : null;
+					var linked_page = next_step ? pages[lang].find( (p) => ( p.name == next_step || p.name == next_step.match("/" + p.name + "/?($|\\?)") ) ) : null;
+					if (linked_page) {
+						page.next_step = linked_page;
+						linked_page.previous_step = page;
 					} else {
-						match = after_action.match(/^\/\w+\/([^\/\?]+)/);
-						if ( match && match[1] ) {
-							var linked_page = pages[lang].find( (p) => ( p.name == match[1] ) );
-							if (linked_page) {
-								page.next_step = linked_page;
-								linked_page.previous_step = page;
+						var after_action = page.followup ? page.followup.url : '';
+						var match = after_action.match(/thanks/);
+						if ( match && match[0] ) {
+							var action_type = after_action.endsWith("?done=1") ? "thanks" : "share";
+							const daisy_action = page.fields.daisy_chain_action;
+							const daisy_page = daisy_action ? pages[lang].find( (p) => p.name == daisy_action ) : null;
+							const daisy_thanks = daisy_page ? daisy_page.name : page.name;
+							const daisy_id = daisy_page ? daisy_page.id : page.id;
+							page.next_step = { id: daisy_id, type: page.type, action_label: action_type, view_href: `/thanks/${daisy_thanks}/?share=1`, edit_href: `/admin/core/pagefollowup/add_or_change/?page=${daisy_id}`, previous_step: page };
+							if (action_type == "share") {
+								page.next_step.next_step = { id: daisy_id, type: page.type, action_label: "thanks", view_href: `/thanks/${daisy_thanks}/?done=1`, previous_step: page.next_step };
 							}
-						} else if ( after_action ) {
-							match = after_action.match(/\/\/(.*?)\//);
-							var label = ( match && match[1] ) ? match[1] : 'external';
-							page.next_step = { id: null, type: 'redirect', action_label: label, view_href: after_action, previous_step: page };
+						} else {
+							match = after_action.match(/^\/\w+\/([^\/\?]+)/);
+							if ( match && match[1] ) {
+								var linked_page = pages[lang].find( (p) => ( p.name == match[1] ) );
+								if (linked_page) {
+									page.next_step = linked_page;
+									linked_page.previous_step = page;
+								}
+							} else if ( after_action ) {
+								match = after_action.match(/\/\/(.*?)\//);
+								var label = ( match && match[1] ) ? match[1] : 'external';
+								page.next_step = { id: null, type: 'redirect', action_label: label, view_href: after_action, previous_step: page };
+							}
 						}
 					}
-				}
 				}
 			});
 			var lang_journeys = [];
