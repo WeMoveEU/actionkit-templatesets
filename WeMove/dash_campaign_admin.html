@@ -689,7 +689,7 @@
 	function sortJourney(pages) {
 		Object.keys(pages).forEach(function(lang) {
 			pages[lang].forEach(function(page) {
-				var redirect = page.fields ? page.fields.redirect : null;
+				var redirect = page.fields ? page.fields.redir : null;
 				if ( redirect ) {
 					page.next_step = { id: null, type: 'redirect', action_label: 'external', view_href: redirect, previous_step: page };
 				} else {
