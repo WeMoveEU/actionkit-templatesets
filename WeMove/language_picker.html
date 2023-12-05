@@ -14,16 +14,17 @@
 	                {% endif %}
 	            {% endfor %}
 				    </button>
+
 				    <ul class="dropdown-menu" aria-labelledby="dropdownsiblings">
 	            {% for translated_page in translations %}
-	                {% if translated_page.id == page.id %}
-	                {% else %}
+	                {% if translated_page.id != page.id and translated_page.custom_fields.youmove_published == 'true' %}
 							        <li>
 							          <a href="{{ translated_page.derived.canonical_path }}{% for name, value in args.items %}{% if forloop.first %}?{{ name }}={{ value }}{% else %}&{{ name }}={{ value }}{% endif %}{% endfor %}">
-							            {{ translated_page.lang.name|default:"English" }}
+							           {% store as lang_name %}language_{{ translated_page.lang.name }}{% endstore %}
+                         {% filter ak_text:lang_name %}{{ translated_page.lang.name|default:"English" }}{% endfilter %}
 							          </a>
 							        </li>
-	                {% endif %}
+                  {% endif %}
 	            {% endfor %}
 				    </ul>
 				  </div>
