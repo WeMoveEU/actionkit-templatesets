@@ -17,7 +17,7 @@
 
 				    <ul class="dropdown-menu" aria-labelledby="dropdownsiblings">
 	            {% for translated_page in translations %}
-	                {% if translated_page.id != page.id and translated_page.custom_fields.youmove_published == 'true' %}
+	                {% if translated_page.id != page.id %}
 							        <li>
 							          <a href="{{ translated_page.derived.canonical_path }}{% for name, value in args.items %}{% if forloop.first %}?{{ name }}={{ value }}{% else %}&{{ name }}={{ value }}{% endif %}{% endfor %}">
 							           {% store as lang_name %}language_{{ translated_page.lang.name }}{% endstore %}
