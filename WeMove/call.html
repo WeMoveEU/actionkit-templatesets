@@ -240,27 +240,37 @@
 
 {% if page.custom_fields.call_page_mode == 'facebook' %}
 <script>
-  const isFormValid = () => {debugger
-    let isValid = true;
-    const errors = document.querySelectorAll('.ak-err');
+  const isFormValid = () => {
+    const checkValidation = () => {
+      let isValid = true;
+      const errors = document.querySelectorAll('.ak-err');
 
-    if (errors.length === 0) {
-      return isValid;
-    }
-
-    [...errors].forEach((error) => {
-      if (error.style.display !== 'none') {
-        isValid = false;
+      if (errors.length === 0) {
+        return isValid;
       }
-    });
 
-    return isValid;
+      [...errors].forEach((error) => {
+        if (error.style.display !== 'none') {
+          isValid = false;
+        }
+      });
+
+      return isValid;
+    };
+
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(checkValidation());
+      }, 10);
+    });
   };
 
-  const submitPost = async () => {
-    const formValid = await new Promise(resolve => setTimeout(isFormValid, 10));
+  const submitPost = async (event) => {
+    const isValid = await isFormValid();
 
-    if (formValid) {
+    event.preventDefault();
+
+    if (!isValid) {
       return;
     }
 
@@ -275,8 +285,8 @@
   }
 
   const attachEventListeners = () => {
-    const post_submit = document.querySelector("[data-wm-facebook-submit]");
-    post_submit.addEventListener('click', submitPost);
+    const subitButton = document.querySelector("[data-wm-facebook-submit]");
+    subitButton.addEventListener('click', submitPost);
   }
 
   $(actionkit.form).bind('actionkit.ready', attachEventListeners);
