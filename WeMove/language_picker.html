@@ -1,4 +1,4 @@
-{% if can_switch_lang %}
+{% if can_switch_lang and not isEmbbeded %}
     {% with page.translations as translations %}
         <!-- Remove this if you don't want popins like "This page also in English" -->
 				<div class="siblings dropdown">
@@ -10,7 +10,8 @@
 				      <img src="https://strapi.wemove.eu/uploads/icon_translate_eeaca63123.svg">
 	            {% for translated_page in translations %}
 	                {% if translated_page.id == page.id %}
-										{{ translated_page.lang.name|default:"English" }}
+                    {% store as selectedLang_name %}language_{{ translated_page.lang.name }}{% endstore %}
+                    {% filter ak_text:selectedLang_name %}{{ translated_page.lang.name|default:"English" }}{% endfilter %}
 	                {% endif %}
 	            {% endfor %}
 				    </button>
@@ -18,12 +19,14 @@
 				    <ul class="dropdown-menu" aria-labelledby="dropdownsiblings">
 	            {% for translated_page in translations %}
 	                {% if translated_page.id != page.id %}
-							        <li>
-							          <a href="{{ translated_page.derived.canonical_path }}{% for name, value in args.items %}{% if forloop.first %}?{{ name }}={{ value }}{% else %}&{{ name }}={{ value }}{% endif %}{% endfor %}">
-							           {% store as lang_name %}language_{{ translated_page.lang.name }}{% endstore %}
-                         {% filter ak_text:lang_name %}{{ translated_page.lang.name|default:"English" }}{% endfilter %}
-							          </a>
-							        </li>
+                    {% if translated_page.custom_fields.temp_is_widget != 'true' %}
+                        <li>
+                          <a href="{{ translated_page.derived.canonical_path }}{% for name, value in args.items %}{% if forloop.first %}?{{ name }}={{ value }}{% else %}&{{ name }}={{ value }}{% endif %}{% endfor %}">
+                          {% store as lang_name %}language_{{ translated_page.lang.name }}{% endstore %}
+                          {% filter ak_text:lang_name %}{{ translated_page.lang.name|default:"English" }}{% endfilter %}
+                          </a>
+                        </li>
+                    {% endif %}
                   {% endif %}
 	            {% endfor %}
 				    </ul>
