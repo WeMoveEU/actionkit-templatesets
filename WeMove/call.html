@@ -147,14 +147,11 @@
 
 {% if page.custom_fields.call_page_mode == 'tweet' %}
 <script>
-  const targets_txt = {{ page.custom_fields.twitter_targets|json }};
-  const messages_txt = {{ page.custom_fields.twitter_messages|json }};
-  const fallback_txt = {{ page.custom_fields.twitter_fallback|json }};
+  const targetsTxt = {{ page.custom_fields.twitter_targets|json }};
+  const messagesTxt = {{ page.custom_fields.twitter_messages|json }};
+  const fallbackTxt = {{ page.custom_fields.twitter_fallback|json }};
 
-  let page_targets;
-
-  $(actionkit.form).bind('actionkit.ready', prepare_tweet);
-  setTimeout(prepare_tweet, 1000);
+  let pageTargets;
 
   const updateTweetForm = () => {
     const textArea = document.querySelector("[data-wm-tweet-message]");
@@ -165,17 +162,23 @@
     tweetSubmit.disabled = textArea.value.length < 1;
   };
 
-  const submitTweet = () => {
+  const submitTweet = async () => {
+    const isFormValid = await wemove.utilities.isAkFormValidAsync();
+
+    if (!isFormValid) {
+      return;
+    }
+
     const tweet = document.querySelector("[data-wm-tweet-message]").value;
     const params = new URLSearchParams({ text: tweet }).toString();
     const handle = window.open( 'https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320' );
   }
 
-  function prepare_tweet () {
-    page_targets = actionkit.context.targets?.targets ? actionkit.context.targets.targets : [];
+  const prepareTweet = () => {
+    pageTargets = actionkit.context.targets?.targets ? actionkit.context.targets.targets : [];
 
     const textArea = document.querySelector("[data-wm-tweet-message]");
-    textArea.value = choose_a_tweet();
+    textArea.value = chooseTweet();
     textArea.addEventListener('keyup', updateTweetForm, false);
     textArea.addEventListener('change', updateTweetForm, false);
     textArea.dispatchEvent(new Event('change'));
@@ -186,37 +189,35 @@
     updateTweetForm();
   }
 
-  function choose_a_tweet () {
-    const target_lines = targets_txt.split(/[\r\n]+/);
-    const target_data = target_lines.map( (s) => s.split(/\s+/) ).map((s) => [s.shift(), s.join(' ')]);
-    const page_target_data = page_targets.map(
+  const chooseTweet = () => {
+    const targetLines = targetsTxt.split(/[\r\n]+/);
+    const targetData = targetLines.map( (s) => s.split(/\s+/) ).map((s) => [s.shift(), s.join(' ')]);
+    const pageTargetData = pageTargets.map(
       (t) => [t.twitter, t.title_informal_full]
     );
-
-    const combined_targets = target_data.concat(page_target_data).map(
+    const combinedTargets = targetData.concat(pageTargetData).map(
       (t) => [t[0] ? '@' + t[0] : null, t[1]]
     );
-    const tweet_targets = combined_targets.filter(
+    const tweetTargets = combinedTargets.filter(
       (t) => t[0]
     );
-    const random_targets = tweet_targets.sort(()=>Math.random()-0.5);
-
-    const first_target = tweet_targets[0] || [];
-    const random_target = random_targets[0] || [];
+    const randomTargets = tweetTargets.sort(()=>Math.random()-0.5);
+    const firstTarget = tweetTargets[0] || [];
+    const randomTarget = randomTargets[0] || [];
 
     const variables = {
-      handle: first_target[0],
-      name: first_target[1],
-      handles: tweet_targets.map((t) => t[0]).join(', '),
-      targets: tweet_targets,
-      rhandle: random_target[0],
-      rname: random_target[1],
-      rhandles: random_targets.map((t) => t[0]).join(', '),
-      rtargets: random_targets,
+      handle: firstTarget[0],
+      name: firstTarget[1],
+      handles: tweetTargets.map((t) => t[0]).join(', '),
+      targets: tweetTargets,
+      rhandle: randomTarget[0],
+      rname: randomTarget[1],
+      rhandles: randomTargets.map((t) => t[0]).join(', '),
+      rtargets: randomTargets,
     };
 
-    const messages = messages_txt.split(/[\r\n]+/);
-    const fallback = fallback_txt.split(/[\r\n]+/);
+    const messages = messagesTxt.split(/[\r\n]+/);
+    const fallback = fallbackTxt.split(/[\r\n]+/);
     const randomized = messages.sort(() => Math.random()-0.5)
                       .concat(fallback)
                       .filter( (s) => s && s.match(/\S/));
@@ -234,43 +235,19 @@
     }
 
     return "No matching tweets were found";
-  }
+  };
+
+  $(actionkit.form).bind('actionkit.ready', prepareTweet);
+  setTimeout(prepareTweet, 1000);
 </script>
 {% endif %}
 
 {% if page.custom_fields.call_page_mode == 'facebook' %}
 <script>
-  const isFormValid = () => {
-    const checkValidation = () => {
-      let isValid = true;
-      const errors = document.querySelectorAll('.ak-err');
+  const submitPost = async () => {
+    const isFormValid = await wemove.utilities.isAkFormValidAsync();
 
-      if (errors.length === 0) {
-        return isValid;
-      }
-
-      [...errors].forEach((error) => {
-        if (error.style.display !== 'none') {
-          isValid = false;
-        }
-      });
-
-      return isValid;
-    };
-
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(checkValidation());
-      }, 10);
-    });
-  };
-
-  const submitPost = async (event) => {
-    const isValid = await isFormValid();
-
-    event.preventDefault();
-
-    if (!isValid) {
+    if (!isFormValid) {
       return;
     }
 
