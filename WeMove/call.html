@@ -86,19 +86,6 @@
             {% if page.custom_fields.call_page_mode == 'facebook' %}
               <h2 class="send-tweet-title">Post to Facebook</h2>
 
-              <div class="form-field hide-if-previously-signed">
-                <label for="rtweet_body">
-                  {% filter ak_text:"facebook_message" %}Suggested message{% endfilter %}
-                </label>
-                <textarea
-                  data-wm-facebook-message
-                  name="tweet_text"
-                  id="tweet_body"
-                  rows="3"
-                  required
-                  class="form-control"></textarea>
-              </div>
-
               {% include "./user_form_wrapper.html" %}
 
               <div class="buttons-wrapper hide-if-previously-signed">
@@ -253,91 +240,47 @@
 
 {% if page.custom_fields.call_page_mode == 'facebook' %}
 <script>
-  const targets_txt = {{ page.custom_fields.facebook_targets|json }};
-  const messages_txt = {{ page.custom_fields.facebook_messages|json }};
+  const isFormValid = () => {debugger
+    let isValid = true;
+    const errors = document.querySelectorAll('.ak-err');
 
-  let page_targets;
+    if (errors.length === 0) {
+      return isValid;
+    }
 
-  $(actionkit.form).bind('actionkit.ready', attachEventListeners);
-  setTimeout(attachEventListeners, 1000);
+    [...errors].forEach((error) => {
+      if (error.style.display !== 'none') {
+        isValid = false;
+      }
+    });
 
-  const submitPost = () => {
+    return isValid;
+  };
+
+  const submitPost = async () => {
+    const formValid = await new Promise(resolve => setTimeout(isFormValid, 10));
+
+    if (formValid) {
+      return;
+    }
+
     if (!window.fb_target) {
       const params = new URLSearchParams({ u: window.fb_link || '{% client_domain_url %}/act/{{ page.name }}' }).toString();
-      const handle = window.open( 'https://www.facebook.com/sharer/sharer.php?' + params, 'facebook', 'popup,innerWidth=600,innerHeight=320' );
+      const handle = window.open('https://www.facebook.com/sharer/sharer.php?' + params, 'facebook', 'popup,innerWidth=600,innerHeight=320' );
     } else if (window.fb_target.match(/\/\//)) {
-      const handle = window.open( window.fb_target, 'facebook', 'popup,innerWidth=940,innerHeight=600' );
+      const handle = window.open(window.fb_target, 'facebook', 'popup,innerWidth=940,innerHeight=600');
     } else {
-      const handle = window.open( 'https://www.facebook.com/' + window.fb_target.replace('@', ''), 'facebook', 'popup,innerWidth=940,innerHeight=600' );
+      const handle = window.open('https://www.facebook.com/' + window.fb_target.replace('@', ''), 'facebook', 'popup,innerWidth=940,innerHeight=600');
     }
   }
 
   const attachEventListeners = () => {
     const post_submit = document.querySelector("[data-wm-facebook-submit]");
-    post_submit.addEventListener('click', submit_post);
+    post_submit.addEventListener('click', submitPost);
   }
 
-  function choose_a_post () {
-    const target_lines = targets_txt.split(/[\r\n]+/);
-    const target_data = target_lines.map( (s) => s.split(/\s+/) ).map((s) => [s.shift(), s.join(' ')]);
-    const page_target_data = page_targets.map(
-      (t) => [t.facebook, t.title_informal_full]
-    );
-
-    const combined_targets = target_data.concat(page_target_data).map(
-      (t) => [t[0] ? '@' + t[0] : null, t[1]]
-    );
-    const facebook_targets = combined_targets.filter(
-      (t) => t[0]
-    );
-    const random_targets = facebook_targets.sort(()=>Math.random()-0.5);
-
-    const first_target = facebook_targets[0] || [];
-    const random_target = random_targets[0] || [];
-
-    const variables = {
-      handle: first_target[0],
-      name: first_target[1],
-      handles: facebook_targets.map((t) => t[0]).join(', '),
-      targets: facebook_targets,
-      rhandle: random_target[0],
-      rname: random_target[1],
-      rhandles: random_targets.map((t) => t[0]).join(', '),
-      rtargets: random_targets,
-    };
-
-    const messages = messages_txt.split(/[\r\n]+/);
-    const randomized = messages.sort(() => Math.random()-0.5)
-				       .filter( (s) => s && s.match(/\S/) );
-
-    if (variables['handles'].match(/\S/)) {
-      randomized.push("An important message for [%= handles %]: ");
-    }
-
-    for (const template of randomized) {
-      var message = actionkit.utils.template(template, variables);
-
-      if (message.match(/\S/)) {
-        const initial_target = message.match(/^(@\S+|https?:\S+)\s(.*)/);
-
-        if ( initial_target && initial_target[1] ) {
-          window.fb_target = initial_target[1];
-          message = initial_target[2];
-        }
-
-        const trailing_link = message.match(/^(.*)\s(https?:\S+)$/);
-
-        if (trailing_link && trailing_link[2]) {
-          window.fb_link = trailing_link[2];
-          message = trailing_link[1];
-        }
-
-        return message;
-      }
-    }
-
-    return "No suggested Facebook messages were found";
-  }
+  $(actionkit.form).bind('actionkit.ready', attachEventListeners);
+  setTimeout(attachEventListeners, 1000);
 </script>
 {% endif %}
 
@@ -437,34 +380,34 @@
     });
   }
 </script>
-{% endif %}
 
 <script>
-  // $(window).load(function () {
-  //   $('#target_checkboxes').appendTo('div#who_called');
+  $(window).load(function () {
+    $('#target_checkboxes').appendTo('div#who_called');
 
-  //   const $window = $(window);
+    const $window = $(window);
 
-  //   function call_page_steps_mobile() {
-  //     const windowSize = $window.width();
+    function call_page_steps_mobile() {
+      const windowSize = $window.width();
 
-  //     if (windowSize < 480) {
-  //       $('.ak-steps-area h3').addClass('clickable');
-  //     } else {
-  //       $('.ak-steps-area h3').removeClass('clickable');
-  //       $('.ak-steps-area h3').each( function () {
-  //         $(this).siblings('div').show();
-  //       });
-  //     }
-  //   }
-  //   $('.ak-steps-area').on('click', 'h3.clickable', function (e) {
-  //     e.stopPropagation();
-  //     $(this).toggleClass('active');
-  //     $(this).siblings('div').stop().slideToggle('fast');
-  //   });
+      if (windowSize < 480) {
+        $('.ak-steps-area h3').addClass('clickable');
+      } else {
+        $('.ak-steps-area h3').removeClass('clickable');
+        $('.ak-steps-area h3').each( function () {
+          $(this).siblings('div').show();
+        });
+      }
+    }
+    $('.ak-steps-area').on('click', 'h3.clickable', function (e) {
+      e.stopPropagation();
+      $(this).toggleClass('active');
+      $(this).siblings('div').stop().slideToggle('fast');
+    });
 
-  //   $(window).on('resize', call_page_steps_mobile);
-  //   call_page_steps_mobile();
-  // });
+    $(window).on('resize', call_page_steps_mobile);
+    call_page_steps_mobile();
+  });
 </script>
+{% endif %}
 {% endblock %}
