@@ -121,6 +121,46 @@
               <div style="clear: both;"></div>
             </div>
 
+            <div class="share-big whatsapp-share-container js-whatsapp-share-container">
+              <a
+                class="btn btn-primary whatsapp-web"
+                href="/thanks/{{ page.name }}?share=whatsapp&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
+                target="_blank"
+                data-wm-pixel-event-type="Share"
+                data-wm-pixel-track-type="trackCustom"
+                data-wm-pixel-content-name="WhatsApp"
+                data-wm-pixel-trigger-event="click">
+                <i class="fa fa-whatsapp"></i> <span class="share-text">
+                  {% filter ak_text:"thanks_shareWhatsApp_button" %}Share on WhatsApp{% endfilter %}
+                </span>
+              </a>
+
+              <script>
+                (async () => {
+                  const urlParams = new URLSearchParams(window.location.search);
+
+                  if (urlParams.get('share') !== 'whatsapp') {
+                    return;
+                  }
+
+                  const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                  const whatsAppURL = isMobile()
+                    ? "whatsapp://send/"
+                    : "https://wa.me/";
+
+                  const title = `{{ page.followup.twitter_message|default:page.title|escapeall }}`;
+                  const sharePageURL = "/share/link?type=ot&source=whatsapp&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}";
+                  const whatsAppText = await fetch(sharePageURL)
+                    .then(async (result) => {
+                      const urlToShare = await result.text();
+                      return encodeURIComponent(`${title} ${urlToShare}`);
+                    });
+
+                  window.location.href = `${whatsAppURL}?text=${whatsAppText}`;
+                })();
+              </script>
+            </div>
+
             <div class="share-big facebook-share-container js-facebook-share-container">
               <a
                 class="btn btn-primary facebook"
@@ -170,46 +210,6 @@
               </a>
             </div>
             {% endif %}
-
-            <div class="share-big whatsapp-share-container js-whatsapp-share-container">
-              <a
-                class="btn btn-primary whatsapp-web"
-                href="/thanks/{{ page.name }}?share=whatsapp&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
-                target="_blank"
-                data-wm-pixel-event-type="Share"
-                data-wm-pixel-track-type="trackCustom"
-                data-wm-pixel-content-name="WhatsApp"
-                data-wm-pixel-trigger-event="click">
-                <i class="fa fa-whatsapp"></i> <span class="share-text">
-                  {% filter ak_text:"thanks_shareWhatsApp_button" %}Share on WhatsApp{% endfilter %}
-                </span>
-              </a>
-
-              <script>
-                (async () => {
-                  const urlParams = new URLSearchParams(window.location.search);
-
-                  if (urlParams.get('share') !== 'whatsapp') {
-                    return;
-                  }
-
-                  const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                  const whatsAppURL = isMobile()
-                    ? "whatsapp://send/"
-                    : "https://wa.me/";
-
-                  const title = `{{ page.followup.twitter_message|default:page.title|escapeall }}`;
-                  const sharePageURL = "/share/link?type=ot&source=whatsapp&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}";
-                  const whatsAppText = await fetch(sharePageURL)
-                    .then(async (result) => {
-                      const urlToShare = await result.text();
-                      return encodeURIComponent(`${title} ${urlToShare}`);
-                    });
-
-                  window.location.href = `${whatsAppURL}?text=${whatsAppText}`;
-                })();
-              </script>
-            </div>
 
             {% if page.followup.send_taf %}
             <div class="share-big email-share-container js-email-share-container">
