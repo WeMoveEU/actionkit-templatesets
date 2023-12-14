@@ -14,7 +14,7 @@
     <p>
       {% if page.type == 'Letter'%}
         {% filter ak_text:"knownUser_writingAs" %}You are writing as{% endfilter %}
-      {% elseif page.type == 'Survey'%}
+      {% elif page.type == 'Survey'%}
 	{% filter ak_text:"knownUser_surveyAs" %}You are submitting this as{% endfilter %}
       {% else %}
         {% filter ak_text:"knownUser_signingAs" %}Sign this as {% endfilter %}
