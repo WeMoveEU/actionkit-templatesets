@@ -64,7 +64,7 @@
   data-selected_amount="{{ page.custom_fields.selected_amount }}"
   data-ak_page_name="{{ page.name }}"
   data-ak_locale="{{ link_iso }}"
-  data-akid="{{ akid|default_if_none:'' }}"
+  data-akid="{{ user.token|default_if_none:'' }}"
 />
 
 {% store as next_step %}
