@@ -1001,13 +1001,13 @@
 			window.alert(`Can't find a model ID for action ${action_type} in language ${language}`);
 			return;
 		}
-		const page_type = action_type;
+		var page_type = action_type;
 		if (action_type == 'tweet') {
 			page_type = 'call';
-			fields.call_mode = 'twitter'
+			fields.call_mode = 'twitter';
 		} else if (action_type == 'facebook') {
 			page_type = 'call';
-			fields.call_mode = 'facebook'
+			fields.call_mode = 'facebook';
 		} else if (action_type == 'call') {
 			fields.call_mode = 'call'
 		} else if (action_type == 'sharing') {
