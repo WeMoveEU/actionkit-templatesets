@@ -37,7 +37,7 @@
               <h2 class="send-tweet-title">Send a tweet</h2>
 
               <div class="form-field hide-if-previously-signed">
-                <label for="rtweet_body">
+                <label for="tweet_body">
                   {% filter ak_text:"twitter_field" %}Tweet text{% endfilter %}
                 </label>
                 <textarea
@@ -249,9 +249,6 @@
 
   let page_targets;
 
-  $(actionkit.form).bind('actionkit.ready', prepare_post);
-  setTimeout(prepare_post, 1000);
-
   const submitPost = async (e) => {
     e.preventDefault()
     const isFormValid = await wemove.utilities.isAkFormValidAsync();
@@ -259,6 +256,8 @@
     if (!isFormValid) {
       return;
     }
+
+    const post = getFacebookPost();
 
     if (!window.fb_target) {
       const params = new URLSearchParams({ u: window.fb_link || '{% client_domain_url %}/act/{{ page.name }}' }).toString();
@@ -278,19 +277,10 @@
   $(actionkit.form).bind('actionkit.ready', attachEventListeners);
   setTimeout(attachEventListeners, 1000);
 
-  function prepare_post () {
+
+  function getFacebookPost () {
     page_targets = actionkit.context.targets?.targets ? actionkit.context.targets.targets : [];
 
-    const textArea = document.querySelector("[data-wm-tweet-message]");
-    textArea.value = choose_a_post();
-    textArea.dispatchEvent(new Event('change'));
-
-    const post_submit = document.querySelector("[data-wm-tweet-submit]");
-    post_submit.addEventListener('click', submit_post);
-    post_submit.disabled = 0;
-  }
-
-  function choose_a_post () {
     const target_lines = targets_txt.split(/[\r\n]+/);
     const target_data = target_lines.map( (s) => s.split(/\s+/) ).map((s) => [s.shift(), s.join(' ')]);
     const page_target_data = page_targets.map(
