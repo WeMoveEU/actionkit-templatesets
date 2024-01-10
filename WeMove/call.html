@@ -249,6 +249,9 @@
 
   let page_targets;
 
+  $(actionkit.form).bind('actionkit.ready', prepare_post);
+  setTimeout(prepare_post, 1000);
+
   const submitPost = async (e) => {
     e.preventDefault()
     const isFormValid = await wemove.utilities.isAkFormValidAsync();
@@ -274,6 +277,18 @@
 
   $(actionkit.form).bind('actionkit.ready', attachEventListeners);
   setTimeout(attachEventListeners, 1000);
+
+  function prepare_post () {
+    page_targets = actionkit.context.targets?.targets ? actionkit.context.targets.targets : [];
+
+    const textArea = document.querySelector("[data-wm-tweet-message]");
+    textArea.value = choose_a_post();
+    textArea.dispatchEvent(new Event('change'));
+
+    const post_submit = document.querySelector("[data-wm-tweet-submit]");
+    post_submit.addEventListener('click', submit_post);
+    post_submit.disabled = 0;
+  }
 
   function choose_a_post () {
     const target_lines = targets_txt.split(/[\r\n]+/);
