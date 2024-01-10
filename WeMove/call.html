@@ -249,8 +249,7 @@
 
   let page_targets;
 
-  const submitPost = async (e) => {
-    e.preventDefault()
+  const submitPost = async () => {
     const isFormValid = await wemove.utilities.isAkFormValidAsync();
 
     if (!isFormValid) {
