@@ -244,7 +244,13 @@
 
 {% if page.custom_fields.call_page_mode == 'facebook' %}
 <script>
-  const submitPost = async () => {
+  const targets_txt = {{ page.custom_fields.facebook_targets|json }};
+  const messages_txt = {{ page.custom_fields.facebook_messages|json }};
+
+  let page_targets;
+
+  const submitPost = async (e) => {
+    e.preventDefault()
     const isFormValid = await wemove.utilities.isAkFormValidAsync();
 
     if (!isFormValid) {
@@ -268,6 +274,68 @@
 
   $(actionkit.form).bind('actionkit.ready', attachEventListeners);
   setTimeout(attachEventListeners, 1000);
+
+  function choose_a_post () {
+    const target_lines = targets_txt.split(/[\r\n]+/);
+    const target_data = target_lines.map( (s) => s.split(/\s+/) ).map((s) => [s.shift(), s.join(' ')]);
+    const page_target_data = page_targets.map(
+      (t) => [t.facebook, t.title_informal_full]
+    );
+
+    const combined_targets = target_data.concat(page_target_data).map(
+      (t) => [t[0] ? '@' + t[0] : null, t[1]]
+    );
+    const facebook_targets = combined_targets.filter(
+      (t) => t[0]
+    );
+    const random_targets = facebook_targets.sort(()=>Math.random()-0.5);
+
+    const first_target = facebook_targets[0] || [];
+    const random_target = random_targets[0] || [];
+
+    const variables = {
+      handle: first_target[0],
+      name: first_target[1],
+      handles: facebook_targets.map((t) => t[0]).join(', '),
+      targets: facebook_targets,
+      rhandle: random_target[0],
+      rname: random_target[1],
+      rhandles: random_targets.map((t) => t[0]).join(', '),
+      rtargets: random_targets,
+    };
+
+    const messages = messages_txt.split(/[\r\n]+/);
+    const randomized = messages.sort(() => Math.random()-0.5)
+				       .filter( (s) => s && s.match(/\S/) );
+
+    if (variables['handles'].match(/\S/)) {
+      randomized.push("An important message for [%= handles %]: ");
+    }
+
+    for (const template of randomized) {
+      var message = actionkit.utils.template(template, variables);
+
+      if (message.match(/\S/)) {
+        const initial_target = message.match(/^(@\S+|https?:\S+)\s(.*)/);
+
+        if ( initial_target && initial_target[1] ) {
+          window.fb_target = initial_target[1];
+          message = initial_target[2];
+        }
+
+        const trailing_link = message.match(/^(.*)\s(https?:\S+)$/);
+
+        if (trailing_link && trailing_link[2]) {
+          window.fb_link = trailing_link[2];
+          message = trailing_link[1];
+        }
+
+        return message;
+      }
+    }
+
+    return "No suggested Facebook messages were found";
+  }
 </script>
 {% endif %}
 
