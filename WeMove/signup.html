@@ -10,10 +10,10 @@
 			{% store as link %}{{ page.custom_fields.sharing_step }}{% endstore %}
 			{% remember link as target %}
 		{% elif page.custom_fields.daisy_chain_action %}
-			{% store as link %}/act/{{ page.custom_fields.daisy_chain_action }}{% endstore %}
+      {% store as link %}/act/{{ page.custom_fields.daisy_chain_action }}?akid={{ args.akid }}{% endstore %}
 			{% remember link as target %}
 		{% else %}
-			{% store as link %}/thanks/{{ page.name }}?share=1{% endstore %}
+			{% store as link %}/thanks/{{ page.name }}?share=1&akid={{ args.akid }}{% endstore %}
 			{% remember link as target %}
 		{% endif %}
 	  <a href="{{ target }}">Please continue to the next step.</a>
