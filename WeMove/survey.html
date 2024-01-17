@@ -18,24 +18,12 @@
 <form class="ak-form" name="act" method="POST" action="/act/" accept-charset="utf-8">
     <input type="hidden" name="page" value="{{ page.name }}">
 
-    <div style="margin-bottom: 2rem;" class="form-field js-nav-buttons hide-if-previously-signed">
-      <button type="submit" class="btn btn-primary">
-        {% if page.custom_fields.sign_petition_button %}
-          {{ page.custom_fields.sign_petition_button }}
-        {% else %}
-          {% filter ak_text:"submitSurvey_button" %}
-            Submit survey
-          {% endfilter %}
-        {% endif %}
-      </button>
-    </div>
-
     <section class="questions ak-errs-below">
       {% for question in form.surveyquestion_set.all %}
-        <div class="question">
+        <div class="question" data-wm-survey-question>
           <label class="ak-survey-question-label">
             {{ question.question_label|safe }}
-            {% if question.is_required %}<span class="ak-required-flag">*</span>{% endif %}
+            {% if question.is_required %}<span class="ak-required-flag" aria-hidden="true">*</span>{% endif %}
           </label>
 
           {{ question.input_html|safe }}
