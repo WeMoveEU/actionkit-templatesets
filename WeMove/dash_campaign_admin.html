@@ -199,12 +199,12 @@
 			<div class="form-label col span_1_of_4"><label>Action type:</label></div>
 			<div class="form-control col span_3_of_4">
 				<label><input type="radio" name="action_type" value="petition" checked> Petition</label>
-				<label><input type="radio" name="action_type" value="share" disabled> Share</label>
+				<label><input type="radio" name="action_type" value="sharing"> Share</label>
 				<label><input type="radio" name="action_type" value="donation"> Donation</label>
 				<label><input type="radio" name="action_type" value="letter"> Email</label>
-				<label><input type="radio" name="action_type" value="tweet" disabled> Tweet</label>
+				<label><input type="radio" name="action_type" value="tweet"> Tweet</label>
+				<label><input type="radio" name="action_type" value="facebook"> Facebook</label>
 				<label><input type="radio" name="action_type" value="call" disabled> Call</label>
-				<label><input type="radio" name="action_type" value="facebook" disabled> Facebook</label>
 			</div>
 		</div>
 		<div class="form-row step-picker">
@@ -418,7 +418,7 @@
 		var prefix = window.models.campaign_name + ":";
 		$.when(
 			api('GET', "multilingualcampaign/", { name__startswith: prefix }),
-			api('GET', "page/", { field__name: 'campaign', field__value: window.models.campaign.id, _limit: 100 })
+			api('GET', "page/", { field__name: 'campaign', field__value: window.models.campaign.id, _limit: 1000 })
 		).done(function(mcamps, pages) {
 			var mcamp_types = {};
 			mcamps[0].objects.forEach(function(mcamp) {
@@ -669,9 +669,6 @@
 				});
 			}
 			window.journeys = lang_journeys;
-			if (langs.length) {
-				$('#page_form input[value=share]').removeAttr('disabled');
-			}
 			$('#page_form').data('campaign', campaign);
 			$('#pages_output').show();
 			$('#page_form input[name=action_type]').on('click', function() {
@@ -688,36 +685,46 @@
 	function sortJourney(pages) {
 		Object.keys(pages).forEach(function(lang) {
 			pages[lang].forEach(function(page) {
-				var next_step = page.fields ? page.fields.next_step : null;
-				var linked_page = next_step ? pages[lang].find( (p) => ( p.name == next_step || p.name == next_step.match("/" + p.name + "/?($|\\?)") ) ) : null;
-				if (linked_page) {
-					page.next_step = linked_page;
-					linked_page.previous_step = page;
+				var redirect = page.fields ? page.fields.redir : null;
+				if ( redirect ) {
+					page.next_step = { id: null, type: 'redirect', action_label: 'external', view_href: redirect, previous_step: page };
 				} else {
-					var after_action = page.followup ? page.followup.url : '';
-					var match = after_action.match(/thanks/);
-					if ( match && match[0] ) {
-						var action_type = after_action.endsWith("?done=1") ? "thanks" : "share";
-						const daisy_action = page.fields.daisy_chain_action;
-						const daisy_page = daisy_action ? pages[lang].find( (p) => p.name == daisy_action ) : null;
-						const daisy_thanks = daisy_page ? daisy_page.name : page.name;
-						const daisy_id = daisy_page ? daisy_page.id : page.id;
-						page.next_step = { id: daisy_id, type: page.type, action_label: action_type, view_href: `/thanks/${daisy_thanks}/?share=1`, edit_href: `/admin/core/pagefollowup/add_or_change/?page=${daisy_id}`, previous_step: page };
-						if (action_type == "share") {
-							page.next_step.next_step = { id: daisy_id, type: page.type, action_label: "thanks", view_href: `/thanks/${daisy_thanks}/?done=1`, previous_step: page.next_step };
-						}
+					var sharing_step = page.fields ? page.fields.sharing_step : null;
+					if ( sharing_step ) {
+						page.type = 'sharing'
+					}
+
+					var next_step = page.fields ? page.fields.next_step : null;
+					var linked_page = next_step ? pages[lang].find( (p) => ( p.name == next_step || p.name == next_step.match("/" + p.name + "/?($|\\?)") ) ) : null;
+					if (linked_page) {
+						page.next_step = linked_page;
+						linked_page.previous_step = page;
 					} else {
-						match = after_action.match(/^\/\w+\/([^\/\?]+)/);
-						if ( match && match[1] ) {
-							var linked_page = pages[lang].find( (p) => ( p.name == match[1] ) );
-							if (linked_page) {
-								page.next_step = linked_page;
-								linked_page.previous_step = page;
+						var after_action = page.followup ? page.followup.url : '';
+						var match = after_action.match(/thanks/);
+						if ( match && match[0] ) {
+							var action_type = after_action.endsWith("?done=1") ? "thanks" : "share";
+							const daisy_action = page.fields.daisy_chain_action;
+							const daisy_page = daisy_action ? pages[lang].find( (p) => p.name == daisy_action ) : null;
+							const daisy_thanks = daisy_page ? daisy_page.name : page.name;
+							const daisy_id = daisy_page ? daisy_page.id : page.id;
+							page.next_step = { id: daisy_id, type: page.type, action_label: action_type, view_href: `/thanks/${daisy_thanks}/?share=1`, edit_href: `/admin/core/pagefollowup/add_or_change/?page=${daisy_id}`, previous_step: page };
+							if (action_type == "share") {
+								page.next_step.next_step = { id: daisy_id, type: page.type, action_label: "thanks", view_href: `/thanks/${daisy_thanks}/?done=1`, previous_step: page.next_step };
 							}
-						} else if ( after_action ) {
-							match = after_action.match(/\/\/(.*?)\//);
-							var label = ( match && match[1] ) ? match[1] : 'external';
-							page.next_step = { id: null, type: 'redirect', action_label: label, view_href: after_action, previous_step: page };
+						} else {
+							match = after_action.match(/^\/\w+\/([^\/\?]+)/);
+							if ( match && match[1] ) {
+								var linked_page = pages[lang].find( (p) => ( p.name == match[1] ) );
+								if (linked_page) {
+									page.next_step = linked_page;
+									linked_page.previous_step = page;
+								}
+							} else if ( after_action ) {
+								match = after_action.match(/\/\/(.*?)\//);
+								var label = ( match && match[1] ) ? match[1] : 'external';
+								page.next_step = { id: null, type: 'redirect', action_label: label, view_href: after_action, previous_step: page };
+							}
 						}
 					}
 				}
@@ -829,6 +836,10 @@
 		$('#save_campaign').on('click', saveCampaignPage);
 		$('#campaign_form').show().find('#name').val(default_name);
 		$('#not_found').show();
+		$('#add_step').hide();
+		$('#page_form').hide();
+		$('#add_mailing').hide();
+		$('#mailing_form').hide();
 	}
 
 	function createCampaignPage() {
@@ -906,13 +917,26 @@
 		return `/${path}/${page.name}/${query}`;
 	}
 
-	function createPages(evt) {
+	async function createPages(evt) {
 		evt.preventDefault();
 		const $form = $('#page_form');
 		var page_prefix = $form.find('input[name=notes]').val();
 		var action_type = $form.find('input[name=action_type]:checked').val();
 		var after_step = $form.find('select[name=after_step]').val();
 		var campaign = $form.data('campaign');
+
+		// if there are pages with this name, add a number to make it unique
+		var existing = await api('GET', "page/", { name__startswith: page_prefix + '-' });
+		if ( existing.objects.length ) {
+			var counter = 1;
+			var page_base = page_prefix;
+			do {
+				counter ++; 
+				page_prefix = page_base + counter;
+				existing = await api('GET', "page/", { name__startswith: page_prefix + '-' });
+			} while ( existing.objects.length )
+		}
+
 		multilingualCampaignFor(campaign.name, action_type).done(function(mcamp, _, xhr) {
 			var calls = [];
 			var mcamp_uri = mcamp || xhr.getResponseHeader('Location');
@@ -977,7 +1001,18 @@
 			window.alert(`Can't find a model ID for action ${action_type} in language ${language}`);
 			return;
 		}
-		const page_type = pageType(action_type);
+		var page_type = action_type;
+		if (action_type == 'tweet') {
+			page_type = 'call';
+			fields.call_page_mode = 'twitter';
+		} else if (action_type == 'facebook') {
+			page_type = 'call';
+			fields.call_page_mode = 'facebook';
+		} else if (action_type == 'call') {
+			fields.call_page_mode = 'call'
+		} else if (action_type == 'sharing') {
+			page_type = 'signup';
+		}
 		var p_copy = await fetch(`/admin/core/${page_type}page/copy/?id=${model_id}`);
 		const page_id = p_copy.url.match(/\d+/)[0];
 		api_log(`Created ${language} ${action_type} page ${page_id}`);
@@ -991,16 +1026,6 @@
 			multilingual_campaign: mcamp,
 			fields: fields,
 		} );
-	}
-
-	function pageType(actionType) {
-		if (actionType == 'tweet') {
-			return 'call';
-		} else if (actionType == 'share') {
-			return 'petition';
-		} else {
-			return actionType;
-		}
 	}
 
 	function createMailings(evt) {

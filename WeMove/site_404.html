@@ -1,8 +1,12 @@
-<html> 
-<body> 
-<p>
-    Sorry, the URL you tried to load doesn't exist.  Check that it's typed
-correctly.
-</p> 
-</body> 
-</html> 
+<script>
+  const getPageIso = () => {
+    const supportedLanguages = ['en', 'it', 'es', 'nl', 'pl', 'de', 'fr']
+    const browserIso = navigator.language.substring(0, 2);
+    const iso = supportedLanguages.find((iso) => iso === browserIso);
+
+    return iso ? iso : 'en';
+  };
+
+  const pageIso = getPageIso();
+  window.location.replace(`https://wemove.eu/${pageIso}/404`);
+</script>

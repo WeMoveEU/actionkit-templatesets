@@ -1,7 +1,12 @@
-<html> 
-<body> 
-<p>
-    Sorry, we're having trouble handling your request at the moment. Please give us a few minutes and try again.
-</p> 
-</body> 
-</html> 
+<script>
+  const getPageIso = () => {
+    const supportedLanguages = ['en', 'it', 'es', 'nl', 'pl', 'de', 'fr']
+    const browserIso = navigator.language.substring(0, 2);
+    const iso = supportedLanguages.find((iso) => iso === browserIso);
+
+    return iso ? iso : 'en';
+  };
+
+  const pageIso = getPageIso();
+  window.location.replace(`https://wemove.eu/${pageIso}/500`);
+</script>
