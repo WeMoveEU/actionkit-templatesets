@@ -53,39 +53,49 @@
 {% endblock scriptadditions %}
 
 {% block content %}
-<section
-  id="donate-widget"
-  data-config_override="{{ page.custom_fields.config_override }}"
-  data-oneoff_amounts="{{ page.custom_fields.oneoff_amounts }}"
-  data-recurring_amounts="{{ page.custom_fields.recurring_amounts }}"
-  data-recurring_type="{{ page.custom_fields.recurring_type }}"
-  data-selected_currency="{{ page.custom_fields.selected_currency }}"
-  data-selected_frequency="{{ page.custom_fields.selected_frequency }}"
-  data-selected_amount="{{ page.custom_fields.selected_amount }}"
-  data-ak_page_name="{{ page.name }}"
-  data-ak_locale="{{ link_iso }}"
-  data-akid="{{ user.token|default_if_none:'' }}"
-></section>
+<section class="donation-main">
+{% if form.ask_text %}
+  <div class="donation-intro">
+    {% include_tmpl form.ask_text %}
+  </div>
+{% endif %}
+
+  <div
+    id="donate-widget"
+    class="donate-widget"
+    data-config_override="{{ page.custom_fields.config_override }}"
+    data-oneoff_amounts="{{ page.custom_fields.oneoff_amounts }}"
+    data-recurring_amounts="{{ page.custom_fields.recurring_amounts }}"
+    data-recurring_type="{{ page.custom_fields.recurring_type }}"
+    data-selected_currency="{{ page.custom_fields.selected_currency }}"
+    data-selected_frequency="{{ page.custom_fields.selected_frequency }}"
+    data-selected_amount="{{ page.custom_fields.selected_amount }}"
+    data-ak_page_name="{{ page.name }}"
+    data-ak_locale="{{ link_iso }}"
+    data-akid="{{ user.token|default_if_none:'' }}"
+  ></div>
+</section>
 
 {% store as next_step %}
 {% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}&amp;action={{ args.action }}{% elif page.custom_fields.daisy_chain_action %}/thanks/{{ page.custom_fields.daisy_chain_action }}?share=1&amp;akid={{ akid }}&amp;action={{ args.action }}{% endif %}{% endstore %}
 
 {% if next_step %}
-<div class="row">
-    <br>
-    <div class="col-md-12" style="text-align: center;">
-        <a href="{{ next_step }}" class="skip btn btn-default"> {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}</a>
+<div class="row next-step">
+    <div class="col-md-12">
+        <a href="{{ next_step }}" class="skip btn btn-default">
+          {% filter ak_text:"skip_this_step" %}Skip this step{% endfilter %}
+        </a>
     </div>
 </div>
 {% endif %}
 
-<div class="row" id="other_ways_giving">
+<div class="row otherWays">
     <div class="col-md-12">
-        <h3>Other ways of giving</h3>
+        <h2>{% filter ak_text:"otherWaysOfGiving_title" %}Other ways of giving{% endfilter %}</h2>
         <div class="row">
             <div class="col-md-4">
-                <p> <i>You can transfer your donation to our bank account</i></p>
-                <p> <i>Please include your email address as payment reference</i> </p>
+                <p><i>{% filter ak_text:"otherWaysOfGiving_desc1" %}You can transfer your donation to our bank account{% endfilter %}</i></p>
+                <p><i>{% filter ak_text:"otherWaysOfGiving_desc2" %}Please include your email address as payment reference{% endfilter %}</i></p>
                 <p>
                     WeMove Europe SCE mbH<br>
                     IBAN: DE98 4306 0967 1177 7069 00<br>
@@ -104,15 +114,17 @@
             </div>
 
             <div class="col-md-5">
-                We want to be transparent and accountable about how we spend your donations - for more information
-                please see our
-                <strong><a href="https://www.wemove.eu/how-we-are-funded" target="_blank">Donation Policy</a></strong>.
-                <br>
-                <br>
+              <p>{% filter ak_text:"otherWaysOfGivingMoreInfo_desc" %}We want to be transparent and accountable about how we spend your donations - for more information
+                please see our{% endfilter %}
+                <a href="https://www.wemove.eu/how-we-are-funded" target="_blank">
+                  {% filter ak_text:"donationPolicy_link" %}Donation Policy{% endfilter %}</a>.
+                </p>
+                <p>
+                {% filter ak_text:"donationPrivacyPolicy_desc" %}
                 Your personal information will be kept private and held securely. By submitting information you are
                 agreeing to WeMove Europe keeping you informed about campaigns and agree to the use of cookies in
-                accordance with our
-                <strong><a href="https://www.wemove.eu/privacy-policy" target="_blank">privacy policy</a></strong>.
+                accordance with our{% endfilter %}
+                <a href="https://www.wemove.eu/privacy-policy" target="_blank">{% filter ak_text:"privacyPolicy_link" %}privacy policy{% endfilter %}</a>.</p>
             </div>
         </div>
     </div>
