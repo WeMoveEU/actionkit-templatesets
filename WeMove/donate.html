@@ -94,37 +94,43 @@
         <h2>{% filter ak_text:"otherWaysOfGiving_title" %}Other ways of giving{% endfilter %}</h2>
         <div class="row">
             <div class="col-md-4">
-                <p><i>{% filter ak_text:"otherWaysOfGiving_desc1" %}You can transfer your donation to our bank account{% endfilter %}</i></p>
-                <p><i>{% filter ak_text:"otherWaysOfGiving_desc2" %}Please include your email address as payment reference{% endfilter %}</i></p>
+                <p style="font-style: italic;">
+                  {% filter ak_text:"otherWaysOfGiving_desc" %}
+                    You can transfer your donation to our bank account
+                    <br/>
+                    Please include your email address as payment reference
+                  {% endfilter %}
+                </p>
                 <p>
-                    WeMove Europe SCE mbH<br>
-                    IBAN: DE98 4306 0967 1177 7069 00<br>
-                    BIC: GENODEM1GLS, GLS Bank<br>
-                    Berlin, Germany
+                  WeMove Europe SCE mbH<br>
+                  IBAN: DE98 4306 0967 1177 7069 00<br>
+                  BIC: GENODEM1GLS, GLS Bank<br>
+                  {% filter ak_text:"bankLocation_info" %}Berlin, Germany{% endfilter %}
                 </p>
             </div>
 
             <div class="col-md-3">
-                <!--Make a <b>recurring</b> donation
-				<a href="https://www.wemove.eu/civicrm/contribute/transact?reset=1&id=83" title="Donate with PayPal" target="_blank">  <img src="https://www.wemove.eu/sites/wemove.eu/files/paypal.png" /></a>
-				<p> </p>
-				Make a <b>one-off</b> donation
-				<a href="https://www.wemove.eu/civicrm/contribute/transact?reset=1&id=88" title="Donate with Paypal" target="_blank">  <img src="https://www.wemove.eu/sites/wemove.eu/files/paypal.png" /></a>
-				</div>-->
+              <!--Make a <b>recurring</b> donation
+              <a href="https://www.wemove.eu/civicrm/contribute/transact?reset=1&id=83" title="Donate with PayPal" target="_blank">  <img src="https://www.wemove.eu/sites/wemove.eu/files/paypal.png" /></a>
+              <p> </p>
+              Make a <b>one-off</b> donation
+              <a href="https://www.wemove.eu/civicrm/contribute/transact?reset=1&id=88" title="Donate with Paypal" target="_blank">  <img src="https://www.wemove.eu/sites/wemove.eu/files/paypal.png" /></a>
+              </div>-->
             </div>
 
             <div class="col-md-5">
-              <p>{% filter ak_text:"otherWaysOfGivingMoreInfo_desc" %}We want to be transparent and accountable about how we spend your donations - for more information
-                please see our{% endfilter %}
-                <a href="https://www.wemove.eu/how-we-are-funded" target="_blank">
-                  {% filter ak_text:"donationPolicy_link" %}Donation Policy{% endfilter %}</a>.
-                </p>
-                <p>
+              <p>
+                {% filter ak_text:"otherWaysOfGivingMoreInfo_desc" %}
+                  We want to be transparent and accountable about how we spend your donations - for more information please see our
+                {% endfilter %}
+              </p>
+              <p>
                 {% filter ak_text:"donationPrivacyPolicy_desc" %}
-                Your personal information will be kept private and held securely. By submitting information you are
-                agreeing to WeMove Europe keeping you informed about campaigns and agree to the use of cookies in
-                accordance with our{% endfilter %}
-                <a href="https://www.wemove.eu/privacy-policy" target="_blank">{% filter ak_text:"privacyPolicy_link" %}privacy policy{% endfilter %}</a>.</p>
+                  Your personal information will be kept private and held securely. By submitting information you are
+                  agreeing to WeMove Europe keeping you informed about campaigns and agree to the use of cookies in
+                  accordance with our
+                {% endfilter %}
+              </p>
             </div>
         </div>
     </div>
