@@ -3,24 +3,34 @@
 {% block content %}
 <h1>{{ page.title }}</h1>
 
-{% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
-{% store as featured_image %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_image" as field_name %}{% endstore %}
-{% if featured_video %}
-  {% include "./featured-video.html" with featured_video=featured_video %}
-{% elif featured_image %}
-  {% include "./featured-image.html" with featured_image=featured_image %}
-{% endif %}
+<aside class="progress-bar" data-wm-survey-progress-bar></aside>
 
-<div class="intro">
-  {% include_tmpl form.introduction_text %}
-</div>
-
-<form class="ak-form" name="act" method="POST" action="/act/" accept-charset="utf-8">
+<form class="ak-form" name="act" method="POST" action="/act/" accept-charset="utf-8" data-wm-survey-slide-container>
     <input type="hidden" name="page" value="{{ page.name }}">
 
-    <section class="questions ak-errs-below">
+    <div data-wm-survey-slide="active" class="intro">
+      {% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
+      {% store as featured_image %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_image" as field_name %}{% endstore %}
+      {% if featured_video %}
+        {% include "./featured-video.html" with featured_video=featured_video %}
+      {% elif featured_image %}
+        {% include "./featured-image.html" with featured_image=featured_image %}
+      {% endif %}
+
+      {% include_tmpl form.introduction_text %}
+
+      <div class="start-btn">
+        <button type="button" class="btn btn-primary" data-wm-survey-button="start">
+          {% filter ak_text:"startSurvey_button" %}
+            Start
+          {% endfilter %}
+        </button>
+      </div>
+    </div>
+
+    <div class="hiddens" data-wm-survey-slide data-wm-survey-slide-temp-container>
       {% for question in form.surveyquestion_set.all %}
-        <div class="question" data-wm-survey-question>
+        <div class="question ak-errs-below" data-wm-survey-question>
           <label class="ak-survey-question-label">
             {{ question.question_label|safe }}
             {% if question.is_required %}<span class="ak-required-flag" aria-hidden="true">*</span>{% endif %}
@@ -29,22 +39,30 @@
           {{ question.input_html|safe }}
         </div>
       {% endfor %}
-    </section>
+    </div>
 
-    <section class="personal-data ak-errs-below">
+    <section class="personal-data ak-errs-below" data-wm-survey-slide>
       <h2>{% filter ak_text:"personalData_title" %}Your information{% endfilter %}</h2>
       {% include "./user_form_wrapper.html" %}
     </section>
 
-    <div class="form-field js-nav-buttons hide-if-previously-signed">
-      <button type="submit" class="btn btn-primary">
-        {% if page.custom_fields.sign_petition_button %}
-          {{ page.custom_fields.sign_petition_button }}
-        {% else %}
-          {% filter ak_text:"submitSurvey_button" %}
-            Submit survey
-          {% endfilter %}
-        {% endif %}
+    <div class="form-field js-nav-buttons survey-buttons-wrapper">
+      <button type="button" class="btn btn-primary hidden" data-wm-survey-button="previous">
+        {% filter ak_text:"previousSurvey_button" %}
+          Previous
+        {% endfilter %}
+      </button>
+
+      <button type="button" class="btn btn-primary hidden" data-wm-survey-button="next">
+        {% filter ak_text:"nextSurvey_button" %}
+          Next
+        {% endfilter %}
+      </button>
+
+      <button type="submit" class="btn btn-primary hidden" data-wm-survey-button="submit">
+        {% filter ak_text:"submitSurvey_button" %}
+          Finish
+        {% endfilter %}
       </button>
     </div>
 </form>
