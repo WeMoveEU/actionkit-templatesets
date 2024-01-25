@@ -3,7 +3,12 @@
 {% block content %}
 <h1>{{ page.title }}</h1>
 
-<aside class="progress-bar" data-wm-survey-progress-bar></aside>
+<div class="survey-progress-bar--container">
+  <div class="survey-progress-bar">
+    <div class="survey-progress-bar--bg" data-wm-survey-progress-bar-bg></div>
+    <div data-wm-survey-progress-bar-text>...</div>
+  </div>
+</div>
 
 <form class="ak-form" name="act" method="POST" action="/act/" accept-charset="utf-8" data-wm-survey-slide-container>
     <input type="hidden" name="page" value="{{ page.name }}">
