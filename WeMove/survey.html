@@ -21,9 +21,9 @@
 <form class="ak-form" name="act" method="POST" action="/act/" accept-charset="utf-8" data-wm-survey-slide-container>
     <input type="hidden" name="page" value="{{ page.name }}">
 
-    <aside data-wm-spinner>
+    <!-- <aside data-wm-spinner>
       <div class="spinner"><div></div><div></div><div></div><div></div></div>
-    </aside>
+    </aside> -->
 
     <div data-wm-survey-slide="active" data-wm-survey-section="intro" class="intro">
       {% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
@@ -45,7 +45,7 @@
       </div>
     </div>
 
-    <div data-wm-survey-slide data-wm-survey-slide-temp-container>
+    <div class="hidden" data-wm-survey-slide data-wm-survey-slide-temp-container>
       {% for question in form.surveyquestion_set.all %}
         <div class="question ak-errs-below" data-wm-survey-question>
           <label class="ak-survey-question-label">
