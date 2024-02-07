@@ -30,7 +30,11 @@
     <div
       data-wm-form-field="{{ field.field_name }}"
       id="ak-fieldbox-{{ field.field_name }}"
-      class="form-field{% if field.field_name|is_in:context.required %} required{% endif %}">
+      class="form-field
+        {% if field.field_name|is_in:context.required %}required{% endif %}
+        field-ak-type--{{ field.type }}
+        field-type--{{ field.input }}">
+
         <label for="id_{{ field.field_name }}">
             {{ field.label_text }}:{% if field.field_name|is_in:context.required %}<span class="ak-required-flag">*</span>{% endif %}
         </label>
