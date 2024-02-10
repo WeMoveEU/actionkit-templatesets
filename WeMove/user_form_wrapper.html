@@ -3,8 +3,9 @@
 {% if user %}
 	{% store as previous_actions %}{% report "previous_user_actions_for_page" with 1 as refresh user.id as user_id page.id as page_id %}{% endstore %}
 	{% if previous_actions and previous_actions != "0" and page.recognize == "always" %}
+  {% remember "true" as userHasAlreadySigned %}
 	<script>
-		$('form.ak-form').addClass('previously-signed');
+    // document.querySelector('.ak-form').classList.add('previously-signed');
 	</script>
 	{% endif %}
 {% endif %}
@@ -15,7 +16,7 @@
       {% if page.type == 'Letter'%}
         {% filter ak_text:"knownUser_writingAs" %}You are writing as{% endfilter %}
       {% elif page.type == 'Survey'%}
-	{% filter ak_text:"knownUser_surveyAs" %}You are submitting this as{% endfilter %}
+	      {% filter ak_text:"knownUser_surveyAs" %}You are submitting this as{% endfilter %}
       {% else %}
         {% filter ak_text:"knownUser_signingAs" %}Sign this as {% endfilter %}
       {% endif %}
@@ -30,21 +31,25 @@
     </p>
   </div>
 
-	{% if previous_actions and previous_actions != "0" %}
+	{% if userHasAlreadySigned %}
 	  <div class="already-signed" style="display: block">
 	    <p>
         {% if page.type == 'Letter'%}
           {% filter ak_text:"alreadyWrote_link" %}It appears that you have already sent an email. However, you can do more. Click below for next step.{% endfilter %}
+        {% elif page.type == 'Survey'%}
+          {% filter ak_text:"alreadySubmitSuvey_link" %}It appears that you have already submitted this form. However, you can do more. Click below for next step.{% endfilter %}
         {% else %}
           {% filter ak_text:"alreadySigned_link" %}It seems you have already signed. However, you can do more. Click below for next step.{% endfilter %}
         {% endif %}
       </p>
 
-	    <a
-	      class="btn btn-danger"
-	      href="/thanks/{{ page.name }}?akid={{ akid }}">
-	      {% filter ak_text:"continue_button" %}Continue{% endfilter %}
-	    </a>
+	    {% if page.type != 'Survey'%}
+        <a
+          class="btn btn-danger"
+          href="/thanks/{{ page.name }}?akid={{ akid }}">
+          {% filter ak_text:"continue_button" %}Continue{% endfilter %}
+        </a>
+      {% endif %}
 	  </div>
 	{% endif %}
 </div>

@@ -76,11 +76,20 @@
         {% endfilter %}
       </button>
 
-      <button type="submit" class="btn btn-primary hidden" data-wm-survey-button="submit">
-        {% filter ak_text:"submitSurvey_button" %}
-          Finish
-        {% endfilter %}
-      </button>
+      {% if userHasAlreadySigned %}
+        <a
+          class="btn btn-primary hidden"
+          data-wm-survey-button="submit"
+          href="/thanks/{{ page.name }}?akid={{ akid }}">
+          {% filter ak_text:"continue_button" %}Continue{% endfilter %}
+        </a>
+      {% else  %}
+        <button type="submit" class="btn btn-primary hidden" data-wm-survey-button="submit">
+          {% filter ak_text:"submitSurvey_button" %}
+            Finish
+          {% endfilter %}
+        </button>
+      {% endif %}
     </div>
 </form>
 {% endblock %}
