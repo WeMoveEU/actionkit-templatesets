@@ -5,7 +5,7 @@
 	{% if previous_actions and previous_actions != "0" and page.recognize == "always" %}
   {% remember "true" as userHasAlreadySigned %}
 	<script>
-    // document.querySelector('.ak-form').classList.add('previously-signed');
+    document.querySelector('.ak-form').classList.add('previously-signed');
 	</script>
 	{% endif %}
 {% endif %}
