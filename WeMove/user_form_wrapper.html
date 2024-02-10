@@ -5,7 +5,8 @@
 	{% if previous_actions and previous_actions != "0" %}
   {% remember "true" as userHasAlreadySigned %}
 	<script>
-    document.querySelector('.ak-form').classList.add('previously-signed');
+    // We have many parent forms (letter, petition, survey, etc...) we change this here to avoid duplication
+    document.querySelector('form.ak-form').classList.add('previously-signed');
 	</script>
 	{% endif %}
 {% endif %}
@@ -32,7 +33,7 @@
   </div>
 
 	{% if userHasAlreadySigned %}
-	  <div class="already-signed" style="display: block">
+	  <div class="already-signed">
 	    <p>
         {% if page.type == 'Letter'%}
           {% filter ak_text:"alreadyWrote_link" %}It appears that you have already sent an email. However, you can do more. Click below for next step.{% endfilter %}
