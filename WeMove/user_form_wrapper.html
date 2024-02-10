@@ -5,8 +5,12 @@
 	{% if previous_actions and previous_actions != "0" %}
   {% remember "true" as userHasAlreadySigned %}
 	<script>
-    // We have many parent forms (letter, petition, survey, etc...) we change this here to avoid duplication
-    document.querySelector('form.ak-form').classList.add('previously-signed');
+    (() => {
+      // We have many parent forms (letter, petition, survey, etc...) we change this here to avoid duplication
+      const akForm = document.querySelector("form.ak-form");
+      akForm.classList.add("previously-signed");
+      akForm.setAttribute("data-wm-previously-signed", true);
+    })();
 	</script>
 	{% endif %}
 {% endif %}
@@ -44,13 +48,11 @@
         {% endif %}
       </p>
 
-	    {% if page.type != 'Survey'%}
         <a
           class="btn btn-danger"
           href="/thanks/{{ page.name }}?akid={{ akid }}">
           {% filter ak_text:"continue_button" %}Continue{% endfilter %}
         </a>
-      {% endif %}
 	  </div>
 	{% endif %}
 </div>
