@@ -95,8 +95,10 @@
               <h1 class="popup-title">{% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}</h1>
               <div data-wm-external-content class="is-loading"></div>
             </div>
-            <script>
-              window.wemove.page.preShareUrl = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
+            <script async>
+              setTimeout(() => {
+                window.wemove.page.preShareUrl = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
+              }, 100);
             </script>
           {% endif %}
         {% endblock %}

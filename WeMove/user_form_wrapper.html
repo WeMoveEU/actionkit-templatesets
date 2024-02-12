@@ -2,8 +2,7 @@
 
 {% if user %}
 	{% store as previous_actions %}{% report "previous_user_actions_for_page" with 1 as refresh user.id as user_id page.id as page_id %}{% endstore %}
-	{% if previous_actions and previous_actions != "0" and page.recognize == "always" %}
-  {% remember "true" as userHasAlreadySigned %}
+	{% if previous_actions and previous_actions != "0" and page.recognize == "once" %}
 	<script>
     (() => {
       // We have many parent forms (letter, petition, survey, etc...) we change this here to avoid duplication
@@ -36,7 +35,7 @@
     </p>
   </div>
 
-	{% if userHasAlreadySigned %}
+	{% if previous_actions and previous_actions != "0" %}
 	  <div class="already-signed">
 	    <p>
         {% if page.type == 'Letter'%}
