@@ -2,7 +2,7 @@
 
 {% if user %}
 	{% store as previous_actions %}{% report "previous_user_actions_for_page" with 1 as refresh user.id as user_id page.id as page_id %}{% endstore %}
-	{% if previous_actions and previous_actions != "0" %}
+	{% if previous_actions and previous_actions != "0" and page.recognize == "always" %}
   {% remember "true" as userHasAlreadySigned %}
 	<script>
     (() => {
