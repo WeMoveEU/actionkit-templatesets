@@ -928,13 +928,8 @@
 		// if there are pages with this name, add a number to make it unique
 		var existing = await api('GET', "page/", { name__startswith: page_prefix + '-' });
 		if ( existing.objects.length ) {
-			var counter = 1;
-			var page_base = page_prefix;
-			do {
-				counter ++; 
-				page_prefix = page_base + counter;
-				existing = await api('GET', "page/", { name__startswith: page_prefix + '-' });
-			} while ( existing.objects.length )
+			alert(`There are already pages with the name ${page_prefix}; choose a different name`);
+			return;
 		}
 
 		multilingualCampaignFor(campaign.name, action_type).done(function(mcamp, _, xhr) {
