@@ -2,23 +2,14 @@
 
 {% block content %}
 
-{% if user %}
-	{% store as previous_actions %}{% report "previous_user_actions_for_page" with 1 as refresh user.id as user_id page.id as page_id %}{% endstore %}
-	{% if previous_actions and previous_actions != "0" and page.recognize == "once" %}
-    {% remember "true" as userHasAlreadySigned %}
-	{% endif %}
-{% endif %}
-
 <h1>{{ page.title }}</h1>
 
-{% if not userHasAlreadySigned %}
 <aside class="survey-progress-bar--container" data-wm-survey-progress-bar>
   <div class="survey-progress-bar">
     <div class="survey-progress-bar--bg" data-wm-survey-progress-bar-bg></div>
     <div data-wm-survey-progress-bar-text></div>
   </div>
 </aside>
-{% endif %}
 
 <form class="ak-form" name="act" method="POST" action="/act/" accept-charset="utf-8" data-wm-survey-slide-container>
     <input type="hidden" name="page" value="{{ page.name }}">
@@ -47,7 +38,6 @@
       </div>
     </div>
 
-    {% if not userHasAlreadySigned %}
     <div data-wm-survey-slide data-wm-survey-slide-temp-container>
       {% for question in form.surveyquestion_set.all %}
         <div class="question ak-errs-below" data-wm-survey-question>
@@ -60,17 +50,13 @@
         </div>
       {% endfor %}
     </div>
-    {% endif %}
 
     <section class="personal-data ak-errs-below" data-wm-survey-slide>
-      {% if not userHasAlreadySigned %}
-        <h2>{% filter ak_text:"personalData_title" %}Your information{% endfilter %}</h2>
-      {% endif %}
+      <h2>{% filter ak_text:"personalData_title" %}Your information{% endfilter %}</h2>
 
       {% include "./user_form_wrapper.html" %}
     </section>
 
-    {% if not userHasAlreadySigned %}
     <div class="form-field js-nav-buttons survey-buttons-wrapper">
       <button type="button" class="btn btn-primary hidden" data-wm-survey-button="previous">
         {% filter ak_text:"previousSurvey_button" %}
@@ -90,6 +76,5 @@
         {% endfilter %}
       </button>
     </div>
-    {% endif %}
 </form>
 {% endblock %}
