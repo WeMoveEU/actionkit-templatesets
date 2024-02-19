@@ -40,14 +40,7 @@
 
     {% block meta_additions %}{% endblock %}
 
-    {% load_css %}
-      /media/modern/actionkit.css?1=22
-      //static.wemove.eu/action-kit/css/wemove.css?v=3
 
-      {% if args.embed and args.css == "1" and page.custom_fields.external_css %}
-        {{ page.custom_fields.external_css }}
-      {% endif %}
-    {% end %}
     {% block css_additions %}{% endblock %}
 
     {% load_js %}
