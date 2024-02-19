@@ -41,8 +41,12 @@
     {% block meta_additions %}{% endblock %}
 
     {% load_css %}
-        /media/modern/actionkit.css?1=22
-        //static.wemove.eu/action-kit/css/wemove.css
+      /media/modern/actionkit.css?1=22
+      //static.wemove.eu/action-kit/css/wemove.css?v=3
+
+      {% if args.embed and args.css == "1" and page.custom_fields.external_css %}
+        {{ page.custom_fields.external_css }}
+      {% endif %}
     {% end %}
     {% block css_additions %}{% endblock %}
 
@@ -95,8 +99,10 @@
               <h1 class="popup-title">{% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}</h1>
               <div data-wm-external-content class="is-loading"></div>
             </div>
-            <script>
-              window.wemove.page.preShareUrl = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
+            <script async>
+              setTimeout(() => {
+                window.wemove.page.preShareUrl = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
+              }, 500);
             </script>
           {% endif %}
         {% endblock %}
@@ -184,6 +190,6 @@ window.wemove.page.shouldDisableForm = true
 <!-- End Meta Pixel Code -->
 <script type="text/plain" data-cookieconsent="marketing" src="https://static.wemove.eu/shared-scripts/matomo-loader.js" async></script>
 {% endif %}
-<script src="//static.wemove.eu/action-kit/js/wemove-main.bundle.min.js"></script>
+<script src="//static.wemove.eu/action-kit/js/wemove-main.bundle.min.js?ver=1.1.0"></script>
 </body>
 </html>
