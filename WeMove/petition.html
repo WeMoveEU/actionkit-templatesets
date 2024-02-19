@@ -126,32 +126,36 @@
 								<textarea id="id_comment" name="action_comment"></textarea>
 							</div>
 
-              {% if page.custom_fields.inline_consent == 1 %}
-                <div
-                  data-wm-form-field="{{ field.field_name }}"
-                  id="ak-fieldbox-{{ field.field_name }}"
-                  class="form-field
-                    {% if field.field_name|is_in:context.required %}required{% endif %}
-                    field-ak-type--{{ field.type }}
-                    field-type--{{ field.input }}">
+              {% if page.custom_fields.inline_consent == "1" %}
+                <div class="form-field field-type--radio required ak-err-below">
+                  <label for="consent_inline">
+                    Accordo iscrizione <span class="ak-required-flag">*</span>
+                  </label>
 
-                    <label for="id_{{ field.field_name }}">
-                        {{ field.label_text }}:{% if field.field_name|is_in:context.required %}<span class="ak-required-flag">*</span>{% endif %}
+                  <div class="ak-userfield-radio-set">
+                    <label class="ak-userfield-radio-choice is-floating">
+                      <input
+                        class="ak-userfield-input"
+                        name="consent_inline"
+                        type="radio"
+                        value="1">
+                        Sì! Fammi sapere se questa campagna ha successo e come posso partecipare ad altre campagne importanti.
+                        Se ci lasci la tua email, potremmo contattarti per dirti di più su come puoi aiutarci, anche sostenendo il nostro lavoro con una donazione.
                     </label>
-                </div>
 
-                <div id="ak-fieldbox-user_erasure_request_immediate" class="form-field required ak-err-below">
-                    <span class="ak-userfield-radio-set">
-                        <label class="ak-userfield-radio-choice is-floating">
-                            <input type="radio" name="user_erasure_request_immediate" id="id_user_erasure_request_immediate_1" class="ak-userfield-input" value="1">
-                            Yes
-                        </label>
+                    <label class="ak-userfield-radio-choice is-floating">
+                      <input
+                        class="ak-userfield-input"
+                        name="consent_inline"
+                        type="radio"
+                        value="0">
+                        No. Non voglio ricevere informazioni sui progressi di questa campagna o su altre campagne.
+                    </label>
+                  </div>
 
-                        <label class="ak-userfield-radio-choice is-floating">
-                            <input type="radio" name="user_erasure_request_immediate" id="id_user_erasure_request_immediate_0" class="ak-userfield-input" value="0">
-                            No
-                        </label>
-                    </span>
+                  <div class="opt-out-disclaimer">
+                    Puoi cancellare la tua iscrizione in qualsiasi momento. Basta andare alla nostra pagina di cancellazione. Inserendo i tuoi dati confermi di avere almeno 16 anni.
+                  </div>
                 </div>
               {% endif %}
 						</div>
