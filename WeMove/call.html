@@ -181,7 +181,7 @@
   };
 
   const submitTweet = async (e) => {
-    // e.preventDefault();
+    e.preventDefault();
 
     const isFormValid = await wemove.utilities.isAkFormValidAsync();
 
@@ -193,12 +193,12 @@
     const params = new URLSearchParams({ text: tweet }).toString();
     const handle = window.open('https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320');
 
-    // if (!handle) {
-    //   alertBlockedPopupMessage();
-    //   return;
-    // }
+    if (!handle) {
+      alertBlockedPopupMessage();
+      return;
+    }
 
-    // document.querySelector('form[data-wm-floating-labels-form]').submit();
+    document.querySelector('form[data-wm-floating-labels-form]').submit();
   }
 
   const prepareTweet = () => {
