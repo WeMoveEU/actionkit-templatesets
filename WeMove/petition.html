@@ -127,29 +127,33 @@
 							</div>
 
               {% if page.custom_fields.inline_consent == "1" %}
-                <div class="form-field field-type--radio required ak-err-below">
-                  <label for="consent_inline">
-                    Accordo iscrizione <span class="ak-required-flag">*</span>
+                <div class="consent-inline form-field field-type--radio required ak-err-below">
+                  <label class="main-label" for="consent_inline">
+                    Accordo iscrizione: <span aria-hidden="true">*</span>
                   </label>
 
-                  <div class="ak-userfield-radio-set">
-                    <label class="ak-userfield-radio-choice is-floating">
+                  <div class="consent-inline-group">
+                    <label class="consent-inline-group--label">
                       <input
-                        class="ak-userfield-input"
+                        class="consent-inline-group--radio"
                         name="consent_inline"
                         type="radio"
                         value="1">
+                      <span class="consent-inline-group--text">
                         Sì! Fammi sapere se questa campagna ha successo e come posso partecipare ad altre campagne importanti.
                         Se ci lasci la tua email, potremmo contattarti per dirti di più su come puoi aiutarci, anche sostenendo il nostro lavoro con una donazione.
+                      </span>
                     </label>
 
-                    <label class="ak-userfield-radio-choice is-floating">
+                    <label class="consent-inline-group--label">
                       <input
-                        class="ak-userfield-input"
+                        class="consent-inline-group--radio"
                         name="consent_inline"
                         type="radio"
                         value="0">
+                      <span class="consent-inline-group--text">
                         No. Non voglio ricevere informazioni sui progressi di questa campagna o su altre campagne.
+                      </span>
                     </label>
                   </div>
 
