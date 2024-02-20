@@ -36,7 +36,7 @@ See the [actionkit stripe integration](https://gitlab.wemove.eu/internal/actionk
 
 ## Local assets proxy
 <script src="http://127.0.0.1:8081/js/wemove-main.bundle.min.js"></script>
-http://127.0.0.1:8081/css/wemove.css
+https://127.0.0.1:8081/css/wemove.css
 
 # TODOs
 

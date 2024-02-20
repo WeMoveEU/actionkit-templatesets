@@ -142,9 +142,26 @@
 			</div>
 	</div>
 </div>
+
+<div class="blocked-popup-message" data-wm-blocked-popup-message>
+  <p>
+    {% filter ak_text:"blockedPopup_alert" %}It seems that your browser is blocking the popup window. Please try to disable the block for this page and try again.{% endfilter %}
+  </p>
+</div>
+
 {% endblock %}
 
 {% block script_additions %}
+<script>
+  const alertBlockedPopupMessage = () => {
+    const blockedPopupMessage = document.querySelector('[data-wm-blocked-popup-message]');
+    blockedPopupMessage.classList.add('active');
+
+    setTimeout(() => {
+      blockedPopupMessage.classList.remove('active');
+    }, 8000);
+  };
+</script>
 
 {% if page.custom_fields.call_page_mode == 'tweet' %}
 <script>
@@ -163,7 +180,9 @@
     tweetSubmit.disabled = textArea.value.length < 1;
   };
 
-  const submitTweet = async () => {
+  const submitTweet = async (e) => {
+    e.preventDefault();
+
     const isFormValid = await wemove.utilities.isAkFormValidAsync();
 
     if (!isFormValid) {
@@ -173,6 +192,13 @@
     const tweet = document.querySelector("[data-wm-tweet-message]").value;
     const params = new URLSearchParams({ text: tweet }).toString();
     const handle = window.open( 'https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320' );
+
+    if (!handle) {
+      alertBlockedPopupMessage();
+      return;
+    }
+
+    document.querySelector('form[data-wm-floating-labels-form]').submit();
   }
 
   const prepareTweet = () => {
@@ -250,7 +276,9 @@
 
   let page_targets;
 
-  const submitPost = async () => {
+  const submitPost = async (e) => {
+    e.preventDefault();
+
     const isFormValid = await wemove.utilities.isAkFormValidAsync();
 
     if (!isFormValid) {
@@ -267,6 +295,13 @@
     } else {
       const handle = window.open('https://www.facebook.com/' + window.fb_target.replace('@', ''), 'facebook', 'popup,innerWidth=940,innerHeight=600');
     }
+
+    if (!handle) {
+      alertBlockedPopupMessage();
+      return;
+    }
+
+    document.querySelector('form[data-wm-floating-labels-form]').submit();
   }
 
   const attachEventListeners = () => {
