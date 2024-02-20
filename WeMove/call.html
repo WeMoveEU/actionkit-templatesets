@@ -192,13 +192,13 @@
     const tweet = document.querySelector("[data-wm-tweet-message]").value;
     const params = new URLSearchParams({ text: tweet }).toString();
     const handle = window.open('https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320');
-return
-    if (!handle) {
-      alertBlockedPopupMessage();
-      return;
-    }
 
-    document.querySelector('form[data-wm-floating-labels-form]').submit();
+    // if (!handle) {
+    //   alertBlockedPopupMessage();
+    //   return;
+    // }
+
+    // document.querySelector('form[data-wm-floating-labels-form]').submit();
   }
 
   const prepareTweet = () => {
@@ -277,7 +277,7 @@ return
   let page_targets;
 
   const submitPost = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
     const isFormValid = await wemove.utilities.isAkFormValidAsync();
 
@@ -296,12 +296,12 @@ return
       const handle = window.open('https://www.facebook.com/' + window.fb_target.replace('@', ''), 'facebook', 'popup,innerWidth=940,innerHeight=600');
     }
 
-    if (!handle) {
-      alertBlockedPopupMessage();
-      return;
-    }
+    // if (!handle) {
+    //   alertBlockedPopupMessage();
+    //   return;
+    // }
 
-    document.querySelector('form[data-wm-floating-labels-form]').submit();
+    // document.querySelector('form[data-wm-floating-labels-form]').submit();
   }
 
   const attachEventListeners = () => {
