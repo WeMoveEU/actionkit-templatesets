@@ -181,6 +181,7 @@
   };
 
   const submitTweet = async (e) => {
+    window.open('https://twitter.com/intent/tweet?', 'tweet', 'popup,innerWidth=600,innerHeight=320');
     // e.preventDefault();
 
     const isFormValid = await wemove.utilities.isAkFormValidAsync();
@@ -191,7 +192,7 @@
 
     const tweet = document.querySelector("[data-wm-tweet-message]").value;
     const params = new URLSearchParams({ text: tweet }).toString();
-    const handle = window.open( 'https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320' );
+    const handle = window.open('https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320');
 return
     if (!handle) {
       alertBlockedPopupMessage();
