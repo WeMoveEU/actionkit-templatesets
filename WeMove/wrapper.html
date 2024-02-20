@@ -39,10 +39,10 @@
     {% endif %}
 
     {% block meta_additions %}{% endblock %}
-<!-- //static.wemove.eu/action-kit/css/wemove.css?v=3 -->
+<!-- https://127.0.0.1:8081/css/wemove.css -->
     {% load_css %}
       /media/modern/actionkit.css?1=22
-      https://127.0.0.1:8081/css/wemove.css
+      //static.wemove.eu/action-kit/css/wemove.css?v=3
 
       {% if args.embed and args.css == "1" and page.custom_fields.external_css %}
         {{ page.custom_fields.external_css }}
