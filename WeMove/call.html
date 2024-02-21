@@ -143,12 +143,23 @@
 	</div>
 </div>
 
+<div class="blocked-popup-message" data-wm-blocked-popup-message>
+  <p>
+    {% filter ak_text:"blockedPopup_alert" %}It seems that your browser is blocking the popup window. Please try to disable the block for this page and try again.{% endfilter %}
+  </p>
+</div>
+
 {% endblock %}
 
 {% block script_additions %}
 <script>
   const alertBlockedPopupMessage = () => {
-    alert('{% filter ak_text:"blockedPopup_alert" %}It seems that your browser is blocking the popup window. Please try to disable the block for this page and try again.{% endfilter %}');
+    const blockedPopupMessage = document.querySelector('[data-wm-blocked-popup-message]');
+    blockedPopupMessage.classList.add('active');
+
+    setTimeout(() => {
+      blockedPopupMessage.classList.remove('active');
+    }, 5000);
   };
 </script>
 
@@ -169,8 +180,10 @@
     tweetSubmit.disabled = textArea.value.length < 1;
   };
 
-  const submitTweet = async () => {
-    const isFormValid = await wemove.utilities.isAkFormValidAsync();
+  const submitTweet = (e) => {
+    e.preventDefault();
+
+    const isFormValid = actionkit.forms.validate();
 
     if (!isFormValid) {
       return;
@@ -182,7 +195,10 @@
 
     if (!handle) {
       alertBlockedPopupMessage();
+      return;
     }
+
+    actionkit.form.requestSubmit();
   }
 
   const prepareTweet = () => {
@@ -260,8 +276,10 @@
 
   let page_targets;
 
-  const submitPost = async () => {
-    const isFormValid = await wemove.utilities.isAkFormValidAsync();
+  const submitPost = (e) => {
+    e.preventDefault();
+
+    const isFormValid = actionkit.forms.validate();
 
     if (!isFormValid) {
       return;
@@ -280,7 +298,10 @@
 
     if (!handle) {
       alertBlockedPopupMessage();
+      return;
     }
+
+    actionkit.form.requestSubmit();
   }
 
   const attachEventListeners = () => {
