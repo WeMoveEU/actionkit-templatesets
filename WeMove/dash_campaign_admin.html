@@ -917,6 +917,17 @@
 		return `/${path}/${page.name}/${query}`;
 	}
 
+	const action_type_to_page_type = {
+		'tweet': 'call',
+		'facebook': 'call',
+		'sharing': 'signup',
+	};
+
+	function page_type_for_action_type ( action_type ) {
+		action_type = action_type.toLowerCase();
+		return ( action_type_to_page_type[ action_type ] || action_type )
+	}
+
 	async function createPages(evt) {
 		evt.preventDefault();
 		const $form = $('#page_form');
@@ -951,7 +962,7 @@
 							fields.next_step = pages[0].name;
 							for ( const page of pages ) {
 								if ( page.status ) {
-									calls.push(api('PATCH', `${page.type.toLowerCase()}page/${page.id}`, {
+									calls.push(api('PATCH', `${page_type_for_action_type(page.type)}page/${page.id}`, {
 										fields: {
 											daisy_chain_action: page_name
 										}
@@ -961,7 +972,7 @@
 						} else {
 							fields.next_step = previous_page.fields.next_step;
 							fields.daisy_chain_action = previous_page.fields.daisy_chain_action || pages[0].name;
-							calls.push(api('PATCH', `${previous_page.type.toLowerCase()}page/${previous_page.id}`, {
+							calls.push(api('PATCH', `${page_type_for_action_type(previous_page.type)}page/${previous_page.id}`, {
 								fields: {
 									next_step: page_name
 								}
