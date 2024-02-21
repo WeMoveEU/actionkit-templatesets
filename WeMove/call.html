@@ -34,7 +34,7 @@
 						<input type="hidden" name="page" value="{{ page.name }}">
 
             {% if page.custom_fields.call_page_mode == 'tweet' %}
-              <h2 class="send-tweet-title">Send a tweet</h2>
+              <h2 class="send-tweet-title">{% filter ak_text:"sendTweet_title" %}Send a tweet{% endfilter %}</h2>
 
               <div class="form-field hide-if-previously-signed">
                 <label for="tweet_body">
