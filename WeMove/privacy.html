@@ -1,14 +1,14 @@
 {% if page.custom_fields.inline_consent == "1" %}
   <div class="consent-inline form-field field-type--radio required ak-err-below" data-wm-consent-inline hidden>
-    <label class="main-label" for="consent_inline">
+    <legend class="main-label">
       Accordo iscrizione: <span aria-hidden="true">*</span>
-    </label>
+    </legend>
 
     <div class="consent-inline-group">
       <label class="consent-inline-group--label">
         <input
           class="consent-inline-group--radio"
-          name="consent_inline"
+          name="opt_in"
           type="radio"
           value="1">
         <span class="consent-inline-group--text">
@@ -20,7 +20,7 @@
       <label class="consent-inline-group--label">
         <input
           class="consent-inline-group--radio"
-          name="consent_inline"
+          name="opt_in"
           type="radio"
           value="0">
         <span class="consent-inline-group--text">
