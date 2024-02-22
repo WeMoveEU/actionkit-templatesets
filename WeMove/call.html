@@ -84,7 +84,7 @@
 						{% endif %}
 
             {% if page.custom_fields.call_page_mode == 'facebook' %}
-              <h2 class="send-tweet-title">Post to Facebook</h2>
+              <h2 class="send-tweet-title">{% filter ak_text:"postToFacebook_title" %}Post to Facebook{% endfilter %}</h2>
 
               {% include "./user_form_wrapper.html" %}
 
