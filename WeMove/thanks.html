@@ -340,11 +340,16 @@
       {% else %}
 
         {% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&trigger_page={{ page.name }}&trigger_action={{ action.id }}{% endif %}&next_step={{ next_step|urlencode }}{% endstore %}
-        <a href="{{ consent_link }}">Please continue to the next step.</a>
-        <script>
-          window.location = '{{ consent_link }}';
-        </script>
-
+        {% if page.custom_fields.inline_consent == "1" %}
+          <script>
+            window.location = '{{ next_step }}';
+          </script>
+        {% else %}
+          <a href="{{ consent_link }}">Please continue to the next step.</a>
+          <script>
+            window.location = '{{ consent_link }}';
+          </script>
+        {% endif %}
       {% endif %}
     {% endif %}
   {% endif %}
