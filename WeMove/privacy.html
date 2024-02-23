@@ -1,10 +1,11 @@
+{# When AB test is done this IF should be removed. #}
 {% if page.custom_fields.inline_consent == "1" %}
   {% if user and user.subscription_status == 'subscribed' %}
     <!-- USER SUBCRIBED: no need to render the inline consents -->
   {% else %}
     <div class="consent-inline form-field field-type--radio required ak-err-below" data-wm-consent-inline hidden>
       <legend class="main-label">
-        Accordo iscrizione: <span aria-hidden="true">*</span>
+        {% filter ak_text:"consentInline_legend" %}Registration agreement{% endfilter %}<span aria-hidden="true">*</span>
       </legend>
 
       <div class="consent-inline-group">
@@ -16,8 +17,10 @@
             type="radio"
             value="1" />
           <span class="consent-inline-group--text">
-            Sì! Fammi sapere se questa campagna ha successo e come posso partecipare ad altre campagne importanti.
-            Se ci lasci la tua email, potremmo contattarti per dirti di più su come puoi aiutarci, anche sostenendo il nostro lavoro con una donazione.
+            {% filter ak_text:"consentInlineYes_field" %}
+              Yes! Let me know if this campaign is successful and how I can participate in other relevant campaigns.
+              If you leave us your email, we may contact you to tell you more about how you can help us, including by supporting our work with a donation.
+            {% endfilter %}
           </span>
         </label>
 
@@ -29,7 +32,9 @@
             type="radio"
             value="0" />
           <span class="consent-inline-group--text">
-            No. Non voglio ricevere informazioni sui progressi di questa campagna o su altre campagne.
+            {% filter ak_text:"consentInlineNo_field" %}
+              No. I don't want to receive information about the progress of this campaign or other campaigns.
+            {% endfilter %}
           </span>
         </label>
 
@@ -37,7 +42,9 @@
       </div>
 
       <div class="opt-out-disclaimer">
-        Puoi cancellare la tua iscrizione in qualsiasi momento. Basta andare alla nostra pagina di cancellazione. Inserendo i tuoi dati confermi di avere almeno 16 anni.
+        {% filter ak_text:"consentInlineCancelSubscription_info" %}
+          You can cancel your membership at any time. Just go to our cancellation page. By entering your details you confirm that you are at least 16 years old.
+        {% endfilter %}
       </div>
     </div>
   {% endif %}
