@@ -341,6 +341,7 @@
 
         {% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&trigger_page={{ page.name }}&trigger_action={{ action.id }}{% endif %}&next_step={{ next_step|urlencode }}{% endstore %}
         {% if page.custom_fields.inline_consent == "1" %}
+        {# TODO: To be removed when ab test is done (Consent inline) #}
           <script>
             window.location = '{{ next_step }}';
           </script>
