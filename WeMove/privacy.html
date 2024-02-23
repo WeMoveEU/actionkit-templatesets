@@ -2,6 +2,8 @@
 {% if page.custom_fields.inline_consent == "1" %}
   {% if user and user.subscription_status == 'subscribed' %}
     <!-- USER SUBCRIBED: no need to render the inline consents -->
+  {% elif user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
+    <!-- GERMANIC USER SUBCRIBED: no need to render the inline consents -->
   {% else %}
     <div class="consent-inline form-field field-type--radio required ak-err-below" data-wm-consent-inline hidden>
       <legend class="main-label">
@@ -50,4 +52,8 @@
   {% endif %}
 {% else %}
   <input type="hidden" name="opt_in" value="1">
+{% endif %}
+
+{% if 1 == 1 and (2 == 2 or 3 == 2) %}
+<div>HOLA</div>
 {% endif %}
