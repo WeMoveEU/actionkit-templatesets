@@ -1,43 +1,46 @@
 {% if page.custom_fields.inline_consent == "1" %}
-  <div class="consent-inline form-field field-type--radio required ak-err-below" data-wm-consent-inline hidden>
-    <legend class="main-label">
-      Accordo iscrizione: <span aria-hidden="true">*</span>
-    </legend>
+  {% if user and user.subscription_status == 'subscribed' %}
+    <!-- USER SUBCRIBED: no need to render the inline consents -->
+  {% else %}
+    <div class="consent-inline form-field field-type--radio required ak-err-below" data-wm-consent-inline hidden>
+      <legend class="main-label">
+        Accordo iscrizione: <span aria-hidden="true">*</span>
+      </legend>
 
-    <div class="consent-inline-group">
-      <label class="consent-inline-group--label">
-        <input
-          class="consent-inline-group--radio"
-          name="action_consent_action-radio"
-          data-wm-consent-inline-radio
-          type="radio"
-          value="y">
-        <span class="consent-inline-group--text">
-          Sì! Fammi sapere se questa campagna ha successo e come posso partecipare ad altre campagne importanti.
-          Se ci lasci la tua email, potremmo contattarti per dirti di più su come puoi aiutarci, anche sostenendo il nostro lavoro con una donazione.
-        </span>
-      </label>
+      <div class="consent-inline-group">
+        <label class="consent-inline-group--label">
+          <input
+            class="consent-inline-group--radio"
+            name="action_consent_action-radio"
+            data-wm-consent-inline-radio
+            type="radio"
+            value="1">
+          <span class="consent-inline-group--text">
+            Sì! Fammi sapere se questa campagna ha successo e come posso partecipare ad altre campagne importanti.
+            Se ci lasci la tua email, potremmo contattarti per dirti di più su come puoi aiutarci, anche sostenendo il nostro lavoro con una donazione.
+          </span>
+        </label>
 
-      <label class="consent-inline-group--label">
-        <input
-          class="consent-inline-group--radio"
-          name="action_consent_action-radio"
-          data-wm-consent-inline-radio
-          type="radio"
-          value="n">
-        <span class="consent-inline-group--text">
-          No. Non voglio ricevere informazioni sui progressi di questa campagna o su altre campagne.
-        </span>
-      </label>
+        <label class="consent-inline-group--label">
+          <input
+            class="consent-inline-group--radio"
+            name="action_consent_action-radio"
+            data-wm-consent-inline-radio
+            type="radio"
+            value="0">
+          <span class="consent-inline-group--text">
+            No. Non voglio ricevere informazioni sui progressi di questa campagna o su altre campagne.
+          </span>
+        </label>
 
-      <input type="hidden" name="action_consent_action" value="n" data-wm-consent-hidden-value />
-      <input type="hidden" name="opt_in" value="1" data-wm-consent-require-opt-in-value  />
+        <input type="hidden" name="opt_in" value="0" data-wm-consent-hidden-value  />
+      </div>
+
+      <div class="opt-out-disclaimer">
+        Puoi cancellare la tua iscrizione in qualsiasi momento. Basta andare alla nostra pagina di cancellazione. Inserendo i tuoi dati confermi di avere almeno 16 anni.
+      </div>
     </div>
-
-    <div class="opt-out-disclaimer">
-      Puoi cancellare la tua iscrizione in qualsiasi momento. Basta andare alla nostra pagina di cancellazione. Inserendo i tuoi dati confermi di avere almeno 16 anni.
-    </div>
-  </div>
+  {% endif %}
 {% else %}
   <input type="hidden" name="opt_in" value="1">
 {% endif %}
