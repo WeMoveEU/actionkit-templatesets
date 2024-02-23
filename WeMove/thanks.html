@@ -304,7 +304,7 @@
     {# 3. You're taking action on a page that doesn't require consents. #}
     <a href="{{ next_step }}">Please continue to the next step.</a>
     <script>
-      window.location = '{{ next_step }}&consent=nolang';
+      window.location = '{{ next_step }}&consent=bypass';
     </script>
 
   {% else %}
