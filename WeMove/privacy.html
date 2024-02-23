@@ -3,7 +3,7 @@
   {% if user and user.subscription_status == 'subscribed' %}
     <!-- USER SUBCRIBED: no need to render the inline consents -->
   {% elif user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
-    <!-- GERMANIC USER SUBCRIBED: no need to render the inline consents -->
+    <!-- KNOWN GERMANIC USER: no need to render the inline consents -->
   {% else %}
     <div class="consent-inline form-field field-type--radio required ak-err-below" data-wm-consent-inline hidden>
       <legend class="main-label">
