@@ -44,6 +44,8 @@
           </span>
         </label>
 
+        <input type="hidden" name="field_action_consent_action-radio" value="{% filter ak_text:"consentInline_legend" %}Registration agreement{% endfilter %}" />
+        <input type="hidden" name="required" value="action_consent_action-radio" data-wm-consent-inline-required-hidden/>
         <input type="hidden" name="opt_in" value="1" data-wm-consent-hidden-optin />
         <input type="hidden" name="action_consent_action" value="n" data-wm-consent-hidden-consent-action />
       </div>
