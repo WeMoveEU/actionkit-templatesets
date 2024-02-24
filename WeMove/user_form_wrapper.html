@@ -1,19 +1,18 @@
 <ul class="compact" id="ak-errors"></ul>
 
 {% if user %}
-<!-- USER EXISTS -->
 	{% store as previous_actions %}{% report "previous_user_actions_for_page" with 1 as refresh user.id as user_id page.id as page_id %}{% endstore %}
-	{% if previous_actions and previous_actions != "0" and ( page.recognize == "always" or args.ar ) %}
-  <!-- USER has: {{ previous_actions }} -->
+	{% if previous_actions and previous_actions != "0" %}
+	{% if page.recognize == "always" or args.ar %}
 	<script>
     (() => {
       // We have many parent forms (letter, petition, survey, etc...) we change this here to avoid duplication
       const akForm = document.querySelector("form.ak-form");
       akForm.classList.add("previously-signed");
       akForm.setAttribute("data-wm-previously-signed", true);
-
     })();
 	</script>
+	{% endif %}
 	{% endif %}
 {% endif %}
 
