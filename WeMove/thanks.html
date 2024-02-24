@@ -233,13 +233,13 @@
             </div>
             {% endif %}
 
-            <div class="share-big copy-link" data-wm-copy-to-clipboard>
+            <div class="share-big copy-link" data-wm-copy-to-clipboard="https://action.wemove.eu/share/link?type=ot{% if action %}&amp;action_id={{ action.id }}{% else %}&amp;page_name={{page.name}}&amp;akid={{ akid }}{% endif %}">
               <input
                 type="text"
                 class="copy-link--textbox"
                 data-wm-copy-to-clipboard-textbox
                 readonly
-                value="https://action.wemove.eu/share/link?type=ot{% if action %}&amp;action_id={{ action.id }}{% else %}&amp;page_name={{page.name}}&amp;akid={{ akid }}{% endif %}"
+                placeholder="{% filter ak_text:"loadingLink_placeholder" %}loading link...{% endfilter %}"
                 />
 
                 <button
@@ -253,7 +253,7 @@
                 <span class="copy-link--text">
                   <i class="fa fa-link"></i>
                   <span class="share-text">
-                    {% filter ak_text:"copyLink_button" %}Copy link{% endfilter %}
+                    {% filter ak_text:"copyLink_button" %}Copy{% endfilter %}
                   </span>
                 </span>
 
