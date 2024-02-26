@@ -130,7 +130,8 @@
                 data-wm-pixel-track-type="trackCustom"
                 data-wm-pixel-content-name="WhatsApp"
                 data-wm-pixel-trigger-event="click">
-                <i class="fa fa-whatsapp"></i> <span class="share-text">
+                <i class="fa fa-whatsapp"></i>
+                <span class="share-text">
                   {% filter ak_text:"thanks_shareWhatsApp_button" %}Share on WhatsApp{% endfilter %}
                 </span>
               </a>
@@ -233,7 +234,7 @@
             </div>
             {% endif %}
 
-            <div class="share-big copy-link" data-wm-copy-to-clipboard="https://action.wemove.eu/share/link?type=ot{% if action %}&amp;action_id={{ action.id }}{% else %}&amp;page_name={{page.name}}&amp;akid={{ akid }}{% endif %}">
+            <!-- <div class="share-big copy-link" data-wm-copy-to-clipboard="/share/link?type=ot{% if action %}&amp;action_id={{ action.id }}{% else %}&amp;page_name={{page.name}}&amp;akid={{ akid }}{% endif %}">
               <input
                 type="text"
                 class="copy-link--textbox"
@@ -264,7 +265,7 @@
                   </span>
                 </span>
               </button>
-            </div>
+            </div> -->
         </div>
       </div>
 
