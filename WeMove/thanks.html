@@ -232,6 +232,39 @@
               </a>
             </div>
             {% endif %}
+
+            <div class="share-big copy-link" data-wm-copy-to-clipboard="https://action.wemove.eu/share/link?type=ot{% if action %}&amp;action_id={{ action.id }}{% else %}&amp;page_name={{page.name}}&amp;akid={{ akid }}{% endif %}">
+              <input
+                type="text"
+                class="copy-link--textbox"
+                data-wm-copy-to-clipboard-textbox
+                readonly
+                placeholder="{% filter ak_text:"loadingLink_placeholder" %}loading link...{% endfilter %}"
+                />
+
+                <button
+                  type="button"
+                  class="btn btn-primary copy-link--button"
+                  data-wm-copy-to-clipboard-button
+                  data-wm-pixel-event-type="Share"
+                  data-wm-pixel-track-type="trackCustom"
+                  data-wm-pixel-content-name="CopyLink"
+                  data-wm-pixel-trigger-event="click">
+                <span class="copy-link--text">
+                  <i class="fa fa-link"></i>
+                  <span class="share-text">
+                    {% filter ak_text:"copyLink_button" %}Copy{% endfilter %}
+                  </span>
+                </span>
+
+                <span class="copy-link--alert">
+                  <i class="fa fa-check"></i>
+                  <span class="share-text">
+                    {% filter ak_text:"linkCopied_alert" %}Link copied{% endfilter %}
+                  </span>
+                </span>
+              </button>
+            </div>
         </div>
       </div>
 
