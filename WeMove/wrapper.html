@@ -100,10 +100,7 @@
               <div data-wm-external-content class="is-loading"></div>
             </div>
             <script>
-              window.wemove.page.preShareUrl = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
-              setTimeout(() => {
-
-              }, 500);
+              const weMovePreShareUrl = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
             </script>
           {% endif %}
         {% endblock %}
@@ -166,6 +163,10 @@ if (!window.wemove) {
     site: {},
     page: {},
   };
+}
+
+if (weMovePreShareUrl) {
+  window.wemove.page.preShareUrl = weMovePreShareUrl;
 }
 
 window.wemove.page.language = {
