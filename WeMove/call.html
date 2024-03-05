@@ -34,7 +34,7 @@
 						<input type="hidden" name="page" value="{{ page.name }}">
 
             {% if page.custom_fields.call_page_mode == 'tweet' %}
-              <h2 class="send-tweet-title">Send a tweet</h2>
+              <h2 class="send-tweet-title">{% filter ak_text:"sendTweet_title" %}Send a tweet{% endfilter %}</h2>
 
               <div class="form-field hide-if-previously-signed">
                 <label for="tweet_body">
@@ -84,7 +84,7 @@
 						{% endif %}
 
             {% if page.custom_fields.call_page_mode == 'facebook' %}
-              <h2 class="send-tweet-title">Post to Facebook</h2>
+              <h2 class="send-tweet-title">{% filter ak_text:"postToFacebook_title" %}Post to Facebook{% endfilter %}</h2>
 
               {% include "./user_form_wrapper.html" %}
 
@@ -111,6 +111,7 @@
                 </a>
               </div>
 
+              {# TODO: review this snippet #}
               <div class="action-feedback-bar">
                 <div class="fade in alert alert-success alert-dismissable feedback-alert">
                   <button type="button" class="close" data-dismiss="alert">×</button>
@@ -142,9 +143,26 @@
 			</div>
 	</div>
 </div>
+
+<div class="blocked-popup-message" data-wm-blocked-popup-message>
+  <p>
+    {% filter ak_text:"blockedPopup_alert" %}It seems that your browser is blocking the popup window. Please try to disable the block for this page and try again.{% endfilter %}
+  </p>
+</div>
+
 {% endblock %}
 
 {% block script_additions %}
+<script>
+  const alertBlockedPopupMessage = () => {
+    const blockedPopupMessage = document.querySelector('[data-wm-blocked-popup-message]');
+    blockedPopupMessage.classList.add('active');
+
+    setTimeout(() => {
+      blockedPopupMessage.classList.remove('active');
+    }, 5000);
+  };
+</script>
 
 {% if page.custom_fields.call_page_mode == 'tweet' %}
 <script>
@@ -163,8 +181,10 @@
     tweetSubmit.disabled = textArea.value.length < 1;
   };
 
-  const submitTweet = async () => {
-    const isFormValid = await wemove.utilities.isAkFormValidAsync();
+  const submitTweet = (e) => {
+    e.preventDefault();
+
+    const isFormValid = actionkit.forms.validate();
 
     if (!isFormValid) {
       return;
@@ -172,7 +192,14 @@
 
     const tweet = document.querySelector("[data-wm-tweet-message]").value;
     const params = new URLSearchParams({ text: tweet }).toString();
-    const handle = window.open( 'https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320' );
+    const handle = window.open('https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320');
+
+    if (!handle) {
+      alertBlockedPopupMessage();
+      return;
+    }
+
+    actionkit.form.requestSubmit();
   }
 
   const prepareTweet = () => {
@@ -250,8 +277,10 @@
 
   let page_targets;
 
-  const submitPost = async () => {
-    const isFormValid = await wemove.utilities.isAkFormValidAsync();
+  const submitPost = (e) => {
+    e.preventDefault();
+
+    const isFormValid = actionkit.forms.validate();
 
     if (!isFormValid) {
       return;
@@ -267,6 +296,13 @@
     } else {
       const handle = window.open('https://www.facebook.com/' + window.fb_target.replace('@', ''), 'facebook', 'popup,innerWidth=940,innerHeight=600');
     }
+
+    if (!handle) {
+      alertBlockedPopupMessage();
+      return;
+    }
+
+    actionkit.form.requestSubmit();
   }
 
   const attachEventListeners = () => {
