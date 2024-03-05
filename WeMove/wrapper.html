@@ -165,7 +165,7 @@ if (!window.wemove) {
   };
 }
 
-if (weMovePreShareUrl) {
+if (typeof weMovePreShareUrl !== "undefined") {
   window.wemove.page.preShareUrl = weMovePreShareUrl;
 }
 
