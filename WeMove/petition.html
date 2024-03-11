@@ -125,6 +125,8 @@
 								<label for="id_comment">{% filter ak_text:"form_field_comments" %}Your comments:{% endfilter %}</label>
 								<textarea id="id_comment" name="action_comment"></textarea>
 							</div>
+
+              <div data-wm-consent-inline-new-container hidden></div>
 						</div>
 
 						<div class="form-field js-nav-buttons hide-if-previously-signed">
@@ -141,11 +143,8 @@
 
 					</div>
 					<div class="privacy-statement">
-            {% if page.custom_fields.privacy_disclaimer %}
-              {{ page.custom_fields.privacy_disclaimer | safe }}
-            {% else %}
-              {% filter ak_text:"form_signTerms_disclaimer" %}By clicking “Sign” you are supporting this campaign, and agreeing to WeMove Europe using your information for the purpose of this campaign. We might hand over your name, surname and country to the petition target. Unless you subscribe to receive personalised updates, we will delete your data after the campaign has ended. We will never share your data with any third parties without your permission. See our full privacy policy <a href="https://www.wemove.eu/privacy-policy" target="_blank">here</a>.{% endfilter %}
-            {% endif %}
+            {% store as consent_text %}{% report "signup_text_for_list_language" with 1 as refresh page.list_id as list_id page.lang_id|default:100 as lang_id %}{% endstore %}
+            {{ consent_text }}
 					</div>
 				</div>
 			</div>

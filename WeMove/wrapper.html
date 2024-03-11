@@ -41,8 +41,8 @@
     {% block meta_additions %}{% endblock %}
 <!-- //static.wemove.eu/action-kit/css/wemove.css?v=3 -->
     {% load_css %}
-      /media/modern/actionkit.css?1=22
-      //static.wemove.eu/action-kit/css/wemove.css?v=3
+      /media/modern/actionkit.css
+      //static.wemove.eu/action-kit/css/wemove.css?v=1.2
 
       {% if args.embed and args.css == "1" and page.custom_fields.external_css %}
         {{ page.custom_fields.external_css }}
@@ -99,10 +99,8 @@
               <h1 class="popup-title">{% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}</h1>
               <div data-wm-external-content class="is-loading"></div>
             </div>
-            <script async>
-              setTimeout(() => {
-                window.wemove.page.preShareUrl = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
-              }, 500);
+            <script>
+              const weMovePreShareUrl = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
             </script>
           {% endif %}
         {% endblock %}
@@ -165,6 +163,10 @@ if (!window.wemove) {
     site: {},
     page: {},
   };
+}
+
+if (typeof weMovePreShareUrl !== "undefined") {
+  window.wemove.page.preShareUrl = weMovePreShareUrl;
 }
 
 window.wemove.page.language = {
