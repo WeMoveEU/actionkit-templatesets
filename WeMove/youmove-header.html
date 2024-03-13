@@ -14,6 +14,7 @@
     </div>
 
     <nav id="nav-bar" class="dropdown-menu" aria-labelledby="nav-button">
+      <a href="https://youmoveeurope.eu/{{ link_iso }}/who-are-we">{% filter ak_text:"nav_ym_whoAreWe" %}Who are we?{% endfilter %}</a>
       <a href="https://youmoveeurope.eu/{{ link_iso }}">{% filter ak_text:"nav_ym_youmoveCampaigns" %}YouMove Campaigns{% endfilter %}</a>
       <a class="button-fill orange" href="https://www.youmoveeurope.eu/{{ link_iso }}/campaign/create">{% filter ak_text:"nav_ym_startCampaign" %}Start a campaign{% endfilter %}</a>
       <a href="https://www.youmoveeurope.eu/{{ link_iso }}/auth/login">{% filter ak_text:"nav_ym_login" %}Log-in{% endfilter %}</a>
