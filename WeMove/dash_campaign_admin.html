@@ -936,9 +936,13 @@
 		var after_step = $form.find('select[name=after_step]').val();
 		var campaign = $form.data('campaign');
 
-		// if there are pages with this name, add a number to make it unique
-		var existing = await api('GET', "page/", { name__startswith: page_prefix + '-' });
+		// if there are pages with this name and language, don't create new ones
+		const new_names = $form.find('.language-picker input:checked').map(
+			(i) => page_prefix + '-' + this.dataset.iso_code
+		);
+		const existing = await api('GET', "page/", { name__in: new_names });
 		if ( existing.objects.length ) {
+			const matching_names = existing.objects.map( (i) => i.name ).join(', ');
 			alert(`There are already pages with the name ${page_prefix}; choose a different name`);
 			return;
 		}
@@ -946,9 +950,8 @@
 		multilingualCampaignFor(campaign.name, action_type).done(function(mcamp, _, xhr) {
 			var calls = [];
 			var mcamp_uri = mcamp || xhr.getResponseHeader('Location');
-			$form.find('.language-picker input').each(function() {
+			$form.find('.language-picker input:checked').each(function() {
 				var fields = { campaign: campaign.id };
-				if (this.checked) {
 					var lang = this.dataset.iso_code;
 					var page_name = page_prefix + '-' + lang;
 					var journeys = window.journeys[this.value] || [];
@@ -985,7 +988,6 @@
 							createPage(action_type, page_name, this.value, mcamp_uri, fields)
 						);
 					}
-				}
 			});
 			$.when(...calls).done(
 				() => reload_dashboard( campaign.name )
