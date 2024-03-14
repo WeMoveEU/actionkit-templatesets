@@ -941,7 +941,7 @@
 		$form.find('.language-picker input:checked').each(function() {
 			var lang = this.dataset.iso_code;
 			var page_name = page_prefix + '-' + lang;
-			var existing = await api('GET', "page/", { name: page_name } );
+			var existing = 1; // await api('GET', "page/", { name: page_name } );
 			if ( existing.objects.length ) {
 				matches.push( page_name )
 			}
