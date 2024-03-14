@@ -937,13 +937,18 @@
 		var campaign = $form.data('campaign');
 
 		// if there are pages with this name and language, don't create new ones
-		const new_names = $form.find('.language-picker input:checked').map(
-			function () { return page_prefix + '-' + this.dataset.iso_code }
+		var matches = [];
+		$form.find('.language-picker input:checked').each(function() {
+			var lang = this.dataset.iso_code;
+			var page_name = page_prefix + '-' + lang;
+			const existing = await api('GET', "page/", { name: page_name });
+			if ( existing.objects.length ) {
+				matches.push( page_name )
+			}
 		);
-		const existing = await api('GET', "page/", { name__in: new_names });
-		if ( existing.objects.length ) {
-			const matching_names = existing.objects.map( (i) => i.name ).join(', ');
-			alert(`There are already pages with the name ${page_prefix}; choose a different name`);
+		if ( matches.length ) {
+			const matching_names = matches.map( (i) => i.name ).join(', ');
+			alert(`There are already pages with the name ${matching_names}; choose a different name`);
 			return;
 		}
 
