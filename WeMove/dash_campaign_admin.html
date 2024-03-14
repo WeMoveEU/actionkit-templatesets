@@ -938,7 +938,7 @@
 
 		// if there are pages with this name and language, don't create new ones
 		const new_names = $form.find('.language-picker input:checked').map(
-			(i) => page_prefix + '-' + this.dataset.iso_code
+			(i) => page_prefix + '-' + i.dataset.iso_code
 		);
 		const existing = await api('GET', "page/", { name__in: new_names });
 		if ( existing.objects.length ) {
