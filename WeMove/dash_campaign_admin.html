@@ -943,7 +943,6 @@
 			var lang = checkbox.dataset.iso_code;
 			var page_name = page_prefix + '-' + lang;
 			var existing = await api('GET', "page/", { name: page_name } );
-			console.log( existing.objects );
 			if ( existing.objects.length ) {
 				matches.push( page_name )
 			}
