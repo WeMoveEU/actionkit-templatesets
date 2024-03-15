@@ -1,5 +1,8 @@
 {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
   {% remember "true" as isGermanic %}
+{% else %}
+  {# TODO: remove me! #}
+  {% remember "true" as isGermanic %}
 {% endif %}
 
 {% extends "./wrapper.html" %}
@@ -84,11 +87,11 @@
 
       {# --- VIEW MODE "SHARING" #}
 
-      {# TODO add proper todo #}
+      {# TODO Logic and partials to be removed after germanic ab is done #}
 
-      {% if isGermanic and page.custom_fields.germanic_ab_test == "campact" %}
+      {% if isGermanic and page.custom_fields.germanic_ab_test_mode == "campact" %}
         {% include "./share-campact.html" %}
-      {% elif isGermanic and page.custom_fields.germanic_ab_test == "innit" %}
+      {% elif isGermanic and page.custom_fields.germanic_ab_test_mode == "innit" %}
         {% include "./share-innit.html" %}
       {% else %}
         {% include "./share-standard.html" %}
