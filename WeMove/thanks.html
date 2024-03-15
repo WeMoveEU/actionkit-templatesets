@@ -1,10 +1,3 @@
-{% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
-  {% remember "true" as isGermanic %}
-{% else %}
-  {# TODO: remove me! #}
-  {% remember "true" as isGermanic %}
-{% endif %}
-
 {% extends "./wrapper.html" %}
 
 {% block pre_action_share %}{% endblock %}
@@ -37,7 +30,6 @@
   </div>
 
 {% elif args.share or share_mode %}
-
   <form name="taf" method="POST" action="/update_action/" accept-charset="utf-8" class="ak-thanks ak-styled-fields">
     <input type="hidden" name="page" value="{{ page.name }}">
 
@@ -87,15 +79,18 @@
 
       {# --- VIEW MODE "SHARING" #}
 
-      {# TODO Logic and partials to be removed after germanic ab is done #}
-
-      {% if isGermanic and page.custom_fields.germanic_ab_test_mode == "campact" %}
-        {% include "./share-campact.html" %}
-      {% elif isGermanic and page.custom_fields.germanic_ab_test_mode == "innit" %}
-        {% include "./share-innit.html" %}
+      {# TODO Logic and partials to be removed after germanic ab test is done #}
+      {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
+        {% if page.custom_fields.germanic_ab_test_mode == "campact" %}
+          {% include "./share-campact.html" %}
+        {% elif page.custom_fields.germanic_ab_test_mode == "innit" %}
+          {% include "./share-innit.html" %}
+        {% else %}
+          {% include "./share-standard.html" %}
+        {% endif %}
       {% else %}
-        {% include "./share-standard.html" %}
-	    {% endif %}
+        {% include "./share-campact.html" %}
+      {% endif %}
 
 	  {% endif %}
   </form>
@@ -199,7 +194,7 @@
         {% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&trigger_page={{ page.name }}&trigger_action={{ action.id }}{% endif %}&next_step={{ next_step|urlencode }}{% endstore %}
         {# TODO: To be removed when ab test is done (Consent inline) #}
         {% if page.custom_fields.inline_consent == "1" %}
-          {% if isGermanic %}
+          {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
             <script>
               window.location = '{{ consent_link }}';
             </script>

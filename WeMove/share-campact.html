@@ -1,5 +1,15 @@
-<div class="ak-grid-row" style="padding: 0 1rem;">
-  <div class="ak-grid-col ak-grid-col-6-of-12">
-    <h1>hola campacat</h1>
-</div>
+<div class="germanic-mail-confirmation--campact">
+    <h1>
+      Fast fertig, <span class="user-name">{{ user.name }}!</span>
+    </h1>
+
+    <div class="content">
+      <img src="/media/modern/stance-supportive.svg" height="22" width="22" alt="&#10003;" aria-hidden="true" />
+
+      <p>Den Bestätigungslink haben wir an die folgende E-Mail-Adresse geschickt: <span class="user-email">{{ user.email }}</span>.</p>
+      <p>Bitte prüfen Sie jetzt Ihr Postfach und klicken Sie auf den enthaltenen Link. Nur so wird Ihre Stimme gezählt!</p>
+      <p>Ihre Bestätigung ist wichtig - denn nur so können wir sicherstellen, dass hinter jeder Teilnahme eine echte Person steht. Danke!</p>
+
+      <button type="button" hidden>Erneut senden</button>
+    </div>
 </div>
