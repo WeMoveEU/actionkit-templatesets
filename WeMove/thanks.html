@@ -80,16 +80,20 @@
       {# --- VIEW MODE "SHARING" #}
 
       {# TODO Logic and partials to be removed after germanic ab test is done #}
-      {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
-        {% if page.custom_fields.germanic_ab_test_mode == "campact" %}
+
+      {# TODO: putback when ready {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %} #}
+      {% if user %}
+        {% if args.skip_abtest == "1" %}
+          {% include "./share-standard.html" %}
+        {% elif page.custom_fields.germanic_ab_test_mode == "campact" %}
           {% include "./share-campact.html" %}
-        {% elif page.custom_fields.germanic_ab_test_mode == "innit" %}
-          {% include "./share-innit.html" %}
+        {% elif page.custom_fields.germanic_ab_test_mode == "innnit" %}
+          {% include "./share-innnit.html" %}
         {% else %}
           {% include "./share-standard.html" %}
         {% endif %}
       {% else %}
-        {% include "./share-campact.html" %}
+        {% include "./share-standard.html" %}
       {% endif %}
 
 	  {% endif %}
