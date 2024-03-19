@@ -79,6 +79,7 @@
 
       {# --- VIEW MODE "SHARING" #}
 <div>{{page.custom_fields.germanic_ab_test_mode}}</div>
+{% include "./share-standard.html" %}
       {# TODO Logic and partials to be removed after germanic ab test is done #}
       {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
         {% if page.custom_fields.germanic_ab_test_mode == "campact" %}
