@@ -202,7 +202,8 @@
 <script>
 	var recent_signers = {% report "names_recent_actions" with 1 as refresh page.id as page_id %};
 	recent_signers.shift();
-	recent_signers = recent_signers.map( n => [ n[0], n[1] + " {% filter ak_text:"userSignedPetition_info" %}has just signed the petition{% endfilter %}" ] );
+	// recent_signers = recent_signers.map( n => [ n[0], n[1] + " {% filter ak_text:"userSignedPetition_info" %}has just signed the petition{% endfilter %}" ] );
+  recent_signers = recent_signers.map( n => [ n[0], n[1] + " has just signed the petition" ] );
 
 	var recent_sharers = {% report "names_recent_shares" with 1 as refresh page.id as page_id %};
 	recent_sharers.shift();
