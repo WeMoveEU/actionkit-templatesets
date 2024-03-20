@@ -19,7 +19,7 @@
 
 {% if args.done %}
   {# --- VIEW MODE "DONE" #}
-  <div class="raction thanks-message" id="rthanks">
+  <div class="thanks-message">
     {% if page.custom_fields.final_message %}
       <div>{{ page.custom_fields.final_message|safe }}</div>
     {% else %}
@@ -27,6 +27,12 @@
         Thank you for standing for democracy with us. It is only together that we can truly be a force to be reckoned with.
       {% endfilter %}
     {% endif %}
+
+    <div class="go-home">
+      <a href="https://wemove.eu/{{ link_iso }}">
+        {% filter ak_text:"returnToHomepage_link" %}Return to the homepage{% endfilter %}
+      </a>
+    </div>
   </div>
 
 {% elif args.share or share_mode %}
@@ -94,6 +100,51 @@
         {% include "./share-standard.html" %}
       {% endif %}
 
+            <div
+              class="share-big copy-link"
+              data-wm-copy-to-clipboard="/share/link?type=ot{% if action %}&amp;action_id={{ action.id }}{% else %}&amp;page_name={{page.name}}&amp;akid={{ akid }}{% endif %}">
+              <input
+                type="text"
+                class="copy-link--textbox"
+                data-wm-copy-to-clipboard-textbox
+                {% if page.custom_fields.custom_url_to_share %}
+                  value="{{ page.custom_fields.custom_url_to_share }}"
+                {% endif %}
+                readonly
+                placeholder="{% filter ak_text:"loadingLink_placeholder" %}loading link...{% endfilter %}"
+                />
+
+                <button
+                  type="button"
+                  class="btn btn-primary copy-link--button"
+                  data-wm-copy-to-clipboard-button
+                  data-wm-pixel-event-type="Share"
+                  data-wm-pixel-track-type="trackCustom"
+                  data-wm-pixel-content-name="CopyLink"
+                  data-wm-pixel-trigger-event="click">
+                <span class="copy-link--text">
+                  <i class="fa fa-link"></i>
+                  <span class="share-text">
+                    {% filter ak_text:"copyLink_button" %}Copy{% endfilter %}
+                  </span>
+                </span>
+
+                <span class="copy-link--alert">
+                  <i class="fa fa-check"></i>
+                  <span class="share-text">
+                    {% filter ak_text:"linkCopied_alert" %}Link copied{% endfilter %}
+                  </span>
+                </span>
+              </button>
+            </div>
+        </div>
+      </div>
+
+      <div class="skip-step-wrapper" style="margin-top: 1rem; text-align: center;">
+        <a href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default" style="margin-top: 1rem;">
+          {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
+          </a>
+      </div>
 	  {% endif %}
   </form>
 {% else %}
