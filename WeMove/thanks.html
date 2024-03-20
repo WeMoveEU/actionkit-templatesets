@@ -248,7 +248,7 @@
                 class="copy-link--textbox"
                 data-wm-copy-to-clipboard-textbox
                 {% if page.custom_fields.custom_url_to_share %}
-                  data-wm-copy-to-clipboard-custom-url="{{ page.custom_fields.custom_url_to_share }}"
+                  value="{{ page.custom_fields.custom_url_to_share }}"
                 {% endif %}
                 readonly
                 placeholder="{% filter ak_text:"loadingLink_placeholder" %}loading link...{% endfilter %}"
