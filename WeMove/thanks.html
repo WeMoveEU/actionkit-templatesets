@@ -19,7 +19,7 @@
 
 {% if args.done %}
   {# --- VIEW MODE "DONE" #}
-  <div class="raction thanks-message" id="rthanks">
+  <div class="thanks-message">
     {% if page.custom_fields.final_message %}
       <div>{{ page.custom_fields.final_message|safe }}</div>
     {% else %}
@@ -28,9 +28,11 @@
       {% endfilter %}
     {% endif %}
 
-    <a href="https://wemove.eu/{{ link_iso }}">
-      {% filter ak_text:"returnToHomepage_link" %}Return to the homepage{% endfilter %}
-    </a>
+    <div class="go-home">
+      <a href="https://wemove.eu/{{ link_iso }}">
+        {% filter ak_text:"returnToHomepage_link" %}Return to the homepage{% endfilter %}
+      </a>
+    </div>
   </div>
 
 {% elif args.share or share_mode %}
