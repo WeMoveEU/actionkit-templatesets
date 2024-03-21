@@ -1,5 +1,12 @@
 {% extends "./wrapper.html" %}
 
+{% block wemove_scripts %}
+  {% if page.custom_fields.consent_version %}
+    {% include "./wemove-scripts.html" %}
+  {% endif %}
+{% endblock %}
+
+
 {% block content %}
 
 {% if page.custom_fields.consent_version %}
@@ -26,11 +33,11 @@
 		{% include "./thanks.html" %}
 
 		{% if page.custom_fields.next_step %}
-      <script>
-        $(() => {
-          $('a.skip.btn').attr('href', '/act/{{ page.custom_fields.next_step }}');
-        });
-      </script>
+		<script>
+			$(() => {
+				$('a.skip.btn').attr('href', '/act/{{ page.custom_fields.next_step }}');
+			});
+		</script>
 		{% endif %}
 
     {% if page.custom_fields.sharing_step %}
