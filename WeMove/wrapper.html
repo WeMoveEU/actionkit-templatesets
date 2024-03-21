@@ -156,6 +156,7 @@ actionkit.forms.initForm('act');
 </script>
 {% endblock %}
 
+{% block wemove_scripts %}
 <script>
 // WeMove library initial setup
 if (!window.wemove) {
@@ -193,5 +194,6 @@ window.wemove.page.shouldDisableForm = true
 <script type="text/plain" data-cookieconsent="marketing" src="https://static.wemove.eu/shared-scripts/matomo-loader.js" async></script>
 {% endif %}
 <script src="//static.wemove.eu/action-kit/js/wemove-main.bundle.min.js?ver=1.1.0"></script>
+{% endblock %}
 </body>
 </html>
