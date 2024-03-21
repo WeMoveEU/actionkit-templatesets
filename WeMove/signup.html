@@ -24,7 +24,6 @@
 		{% remember "1" as share_mode %}
 		{% remember "1" as isEmbbeded %}
 		{% include "./thanks.html" %}
-    {% block wemove_scripts %}{% endblock %}
 
 		{% if page.custom_fields.next_step %}
       <script>
@@ -33,6 +32,10 @@
         });
       </script>
 		{% endif %}
+
+    {% if page.custom_fields.sharing_step %}
+      {% block wemove_scripts %}{% endblock %}
+    {% endif %}
 	{% endif %}
 {% else %}
 
