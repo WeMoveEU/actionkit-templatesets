@@ -24,14 +24,18 @@
 		{% remember "1" as share_mode %}
 		{% remember "1" as isEmbbeded %}
 		{% include "./thanks.html" %}
+
 		{% if page.custom_fields.next_step %}
-		<script>
-			$( function () {
-				$('a.skip.btn').attr('href', '/act/{{ page.custom_fields.next_step }}' )
-			} );
-		</script>
-    {% block wemove_scripts %}{% endblock %}
+      <script>
+        $(() => {
+          $('a.skip.btn').attr('href', '/act/{{ page.custom_fields.next_step }}');
+        });
+      </script>
 		{% endif %}
+
+    {% if page.custom_fields.sharing_step %}
+      {% block wemove_scripts %}{% endblock %}
+    {% endif %}
 	{% endif %}
 {% else %}
 
