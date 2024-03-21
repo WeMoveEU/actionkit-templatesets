@@ -10,6 +10,9 @@
       <p>Bitte prüfen Sie jetzt Ihr Postfach und klicken Sie auf den enthaltenen Link. Nur so wird Ihre Stimme gezählt!</p>
       <p>Ihre Bestätigung ist wichtig - denn nur so können wir sicherstellen, dass hinter jeder Teilnahme eine echte Person steht. Danke!</p>
 
-      <button type="button" hidden>Erneut senden</button>
+      {% store as signup_page_name %}{% report "signup_page_for_list_language" with 1 as refresh page.list_id as list_id user.lang_id|default:100 as lang_id %}{% endstore %}
+      <a href="/act/{{ signup_page_name }}?akid={{ akid }}&trigger_page={{ page.name }}&trigger_action={{ action.id }}&next_step=/thanks/{{ page.name }}%3Fshare%3D1%26akid%3D{{ akid }}%26action_id%3D{{ action.id }}">
+        Erneut senden
+      </a>
     </div>
 </div>
