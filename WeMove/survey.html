@@ -1,55 +1,48 @@
-{% extends "./wrapper.html" %} {% block content %}
+{% extends "./wrapper.html" %}
+
+{% block content %}
 
 <h1>{{ page.title }}</h1>
 
-<form
-  class="ak-form"
-  name="act"
-  method="POST"
-  action="/act/"
-  accept-charset="utf-8"
->
-  <input type="hidden" name="page" value="{{ page.name }}" />
+<form class="ak-form" name="act" method="POST" action="/act/" accept-charset="utf-8">
+    <input type="hidden" name="page" value="{{ page.name }}">
 
-  <div class="intro">
-    {% store as featured_video %}{% report "custom_field_from_page_or_campaign"
-    with 1 as refresh page.id as page_id "featured_video" as field_name %}{%
-    endstore %} {% store as featured_image %}{% report
-    "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id
-    "featured_image" as field_name %}{% endstore %} {% if featured_video %} {%
-    include "./featured-video.html" with featured_video=featured_video %} {%
-    elif featured_image %} {% include "./featured-image.html" with
-    featured_image=featured_image %} {% endif %} {% include_tmpl
-    form.introduction_text %}
-  </div>
+    <div class="intro">
+      {% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
+      {% store as featured_image %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_image" as field_name %}{% endstore %}
+      {% if featured_video %}
+        {% include "./featured-video.html" with featured_video=featured_video %}
+      {% elif featured_image %}
+        {% include "./featured-image.html" with featured_image=featured_image %}
+      {% endif %}
 
-  {% for question in form.surveyquestion_set.all %}
-  <div class="question ak-errs-below">
-    <label class="ak-survey-question-label">
-      {{ question.question_label|safe }} {% if question.is_required %}<span
-        class="ak-required-flag"
-        aria-hidden="true"
-        >*</span
-      >{% endif %}
-    </label>
+      {% include_tmpl form.introduction_text %}
+    </div>
 
-    {{ question.input_html|safe }}
-  </div>
-  {% endfor %}
+    {% for question in form.surveyquestion_set.all %}
+      <div class="question ak-errs-below">
+        <label class="ak-survey-question-label">
+          {{ question.question_label|safe }}
+          {% if question.is_required %}<span class="ak-required-flag" aria-hidden="true">*</span>{% endif %}
+        </label>
 
-  <section class="personal-data ak-errs-below">
-    <h2>
-      {% filter ak_text:"personalData_title" %}Your information{% endfilter %}
-    </h2>
+        {{ question.input_html|safe }}
+      </div>
+    {% endfor %}
 
-    {% include "./user_form_wrapper.html" %}
-  </section>
+    <section class="personal-data ak-errs-below">
+      <h2>{% filter ak_text:"personalData_title" %}Your information{% endfilter %}</h2>
 
-  <div class="form-field js-nav-buttons survey-buttons-wrapper">
-    <button type="submit" class="btn btn-primary">
-      {% filter ak_text:"submitSurvey_button" %} Send {% endfilter %}
-    </button>
-  </div>
+      {% include "./user_form_wrapper.html" %}
+    </section>
+
+    <div class="form-field js-nav-buttons survey-buttons-wrapper">
+      <button type="submit" class="btn btn-primary">
+        {% filter ak_text:"submitSurvey_button" %}
+          Send
+        {% endfilter %}
+      </button>
+    </div>
 </form>
 
 {% endblock %}
