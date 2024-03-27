@@ -1,0 +1,18 @@
+<div class="germanic-mail-confirmation--campact">
+    <h1>
+      Fast fertig, <span class="user-name">{{ user.name }}!</span>
+    </h1>
+
+    <div class="content">
+      <img src="/media/modern/stance-supportive.svg" height="22" width="22" alt="&#10003;" aria-hidden="true" />
+
+      <p>Den Bestätigungslink haben wir an die folgende E-Mail-Adresse geschickt: <span class="user-email">{{ user.email }}</span>.</p>
+      <p>Bitte prüfen Sie jetzt Ihr Postfach und klicken Sie auf den enthaltenen Link. Nur so wird Ihre Stimme gezählt!</p>
+      <p>Ihre Bestätigung ist wichtig - denn nur so können wir sicherstellen, dass hinter jeder Teilnahme eine echte Person steht. Danke!</p>
+
+      {% store as signup_page_name %}{% report "signup_page_for_list_language" with 1 as refresh page.list_id as list_id user.lang_id|default:100 as lang_id %}{% endstore %}
+      <a href="/act/{{ signup_page_name }}?akid={{ akid }}&trigger_page={{ page.name }}&trigger_action={{ action.id }}&next_step=/thanks/{{ page.name }}%3Fshare%3D1%26akid%3D{{ akid }}%26action_id%3D{{ action.id }}">
+        Erneut senden
+      </a>
+    </div>
+</div>
