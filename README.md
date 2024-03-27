@@ -35,7 +35,9 @@ There are a few tools in ActionKit that make developing template sets easier. He
 See the [actionkit stripe integration](https://gitlab.wemove.eu/internal/actionkit-stripe-integration/) for setting up the development environment for this work.
 
 ## Local assets proxy
+
 <script src="//127.0.0.1:8081/js/wemove-main.bundle.min.js"></script>
+
 //127.0.0.1:8081/css/wemove.css
 
 # TODOs
@@ -46,15 +48,15 @@ See the [actionkit stripe integration](https://gitlab.wemove.eu/internal/actionk
 
 Currency switching requires:
 
- - a form input to let users change and to read the currency
- - a way to match payment methods to currency. for example, GBP and SEPA are incompatible
- - display updates for amounts
-      - update the currency symbol / display
-      - update the amounts where needed b/c the currency exchange rates are significantly different
+- a form input to let users change and to read the currency
+- a way to match payment methods to currency. for example, GBP and SEPA are incompatible
+- display updates for amounts
+  - update the currency symbol / display
+  - update the amounts where needed b/c the currency exchange rates are significantly different
 
 We shouldn't use the ActionKit currency switcher - it does all kinds of weird stuff to handle multiple Braintree accounts (each with a different currency). Stripe just needs an parameter to process the donation in a different currency.
 
-## Translations in donate.html *and* *.js files here
+## Translations in donate.html _and_ \*.js files here
 
 If possible it would be good to avoid translations in the JS files, and
 to keep it all in ActionKit. Using multiple divs in donate.html instead of inserting
