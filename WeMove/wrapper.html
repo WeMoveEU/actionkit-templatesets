@@ -16,15 +16,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     {% block share_metatags %}
-    {% if form.id %}
-      <meta name="description" property="og:description" content="{% block description %}{{ page.followup.share_description_value }}{% endblock %}">
-    {% endif %}
-    <meta property="og:site_name" content="{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}">
-    <meta property="og:type" content="article">
-    {{ page.followup.share_title_tag }}
-    <meta name="twitter:card" content="summary_large_image">
-    {{ page.followup.share_image_tag }}
-    {{ page.followup.share_url_tag }}
+      {% if form.id %}
+        <meta name="description" property="og:description" content="{% block description %}{{ page.followup.share_description_value }}{% endblock %}">
+      {% endif %}
+
+      <meta property="og:site_name" content="{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}">
+      <meta property="og:type" content="article">
+
+      <meta name="twitter:card" content="summary_large_image">
+      {{ page.followup.share_title_tag }}
+      {{ page.followup.share_image_tag }}
+      {{ page.followup.share_url_tag }}
     {% endblock %}
 
     {% if page.id %}
@@ -67,9 +69,8 @@
   {% if isEmbbeded == "true" %}data-wm-is-embbeded{% endif %}
   data-wm-page-id="{{ page.id }}"
   class="{% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %} ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
-    <script>
-      actionkit.forms.initPage()
-    </script>
+
+  <script>actionkit.forms.initPage();</script>
 
     {% if not isEmbbeded %}
       {% if campaign_type == "youmove" %}
