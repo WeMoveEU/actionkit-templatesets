@@ -159,6 +159,9 @@
           type="text"
           class="copy-link--textbox"
           data-wm-copy-to-clipboard-textbox
+          {% if page.custom_fields.sharing_step %}
+            value="{{ page.custom_fields.sharing_step }}"
+          {% endif %}
           readonly
           placeholder="{% filter ak_text:"loadingLink_placeholder" %}loading link...{% endfilter %}"
           />
