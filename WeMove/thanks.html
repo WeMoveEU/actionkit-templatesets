@@ -84,7 +84,6 @@
     {% else %}
 
       {# --- VIEW MODE "SHARING" #}
-      <div class="test" hidden>{{page.custom_fields.germanic_ab_test_mode}}</div>
 
       {# TODO Logic and partials to be removed after germanic ab test is done #}
       {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
