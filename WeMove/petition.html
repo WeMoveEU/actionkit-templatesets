@@ -121,7 +121,8 @@
 						<div id="petition-form" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
 							{% include "./user_form_wrapper.html" %}
 
-							{% if not page.custom_fields.hide_comments_field == "1" %}
+							{% store as hide_comments_field %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "hide_comments_field" as field_name %}{% endstore %}
+							{% if not hide_comments_field == "1" %}
 							<div class="ak-field form-field hide-if-previously-signed">
 								<label for="id_comment">{% filter ak_text:"form_field_comments" %}Your comments:{% endfilter %}</label>
 								<textarea id="id_comment" name="action_comment"></textarea>
