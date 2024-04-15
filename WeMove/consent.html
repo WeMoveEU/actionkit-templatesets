@@ -25,11 +25,7 @@
 
 		<div id="consent-buttons">
 				<button type="button" id="btn_optout" value="none_given" class="btn optout js-popup-consent-button">
-          {% if page.custom_fields.opt_ab_test_cancel_button %}
-            {{ page.custom_fields.opt_ab_test_cancel_button }}
-          {% else %}
-            {% filter ak_text:"consents_contactMeNo_button" %}No, do not contact me{% endfilter %}
-          {% endif %}
+          {% filter ak_text:"consents_contactMeNo_button" %}No, I don't want to use my power{% endfilter %}
 				</button>
 
         <button
@@ -43,11 +39,7 @@
           data-wm-pixel-content-id="optin_{{ tests.1.letter }}"
           {% endif %}
           data-wm-pixel-trigger-event="click">
-          {% if page.custom_fields.opt_ab_test_confirm_button %}
-            {{ page.custom_fields.opt_ab_test_confirm_button }}
-          {% else %}
-            {% filter ak_text:"consents_contactMeYes_button" %}Yes, keep me informed!{% endfilter %}
-          {% endif %}
+          {% filter ak_text:"consents_contactMeYes_button" %}Yes, keep me informed!{% endfilter %}
 				</button>
 
 				<button type="button" id="btn_email" value="email_opt_in" class="btn optemail js-popup-consent-button" hidden>
