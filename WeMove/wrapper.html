@@ -106,39 +106,31 @@
       {% endif %}
     {% endif %}
 
-    <div id="wrapper">
-      <div id="content">
-        <div class="container-fluid">
-          {% if not isEmbbeded %}
-            {% block finished_alert %}
-              {% if page.custom_fields.finished_alert %}
-                <div class="alert alert-warning alert-finished" role="alert">
-                    {{ page.custom_fields.finished_alert |safe }}
-                </div>
-              {% endif %}
-            {% endblock %}
-          {% endif %}
-
-          <div class="raction" id="rsign">
-            <div class="raction-content">
-              {% if not isEmbbeded %}
-                {% if page.custom_fields.consent_version %}
-                  <div data-wm-popup-content-template data-wm-popup-hide-close-button="true" hidden>
-                {% endif %}
-              {% endif %}
-
-              {% block content %}{% endblock %}
-
-              {% if not isEmbbeded %}
-                {% if page.custom_fields.consent_version %}
-                  </div>
-                {% endif %}
-              {% endif %}
+    <article class="wrapper px-4">
+      {% if not isEmbbeded %}
+        {% block finished_alert %}
+          {% if page.custom_fields.finished_alert %}
+            <div class="alert alert-warning alert-finished" role="alert">
+                {{ page.custom_fields.finished_alert |safe }}
             </div>
+          {% endif %}
+        {% endblock %}
+      {% endif %}
+
+      {% if not isEmbbeded %}
+        {% if page.custom_fields.consent_version %}
+          <div data-wm-popup-content-template data-wm-popup-hide-close-button="true" hidden>
+        {% endif %}
+      {% endif %}
+
+      {% block content %}{% endblock %}
+
+      {% if not isEmbbeded %}
+        {% if page.custom_fields.consent_version %}
           </div>
-        </div>
-      </div>
-    </div>
+        {% endif %}
+      {% endif %}
+    </article>
 
     {% if not isEmbbeded %}
       {% if campaign_type == "youmove" %}

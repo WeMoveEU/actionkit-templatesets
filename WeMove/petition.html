@@ -2,8 +2,85 @@
 
 {% block content %}
 
+{% if not isEmbbeded %}
+	<div class="md:flex">
+		{% include "./language_picker.html" %}
+		<h1 class="text-wm-purple text-4xl mb-8">{{ page.title }}</h1>
+	</div>
+
+	{% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
+	{% store as featured_image %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_image" as field_name %}{% endstore %}
+	{% if featured_video %}
+		{% include "./featured-video.html" with featured_video=featured_video %}
+	{% elif featured_image %}
+		{% include "./featured-image.html" with featured_image=featured_image %}
+	{% endif %}
+
+	{% if form.statement_leadin %}
+		<h3 class="mt-4 italic font-normal text-base font-libre-franklin">
+			{% include_tmpl form.statement_leadin %}
+		</h3>
+	{% endif %}
+
+	{% if page.custom_fields.youmove_initiator_name %}
+		<div class="initiator">
+			<p data-wm-initiator-name="{{ page.custom_fields.youmove_initiator_name }}">
+				{% filter ak_text:"statement_initiator" %}This petition is run by [% inititator_name %]{% endfilter %}
+			</p>
+		</div>
+	{% endif %}
+
+	<div class="text-wm-purple p-6 bg-wm-petition-box mb-8">
+		<h2 class="uppercase border-b-[1px] text-2xl pb-2 border-wm-purple">
+			{% filter ak_text:"petition_title" %}Petition{% endfilter %}
+		</h2>
+
+		{% include_tmpl form.statement_text %}
+	</div>
+
+	<div class="text-wm-purple p-6 bg-wm-why-box mb-8">
+		{% if form.about_text %}
+		<h2 class="uppercase border-b-[1px] text-2xl pb-2 border-wm-purple">
+			{% filter ak_text:"whyIsThisImportant_title" %}Why is this important?{% endfilter %}
+		</h2>
+
+		{% include_tmpl form.about_text %}
+		{% endif %}
+
+		{% store as references %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "references" as field_name %}{% endstore %}
+		{% if references %}
+		<h4 class="border-t-[1px] inline-block text-black pr-4 pt-4 border-wm-purple">
+			{% filter ak_text:"references" %}References:{% endfilter %}
+		</h4>
+
+		<div class="references text-sm">
+			{{ references }}
+		</div>
+		{% endif %}
+	</div>
+
+	{% store as partnership_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "partnership_icons" as field_name %}{% endstore %}
+	{% if partnership_icons %}
+	<div class="text-wm-purple mb-8">
+		<h3>{% filter ak_text:"in_partnership_with" %}In partnership with:{% endfilter %}</h3>
+		{{ partnership_icons }}
+	</div>
+	{% endif %}
+
+	{% store as supporters_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "supporters_icons" as field_name %}{% endstore %}
+	{% if supporters_icons %}
+	<div class="text-wm-purple mb-8">
+		<h3>{% filter ak_text:"supported_by" %}Supported by:{% endfilter %}</h3>
+		{{ supporters_icons }}
+	</div>
+	{% endif %}
+
+	{% include "./component-recent_comments.html" %}
+
+{% endif %}
+
 <form
-  class="ak-form"
+  class="ak-form !hidden"
   name="act"
   method="POST"
   action="/act/"
@@ -16,86 +93,6 @@
   data-wm-pixel-trigger-event="submit">
 
 	<input type="hidden" name="page" value="{{ page.name }}">
-
-    {% if not isEmbbeded %}
-    <div class="advice-advice">
-			<div class="action-advice-col">
-				{% include "./language_picker.html" %}
-				<div class="advice-container">
-					<h1>{{ page.title }}</h1>
-
-					{% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
-          {% store as featured_image %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_image" as field_name %}{% endstore %}
-					{% if featured_video %}
-            {% include "./featured-video.html" with featured_video=featured_video %}
-          {% elif featured_image %}
-            {% include "./featured-image.html" with featured_image=featured_image %}
-          {% endif %}
-
-					{% if form.statement_leadin %}
-					<div id="letter_to">
-						{% include_tmpl form.statement_leadin %}
-					</div>
-					{% endif %}
-
-          {% if page.custom_fields.youmove_initiator_name %}
-					<div class="initiator">
-						<p data-wm-initiator-name="{{ page.custom_fields.youmove_initiator_name }}">
-							{% filter ak_text:"statement_initiator" %}This petition is run by [% inititator_name %]{% endfilter %}
-						</p>
-					</div>
-					{% endif %}
-
-					<div id="sign-advice">
-						<div class="well">
-							<h2>{% filter ak_text:"petition_title" %}Petition{% endfilter %}</h2>
-
-							<div class="ak-margin-bottom-1 ak-text-expander-disabled">
-								{% include_tmpl form.statement_text %}
-							</div>
-							<a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"readMore_button" %}Read more{% endfilter %}</a>
-						</div>
-
-						<div id="ak-petition-story">
-							{% if form.about_text %}
-							<h2>{% filter ak_text:"whyIsThisImportant_title" %}Why is this important?{% endfilter %}</h2>
-							<div class="ak-text-expander-disabled">{% include_tmpl form.about_text %}</div>
-							<a href="#" class="ak-read-more ak-mobile" data-lines="10">{% filter ak_text:"readMore_button" %}Read more{% endfilter %}</a>
-							{% endif %}
-
-							{% store as references %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "references" as field_name %}{% endstore %}
-							{% if references %}
-							<div class="references">
-								<h4>{% filter ak_text:"references" %}References:{% endfilter %}</h4>
-								<div class="unescape-html">{{ references }}</div>
-							</div>
-							{% endif %}
-						</div>
-
-						{% store as partnership_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "partnership_icons" as field_name %}{% endstore %}
-						{% if partnership_icons %}
-						<div class="partners">
-							<h2>{% filter ak_text:"in_partnership_with" %}In partnership with:{% endfilter %}</h2>
-							<div class="partnership-icons">
-								{{ partnership_icons }}
-							</div>
-						</div>
-						{% endif %}
-
-            {% store as supporters_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "supporters_icons" as field_name %}{% endstore %}
-						{% if supporters_icons %}
-						<div class="supporters">
-							<h2>{% filter ak_text:"supported_by" %}Supported by:{% endfilter %}</h2>
-							<div class="supporters-icons">
-								{{ supporters_icons }}
-							</div>
-						</div>
-						{% endif %}
-					</div>
-				</div>
-			</div>
-		</div>
-    {% endif %}
 
 		<div
       class="action-form-container-col ak-grid-col ak-grid-col-4-of-12{% if isEmbbeded != "true" %} is-floating{% endif %}"
@@ -151,53 +148,10 @@
 					</div>
 				</div>
 			</div>
-
-			<aside class="recent-comments" style="display: none">
-				<h4>Recent comments</h4>
-				<div class="recent-comment">
-					<div class="recent-comment-by" style="font-style: italic;"></div>
-					<div class="recent-comment-text"></div>
-				</div>
-			</aside>
 		</div>
 </form>
 
 {% if not isEmbbeded %}
-<script>
-	var recent_comments = {% report "comments_recent_actions" with 1 as refresh page.id as page_id %};
-	recent_comments.shift();
-
-	window.currentCommentIndex = 0;
-	window.recentCommentShown = false;
-	window.comment_elt = $('.recent-comments .recent-comment');
-	$(function () {
-		if (comment_elt.length > 0) {
-			if (recent_comments.length && ! recentCommentShown) {
-				recentCommentShown = true;
-				comment_elt.parent().fadeIn('slow');
-				cycleRecentComment();
-			}
-		}
-	});
-
-	function cycleRecentComment () {
-		comment_elt.fadeOut('slow', function () {
-			var comment = recent_comments[currentCommentIndex ++ % recent_comments.length];
-			comment_elt.find('.recent-comment-by').text(comment[0]);
-			comment_elt.find('.recent-comment-text').text(comment[1]);
-			comment_elt.removeClass('hidden');
-			comment_elt.fadeIn('slow');
-			var duration = Math.ceil(comment[1].split(' ').length * 0.2);
-
-			if (duration < 3) {
-        duration = 3;
-      }
-
-      setTimeout(cycleRecentComment, duration * 1000);
-		});
-	}
-</script>
-
 <div class="js-recent-action no-mobile" style="display: none">
   👍 <span class="js-text"></span>
 </div>

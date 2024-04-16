@@ -1,4 +1,4 @@
-<header class="relative p-4 nav-md:flex nav-md:justify-between">
+<header class="wrapper relative p-4 nav-md:flex nav-md:justify-between mb-4">
   <a href="https://wemove.eu/{{ link_iso }}" class="inline-block">
     <img
       alt="WeMove Europe logo"
@@ -31,21 +31,22 @@
     </button>
 
     <ul
-      class="flyout-menu-list height-0 w-full flex-col content-between items-center m-auto nav-md:!flex nav-md:!max-h-96 nav-md:flex-row nav-md:p-0 nav-md:flex-wrap nav-md:gap-x-8 nav-md:justify-end nav-md:items-center nav-md:mb-4"
-      hidden=""
+      class="flyout-menu-list text-sm height-0 w-full flex-col content-between items-center m-auto text-wm-purple
+      nav-md:!flex nav-md:!max-h-96 nav-md:flex-row nav-md:p-0 nav-md:flex-wrap nav-md:gap-x-8 nav-md:justify-end nav-md:items-center nav-md:mb-4"
+      hidden
     >
       <li class="about-us__nav">
         <div>
           <button
             type="button"
             aria-expanded="false"
-            class="relative pr-3 after:pointer-events-none after:absolute after:right-0 after:top-2 after:ml-1 after:inline-block after:border-[.3em] after:border-b-0 after:border-solid after:border-black after:border-l-transparent after:border-r-transparent after:align-[.25rem] after:content-[''] after:hover:border-t-wm-pink"
+            class="relative pr-3 after:pointer-events-none after:absolute after:right-0 after:top-[6px] after:ml-1 after:inline-block after:border-[.3em] after:border-b-0 after:border-solid after:border-black after:border-l-transparent after:border-r-transparent after:align-[.25rem] after:content-[''] after:hover:border-t-wm-pink"
           >
             {% filter ak_text:"nav_wm_aboutUS" %}About us{% endfilter %}
             <span class="sr-only"></span>
           </button>
 
-          <ul hidden="" class="flyout-menu-list">
+          <ul hidden class="flyout-menu-list">
             <li><a href="https://wemove.eu/{{ link_iso }}/community">{% filter ak_text:"nav_wm_community" %}Community{% endfilter%}</a></li>
             <li><a href="https://wemove.eu/{{ link_iso }}/victories">{% filter ak_text:"nav_wm_victories" %}Victories{% endfilter%}</a></li>
             <li><a href="https://wemove.eu/{{ link_iso }}/team">{% filter ak_text:"nav_wm_team" %}Team{% endfilter%}</a></li>
@@ -59,31 +60,29 @@
         <a href="https://wemove.eu/{{ link_iso }}/en/updates" class="regular-link regular-link--default">{% filter ak_text:"nav_wm_updates" %}Updates{% endfilter %}</a>
       </li>
       <li>
-        <a href="https://www.youmoveeurope.eu/{{ link_iso }}" class="button-fill button-fill--light-blue">YouMove</a>
+        <a href="https://www.youmoveeurope.eu/{{ link_iso }}" class="button-fill button-fill--light-blue !min-w-0 !px-5">YouMove</a>
       </li>
     </ul>
+
     <ul
-      class="flyout-menu-list height-0 w-full flex-col content-between items-center m-auto nav-md:!flex nav-md:!max-h-96 nav-md:flex-row nav-md:p-0 nav-md:flex-wrap nav-md:gap-x-8 nav-md:gap-y-6 nav-md:justify-end nav-md:items-center"
-      hidden=""
+      class="flyout-menu-list text-lg height-0 w-full  flex-col content-between items-center m-auto nav-md:!flex nav-md:!max-h-96 nav-md:flex-row
+      nav-md:p-0 nav-md:flex-wrap nav-md:gap-x-8 nav-md:gap-y-6 nav-md:justify-end nav-md:items-center text-wm-purple"
+      hidden
     >
       <li>
-        <a href="/en/campaigns" class="regular-link regular-link--default"
-          >{% filter ak_text:"nav_wm_campaigns" %}Campaigns{% endfilter %}</a
-        >
+        <a href="/en/campaigns" class="regular-link regular-link--default !normal-case">
+          {% filter ak_text:"nav_wm_campaigns" %}Campaigns{% endfilter %}
+        </a>
       </li>
       <li>
-        <a
-        href="https://action.wemove.eu/signup/wemove-join_{{ link_iso }}"
-          class="regular-link regular-link--default"
-          >{% filter ak_text:"nav_wm_joinUs" %}Join us{% endfilter %}</a
-        >
+        <a href="https://action.wemove.eu/signup/wemove-join_{{ link_iso }}" class="regular-link regular-link--default !normal-case">
+          {% filter ak_text:"nav_wm_joinUs" %}Join us{% endfilter %}
+        </a>
       </li>
       <li>
-        <a
-          data-link-translate-me="wm-donate"
-          class="button-fill button-fill--pink"
-          >{% filter ak_text:"nav_wm_donate" %}Donate{% endfilter %}</a
-        >
+        <a data-link-translate-me="wm-donate" class="button-fill button-fill--pink text-base">
+          {% filter ak_text:"nav_wm_donate" %}Donate{% endfilter %}
+        </a>
       </li>
     </ul>
   </nav>

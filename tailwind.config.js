@@ -9,6 +9,11 @@ module.exports = {
         "wm-pink": "#c552df",
         "wm-turquoise": "#24aecb",
         "wm-orange": "#ee6947",
+        "wm-petition-box": "#ffede9",
+        "wm-why-box": "#f1efff",
+      },
+      screens: {
+        "nav-md": "940px",
       },
       fontFamily: {
         "libre-franklin": ["Libre Franklin", "serif"],

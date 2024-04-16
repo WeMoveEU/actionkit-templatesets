@@ -1,0 +1,40 @@
+<div data-wm-recent-comments class="shidden my-8 lg:mx-4">
+  <h4 class="text-wm-purple mb-4 text-2xl">Recent comments</h4>
+  <div data-wm-recent-comment-text class="bg-wm-why-box text-wm-purple p-6 text-sm">
+    <div data-wm-comment-by class="italic text-right font-bold">HOla</div>
+    <div data-wm-comment-text>sonethubg</div>
+  </div>
+
+  <script async>
+    const recentComments = {% report "comments_recent_actions" with 1 as refresh page.id as page_id %};
+    recentComments.shift();
+
+    window.currentCommentIndex = 0;
+    window.recentCommentShown = false;
+    window.commentsWrapper = document.querySelector('[data-wm-recent-comments]');
+    window.commentText = commentsWrapper.querySelector('[data-wm-recent-comment-text]');
+
+    if (commentText && (recentComments.length && !recentCommentShown)) {
+      recentCommentShown = true;
+      commentsWrapper.fadeIn("slow"); // todo
+      cycleRecentComment();
+    }
+
+    const cycleRecentComment = () => {
+      commentText.fadeOut('slow', () => {// todo
+        const comment = recentComments[currentCommentIndex ++ % recentComments.length];
+        commentText.querySelector('[data-wm-comment-by]').innerHTML(comment[0]);
+        commentText.querySelector('[data-wm-comment-text]').innerHTML(comment[1]);
+        commentText.classList.remove('hidden');
+
+        let duration = Math.ceil(comment[1].split(' ').length * 0.2);
+
+        if (duration < 3) {
+          duration = 3;
+        }
+
+        setTimeout(cycleRecentComment, duration * 1000);
+      });
+    };
+  </script>
+</div>
