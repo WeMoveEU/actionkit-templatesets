@@ -1,0 +1,46 @@
+<div class="js-recent-action no-mobile" style="display: none">
+  👍 <span class="js-text"></span>
+</div>
+
+<script>
+	var recent_signers = {% report "names_recent_actions" with 1 as refresh page.id as page_id %};
+	recent_signers.shift();
+	recent_signers = recent_signers.map( n => [ n[0], n[1] + " {% filter ak_text:"userSignedPetition_info" %}has just signed the petition{% endfilter %}" ] );
+
+	var recent_sharers = {% report "names_recent_shares" with 1 as refresh page.id as page_id %};
+	recent_sharers.shift();
+	recent_sharers = recent_sharers.map( n => [ n[0], n[1] + " {% filter ak_text:"userSharedThis_info" %}just shared this on{% endfilter %} " + n[2] ] );
+
+	var recent_actions = recent_signers.concat( recent_sharers );
+	recent_actions = recent_actions.sort( function compare(a,b) {
+		if ( a[0] < b[0] ) { return 1 }
+		if ( a[0] > b[0] ) { return -1 }
+		return 0
+	} );
+
+	window.recentActions = recent_actions.map( n => n[1] );
+	window.currentActionIndex = 0;
+	window.recentActionShown = false;
+	window.recent_action_elt = $('.js-recent-action');
+
+	$( function () {
+		if (recent_action_elt.length > 0) {
+			if (window.innerWidth > 1180) {
+				if (recentActions.length && ! recentActionShown) {
+					recentActionShown = true;
+					cycleRecentAction();
+				}
+			}
+		}
+	} );
+
+	function cycleRecentAction() {
+		recent_action_elt.fadeOut('slow', function() {
+			var signer = recentActions[currentActionIndex ++ % recentActions.length];
+			recent_action_elt.find('.js-text').text(signer);
+			recent_action_elt.removeClass('hidden');
+			recent_action_elt.fadeIn('slow');
+			setTimeout(cycleRecentAction, 5000);
+		});
+	}
+</script>
