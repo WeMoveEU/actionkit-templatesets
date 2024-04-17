@@ -776,7 +776,7 @@
 						`<tr><td>${mailing.id}</td>`
 						+ `<td>${mailing.notes}</td>`
 						+ `<td>${mailing.status}</td>`
-						+ `<td>${mailing.started_at || ''}</td>`
+						+ `<td>${(mailing.started_at || '').replace(/:\d\d\..*/, '')}</td>`
 						+ `<td>${mailingLink(mailing)}</td>`
 						+ "</tr>"
 					);
