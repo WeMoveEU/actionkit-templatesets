@@ -492,7 +492,7 @@
 	}
 
 	function readMultilingualCampaigns(prefix) {
-		return api('GET', "multilingualcampaign/", { name__startswith: prefix } ).done(function(camps) {
+		return api('GET', "multilingualcampaign/", { name__startswith: prefix, _limit: 100 } ).done(function(camps) {
 			const step_picker = $('.step-picker .form-control select');
 			step_picker.find('option:not(:first-child)').remove();
 			camps.objects.forEach(function(camp) {
