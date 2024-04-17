@@ -106,7 +106,7 @@
       {% endif %}
     {% endif %}
 
-    <article id="main-block" class="wrapper px-4">
+    <main class="wrapper px-4">
       {% if not isEmbbeded %}
         {% block finished_alert %}
           {% if page.custom_fields.finished_alert %}
@@ -130,7 +130,7 @@
           </div>
         {% endif %}
       {% endif %}
-    </article>
+    </main>
 
     {% if not isEmbbeded %}
       {% if campaign_type == "youmove" %}

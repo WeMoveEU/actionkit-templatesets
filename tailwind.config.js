@@ -11,9 +11,13 @@ module.exports = {
         "wm-orange": "#ee6947",
         "wm-orangy-box": "#ffede9",
         "wm-lightblue-box": "#f1efff",
+        "wm-bg-form": "#7e6af0",
       },
       screens: {
         "nav-md": "940px",
+      },
+      gridTemplateColumns: {
+        petition: "66% 34%",
       },
       fontFamily: {
         "libre-franklin": ["Libre Franklin", "serif"],

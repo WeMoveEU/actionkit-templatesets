@@ -2,122 +2,124 @@
 
 {% block content %}
 
-{% if not isEmbbeded %}
-<div class="main-content">
-	<div class="nav-md:flex">
-		{% include "./language_picker.html" %}
-		<h1 class="text-wm-purple text-4xl mb-8">{{ page.title }}</h1>
-	</div>
+<div class="nav-md:grid grid-cols-petition">
 
-	{% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
-	{% store as featured_image %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_image" as field_name %}{% endstore %}
-	{% if featured_video %}
-		{% include "./featured-video.html" with featured_video=featured_video %}
-	{% elif featured_image %}
-		{% include "./featured-image.html" with featured_image=featured_image %}
-	{% endif %}
-
-	{% if form.statement_leadin %}
-		<h3 class="mt-8 italic font-normal text-base font-libre-franklin">
-			{% include_tmpl form.statement_leadin %}
-		</h3>
-	{% endif %}
-
-	{% if page.custom_fields.youmove_initiator_name %}
-		<div class="initiator">
-			<p data-wm-initiator-name="{{ page.custom_fields.youmove_initiator_name }}">
-				{% filter ak_text:"statement_initiator" %}This petition is run by [% inititator_name %]{% endfilter %}
-			</p>
+	{% if not isEmbbeded %}
+	<article>
+		<div class="nav-md:flex nav-md:mr-4">
+			{% include "./language_picker.html" %}
+			<h1 class="text-wm-purple text-4xl mb-8">{{ page.title }}</h1>
 		</div>
-	{% endif %}
 
-	<div class="text-wm-purple p-6 bg-wm-orangy-box mb-8">
-		<h2 class="uppercase border-b-[1px] text-2xl pb-2 border-wm-purple">
-			{% filter ak_text:"petition_title" %}Petition{% endfilter %}
-		</h2>
-
-		{% include_tmpl form.statement_text %}
-	</div>
-
-	<div class="text-wm-purple p-6 bg-wm-lightblue-box mb-8">
-		{% if form.about_text %}
-		<h2 class="uppercase border-b-[1px] text-2xl pb-2 border-wm-purple">
-			{% filter ak_text:"whyIsThisImportant_title" %}Why is this important?{% endfilter %}
-		</h2>
-
-		{% include_tmpl form.about_text %}
+		{% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
+		{% store as featured_image %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_image" as field_name %}{% endstore %}
+		{% if featured_video %}
+			{% include "./featured-video.html" with featured_video=featured_video %}
+		{% elif featured_image %}
+			{% include "./featured-image.html" with featured_image=featured_image %}
 		{% endif %}
 
-		{% store as references %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "references" as field_name %}{% endstore %}
-		{% if references %}
-		<h4 class="border-t-[1px] inline-block text-black pr-4 pt-4 border-wm-purple">
-			{% filter ak_text:"references" %}References:{% endfilter %}
-		</h4>
+		<div class="mr-4">
+			{% if form.statement_leadin %}
+				<h3 class="mt-8 italic font-normal text-base font-libre-franklin">
+					{% include_tmpl form.statement_leadin %}
+				</h3>
+			{% endif %}
 
-		<div class="references text-sm">
-			{{ references }}
+			{% if page.custom_fields.youmove_initiator_name %}
+				<div class="initiator">
+					<p data-wm-initiator-name="{{ page.custom_fields.youmove_initiator_name }}">
+						{% filter ak_text:"statement_initiator" %}This petition is run by [% inititator_name %]{% endfilter %}
+					</p>
+				</div>
+			{% endif %}
+
+			<div class="text-wm-purple p-6 bg-wm-orangy-box mb-8">
+				<h2 class="uppercase border-b-[1px] text-2xl pb-2 border-wm-purple">
+					{% filter ak_text:"petition_title" %}Petition{% endfilter %}
+				</h2>
+
+				{% include_tmpl form.statement_text %}
+			</div>
+
+			<div class="text-wm-purple p-6 bg-wm-lightblue-box mb-8">
+				{% if form.about_text %}
+				<h2 class="uppercase border-b-[1px] text-2xl pb-2 border-wm-purple">
+					{% filter ak_text:"whyIsThisImportant_title" %}Why is this important?{% endfilter %}
+				</h2>
+
+				{% include_tmpl form.about_text %}
+				{% endif %}
+
+				{% store as references %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "references" as field_name %}{% endstore %}
+				{% if references %}
+				<h4 class="border-t-[1px] inline-block text-black pr-4 pt-4 border-wm-purple">
+					{% filter ak_text:"references" %}References:{% endfilter %}
+				</h4>
+
+				<div class="references text-sm">
+					{{ references }}
+				</div>
+				{% endif %}
+			</div>
+
+			{% store as partnership_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "partnership_icons" as field_name %}{% endstore %}
+			{% if partnership_icons %}
+			<div class="text-wm-purple mb-8">
+				<h3>{% filter ak_text:"in_partnership_with" %}In partnership with:{% endfilter %}</h3>
+				{{ partnership_icons }}
+			</div>
+			{% endif %}
+
+			{% store as supporters_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "supporters_icons" as field_name %}{% endstore %}
+			{% if supporters_icons %}
+			<div class="text-wm-purple mb-8">
+				<h3>{% filter ak_text:"supported_by" %}Supported by:{% endfilter %}</h3>
+				{{ supporters_icons }}
+			</div>
+			{% endif %}
 		</div>
-		{% endif %}
-	</div>
 
-	{% store as partnership_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "partnership_icons" as field_name %}{% endstore %}
-	{% if partnership_icons %}
-	<div class="text-wm-purple mb-8">
-		<h3>{% filter ak_text:"in_partnership_with" %}In partnership with:{% endfilter %}</h3>
-		{{ partnership_icons }}
-	</div>
+		{% include "./component-recent_actions.html" %}
+	</article>
 	{% endif %}
 
-	{% store as supporters_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "supporters_icons" as field_name %}{% endstore %}
-	{% if supporters_icons %}
-	<div class="text-wm-purple mb-8">
-		<h3>{% filter ak_text:"supported_by" %}Supported by:{% endfilter %}</h3>
-		{{ supporters_icons }}
-	</div>
-	{% endif %}
+	<aside>
+		<form
+			class="ak-form {% if not isEmbbeded %}is-floating{% endif %}
+				bg-wm-bg-form p-4"
+			name="act"
+			method="post"
+			action="/act/"
+			accept-charset="utf-8"
+			data-wm-floating-labels-form
+			data-wm-form
+			data-wm-pixel-event-type="Lead"
+			data-wm-pixel-track-type="track"
+			data-wm-pixel-content-id="{{ page.id }}"
+			data-wm-pixel-content-name="{{ page.title }}"
+			data-wm-pixel-trigger-event="submit">
 
-	{% include "./component-recent_comments.html" %}
-	{% include "./component-recent_actions.html" %}
-</div>
-{% endif %}
+			<input type="hidden" name="page" value="{{ page.name }}">
 
-<form
-  class="ak-form"
-  name="act"
-  method="post"
-  action="/act/"
-  accept-charset="utf-8"
-  data-wm-floating-labels-form
-  data-wm-pixel-event-type="Lead"
-  data-wm-pixel-track-type="track"
-  data-wm-pixel-content-id="{{ page.id }}"
-  data-wm-pixel-content-name="{{ page.title }}"
-  data-wm-pixel-trigger-event="submit">
+			<div data-wm-floating-meter class="floating-progress-meter">
+				{% include "./progress_meter.html" %}
 
-	<input type="hidden" name="page" value="{{ page.name }}">
-
-		<div
-      class="action-form-container-col ak-grid-col ak-grid-col-4-of-12{% if isEmbbeded != "true" %} is-floating{% endif %}"
-      id="action-form-container-col"
-      data-wm-form-container>
-      <div data-wm-floating-meter class="floating-progress-meter">
-        {% include "./progress_meter.html" %}
-
-        <a href="#action-form-container-col" class="btn btn-primary fake-submit-button">
-          {% if page.custom_fields.sign_petition_button %}
-            {{ page.custom_fields.sign_petition_button }}
-          {% else %}
-            {% filter ak_text:"button_sign_petition" %}
-              Sign the Petition
-            {% endfilter %}
-          {% endif %}
-        </a>
-      </div>
+				<a href="#petition-form" class="fake-submit-button">
+					{% if page.custom_fields.sign_petition_button %}
+						{{ page.custom_fields.sign_petition_button }}
+					{% else %}
+						{% filter ak_text:"button_sign_petition" %}
+							Sign the Petition
+						{% endfilter %}
+					{% endif %}
+				</a>
+			</div>
 
 			<div class="action-form">
 				<div id="action-form-container-id" class="action-form-container">
 					<div class="ak-field-box ak-field-box-borderless">
-						<div id="petition-form" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
+						<div id="petition-form" data-wm-form-container class="ak-styled-fields ak-labels-overlaid ak-errs-below">
 							{% include "./user_form_wrapper.html" %}
 
 							{% store as hide_comments_field %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "hide_comments_field" as field_name %}{% endstore %}
@@ -128,29 +130,34 @@
 							</div>
 							{% endif %}
 
-              <div data-wm-consent-inline-new-container hidden></div>
+							<div data-wm-consent-inline-new-container hidden></div>
 						</div>
 
 						<div class="form-field js-nav-buttons hide-if-previously-signed">
 							<button type="submit" class="btn btn-primary">
-                {% if page.custom_fields.sign_petition_button %}
-                  {{ page.custom_fields.sign_petition_button }}
-                {% else %}
-                  {% filter ak_text:"button_sign_petition" %}
-                    Sign the Petition
-                  {% endfilter %}
-                {% endif %}
-              </button>
+								{% if page.custom_fields.sign_petition_button %}
+									{{ page.custom_fields.sign_petition_button }}
+								{% else %}
+									{% filter ak_text:"button_sign_petition" %}
+										Sign the Petition
+									{% endfilter %}
+								{% endif %}
+							</button>
 						</div>
 
 					</div>
 					<div class="privacy-statement">
-            {% store as consent_text %}{% report "signup_text_for_list_language" with 1 as refresh page.list_id as list_id page.lang_id|default:100 as lang_id %}{% endstore %}
-            {{ consent_text }}
+						{% store as consent_text %}{% report "signup_text_for_list_language" with 1 as refresh page.list_id as list_id page.lang_id|default:100 as lang_id %}{% endstore %}
+						{{ consent_text }}
 					</div>
 				</div>
 			</div>
-		</div>
-</form>
+		</form>
+
+		{% if not isEmbbeded %}
+			{% include "./component-recent_comments.html" %}
+		{% endif %}
+	</aside>
+</div>
 
 {% endblock %}
