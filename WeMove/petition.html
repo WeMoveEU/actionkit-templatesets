@@ -3,7 +3,8 @@
 {% block content %}
 
 {% if not isEmbbeded %}
-	<div class="md:flex">
+<div class="main-content">
+	<div class="nav-md:flex">
 		{% include "./language_picker.html" %}
 		<h1 class="text-wm-purple text-4xl mb-8">{{ page.title }}</h1>
 	</div>
@@ -17,7 +18,7 @@
 	{% endif %}
 
 	{% if form.statement_leadin %}
-		<h3 class="mt-4 italic font-normal text-base font-libre-franklin">
+		<h3 class="mt-8 italic font-normal text-base font-libre-franklin">
 			{% include_tmpl form.statement_leadin %}
 		</h3>
 	{% endif %}
@@ -30,7 +31,7 @@
 		</div>
 	{% endif %}
 
-	<div class="text-wm-purple p-6 bg-wm-petition-box mb-8">
+	<div class="text-wm-purple p-6 bg-wm-orangy-box mb-8">
 		<h2 class="uppercase border-b-[1px] text-2xl pb-2 border-wm-purple">
 			{% filter ak_text:"petition_title" %}Petition{% endfilter %}
 		</h2>
@@ -38,7 +39,7 @@
 		{% include_tmpl form.statement_text %}
 	</div>
 
-	<div class="text-wm-purple p-6 bg-wm-why-box mb-8">
+	<div class="text-wm-purple p-6 bg-wm-lightblue-box mb-8">
 		{% if form.about_text %}
 		<h2 class="uppercase border-b-[1px] text-2xl pb-2 border-wm-purple">
 			{% filter ak_text:"whyIsThisImportant_title" %}Why is this important?{% endfilter %}
@@ -77,13 +78,13 @@
 
 	{% include "./component-recent_comments.html" %}
 	{% include "./component-recent_actions.html" %}
-
+</div>
 {% endif %}
 
 <form
-  class="ak-form !hidden"
+  class="ak-form"
   name="act"
-  method="POST"
+  method="post"
   action="/act/"
   accept-charset="utf-8"
   data-wm-floating-labels-form
