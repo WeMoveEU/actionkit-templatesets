@@ -67,7 +67,11 @@
 
           <div class="form-field js-nav-buttons hide-if-previously-signed">
             <button type="submit" class="btn btn-primary">
-              {% filter ak_text:"button_send_email" %}Send Email{% endfilter %}
+                {% if page.custom_fields.sign_petition_button %}
+                  {{ page.custom_fields.sign_petition_button }}
+                {% else %}
+                  {% filter ak_text:"button_send_email" %}Send Email{% endfilter %}
+                {% endif %}
             </button>
           </div>
 
