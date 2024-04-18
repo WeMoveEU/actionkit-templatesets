@@ -8,20 +8,19 @@
     <input type="hidden" name="opt_in" value="1">
   {% else %}
     <div class="consent-inline form-field field-type--radio required ak-err-below" data-wm-consent-inline hidden>
-      <legend class="main-label">
+      <legend class="static mx-0 my-1 p-0 text-white text-sm font-bold border-0">
         {% filter ak_text:"consentInline_legend" %}Registration agreement{% endfilter %}
         <span class="ak-required-flag" aria-hidden="true">*</span>
       </legend>
 
       <div class="consent-inline-group">
-        <label class="consent-inline-group--label">
+        <label>
           <input
-            class="consent-inline-group--radio"
             name="action_consent_action-radio"
             data-wm-consent-inline-radio
             type="radio"
             value="y" />
-          <span class="consent-inline-group--text">
+          <span>
             {% filter ak_text:"consentInlineYes_field" %}
               Yes! Let me know if this campaign is successful and how I can participate in other relevant campaigns.
               If you leave us your email, we may contact you to tell you more about how you can help us, including by supporting our work with a donation.
@@ -29,14 +28,13 @@
           </span>
         </label>
 
-        <label class="consent-inline-group--label">
+        <label>
           <input
-            class="consent-inline-group--radio"
             name="action_consent_action-radio"
             data-wm-consent-inline-radio
             type="radio"
             value="n" />
-          <span class="consent-inline-group--text">
+          <span>
             {% filter ak_text:"consentInlineNo_field" %}
               No. I don't want to receive information about the progress of this campaign or other campaigns.
             {% endfilter %}
