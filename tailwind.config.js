@@ -9,6 +9,7 @@ module.exports = {
         "wm-pink": "#c552df",
         "wm-turquoise": "#24aecb",
         "wm-orange": "#ee6947",
+        "wm-orange-alert": "#f77300",
         "wm-orangy-box": "#ffede9",
         "wm-lightblue-box": "#f1efff",
         "wm-bg-form": "#7e6af0",

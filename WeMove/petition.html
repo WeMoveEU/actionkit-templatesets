@@ -102,18 +102,20 @@
 
 			<input type="hidden" name="page" value="{{ page.name }}">
 
-			<div data-wm-floating-meter class="floating-progress-meter">
-				{% include "./progress_meter.html" %}
+			<div class="mb-4 h-[88px]">
+				<div data-wm-floating-meter class="floating-progress-meter">
+					{% include "./progress_meter.html" %}
 
-				<a href="#petition-form" class="fake-submit-button">
-					{% if page.custom_fields.sign_petition_button %}
-						{{ page.custom_fields.sign_petition_button }}
-					{% else %}
-						{% filter ak_text:"button_sign_petition" %}
-							Sign the Petition
-						{% endfilter %}
-					{% endif %}
-				</a>
+					<a href="#petition-form" class="fake-submit-button">
+						{% if page.custom_fields.sign_petition_button %}
+							{{ page.custom_fields.sign_petition_button }}
+						{% else %}
+							{% filter ak_text:"button_sign_petition" %}
+								Sign the Petition
+							{% endfilter %}
+						{% endif %}
+					</a>
+				</div>
 			</div>
 
 			<div
