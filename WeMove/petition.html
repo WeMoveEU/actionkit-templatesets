@@ -6,9 +6,9 @@
 
 	{% if not isEmbbeded %}
 	<article>
-		<div class="nav-md:flex nav-md:mr-4">
+		<div class="relative">
 			{% include "./language_picker.html" %}
-			<h1 class="text-wm-purple text-4xl mb-8">{{ page.title }}</h1>
+			<h1 class="text-wm-purple text-4xl mb-8 pr-40 nav-md:text-5xl">{{ page.title }}</h1>
 		</div>
 
 		{% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
@@ -116,41 +116,40 @@
 				</a>
 			</div>
 
-			<div class="action-form">
-				<div id="action-form-container-id" class="action-form-container">
-					<div class="ak-field-box ak-field-box-borderless">
-						<div id="petition-form" data-wm-form-container class="ak-styled-fields ak-labels-overlaid ak-errs-below">
-							{% include "./user_form_wrapper.html" %}
+			<div
+				id="petition-form"
+				class="form-wrapper-container"
+				data-wm-form-container>
 
-							{% store as hide_comments_field %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "hide_comments_field" as field_name %}{% endstore %}
-							{% if not hide_comments_field == "1" %}
-							<div class="ak-field form-field hide-if-previously-signed">
-								<label for="id_comment">{% filter ak_text:"form_field_comments" %}Your comments:{% endfilter %}</label>
-								<textarea id="id_comment" name="action_comment"></textarea>
-							</div>
-							{% endif %}
+				{% include "./user_form_wrapper.html" %}
 
-							<div data-wm-consent-inline-new-container hidden></div>
-						</div>
-
-						<div class="form-field js-nav-buttons hide-if-previously-signed">
-							<button type="submit" class="btn btn-primary">
-								{% if page.custom_fields.sign_petition_button %}
-									{{ page.custom_fields.sign_petition_button }}
-								{% else %}
-									{% filter ak_text:"button_sign_petition" %}
-										Sign the Petition
-									{% endfilter %}
-								{% endif %}
-							</button>
-						</div>
-
-					</div>
-					<div class="privacy-statement">
-						{% store as consent_text %}{% report "signup_text_for_list_language" with 1 as refresh page.list_id as list_id page.lang_id|default:100 as lang_id %}{% endstore %}
-						{{ consent_text }}
-					</div>
+				{% store as hide_comments_field %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "hide_comments_field" as field_name %}{% endstore %}
+				{% if not hide_comments_field == "1" %}
+				<div class="ak-field form-field hide-if-previously-signed">
+					<label for="id_comment">{% filter ak_text:"form_field_comments" %}Your comments:{% endfilter %}</label>
+					<textarea id="id_comment" name="action_comment"></textarea>
 				</div>
+				{% endif %}
+
+				<div data-wm-consent-inline-new-container hidden></div>
+
+				<div class="form-field hide-if-previously-signed mb-4">
+					<button type="submit" class="button--primary">
+						{% if page.custom_fields.sign_petition_button %}
+							{{ page.custom_fields.sign_petition_button }}
+						{% else %}
+							{% filter ak_text:"button_sign_petition" %}
+								Sign the Petition
+							{% endfilter %}
+						{% endif %}
+					</button>
+				</div>
+
+				<div class="privacy-statement">
+					{% store as consent_text %}{% report "signup_text_for_list_language" with 1 as refresh page.list_id as list_id page.lang_id|default:100 as lang_id %}{% endstore %}
+					{{ consent_text }}
+				</div>
+
 			</div>
 		</form>
 

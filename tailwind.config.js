@@ -12,6 +12,7 @@ module.exports = {
         "wm-orangy-box": "#ffede9",
         "wm-lightblue-box": "#f1efff",
         "wm-bg-form": "#7e6af0",
+        "wm-light-purple-text": "#b6aafc",
       },
       screens: {
         "nav-md": "940px",
