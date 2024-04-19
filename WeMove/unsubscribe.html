@@ -2,78 +2,60 @@
 
 {% block content %}
 
-<h1 class="page-header">{{ page.title }}</h1>
+<h1 class="text-center text-wm-purple text-5xl mb-8">{{ page.title }}</h1>
 
-<div class="region region-content">
-	<section id="block-system-main" class="block block-system clearfix">
+<form id="unsub-form" name="act" method="POST" action="/act/" accept-charset="utf-8"
+	class="out-put--form ak-styled-fields ak-labels-overlaid ak-errs-below text-center">
+	<input type="hidden" name="page" value="{{ page.name }}">
 
-		<div id="crm-container" class="crm-container crm-public" lang="en" xml:lang="en">
+	<div class="mb-8">
+		{% if page.custom_fields.featured_image %}
+			<img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
+		{% endif %}
 
-			<div class="clear"></div>
+		{% if form.introduction_text|is_nonblank %}
+			{% include_tmpl form.introduction_text %}
+		{% endif %}
+	</div>
 
-			<div id="crm-main-content-wrapper">
+	<ul class="compact" id="ak-errors"></ul>
 
-				<form id="unsub-form" name="act" method="POST" action="/act/" accept-charset="utf-8">
-					<input type="hidden" name="page" value="{{ page.name }}">
+	<div id="known_user">
+		<p>
+			{% filter ak_text:"optout_identified_intro" %}You are requesting to opt out from all mailing lists for the user named below.{% endfilter %}
+			<span class="block my-4 font-bold text-wm-purple text-xl" id="known_user_name"></span>
+		</p>
 
-					{% if page.custom_fields.featured_image %}
-					<img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
-					{% endif %}
-					{% if form.introduction_text|is_nonblank %}
-					{% include_tmpl form.introduction_text %}
-					{% endif %}
+		<p>
+			{% filter ak_text:"optout_identified_extended" %}If this is not you, there is no need to do anything. You have not been added to any mailing lists. If this is your name and you wish to opt out please click the Opt Out button to confirm.{% endfilter %}
+		</p>
+	</div>
 
-					<div class="crm-block crm-form-block crm-miscellaneous-form-block">
+	<div id="unknown_user" class="flex flex-col items-center mb-8">
+		<label for="id_email" class="mb-2 font-bold">{% filter ak_text:"field_email" %}Email address{% endfilter %}</label>
+		<input id="id_email" type="text" name="email" class="p-2 max-w-96 w-full rounded bg-zinc-100 border-[1px] border-zinc-300">
+	</div>
 
-						<div class="ak-styled-fields ak-labels-overlaid ak-errs-below">
+	{% if form.survey_question_text|is_nonblank %}
+	<div class="flex flex-col items-center mt-16 mb-8">
+		<label for="id_action_survey" class="font-bold mb-4">
+			{% include_tmpl form.survey_question_text %}
+		</label>
 
-							<ul class="compact" id="ak-errors"></ul>
+		<textarea id="id_action_survey" name="action_survey"
+			class="max-w-[600px] w-full rounded bg-zinc-100 border-[1px] border-zinc-300 min-h-32"></textarea>
+	</div>
+	{% endif %}
 
-							<div id="known_user">
-								<p>{% filter ak_text:"optout_identified_intro" %}You are requesting to opt out from all mailing lists for the user named below.{% endfilter %}</p>
- 
-								<h3> <span id="known_user_name"></span> </h3>
+	<div class="flex justify-center gap-8 pb-40">
+		<button class="!bg-wm-turquoise !normal-case !w-44 !font-libre-franklin hover:!bg-wm-pink" type="submit">
+			{% filter ak_text:"optout_button_confirm" %}Opt Out{% endfilter %}
+		</button>
 
-								<p>{% filter ak_text:"optout_identified_extended" %}If this is not you, there is no need to do anything. You have not been added to any mailing lists. If this is your name and you wish to opt out please click the Opt Out button to confirm.{% endfilter %}</p>
-
-							</div>
-
-							<div id="unknown_user">
-								<div>
-									<div>
-										<label for="id_email">{% filter ak_text:"field_email" %}Email address{% endfilter %}</label>
-										<input id="id_email" type="text" name="email" size=40>
-									</div>
-								</div>
-							</div>
-
-							{% if form.survey_question_text|is_nonblank %}
-							<div class="opt-out-reason">
-								<label for="id_action_survey">
-									{% include_tmpl form.survey_question_text %}
-								</label>
-								<textarea id="id_action_survey" name="action_survey"></textarea>
-							</div>
-							{% endif %}
-
-							<div class="crm-submit-buttons">
-
-								<button class="crm-form-submit default validate crm-button crm-button-type-next crm-button_qf_Optout_next" value="1" type="submit" id="_qf_Optout_next-bottom">{% filter ak_text:"optout_button_confirm" %}Opt Out{% endfilter %}</button>
-
-								<a class="button" href="//www.wemove.eu">{% filter ak_text:"optout_button_cancel" %}Cancel{% endfilter %}</a>
-							</div>
-
-						</div>
-
-					</div>
-
-
-				</form>
-			</div>
-
-
-		</div>
-	</section>
-</div>
+		<a class="flex items-center justify-center !text-white font-libre-franklin bg-wm-bg-form rounded w-44 font-bold hover:bg-wm-pink hover:shadow hover:!no-underline" href="/">
+			{% filter ak_text:"optout_button_cancel" %}Cancel{% endfilter %}
+		</a>
+	</div>
+</form>
 
 {% endblock %}
