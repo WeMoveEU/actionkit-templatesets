@@ -492,7 +492,7 @@
 	}
 
 	function readMultilingualCampaigns(prefix) {
-		return api('GET', "multilingualcampaign/", { name__startswith: prefix } ).done(function(camps) {
+		return api('GET', "multilingualcampaign/", { name__startswith: prefix, _limit: 100 } ).done(function(camps) {
 			const step_picker = $('.step-picker .form-control select');
 			step_picker.find('option:not(:first-child)').remove();
 			camps.objects.forEach(function(camp) {
@@ -776,7 +776,7 @@
 						`<tr><td>${mailing.id}</td>`
 						+ `<td>${mailing.notes}</td>`
 						+ `<td>${mailing.status}</td>`
-						+ `<td>${mailing.started_at || ''}</td>`
+						+ `<td>${(mailing.started_at || '').replace(/:\d\d\..*/, '')}</td>`
 						+ `<td>${mailingLink(mailing)}</td>`
 						+ "</tr>"
 					);
@@ -1018,7 +1018,7 @@
 		var page_type = action_type;
 		if (action_type == 'tweet') {
 			page_type = 'call';
-			fields.call_page_mode = 'twitter';
+			fields.call_page_mode = 'tweet';
 		} else if (action_type == 'facebook') {
 			page_type = 'call';
 			fields.call_page_mode = 'facebook';
