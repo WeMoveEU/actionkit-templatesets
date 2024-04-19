@@ -55,11 +55,17 @@
         {% endif %}
 
         <div id="letter-form" class="ak-field-box ak-styled-fields ak-labels-overlaid ak-errs-below">
-
           {% if not page.custom_fields.hide_comments_field == "1" %}
-          <div class="ak-field ak-margin-bottom-1 ak-styled-fields form-field">
-            <label for="id_comment">{% filter ak_text:"form_field_message" %}Please write your message here{% endfilter %}</label>
-            <textarea id="id_comment" name="action_comment" class="ak-letter-text ">{% include_tmpl form.letter_text escaped %}</textarea>
+          <div class="ak-field ak-margin-bottom-1 ak-styled-fields form-field{% if page.custom_fields.letter_body_required == "1" %} required{% endif %}">
+            <label for="id_comment">
+              {% filter ak_text:"form_field_message" %}Please write your message here{% endfilter %}
+              {% if page.custom_fields.letter_body_required == "1" %}<span class="ak-required-flag">*</span>{% endif %}
+            </label>
+
+            <textarea id="id_comment" name="action_comment" class="ak-letter-text">{% include_tmpl form.letter_text escaped %}</textarea>
+            {% if page.custom_fields.letter_body_required == "1" %}
+              <input type="hidden" name="required" value="action_comment"/>
+            {% endif %}
           </div>
           {% endif %}
 
