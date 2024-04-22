@@ -88,16 +88,16 @@
       {# TODO Logic and partials to be removed after germanic ab test is done #}
       {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
         {% if args.skip_abtest == "1" %}
-          {% include "./share-standard.html" %}
+          {% include "./partial-share_standard.html" %}
         {% elif page.custom_fields.germanic_ab_test_mode == "campact" %}
-          {% include "./share-campact.html" %}
+          {% include "./partial-share_campact.html" %}
         {% elif page.custom_fields.germanic_ab_test_mode == "innnit" %}
-          {% include "./share-innnit.html" %}
+          {% include "./partial-share_innnit.html" %}
         {% else %}
-          {% include "./share-standard.html" %}
+          {% include "./partial-share_standard.html" %}
         {% endif %}
       {% else %}
-        {% include "./share-standard.html" %}
+        {% include "./partial-share_standard.html" %}
       {% endif %}
 
 	  {% endif %}

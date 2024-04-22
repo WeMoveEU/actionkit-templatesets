@@ -29,7 +29,7 @@
             {% if page.custom_fields.featured_image %}
             <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
             {% endif %}
-            {% include "./progress_meter.html" %}
+            {% include "./component-progress_meter.html" %}
         </div>
         {% endif %}
         <div class="ak-grid-col {% if page.custom_fields.featured_image or page.goal %}ak-grid-col-8-of-12{% else %}ak-grid-col-12-of-12{% endif %} ak-styled-description">
