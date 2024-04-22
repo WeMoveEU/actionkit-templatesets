@@ -14,6 +14,8 @@ module.exports = {
         "wm-lightblue-box": "#f1efff",
         "wm-bg-form": "#7e6af0",
         "wm-light-purple-text": "#b6aafc",
+        "wm-yellow": "#f39629",
+        "whatsapp": "#2eb82e",
       },
       screens: {
         "nav-md": "940px",
@@ -27,5 +29,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-fontawesome")],
 };
