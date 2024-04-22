@@ -138,7 +138,7 @@
       data-wm-pixel-track-type="trackCustom"
       data-wm-pixel-content-name="Taf"
       data-wm-pixel-trigger-event="click">
-      <span aria-hidden="true" class="h-4 w-4">
+      <span aria-hidden="true" class="h-6 w-6">
         {% include "./icon-mail.html" %}
       </span>
       <span>{% filter ak_text:"thanks_shareEmail_button" %}Share by e-mail{% endfilter %}</span>
@@ -147,11 +147,11 @@
   {% endif %}
 
   <div
-    class="share-big copy-link"
+    class="border-[1px] border-wm-black rounded p-2 mb-4"
     data-wm-copy-to-clipboard="/share/link?type=ot{% if action %}&amp;action_id={{ action.id }}{% else %}&amp;page_name={{page.name}}&amp;akid={{ akid }}{% endif %}">
     <input
       type="text"
-      class="copy-link--textbox"
+      class="bg-gray-100 px-2 py-3 text-sm rounded border-[1px] border-gray-300 w-full mb-2"
       data-wm-copy-to-clipboard-textbox
       {% if page.custom_fields.sharing_step %}
         value="{{ page.custom_fields.sharing_step }}"
@@ -162,25 +162,26 @@
 
       <button
         type="button"
-        class="btn btn-primary copy-link--button"
+        class="transition-all text-center bg-copyurl !text-white font-bold uppercase p-3 block font-gilroy rounded hover:!no-underline hover:brightness-110
+        w-full"
         data-wm-copy-to-clipboard-button
         data-wm-pixel-event-type="Share"
         data-wm-pixel-track-type="trackCustom"
         data-wm-pixel-content-name="CopyLink"
         data-wm-pixel-trigger-event="click">
-      <span class="copy-link--text">
-        <i class="fa fa-link"></i>
-        <span class="share-text">
-          {% filter ak_text:"copyLink_button" %}Copy{% endfilter %}
+        <span class="flex items-center justify-center gap-2">
+          <span aria-hidden="true" class="h-6 w-6">
+            {% include "./icon-link.html" %}
+          </span>
+          <span>{% filter ak_text:"copyLink_button" %}Copy{% endfilter %}</span>
         </span>
-      </span>
 
-      <span class="copy-link--alert">
-        <i class="fa fa-check"></i>
-        <span class="share-text">
-          {% filter ak_text:"linkCopied_alert" %}Link copied{% endfilter %}
+        <span class="hidden items-center justify-center gap-2">
+          <span aria-hidden="true" class="h-6 w-6">
+            {% include "./icon-check.html" %}
+          </span>
+          <span>{% filter ak_text:"linkCopied_alert" %}Link copied{% endfilter %}</span>
         </span>
-      </span>
     </button>
   </div>
 </div>
