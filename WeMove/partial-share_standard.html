@@ -120,7 +120,7 @@
       data-wm-pixel-track-type="trackCustom"
       data-wm-pixel-content-name="Instagram"
       data-wm-pixel-trigger-event="click">
-      <span aria-hidden="true" class="h-6 w-6">
+      <span aria-hidden="true" class="h-4 w-4">
         {% include "./icon-instagram.html" %}
       </span>
       <span>{% filter ak_text:"thanks_shareInstagram_button" %}Share Story on Instagram{% endfilter %}</span>
@@ -131,14 +131,17 @@
   {% if page.followup.send_taf %}
   <div class="border-[1px] border-wm-black rounded p-2 mb-4">
     <a
-      class="btn btn-primary email"
+      class="transition-all text-center bg-wm-orange !text-white font-bold uppercase p-3 block font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
       href="mailto:?subject={{ page.followup.taf_subject|urlencode }}&amp;body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"
       target="_blank"
       data-wm-pixel-event-type="Share"
       data-wm-pixel-track-type="trackCustom"
       data-wm-pixel-content-name="Taf"
       data-wm-pixel-trigger-event="click">
-      <i class="fa fa-envelope-o"></i> <span class="share-text">{% filter ak_text:"thanks_shareEmail_button" %}Share by e-mail{% endfilter %}</span>
+      <span aria-hidden="true" class="h-4 w-4">
+        {% include "./icon-mail.html" %}
+      </span>
+      <span>{% filter ak_text:"thanks_shareEmail_button" %}Share by e-mail{% endfilter %}</span>
     </a>
   </div>
   {% endif %}
