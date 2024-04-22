@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./WeMove/*.{html,js}"],
   theme: {
     extend: {
       colors: {
@@ -15,7 +14,12 @@ module.exports = {
         "wm-bg-form": "#7e6af0",
         "wm-light-purple-text": "#b6aafc",
         "wm-yellow": "#f39629",
-        "whatsapp": "#2eb82e",
+        whatsapp: "#2eb82e",
+        facebook: "#4966b7",
+        twitter: "#55acee",
+        instagram: "#c552df",
+        taf: "#c552df",
+        copyurl: "#c552df",
       },
       screens: {
         "nav-md": "940px",
@@ -29,5 +33,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwind-fontawesome")],
+  plugins: [],
 };
