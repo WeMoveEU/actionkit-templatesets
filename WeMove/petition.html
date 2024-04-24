@@ -8,7 +8,7 @@
 	<article>
 		<div class="relative">
 			{% include "./language_picker.html" %}
-			<h1 class="text-wm-purple text-4xl mb-8 pr-40 nav-md:text-5xl">{{ page.title }}</h1>
+			<h1 class="text-4xl mb-8 pr-40 nav-md:text-5xl">{{ page.title }}</h1>
 		</div>
 
 		{% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
