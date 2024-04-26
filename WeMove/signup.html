@@ -34,175 +34,80 @@
 
 		{% if page.custom_fields.next_step %}
 		<script>
-			$(() => {
-				$('a.skip.btn').attr('href', '/act/{{ page.custom_fields.next_step }}');
-			});
+			(()=>{
+				// TODO
+				document.querySelector('a.skip.btn').href = '/act/{{ page.custom_fields.next_step }}';
+			})();
 		</script>
 		{% endif %}
-
-    {% if page.custom_fields.sharing_step %}
-      {% block wemove_scripts %}{% endblock %}
-    {% endif %}
 	{% endif %}
 {% else %}
 
-<form
-  class="ak-form"
-  name="act"
-  method="post"
-  action="/act/"
-  accept-charset="utf-8"
-  data-wm-floating-labels-form
-  data-wm-pixel-event-type="Subscribe"
-  data-wm-pixel-track-type="track"
-  data-wm-pixel-trigger-event="submit">
-  <input type="hidden" name="page" value="{{ page.name }}" />
-
-		<div class="advice-advice" id="signup-story">
-			<div class="action-advice-col">
-				{% include "./language_picker.html" %}
-				<div class="advice-container">
-					<h1>{{ page.title }}</h1>
-
-					{% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
-          {% store as featured_image %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_image" as field_name %}{% endstore %}
-					{% if featured_video %}
-            {% include "./featured-video.html" with featured_video=featured_video %}
-          {% elif featured_image %}
-            {% include "./featured-image.html" with featured_image=featured_image %}
-          {% endif %}
-
-          <div class="ak-abovefold">
-            <div class="well">
-              {% filter ak_text:"singup_well" %}I stand for a better Europe; for a European Union committed to social and economic justice, environmental sustainability and citizen-led democracy.{% endfilter %}
-            </div>
-
-            {% include_tmpl form.introduction_text %}
-          </div>
-			</div>
+<div class="nav-md:grid grid-cols-petition">
+	<article>
+		<div class="relative">
+			{% include "./language_picker.html" %}
+			<h1 class="text-4xl mb-8 pr-40 nav-md:text-5xl">{{ page.title }}</h1>
 		</div>
 
-		<div class="action-form-container-col ak-grid-col ak-grid-col-4-of-12" id="action-form-container-col">
+		{% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
+		{% store as featured_image %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_image" as field_name %}{% endstore %}
+		{% if featured_video %}
+			{% include "./featured-video.html" with featured_video=featured_video %}
+		{% elif featured_image %}
+			{% include "./featured-image.html" with featured_image=featured_image %}
+		{% endif %}
 
-			<div class="action-form">
-				<div id="action-form-container-id" class="action-form-container">
-
-					<div class="ak-field-box ak-field-box-borderless">
-
-						<div id="petition-form" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
-							{% include "./user_form_wrapper.html" %}
-						</div>
-
-            <div class="js-nav-buttons hide-if-previously-signed">
-							<button type="submit" class="btn btn-primary">
-                {% if page.custom_fields.sign_petition_button %}
-                  {{ page.custom_fields.sign_petition_button }}
-                {% else %}
-                  {% filter ak_text:"button_sign_petition" %}
-                    I'm joining!
-                  {% endfilter %}
-                {% endif %}
-              </button>
-						</div>
-
-					</div>
-					<div class="privacy-statement">
-            {% store as consent_text %}{% report "signup_text_for_list_language" with 1 as refresh page.list_id as list_id page.lang_id|default:100 as lang_id %}{% endstore %}
-            {{ consent_text }}
-					</div>
-				</div>
-
+		<div class="mr-4">
+			<div class="text-wm-purple p-6 bg-wm-lightblue-box mt-4 mb-8 font-normal text-base font-libre-franklin">
+				{% filter ak_text:"singup_well" %}I stand for a better Europe; for a European Union committed to social and economic justice, environmental sustainability and citizen-led democracy.{% endfilter %}
 			</div>
 
-			<aside class="recent-comments" style="display: none">
-				<h4>Recent comments</h4>
-				<div class="recent-comment">
-					<div class="recent-comment-by" style="font-style: italic;"></div>
-					<div class="recent-comment-text"></div>
-				</div>
-			</aside>
+			{% include_tmpl form.introduction_text %}
 		</div>
-	</div>
-</form>
 
-<script>
-	var recent_comments = {% report "comments_recent_actions" with 1 as refresh page.id as page_id %};
-	recent_comments.shift();
+		{% include "./component-recent_actions.html" %}
+	</article>
 
-	window.currentCommentIndex = 0;
-	window.recentCommentShown = false;
-	window.comment_elt = $('.recent-comments .recent-comment');
-	$( function () {
-		if (comment_elt.length > 0) {
-			if (recent_comments.length && !recentCommentShown) {
-				recentCommentShown = true;
-				comment_elt.parent().fadeIn('slow');
-				cycleRecentComment();
-			}
-		}
-	} );
+	<aside>
+		<form
+			class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below is-floating
+			bg-wm-bg-form p-4"
+			name="act"
+			method="post"
+			action="/act/"
+			accept-charset="utf-8"
+			data-wm-floating-labels-form
+			data-wm-pixel-event-type="Subscribe"
+			data-wm-pixel-track-type="track"
+			data-wm-pixel-trigger-event="submit">
+			<input type="hidden" name="page" value="{{ page.name }}" />
 
-	function cycleRecentComment() {
-		comment_elt.fadeOut('slow', function() {
-			var comment = recent_comments[currentCommentIndex ++ % recent_comments.length];
-			comment_elt.find('.recent-comment-by').text(comment[0]);
-			comment_elt.find('.recent-comment-text').text(comment[1]);
-			comment_elt.removeClass('hidden');
-			comment_elt.fadeIn('slow');
-			var duration = Math.ceil(comment[1].split(' ').length * 0.2);
-            if (duration < 3) { duration = 3; }
-			setTimeout(cycleRecentComment, duration * 1000);
-		});
-	}
-</script>
+			<div id="petition-form" class="form-wrapper-container">
+				{% include "./user_form_wrapper.html" %}
 
-<div class="js-recent-action no-mobile" style="display: none">
-  👍 <span class="js-text"></span>
+				<div class="form-field hide-if-previously-signed mb-4">
+					<button type="submit" class="button--primary">
+						{% if page.custom_fields.sign_petition_button %}
+							{{ page.custom_fields.sign_petition_button }}
+						{% else %}
+							{% filter ak_text:"button_sign_petition" %}
+								I'm joining!
+							{% endfilter %}
+						{% endif %}
+					</button>
+				</div>
+
+				<div class="privacy-statement">
+					{% store as consent_text %}{% report "signup_text_for_list_language" with 1 as refresh page.list_id as list_id page.lang_id|default:100 as lang_id %}{% endstore %}
+					{{ consent_text }}
+				</div>
+			</div>
+		</form>
+
+		{% include "./component-recent_comments.html" %}
+	</aside>
 </div>
-
-<script>
-	var recent_signers = {% report "names_recent_actions" with 1 as refresh page.id as page_id %};
-	recent_signers.shift();
-  recent_signers = recent_signers.map( n => [ n[0], n[1] + " {% filter ak_text:"userSignedPetition_info" %}has just signed the petition{% endfilter %}" ] );
-
-	var recent_sharers = {% report "names_recent_shares" with 1 as refresh page.id as page_id %};
-	recent_sharers.shift();
-	recent_sharers = recent_sharers.map( n => [ n[0], n[1] + " just shared this on " + n[2] ] );
-
-	var recent_actions = recent_signers.concat( recent_sharers );
-	recent_actions = recent_actions.sort( function compare(a,b) {
-		if ( a[0] < b[0] ) { return 1 }
-		if ( a[0] > b[0] ) { return -1 }
-		return 0
-	} );
-
-	window.recentActions = recent_actions.map( n => n[1] );
-
-	window.currentActionIndex = 0;
-	window.recentActionShown = false;
-	window.recent_action_elt = $('.js-recent-action');
-	$( function () {
-		if (recent_action_elt.length > 0) {
-			if (window.innerWidth > 1180) {
-				if (recentActions.length && ! recentActionShown) {
-					recentActionShown = true;
-					cycleRecentAction();
-				}
-			}
-		}
-	} );
-
-	function cycleRecentAction() {
-		recent_action_elt.fadeOut('slow', function() {
-			var signer = recentActions[currentActionIndex ++ % recentActions.length];
-			recent_action_elt.find('.js-text').text(signer);
-			recent_action_elt.removeClass('hidden');
-			recent_action_elt.fadeIn('slow');
-			setTimeout(cycleRecentAction, 5000);
-		});
-	}
-
-</script>
 
 {% endif %}
 
