@@ -579,6 +579,19 @@
 	////////////////////////////////////////////////////////////////////
 	// List View
 
+	function elide (text, max, elipses) {
+		if ( ! max ) {
+			max = 40;
+		}
+		if ( ( ! text ) || ( text.length < max ) ) {
+			return text
+		}
+		if ( ! elipses ) {
+			elipses = '...';
+		}
+		return ( text.substring(0, max - elipses.length) + elipses );
+	}
+
 	function displayMatches(title, matches) {
 		$('#campaign-list').show();
 		$('#campaign-detail').hide();
@@ -587,7 +600,7 @@
 		table.find('tr').remove();
 		matches.forEach( function(cmp) {
 			table.append(
-				` <tr class="item"><td><a data-campaign-name="${cmp.name}" href="?campaign=${cmp.name}">${cmp.name}</a></td></tr>`
+				` <tr class="item"><td><a data-campaign-name="${cmp.name}" href="?campaign=${cmp.name}">${elide(cmp.name, 80)}</a></td></tr>`
 			);
 		} );
 	}
@@ -652,17 +665,17 @@
 				langs.forEach(function(lang) {
 					var table_row = $(
 						`<tr><th scope="row">${languages[lang].name}</th>`
-						+ "<td></td>"
+						+ "<td><ul></ul></td>"
 						+ "</tr>"
 					);
 					var lang_journey_list = table_row.find('td');
 					lang_journeys[lang].forEach(function(journey) {
 						lang_journey_list.append(
-							'<div class="journey">' +
+							'<li class="journey">' +
 							journey.map(
 								(p) => `<span>${pageLink(p)}</span>`
 							).join(' <span class="next-arrow">➡</span> ')
-							+ '</div>'
+							+ '</li>'
 						)
 					});
 					$('#pages_output table').append( table_row );
@@ -708,9 +721,9 @@
 							const daisy_page = daisy_action ? pages[lang].find( (p) => p.name == daisy_action ) : null;
 							const daisy_thanks = daisy_page ? daisy_page.name : page.name;
 							const daisy_id = daisy_page ? daisy_page.id : page.id;
-							page.next_step = { id: daisy_id, type: page.type, action_label: action_type, view_href: `/thanks/${daisy_thanks}/?share=1`, edit_href: `/admin/core/pagefollowup/add_or_change/?page=${daisy_id}`, previous_step: page };
+							page.next_step = { id: daisy_id, type: page.type, name: page.name, action_label: action_type, view_href: `/thanks/${daisy_thanks}/?share=1`, edit_href: `/admin/core/pagefollowup/add_or_change/?page=${daisy_id}`, previous_step: page };
 							if (action_type == "share") {
-								page.next_step.next_step = { id: daisy_id, type: page.type, action_label: "thanks", view_href: `/thanks/${daisy_thanks}/?done=1`, previous_step: page.next_step };
+								page.next_step.next_step = { id: daisy_id, type: page.type, name: page.name, action_label: "thanks", view_href: `/thanks/${daisy_thanks}/?done=1`, previous_step: page.next_step };
 							}
 						} else {
 							match = after_action.match(/^\/\w+\/([^\/\?]+)/);
@@ -761,8 +774,10 @@
 		if ( page.type == 'redirect' ) {
 			return `<a href="${view_href}">${action_label}</a>`
 		}
+		var title_txt = page.title || `${action_label} page`;
+		var name_txt = page.name || `page ${page.id}`;
 		var edit_href = page.edit_href || `/admin/core/page/${page.id}/change/`;
-		return ( view_href ? `<a href="${view_href}">${action_label}</a>` : action_label ) + ` <a class="dash-icon-btn" href="${edit_href}">✎</a>`;
+		return ( view_href ? `<a title="View ${title_txt}" href="${view_href}">${action_label}</a>` : action_label ) + ` <a class="dash-icon-btn" title="Edit ${name_txt}" href="${edit_href}">✎</a>`;
 	}
 
 	function displayMailings(campaign) {
