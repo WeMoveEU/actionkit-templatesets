@@ -119,11 +119,12 @@
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
       </div>
 
-      {% if page.custom_fields.instagram_share_link %}
+      {% store as featured_image %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "instagram_share_link" as field_name %}{% endstore %}
+      {% if instagram_share_link %}
       <div class="share-big instagram-share-container">
         <a
           class="btn btn-primary instagram"
-          href="{{page.custom_fields.instagram_share_link}}"
+          href="{{instagram_share_link}}"
           target="_blank"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
