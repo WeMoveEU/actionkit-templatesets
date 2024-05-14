@@ -205,23 +205,16 @@
       {% else %}
 
         {% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&trigger_page={{ page.name }}&trigger_action={{ action.id }}{% endif %}&next_step={{ next_step|urlencode }}{% endstore %}
-        {# TODO: To be removed when ab test is done (Consent inline) #}
-        {% if page.custom_fields.inline_consent == "1" %}
-          {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
-            <script>
-              window.location = '{{ consent_link }}';
-            </script>
-          {% else %}
-            <script>
-              window.location = '{{ next_step }}';
-            </script>
-          {% endif %}
-        {% else %}
-          <a href="{{ consent_link }}">Please continue to the next step.</a>
+        {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
           <script>
             window.location = '{{ consent_link }}';
           </script>
+        {% else %}
+          <script>
+            window.location = '{{ next_step }}';
+          </script>
         {% endif %}
+
       {% endif %}
     {% endif %}
   {% endif %}
