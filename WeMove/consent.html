@@ -1,3 +1,7 @@
+{# TODO: Should we remove remove this file after inline consent was implemented? #}
+
+<h2>{{ page.title }}</h2>
+
 <form class="action_form" name="act" method="POST" action="/act/" accept-charset="utf-8">
   <h2 class="text-wm-purple border-b border-black pb-4">{{ page.title }}</h2>
 
@@ -34,9 +38,6 @@
           class="block mb-4 uppercase font-bold text-center bg-wm-bg-form rounded p-3 font-gilroy text-white w-full text-sm hover:text-white hover:bg-wm-pink"
           data-wm-pixel-event-type="OptIn"
           data-wm-pixel-track-type="trackCustom"
-          {% if tests %}
-          data-wm-pixel-content-id="optin_{{ tests.1.letter }}"
-          {% endif %}
           data-wm-pixel-trigger-event="click">
           {% filter ak_text:"consents_contactMeYes_button" %}Yes, keep me informed!{% endfilter %}
 				</button>
