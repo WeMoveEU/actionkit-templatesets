@@ -53,6 +53,8 @@
 
               {% include "./user_form_wrapper.html" %}
 
+              <div data-wm-consent-inline-new-container hidden></div>
+
               <div class="buttons-wrapper hide-if-previously-signed">
                   <button
                     class="btn btn-primary js-track-action js-submit"
@@ -122,6 +124,8 @@
 
             {% if page.custom_fields.call_page_mode == 'call' %}
               {% include "./user_form_wrapper.html" %}
+
+              <div data-wm-consent-inline-new-container hidden></div>
 
               <div class="buttons-wrapper hide-if-previously-signed">
                   <button class="btn btn-lg btn-primary btn-block js-track-action js-dial-representative" data-js-event-category="call" data-js-event-action="action" data-decision-id="105346" data-campaign-id="3562">
