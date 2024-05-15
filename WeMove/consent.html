@@ -37,9 +37,6 @@
           class="btn optin js-popup-consent-button"
           data-wm-pixel-event-type="OptIn"
           data-wm-pixel-track-type="trackCustom"
-          {% if tests %}
-          data-wm-pixel-content-id="optin_{{ tests.1.letter }}"
-          {% endif %}
           data-wm-pixel-trigger-event="click">
           {% filter ak_text:"consents_contactMeYes_button" %}Yes, keep me informed!{% endfilter %}
 				</button>
