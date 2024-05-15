@@ -1,5 +1,5 @@
 {# TODO: When AB test is done this IF should be removed. #}
-
+{% if page.custom_fields.inline_consent == "1" %}
   {% if user and user.subscription_status == 'subscribed' %}
     <!-- USER SUBCRIBED: no need to render the inline consents -->
     <input type="hidden" name="opt_in" value="1">
@@ -59,3 +59,6 @@
       </div>
     </div>
   {% endif %}
+{% else %}
+  <input type="hidden" name="opt_in" value="1">
+{% endif %}
