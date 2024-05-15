@@ -168,12 +168,10 @@
 <script>
 	var queryTargets = [];
 </script>
-
 <script>
 	queryTargets = {% report "call_page_target_information" with page.id as page_id %};
 	queryTargets.shift();
 </script>
-
 <script>
   const targetsTxt = {{ page.custom_fields.twitter_targets|json }};
   const messagesTxt = {{ page.custom_fields.twitter_messages|json }};
@@ -283,6 +281,13 @@
 
 {% if page.custom_fields.call_page_mode == 'facebook' %}
 <script>
+	var queryTargets = [];
+</script>
+<script>
+	queryTargets = {% report "call_page_target_information" with page.id as page_id %};
+	queryTargets.shift();
+</script>
+<script>
   const targets_txt = {{ page.custom_fields.facebook_targets|json }};
   const messages_txt = {{ page.custom_fields.facebook_messages|json }};
 
@@ -330,9 +335,11 @@
 
     const target_lines = targets_txt.split(/[\r\n]+/);
     const target_data = target_lines.map( (s) => s.split(/\s+/) ).map((s) => [s.shift(), s.join(' ')]);
-    const page_target_data = page_targets.map(
+    const page_target_data = page_targets ? page_targets.map(
       (t) => [t.facebook, t.title_informal_full]
-    );
+    ) : queryTargets.map(
+      (t) => [t[7], t[3]]
+     );
 
     const combined_targets = target_data.concat(page_target_data).map(
       (t) => [t[0] ? '@' + t[0] : null, t[1]]
