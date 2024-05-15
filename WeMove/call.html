@@ -166,6 +166,15 @@
 
 {% if page.custom_fields.call_page_mode == 'tweet' %}
 <script>
+	var queryTargets = [];
+</script>
+
+<script>
+	queryTargets = {% report "call_page_target_information" with page.id as page_id %};
+	queryTargets.shift();
+</script>
+
+<script>
   const targetsTxt = {{ page.custom_fields.twitter_targets|json }};
   const messagesTxt = {{ page.custom_fields.twitter_messages|json }};
   const fallbackTxt = {{ page.custom_fields.twitter_fallback|json }};
@@ -220,11 +229,13 @@
   const chooseTweet = () => {
     const targetLines = targetsTxt.split(/[\r\n]+/);
     const targetData = targetLines.map( (s) => s.split(/\s+/) ).map((s) => [s.shift(), s.join(' ')]);
-    const pageTargetData = pageTargets.map(
+    const pageTargetData = pageTargets.length ? pageTargets.map(
       (t) => [t.twitter, t.title_informal_full]
+    ) : queryTargets.map(
+      (t) => [t[6], t[3]]
     );
     const combinedTargets = targetData.concat(pageTargetData).map(
-      (t) => [t[0] ? '@' + t[0] : null, t[1]]
+      (t) => [ ( ! t[0] ) ? t[0] : ( t[0].substring(0, 1) == '@' ? '' : '@' ) + t[0], t[1] ]
     );
     const tweetTargets = combinedTargets.filter(
       (t) => t[0]
