@@ -1,11 +1,5 @@
 {% extends "./wrapper.html" %}
 
-{% block wemove_scripts %}
-  {% if page.custom_fields.consent_version %}
-    {% include "./wemove-scripts.html" %}
-  {% endif %}
-{% endblock %}
-
 
 {% block content %}
 
@@ -39,10 +33,6 @@
 			});
 		</script>
 		{% endif %}
-
-    {% if page.custom_fields.sharing_step %}
-      {% block wemove_scripts %}{% endblock %}
-    {% endif %}
 	{% endif %}
 {% else %}
 
