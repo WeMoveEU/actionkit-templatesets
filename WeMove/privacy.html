@@ -7,7 +7,12 @@
 {% else %}
   <div class="consent-inline form-field field-type--radio required ak-err-below" data-wm-consent-inline hidden>
     <legend class="main-label">
-      {% filter ak_text:"consentInline_legend" %}Do you want to find out if this campaign is successful?{% endfilter %}
+      {% if page.type == 'Survey'  or page.type == 'Signup' %}
+        {% filter ak_text:"joinUsConsentInline_legend" %}Do you want to join our community?{% endfilter %}
+      {% else %}
+        {% filter ak_text:"consentInline_legend" %}Do you want to find out if this campaign is successful?{% endfilter %}
+      {% endif %}
+
       <span class="ak-required-flag" aria-hidden="true">*</span>
     </legend>
 
@@ -19,11 +24,21 @@
           data-wm-consent-inline-radio
           type="radio"
           value="y" />
+
         <span class="consent-inline-group--text">
-          {% filter ak_text:"consentInlineYes_field" %}
-            Yes! Let me know if this campaign is successful and how I can participate in other relevant campaigns.
-            If you leave us your email, we may contact you to tell you more about how you can help us, including by supporting our work with a donation.
-          {% endfilter %}
+          {% if page.type == 'Survey' or page.type == 'Signup' %}
+            {% filter ak_text:"joinUsConsentInlineYes_field" %}
+              Yes! I want to join the WeMove Europe community to participate in campaigns that fight for a better Europe,
+              one that puts people and the planet first. If you leave us your email,
+              we may contact you to tell you more about how you can help us, including by supporting our work with a donation.
+            {% endfilter %}
+          {% else %}
+            {% filter ak_text:"consentInlineYes_field" %}
+              Yes! Let me know if this campaign is successful and how I can participate in other relevant campaigns.
+              If you leave us your email, we may contact you to tell you more about how you can help us,
+              including by supporting our work with a donation.
+            {% endfilter %}
+          {% endif %}
         </span>
       </label>
 
@@ -34,10 +49,17 @@
           data-wm-consent-inline-radio
           type="radio"
           value="n" />
+
         <span class="consent-inline-group--text">
-          {% filter ak_text:"consentInlineNo_field" %}
-            No. I don't want to receive information about the progress of this campaign or other campaigns.
-          {% endfilter %}
+          {% if page.type == 'Survey' or page.type == 'Signup' %}
+            {% filter ak_text:"joinUsConsentInlineNo_field" %}
+              No. I don't want to receive information about the progress of campaigns that fight for a better Europe.
+            {% endfilter %}
+          {% else %}
+            {% filter ak_text:"consentInlineNo_field" %}
+              No. I don't want to receive information about the progress of this campaign or other campaigns.
+            {% endfilter %}
+          {% endif %}
         </span>
       </label>
 
@@ -52,7 +74,8 @@
 
     <div class="opt-out-disclaimer">
       {% filter ak_text:"consentInlineCancelSubscription_info" %}
-        You can unsubscribe at any time. Just go to our unsubscribe page. By entering your information you confirm that you are at least 16 years old.
+        You can unsubscribe at any time. Just go to our unsubscribe page.
+        By entering your information you confirm that you are at least 16 years old.
       {% endfilter %}
     </div>
   </div>

@@ -43,7 +43,7 @@
 
     {% load_css %}
       /media/modern/actionkit.css
-      //static.wemove.eu/action-kit/css/wemove.css?v=1.6.1
+      //static.wemove.eu/action-kit/css/wemove.css?v=1.6.2
 
       {% if args.embed and args.css == "1" and page.custom_fields.external_css %}
         {{ page.custom_fields.external_css }}
@@ -157,8 +157,6 @@ actionkit.forms.initForm('act');
 </script>
 {% endblock %}
 
-{% block wemove_scripts %}
-  {% include "./wemove-scripts.html" %}
-{% endblock %}
+{% include "./wemove-scripts.html" %}
 </body>
 </html>
