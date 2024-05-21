@@ -5,7 +5,7 @@
   <!-- KNOWN GERMANIC USER: no need to render the inline consents -->
   <input type="hidden" name="opt_in" value="1">
 {% else %}
-  <div class="consent-inline form-field field-type--radio required ak-err-below" data-wm-consent-inline hidden>
+  <div class="consent-inline form-field field-type--radio required ak-err-below" data-wm-consent-inline>
     <legend class="static mx-0 my-1 p-0 text-white text-sm font-bold border-0">
       {% if page.type == 'Survey'  or page.type == 'Signup' %}
         {% filter ak_text:"joinUsConsentInline_legend" %}Do you want to join our community?{% endfilter %}

@@ -35,7 +35,6 @@
         {% include "./component-call_page-tweet.html" %}
       {% elif page.custom_fields.call_page_mode == 'facebook' %}
         {% include "./component-call_page-facebook.html" %}
-      {% endif %}
       {% elif page.custom_fields.call_page_mode == 'call' %}
         {% include "./component-call_page-call.html" %}
       {% endif %}
@@ -50,21 +49,23 @@
       Please try to disable the block for this page and try again.
     {% endfilter %}
   </p>
+
+  <script>
+    const alertBlockedPopupMessage = () => {
+      const blockedPopupMessage = document.querySelector('[data-wm-blocked-popup-message]');
+      blockedPopupMessage.classList.add('active');
+
+      setTimeout(() => {
+        blockedPopupMessage.classList.remove('active');
+      }, 5000);
+    };
+  </script>
 </div>
 
 {% endblock %}
 
 {% block script_additions %}
-<script>
-  const alertBlockedPopupMessage = () => {
-    const blockedPopupMessage = document.querySelector('[data-wm-blocked-popup-message]');
-    blockedPopupMessage.classList.add('active');
 
-    setTimeout(() => {
-      blockedPopupMessage.classList.remove('active');
-    }, 5000);
-  };
-</script>
 
 {% if page.custom_fields.call_page_mode == 'tweet' %}
 <script>
