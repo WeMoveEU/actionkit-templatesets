@@ -1,0 +1,17 @@
+{% include "./user_form_wrapper.html" %}
+
+<div data-wm-consent-inline-new-container hidden></div>
+
+<div class="buttons-wrapper hide-if-previously-signed">
+    <button class="btn btn-lg btn-primary btn-block js-track-action js-dial-representative" data-js-event-category="call" data-js-event-action="action" data-decision-id="105346" data-campaign-id="3562">
+      <i style="position: relative; top: -1px" class="fa fa-phone call-icon"></i>
+      <i class="fa fa-spinner fa-pulse fa-fw hidden call-in-progress-icon"></i>CONNECTION TO <strong>TARGET NAME</strong><br>FREE SERVICE
+    </button>
+  <a
+    href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
+    class="skip btn btn-default">
+    {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
+  </a>
+</div>
+
+<div id="call-status" style="text-align: center;"></div>

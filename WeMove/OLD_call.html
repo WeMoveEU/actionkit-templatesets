@@ -1,54 +1,158 @@
 {% extends "./wrapper.html" %}
 
 {% block content %}
+<div class="raction" id="rtweet">
+	<div class="raction-content">
+			<div class="action-advice-col">
+				<div class="advice-container">
+					<h1>{{ page.title }}</h1>
 
-<div class="nav-md:grid grid-cols-petition">
-  <article>
-		<h1 class="text-4xl mb-8 pr-40 nav-md:text-5xl">{{ page.title }}</h1>
+          {% if page.custom_fields.featured_video %}
+            {% include "./featured-video.html" with featured_video=page.custom_fields.featured_video %}
+          {% elif page.custom_fields.featured_image %}
+            {% include "./featured-image.html" with featured_image=page.custom_fields.featured_image %}
+          {% endif %}
 
-    {% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
-		{% store as featured_image %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_image" as field_name %}{% endstore %}
-		{% if featured_video %}
-			{% include "./featured-video.html" with featured_video=featured_video %}
-		{% elif featured_image %}
-			{% include "./featured-image.html" with featured_image=featured_image %}
-		{% endif %}
+          <div class="call-text">
+					  {% include_tmpl form.introduction_text %}
+          </div>
+				</div>
+			</div>
 
-    <div class="mt-4 mr-4">
-      {% include_tmpl form.introduction_text %}
-    </div>
-	</article>
+			<div class="action-form-container-col ak-grid-col ak-grid-col-4-of-12">
+				<div class="action-form-container member-is-known">
 
-  <aside>
-    <form
-      class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below bg-wm-bg-form p-4"
-      name="act"
-      method="post"
-      action="/act/"
-      accept-charset="utf-8"
-      id="call-form"
-      data-wm-floating-labels-form>
+					<form
+            class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below"
+            name="act"
+            method="POST"
+            action="/act/"
+            accept-charset="utf-8"
+            id="call-form"
+            data-wm-floating-labels-form>
 
-      <input type="hidden" name="page" value="{{ page.name }}">
+						<input type="hidden" name="page" value="{{ page.name }}">
 
-      {% if page.custom_fields.call_page_mode == 'tweet' %}
-        {% include "./component-call_page-tweet.html" %}
-      {% elif page.custom_fields.call_page_mode == 'facebook' %}
-        {% include "./component-call_page-facebook.html" %}
-      {% endif %}
-      {% elif page.custom_fields.call_page_mode == 'call' %}
-        {% include "./component-call_page-call.html" %}
-      {% endif %}
-    </form>
-	</aside>
+            {% if page.custom_fields.call_page_mode == 'tweet' %}
+              <h2 class="send-tweet-title">{% filter ak_text:"sendTweet_title" %}Send a tweet{% endfilter %}</h2>
+
+              <div class="form-field hide-if-previously-signed">
+                <label for="tweet_body">
+                  {% filter ak_text:"twitter_field" %}Tweet text{% endfilter %}
+                </label>
+                <textarea
+                  data-wm-tweet-message
+                  name="tweet_text"
+                  id="tweet_body"
+                  rows="3"
+                  required
+                  class="form-control"></textarea>
+
+                <div data-wm-tweet-char-count>280</div>
+              </div>
+
+              {% include "./user_form_wrapper.html" %}
+
+              <div data-wm-consent-inline-new-container hidden></div>
+
+              <div class="buttons-wrapper hide-if-previously-signed">
+                  <button
+                    class="btn btn-primary js-track-action js-submit"
+                    data-js-event-category="tweet"
+                    data-js-event-action="action"
+                    data-wm-tweet-submit
+                    disabled>
+                      <span aria-label="hidden" class="social-icon">
+                        {% include "./icon-twitter.html" %}
+                      </span>
+                      {% if page.custom_fields.sign_petition_button %}
+                        {{ page.custom_fields.sign_petition_button }}
+                      {% else %}
+                        {% filter ak_text:"sendTweet_button" %}Tweet{% endfilter %}
+                      {% endif %}
+                  </button>
+                <a
+                  href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
+                  class="skip btn btn-default">
+                  {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
+                </a>
+              </div>
+              <div class="action-feedback-bar">
+                <div class="fade in alert alert-success alert-dismissable feedback-alert">
+                  <button type="button" class="close" data-dismiss="alert">×</button>
+                  Thanks for tweeting!
+                </div>
+              </div>
+						{% endif %}
+
+            {% if page.custom_fields.call_page_mode == 'facebook' %}
+              <h2 class="send-tweet-title">{% filter ak_text:"postToFacebook_title" %}Post to Facebook{% endfilter %}</h2>
+
+              {% include "./user_form_wrapper.html" %}
+
+              <div data-wm-consent-inline-new-container hidden></div>
+
+              <div class="buttons-wrapper hide-if-previously-signed">
+                  <button
+                    class="btn btn-primary"
+                    data-js-event-category="tweet"
+                    data-js-event-action="action"
+                    data-wm-facebook-submit
+                    >
+                      <span aria-label="hidden" class="social-icon">
+                        {% include "./icon-facebook.html" %}
+                      </span>
+                      {% if page.custom_fields.sign_petition_button %}
+                        {{ page.custom_fields.sign_petition_button }}
+                      {% else %}
+                        {% filter ak_text:"sendFacebook_button" %}Open Facebook{% endfilter %}
+                      {% endif %}
+                  </button>
+                <a
+                  href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
+                  class="skip btn btn-default">
+                  {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
+                </a>
+              </div>
+
+              {# TODO: review this snippet #}
+              <div class="action-feedback-bar">
+                <div class="fade in alert alert-success alert-dismissable feedback-alert">
+                  <button type="button" class="close" data-dismiss="alert">×</button>
+                  Thanks for posting!
+                </div>
+              </div>
+						{% endif %}
+
+            {% if page.custom_fields.call_page_mode == 'call' %}
+              {% include "./user_form_wrapper.html" %}
+
+              <div data-wm-consent-inline-new-container hidden></div>
+
+              <div class="buttons-wrapper hide-if-previously-signed">
+                  <button class="btn btn-lg btn-primary btn-block js-track-action js-dial-representative" data-js-event-category="call" data-js-event-action="action" data-decision-id="105346" data-campaign-id="3562">
+                    <i style="position: relative; top: -1px" class="fa fa-phone call-icon"></i>
+                    <i class="fa fa-spinner fa-pulse fa-fw hidden call-in-progress-icon"></i>CONNECTION TO <strong>TARGET NAME</strong><br>FREE SERVICE
+                  </button>
+                <a
+                  href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
+                  class="skip btn btn-default">
+                  {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
+                </a>
+              </div>
+
+              <div id="call-status" style="text-align: center;"></div>
+
+						{% endif %}
+					</form>
+				</div>
+			</div>
+	</div>
 </div>
 
 <div class="blocked-popup-message" data-wm-blocked-popup-message>
   <p>
-    {% filter ak_text:"blockedPopup_alert" %}
-      It seems that your browser is blocking the popup window.
-      Please try to disable the block for this page and try again.
-    {% endfilter %}
+    {% filter ak_text:"blockedPopup_alert" %}It seems that your browser is blocking the popup window. Please try to disable the block for this page and try again.{% endfilter %}
   </p>
 </div>
 

@@ -1,0 +1,38 @@
+{% if page.custom_fields.call_page_mode == 'facebook' %}
+  <h2 class="send-tweet-title">{% filter ak_text:"postToFacebook_title" %}Post to Facebook{% endfilter %}</h2>
+
+  {% include "./user_form_wrapper.html" %}
+
+  <div data-wm-consent-inline-new-container hidden></div>
+
+  <div class="buttons-wrapper hide-if-previously-signed">
+      <button
+        class="btn btn-primary"
+        data-js-event-category="tweet"
+        data-js-event-action="action"
+        data-wm-facebook-submit
+        >
+          <span aria-label="hidden" class="social-icon">
+            {% include "./icon-facebook.html" %}
+          </span>
+          {% if page.custom_fields.sign_petition_button %}
+            {{ page.custom_fields.sign_petition_button }}
+          {% else %}
+            {% filter ak_text:"sendFacebook_button" %}Open Facebook{% endfilter %}
+          {% endif %}
+      </button>
+    <a
+      href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
+      class="skip btn btn-default">
+      {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
+    </a>
+  </div>
+
+  {# TODO: review this snippet #}
+  <div class="action-feedback-bar">
+    <div class="fade in alert alert-success alert-dismissable feedback-alert">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      Thanks for posting!
+    </div>
+  </div>
+{% endif %}
