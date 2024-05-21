@@ -45,3 +45,114 @@
     Thanks for tweeting!
   </div>
 </div>
+
+{% block script_additions %}
+<script>
+  const queryTargets = [{% report "call_page_target_information" with page.id as page_id %}];
+  queryTargets.shift();
+
+  const targetsTxt = {{ page.custom_fields.twitter_targets|json }};
+  const messagesTxt = {{ page.custom_fields.twitter_messages|json }};
+  const fallbackTxt = {{ page.custom_fields.twitter_fallback|json }};
+
+  let pageTargets;
+
+  const updateTweetForm = () => {
+    const textArea = document.querySelector("[data-wm-tweet-message]");
+    const counter = document.querySelector("[data-wm-tweet-char-count]");
+    const tweetSubmit = document.querySelector("[data-wm-tweet-submit]");
+
+    counter.innerHTML = 280 - textArea.value.length;
+    tweetSubmit.disabled = textArea.value.length < 1;
+  };
+
+  const submitTweet = (e) => {
+    e.preventDefault();
+
+    const isFormValid = actionkit.forms.validate();
+
+    if (!isFormValid) {
+      return;
+    }
+
+    const tweet = document.querySelector("[data-wm-tweet-message]").value;
+    const params = new URLSearchParams({ text: tweet }).toString();
+    const handle = window.open('https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320');
+
+    if (!handle) {
+      alertBlockedPopupMessage();
+      return;
+    }
+
+    actionkit.form.requestSubmit();
+  }
+
+  const prepareTweet = () => {
+    pageTargets = actionkit.context.targets?.targets ? actionkit.context.targets.targets : [];
+
+    const textArea = document.querySelector("[data-wm-tweet-message]");
+    textArea.value = chooseTweet();
+    textArea.addEventListener('keyup', updateTweetForm, false);
+    textArea.addEventListener('change', updateTweetForm, false);
+    textArea.dispatchEvent(new Event('change'));
+
+    const tweetSubmit = document.querySelector("[data-wm-tweet-submit]");
+    tweetSubmit.addEventListener('click', submitTweet);
+
+    updateTweetForm();
+  }
+
+  const chooseTweet = () => {
+    const targetLines = targetsTxt.split(/[\r\n]+/);
+    const targetData = targetLines.map( (s) => s.split(/\s+/) ).map((s) => [s.shift(), s.join(' ')]);
+    const pageTargetData = pageTargets.length ? pageTargets.map(
+      (t) => [t.twitter, t.title_informal_full]
+    ) : queryTargets.map(
+      (t) => [t[6], t[3]]
+    );
+    const combinedTargets = targetData.concat(pageTargetData).map(
+      (t) => [ ( ! t[0] ) ? t[0] : ( t[0].substring(0, 1) == '@' ? '' : '@' ) + t[0], t[1] ]
+    );
+    const tweetTargets = combinedTargets.filter(
+      (t) => t[0]
+    );
+    const randomTargets = tweetTargets.sort(()=>Math.random()-0.5);
+    const firstTarget = tweetTargets[0] || [];
+    const randomTarget = randomTargets[0] || [];
+
+    const variables = {
+      handle: firstTarget[0],
+      name: firstTarget[1],
+      handles: tweetTargets.map((t) => t[0]).join(', '),
+      targets: tweetTargets,
+      rhandle: randomTarget[0],
+      rname: randomTarget[1],
+      rhandles: randomTargets.map((t) => t[0]).join(', '),
+      rtargets: randomTargets,
+    };
+
+    const messages = messagesTxt.split(/[\r\n]+/);
+    const fallback = fallbackTxt.split(/[\r\n]+/);
+    const randomized = messages.sort(() => Math.random()-0.5)
+                      .concat(fallback)
+                      .filter( (s) => s && s.match(/\S/));
+
+    if (variables['handles'].match(/\S/)) {
+      randomized.push("An important message for [%= handles %]: ");
+    }
+
+    for (const template of randomized) {
+      const message = actionkit.utils.template(template, variables);
+
+      if (message.match(/\S/)) {
+        return message;
+      }
+    }
+
+    return "No matching tweets were found";
+  };
+
+  $(actionkit.form).bind('actionkit.ready', prepareTweet);
+  setTimeout(prepareTweet, 1000);
+</script>
+{% endblock %}

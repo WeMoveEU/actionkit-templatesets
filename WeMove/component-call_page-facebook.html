@@ -1,8 +1,12 @@
-<h2 class="send-tweet-title">{% filter ak_text:"postToFacebook_title" %}Post to Facebook{% endfilter %}</h2>
+<h2 class="text-white">
+  {% filter ak_text:"postToFacebook_title" %}
+    Post to Facebook
+  {% endfilter %}
+</h2>
 
 {% include "./user_form_wrapper.html" %}
 
-<div class="buttons-wrapper hide-if-previously-signed">
+<div class="hide-if-previously-signed">
     <button
       class="btn btn-primary"
       data-js-event-category="tweet"
@@ -12,12 +16,14 @@
         <span aria-label="hidden" class="social-icon">
           {% include "./icon-facebook.html" %}
         </span>
+
         {% if page.custom_fields.sign_petition_button %}
           {{ page.custom_fields.sign_petition_button }}
         {% else %}
           {% filter ak_text:"sendFacebook_button" %}Open Facebook{% endfilter %}
         {% endif %}
     </button>
+
   <a
     href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
     class="skip btn btn-default">
