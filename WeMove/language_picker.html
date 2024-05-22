@@ -1,10 +1,13 @@
 {% if can_switch_lang and not isEmbbeded %}
   {% with page.translations as translations %}
     <!-- Remove this if you don't want popins like "This page also in English" -->
-    <aside class="w-36 mb-4 nav-md:absolute nav-md:right-4">
+    <aside class="language-pickers w-36 mb-4 nav-md:absolute nav-md:right-4" data-wm-fly-out-menu>
       <button
         type="button"
+        data-wm-fly-out-menu-trigger
+        aria-expanded="false"
         class="relative rounded bg-neutral-100 hover:text-wm-purple flex p-3 gap-2 justify-between items-center font-gilroy font-bold uppercase text-neutral-600">
+
         <img height="32" width="27" alt="Language selector" src="https://strapi.wemove.eu/uploads/icon_translate_eeaca63123.svg" />
 
         <span class="pr-4 after:pointer-events-none after:absolute after:right-2 after:top-6
@@ -20,12 +23,17 @@
         </span>
       </button>
 
-      <ul class="hidden">
+      <ul
+        class="absolute mt-1 rounded bg-white border-[1px] border-gray-200 shadow min-w-[180px] z-10"
+        data-wm-fly-out-menu-list
+        hidden>
         {% for translated_page in translations %}
             {% if translated_page.id != page.id %}
               {% if translated_page.custom_fields.temp_is_widget != 'true' %}
-                  <li>
-                    <a href="{{ translated_page.derived.canonical_path }}{% for name, value in args.items %}{% if forloop.first %}?{{ name }}={{ value }}{% else %}&{{ name }}={{ value }}{% endif %}{% endfor %}">
+                  <li class="px-6 p-[2px]">
+                    <a
+                      href="{{ translated_page.derived.canonical_path }}{% for name, value in args.items %}{% if forloop.first %}?{{ name }}={{ value }}{% else %}&{{ name }}={{ value }}{% endif %}{% endfor %}"
+                      class="text-sm !text-gray-400 hover:!no-underline hover:!text-gray-800">
                     {% store as lang_name %}language_{{ translated_page.lang.name }}{% endstore %}
                     {% filter ak_text:lang_name %}{{ translated_page.lang.name|default:"English" }}{% endfilter %}
                     </a>
