@@ -14,6 +14,8 @@ module.exports = {
         "wm-bg-form": "#7e6af0",
         "wm-light-purple-text": "#b6aafc",
         "wm-yellow": "#f39629",
+        "wm-warning-highlight": "#c05621",
+        "wm-warning-bg": "#fffaf0",
         whatsapp: "#2eb82e",
         facebook: "#4966b7",
         twitter: "#55acee",

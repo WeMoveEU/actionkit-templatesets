@@ -42,24 +42,6 @@
 	</aside>
 </div>
 
-<div class="blocked-popup-message" data-wm-blocked-popup-message>
-  <p>
-    {% filter ak_text:"blockedPopup_alert" %}
-      It seems that your browser is blocking the popup window.
-      Please try to disable the block for this page and try again.
-    {% endfilter %}
-  </p>
-
-  <script>
-    const alertBlockedPopupMessage = () => {
-      const blockedPopupMessage = document.querySelector('[data-wm-blocked-popup-message]');
-      blockedPopupMessage.classList.add('active');
-
-      setTimeout(() => {
-        blockedPopupMessage.classList.remove('active');
-      }, 5000);
-    };
-  </script>
-</div>
+{% include "./component-popup_blocker_alert.html" %}
 
 {% endblock %}
