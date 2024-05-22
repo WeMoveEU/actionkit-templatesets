@@ -6,13 +6,7 @@
   <article>
 		<h1 class="text-4xl mb-8 pr-40 nav-md:text-5xl">{{ page.title }}</h1>
 
-    {% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
-		{% store as featured_image %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_image" as field_name %}{% endstore %}
-		{% if featured_video %}
-			{% include "./featured-video.html" with featured_video=featured_video %}
-		{% elif featured_image %}
-			{% include "./featured-image.html" with featured_image=featured_image %}
-		{% endif %}
+    {% include "./component-featured_media.html" %}
 
     <div class="mt-4 mr-4">
       {% include_tmpl form.introduction_text %}
