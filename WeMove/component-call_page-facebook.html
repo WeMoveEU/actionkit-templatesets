@@ -8,7 +8,7 @@
 
 <div class="hide-if-previously-signed">
     <button
-      class="mb-2 flex w-full bg-wm-orange hover:bg-wm-orange-alert text-white gap-2 justify-center p-4 uppercase font-bold rounded font-gilroy"
+      class="mb-2 flex w-full bg-wm-orange hover:bg-wm-orange-alert text-white gap-2 justify-center p-3 uppercase font-bold rounded font-gilroy"
       data-js-event-category="tweet"
       data-js-event-action="action"
       data-wm-facebook-submit
@@ -26,7 +26,7 @@
 
   <a
     href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
-    class="flex w-full bg-white hover:!no-underline !text-wm-orange-alert gap-2 justify-center p-4 font-bold rounded font-gilroy text-xl hover:shadow hover:!text-wm-yellow transition-all">
+    class="flex w-full bg-white hover:!no-underline !text-wm-orange-alert gap-2 justify-center p-3 font-bold rounded font-gilroy text-xl hover:shadow hover:!text-wm-yellow transition-all">
     {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
   </a>
 </div>
