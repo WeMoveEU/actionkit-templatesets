@@ -9,10 +9,11 @@
     />
   </a>
 
-  <nav class="main-nav text-center">
+  <nav class="main-nav text-center" data-wm-fly-out-menu>
     <button
       class="absolute right-4 top-9 p-4 outline-1 nav-md:hidden"
       type="button"
+      data-wm-fly-out-menu-trigger
       aria-expanded="false"
     >
       <svg
@@ -27,63 +28,72 @@
           d="M20 3V0H0V3H20ZM20 9V6H0V9H20ZM20 15V12H0V15H20Z"
         ></path>
       </svg>
-      <span class="sr-only"></span>
+      <span class="sr-only">
+        {% filter ak_text:"a11y_nav_showMainMenu_button" %}Show website menu{% endfilter %}
+      </span>
     </button>
 
-    <ul
-      class="flyout-menu-list text-sm height-0 w-full flex-col content-between items-center m-auto text-wm-purple
-      nav-md:!flex nav-md:!max-h-96 nav-md:flex-row nav-md:p-0 nav-md:flex-wrap nav-md:gap-x-8 nav-md:justify-end nav-md:items-center nav-md:mb-4"
+    <div
+      data-wm-fly-out-menu-list
       hidden
-    >
-      <li class="about-us__nav">
-        <div>
-          <button
-            type="button"
-            aria-expanded="false"
-            class="relative pr-3 after:pointer-events-none after:absolute after:right-0 after:top-[6px] after:ml-1 after:inline-block after:border-[.3em] after:border-b-0 after:border-solid after:border-black after:border-l-transparent after:border-r-transparent after:align-[.25rem] after:content-[''] after:hover:border-t-wm-pink"
-          >
-            {% filter ak_text:"nav_wm_aboutUS" %}About us{% endfilter %}
-            <span class="sr-only"></span>
-          </button>
+      class="flyout-menu-list nav-md:!max-h-max">
+      <ul
+        class="flyout-menu-list text-sm w-full flex-col content-between items-center m-auto text-wm-purple
+        nav-md:!flex nav-md:!max-h-96 nav-md:flex-row nav-md:p-0 nav-md:flex-wrap nav-md:gap-x-8 nav-md:justify-end nav-md:items-center nav-md:mb-4"
+      >
+        <li class="about-us__nav">
+          <div data-wm-fly-out-menu>
+            <button
+              type="button"
+              aria-expanded="false"
+              data-wm-fly-out-menu-trigger
+              class="relative pr-3 after:pointer-events-none after:absolute after:right-0 after:top-[6px] after:ml-1 after:inline-block after:border-[.3em] after:border-b-0 after:border-solid after:border-black after:border-l-transparent after:border-r-transparent after:align-[.25rem] after:content-[''] after:hover:border-t-wm-pink"
+            >
+              {% filter ak_text:"nav_wm_aboutUS" %}About us{% endfilter %}
+              <span class="sr-only"></span>
+            </button>
 
-          <ul hidden class="flyout-menu-list">
-            <li><a href="https://wemove.eu/{{ link_iso }}/community">{% filter ak_text:"nav_wm_community" %}Community{% endfilter%}</a></li>
-            <li><a href="https://wemove.eu/{{ link_iso }}/victories">{% filter ak_text:"nav_wm_victories" %}Victories{% endfilter%}</a></li>
-            <li><a href="https://wemove.eu/{{ link_iso }}/team">{% filter ak_text:"nav_wm_team" %}Team{% endfilter%}</a></li>
-            <li><a href="https://wemove.eu/{{ link_iso }}/work-with-us">{% filter ak_text:"nav_wm_workWithUs" %}Work with us{% endfilter%}</a></li>
-            <li><a href="https://wemove.eu/{{ link_iso }}/how-we-are-funded">{% filter ak_text:"nav_wm_howWeAreFunded" %}How we are funded{% endfilter%}</a></li>
-            <li><a href="https://wemove.eu/{{ link_iso }}/contact-us">{% filter ak_text:"nav_wm_contactUs" %}Contact us{% endfilter%}</a></li>
-          </ul>
-        </div>
-      </li>
-      <li>
-        <a href="https://wemove.eu/{{ link_iso }}/en/updates" class="regular-link regular-link--default">{% filter ak_text:"nav_wm_updates" %}Updates{% endfilter %}</a>
-      </li>
-      <li>
-        <a href="https://www.youmoveeurope.eu/{{ link_iso }}" class="button-fill button-fill--light-blue !min-w-0 !px-5">YouMove</a>
-      </li>
-    </ul>
+            <ul
+            class="flyout-menu-list"
+            data-wm-fly-out-menu-list
+              hidden>
+              <li><a href="https://wemove.eu/{{ link_iso }}/community">{% filter ak_text:"nav_wm_community" %}Community{% endfilter%}</a></li>
+              <li><a href="https://wemove.eu/{{ link_iso }}/victories">{% filter ak_text:"nav_wm_victories" %}Victories{% endfilter%}</a></li>
+              <li><a href="https://wemove.eu/{{ link_iso }}/team">{% filter ak_text:"nav_wm_team" %}Team{% endfilter%}</a></li>
+              <li><a href="https://wemove.eu/{{ link_iso }}/work-with-us">{% filter ak_text:"nav_wm_workWithUs" %}Work with us{% endfilter%}</a></li>
+              <li><a href="https://wemove.eu/{{ link_iso }}/how-we-are-funded">{% filter ak_text:"nav_wm_howWeAreFunded" %}How we are funded{% endfilter%}</a></li>
+              <li><a href="https://wemove.eu/{{ link_iso }}/contact-us">{% filter ak_text:"nav_wm_contactUs" %}Contact us{% endfilter%}</a></li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <a href="https://wemove.eu/{{ link_iso }}/en/updates" class="regular-link regular-link--default">{% filter ak_text:"nav_wm_updates" %}Updates{% endfilter %}</a>
+        </li>
+        <li>
+          <a href="https://www.youmoveeurope.eu/{{ link_iso }}" class="button-fill button-fill--light-blue !min-w-0 !px-5">YouMove</a>
+        </li>
+      </ul>
 
-    <ul
-      class="flyout-menu-list text-lg height-0 w-full  flex-col content-between items-center m-auto nav-md:!flex nav-md:!max-h-96 nav-md:flex-row
-      nav-md:p-0 nav-md:flex-wrap nav-md:gap-x-8 nav-md:gap-y-6 nav-md:justify-end nav-md:items-center text-wm-purple"
-      hidden
-    >
-      <li>
-        <a href="/en/campaigns" class="regular-link regular-link--default !normal-case">
-          {% filter ak_text:"nav_wm_campaigns" %}Campaigns{% endfilter %}
-        </a>
-      </li>
-      <li>
-        <a href="https://action.wemove.eu/signup/wemove-join_{{ link_iso }}" class="regular-link regular-link--default !normal-case">
-          {% filter ak_text:"nav_wm_joinUs" %}Join us{% endfilter %}
-        </a>
-      </li>
-      <li>
-        <a data-link-translate-me="wm-donate" class="button-fill button-fill--pink text-base">
-          {% filter ak_text:"nav_wm_donate" %}Donate{% endfilter %}
-        </a>
-      </li>
-    </ul>
+      <ul
+        class="text-lg w-full flex-col content-between items-center m-auto nav-md:!flex nav-md:!max-h-96 nav-md:flex-row
+        nav-md:p-0 nav-md:flex-wrap nav-md:gap-x-8 nav-md:gap-y-6 nav-md:justify-end nav-md:items-center text-wm-purple"
+      >
+        <li>
+          <a href="/en/campaigns" class="regular-link regular-link--default !normal-case">
+            {% filter ak_text:"nav_wm_campaigns" %}Campaigns{% endfilter %}
+          </a>
+        </li>
+        <li>
+          <a href="https://action.wemove.eu/signup/wemove-join_{{ link_iso }}" class="regular-link regular-link--default !normal-case">
+            {% filter ak_text:"nav_wm_joinUs" %}Join us{% endfilter %}
+          </a>
+        </li>
+        <li>
+          <a data-link-translate-me="wm-donate" class="button-fill button-fill--pink text-base">
+            {% filter ak_text:"nav_wm_donate" %}Donate{% endfilter %}
+          </a>
+        </li>
+      </ul>
+    </div>
   </nav>
 </header>
