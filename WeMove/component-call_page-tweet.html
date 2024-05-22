@@ -1,4 +1,8 @@
-<h2 class="send-tweet-title">{% filter ak_text:"sendTweet_title" %}Send a tweet{% endfilter %}</h2>
+<h2 class="text-white">
+  {% filter ak_text:"sendTweet_title" %}
+    Send a tweet
+  {% endfilter %}
+</h2>
 
 <div class="form-field hide-if-previously-signed">
   <label for="tweet_body">
@@ -17,36 +21,31 @@
 
 {% include "./user_form_wrapper.html" %}
 
-<div class="buttons-wrapper hide-if-previously-signed">
-    <button
-      class="btn btn-primary js-track-action js-submit"
-      data-js-event-category="tweet"
-      data-js-event-action="action"
-      data-wm-tweet-submit
-      disabled>
-        <span aria-label="hidden" class="social-icon">
-          {% include "./icon-twitter.html" %}
-        </span>
-        {% if page.custom_fields.sign_petition_button %}
-          {{ page.custom_fields.sign_petition_button }}
-        {% else %}
-          {% filter ak_text:"sendTweet_button" %}Tweet{% endfilter %}
-        {% endif %}
-    </button>
+<div class="hide-if-previously-signed">
+  <button
+    class="mb-2 flex w-full bg-wm-orange hover:bg-wm-orange-alert text-white gap-2 justify-center p-3 uppercase font-bold rounded font-gilroy"
+    data-js-event-category="tweet"
+    data-js-event-action="action"
+    data-wm-tweet-submit
+    disabled>
+      <span aria-label="hidden">
+        {% include "./icon-twitter.html" %}
+      </span>
+      {% if page.custom_fields.sign_petition_button %}
+        {{ page.custom_fields.sign_petition_button }}
+      {% else %}
+        {% filter ak_text:"sendTweet_button" %}Tweet{% endfilter %}
+      {% endif %}
+  </button>
+
   <a
     href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
-    class="skip btn btn-default">
+    class="button-fill button-fill--white
+    flex w-full gap-2 justify-center p-3 font-bold rounded font-gilroy text-xl">
     {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
   </a>
 </div>
-<div class="action-feedback-bar">
-  <div class="fade in alert alert-success alert-dismissable feedback-alert">
-    <button type="button" class="close" data-dismiss="alert">×</button>
-    Thanks for tweeting!
-  </div>
-</div>
 
-{% block script_additions %}
 <script>
   const queryTargets = [{% report "call_page_target_information" with page.id as page_id %}];
   queryTargets.shift();
@@ -80,7 +79,7 @@
     const handle = window.open('https://twitter.com/intent/tweet?' + params, 'tweet', 'popup,innerWidth=600,innerHeight=320');
 
     if (!handle) {
-      alertBlockedPopupMessage();
+      wemove.components.showPopupBlockerAlert();
       return;
     }
 
@@ -155,4 +154,3 @@
   $(actionkit.form).bind('actionkit.ready', prepareTweet);
   setTimeout(prepareTweet, 1000);
 </script>
-{% endblock %}

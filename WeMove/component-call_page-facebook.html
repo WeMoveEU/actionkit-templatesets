@@ -13,7 +13,7 @@
       data-js-event-action="action"
       data-wm-facebook-submit
       >
-        <span aria-label="hidden" class="social-icon">
+        <span aria-label="hidden">
           {% include "./icon-facebook.html" %}
         </span>
 
@@ -26,12 +26,12 @@
 
   <a
     href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
-    class="flex w-full bg-white hover:!no-underline !text-wm-orange-alert gap-2 justify-center p-3 font-bold rounded font-gilroy text-xl hover:shadow hover:!text-wm-yellow transition-all">
+    class="button-fill button-fill--white
+    flex w-full gap-2 justify-center p-3 font-bold rounded font-gilroy text-xl">
     {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
   </a>
 </div>
 
-{% block script_additions %}
 <script>
   const queryTargets = [{% report "call_page_target_information" with page.id as page_id %}];
   queryTargets.shift();
@@ -51,18 +51,19 @@
     }
 
     const post = getFacebookPost();
+    let handle;
 
     if (!window.fb_target) {
       const params = new URLSearchParams({ u: window.fb_link || '{% client_domain_url %}/act/{{ page.name }}' }).toString();
-      const handle = window.open('https://www.facebook.com/sharer/sharer.php?' + params, 'facebook', 'popup,innerWidth=600,innerHeight=320' );
+      handle = window.open('https://www.facebook.com/sharer/sharer.php?' + params, 'facebook', 'popup,innerWidth=600,innerHeight=320' );
     } else if (window.fb_target.match(/\/\//)) {
-      const handle = window.open(window.fb_target, 'facebook', 'popup,innerWidth=940,innerHeight=600');
+      handle = window.open(window.fb_target, 'facebook', 'popup,innerWidth=940,innerHeight=600');
     } else {
-      const handle = window.open('https://www.facebook.com/' + window.fb_target.replace('@', ''), 'facebook', 'popup,innerWidth=940,innerHeight=600');
+      handle = window.open('https://www.facebook.com/' + window.fb_target.replace('@', ''), 'facebook', 'popup,innerWidth=940,innerHeight=600');
     }
 
     if (!handle) {
-      alertBlockedPopupMessage();
+      wemove.components.showPopupBlockerAlert();
       return;
     }
 
@@ -112,7 +113,7 @@
 
     const messages = messages_txt.split(/[\r\n]+/);
     const randomized = messages.sort(() => Math.random()-0.5)
-				       .filter( (s) => s && s.match(/\S/) );
+      .filter( (s) => s && s.match(/\S/) );
 
     if (variables['handles'].match(/\S/)) {
       randomized.push("An important message for [%= handles %]: ");
@@ -143,4 +144,3 @@
     return "No suggested Facebook messages were found";
   }
 </script>
-{% endblock %}
