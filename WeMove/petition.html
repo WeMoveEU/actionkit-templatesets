@@ -21,7 +21,8 @@
 			{% endif %}
 
 			{% if page.custom_fields.youmove_initiator_name %}
-				<p data-wm-initiator-name="{{ page.custom_fields.youmove_initiator_name }}">
+				<p data-wm-initiator-name="{{ page.custom_fields.youmove_initiator_name }}"
+					class="italic text-sm invisible">
 					{% filter ak_text:"statement_initiator" %}This petition is run by [% inititator_name %]{% endfilter %}
 				</p>
 			{% endif %}
