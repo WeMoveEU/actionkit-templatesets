@@ -28,6 +28,7 @@ module.exports = {
       },
       gridTemplateColumns: {
         petition: "66% 34%",
+        donate: "1fr max-content",
       },
       fontFamily: {
         "libre-franklin": ["Libre Franklin", "serif"],

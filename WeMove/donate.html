@@ -1,8 +1,6 @@
 {% extends "./wrapper.html" %}
 
-{% block body_extra_classes %}wemove {{ block.super }}{% endblock %}
-
-{% block css_additionsTODO %}
+{% block css_additions %}
 {% load_css %}
     {% if fundraiser_staging %}
         //donate-ui.not-a2.eu/donate-main.css
@@ -12,52 +10,9 @@
 {% end %}
 {% endblock %}
 
-{% block scriptadditions %}
-{% load_js %}
-    //cdn.tailwindcss.com
-{% end %}
-
-<script>
-    {% comment %}
-    https://tailwindcss.com/docs/installation/play-cdn
-    These customisations are brought in via the fundraiser widget app as well, along with some
-    plugins to define form components and so on. So these theme customimisations here are
-    most likely redundant, but have been put here for explicitness, since they are customisations
-    that could be used in other pages if we decide to go with a full tailwind CSS solution across
-    all templates.
-    {% endcomment %}
-
-    tailwind.config = {
-        theme: {
-            extend: {
-                colors: {
-                    primary: {
-                        DEFAULT: '#BD39DBff',
-                        800: '#C655E0ff',
-                        700: '#CF70E5ff',
-                        600: '#D98CEAff',
-                        500: '#E2A7EFff',
-                        400: '#EBC3F4ff',
-                        300: '#F4DEF9ff',
-                    },
-                    'wm-gray': {
-                        extralight: '#fbfbfb',
-                        light: '#999999',
-                        DEFAULT: '#494949',
-                    }
-                },
-                fontFamily: {
-                    sans: ['Helvetica Neue', 'Helvetica', 'Arial', 'Verdana', 'Droid Sans', 'sans-serif'],
-                }
-            }
-        },
-    };
-</script>
-{% endblock scriptadditions %}
-
 {% block content %}
 
-  <article class="nav-md:grid grid-cols-petition mb-16">
+  <article class="nav-md:grid grid-cols-donate mb-16">
     {% if form.ask_text %}
     <div class="mr-16">
       {% include_tmpl form.ask_text %}
@@ -95,7 +50,6 @@
         </div>
       {% endif %}
     {% endif %}
-
 
   </article>
 

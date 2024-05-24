@@ -41,6 +41,7 @@
 
     {% block meta_additions %}{% endblock %}
 
+    {% block css_additions %}{% endblock %}
     {% load_css %}
       //127.0.0.1:8081/css/wemove.css
 
@@ -48,7 +49,6 @@
         {{ page.custom_fields.external_css }}
       {% endif %}
     {% end %}
-    {% block css_additions %}{% endblock %}
 
     <script>window.startTime = new Date();</script>
     {% load_js %}
