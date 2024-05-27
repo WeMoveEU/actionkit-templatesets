@@ -1,22 +1,23 @@
-<div class="bg-wm-lightblue-video">
-  <div class="cookieconsent-optout-marketing">
-    <div class="video-placeholder">
-      <button
-        type="button"
-        onclick="Cookiebot.renew()"
-        class="text-wm-orange"
-        >
-        {% filter ak_text:"videoPlaceholder_button" %}Please accept marketing cookies to watch this video{% endfilter %}
-      </button>
-    </div>
+<aside>
+  <div class="bg-wm-lightblue-video h-auto w-full aspect-video flex items-center justify-center
+    cookieconsent-optout-marketing">
+    <button
+      type="button"
+      onclick="Cookiebot.renew()"
+      class="text-wm-orange hover:underline"
+      >
+      {% filter ak_text:"videoPlaceholder_button" %}Please accept marketing cookies to watch this video{% endfilter %}
+    </button>
   </div>
+
   <iframe
     width="560"
     height="315"
+    class="h-auto w-full aspect-video"
     data-cookieblock-src="{{featured_video}}"
     data-cookieconsent="marketing"
     frameborder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
     allowfullscreen>
   </iframe>
-</div>
+</aside>
