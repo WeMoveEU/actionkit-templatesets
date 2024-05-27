@@ -70,9 +70,9 @@
 
   <script>actionkit.forms.initPage();</script>
 
-  {% include "./component-popup_blocker_alert.html" %}
-
   {% if not isEmbbeded %}
+    {% include "./component-popup_blocker_alert.html" %}
+
     {% if campaign_type == "youmove" %}
       {% include "./component-header-youmove.html" %}
     {% else %}
@@ -110,28 +110,14 @@
 
   <main id="main-content" class="wrapper px-4">
     {% if not isEmbbeded %}
-      {% block finished_alert %}
-        {% if page.custom_fields.finished_alert %}
-          <div class="p-4 bg-wm-orange-alert text-white mb-4 rounded" role="alert">
-              {{ page.custom_fields.finished_alert |safe }}
-          </div>
-        {% endif %}
-      {% endblock %}
-    {% endif %}
-
-    {% if not isEmbbeded %}
-      {% if page.custom_fields.consent_version %}
-        <div data-wm-popup-content-template data-wm-popup-hide-close-button="true" hidden>
+      {% if page.custom_fields.finished_alert %}
+        <div class="p-4 bg-wm-orange-alert text-white mb-4 rounded" role="alert">
+            {{ page.custom_fields.finished_alert |safe }}
+        </div>
       {% endif %}
     {% endif %}
 
     {% block content %}{% endblock %}
-
-    {% if not isEmbbeded %}
-      {% if page.custom_fields.consent_version %}
-        </div>
-      {% endif %}
-    {% endif %}
   </main>
 
   {% if not isEmbbeded %}
