@@ -1,7 +1,11 @@
-<div class="bg-wm-turquoise [&_a]:text-wm-orange">
+<div class="bg-wm-lightblue-video">
   <div class="cookieconsent-optout-marketing">
     <div class="video-placeholder">
-      <button type="button" onclick="Cookiebot.renew()">
+      <button
+        type="button"
+        onclick="Cookiebot.renew()"
+        class="text-wm-orange"
+        >
         {% filter ak_text:"videoPlaceholder_button" %}Please accept marketing cookies to watch this video{% endfilter %}
       </button>
     </div>
