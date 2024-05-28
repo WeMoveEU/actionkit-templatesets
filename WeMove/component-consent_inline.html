@@ -10,13 +10,15 @@
   </legend>
 
   <div class="consent-inline-group">
-    <label>
+    <label class="cursor-pointer">
       <input
+        class="cursor-pointer"
         name="action_consent_action-radio"
         data-wm-consent-inline-radio
         type="radio"
         value="y" />
-      <span>
+
+      <span class="cursor-pointer">
         {% if page.type == 'Survey' or page.type == 'Signup' %}
           {% filter ak_text:"joinUsConsentInlineYes_field" %}
             Yes! I want to join the WeMove Europe community to participate in campaigns that fight for a better Europe,
@@ -35,11 +37,13 @@
 
     <label>
       <input
+        class="cursor-pointer"
         name="action_consent_action-radio"
         data-wm-consent-inline-radio
         type="radio"
         value="n" />
-      <span>
+
+      <span class="cursor-pointer">
         {% if page.type == 'Survey' or page.type == 'Signup' %}
           {% filter ak_text:"joinUsConsentInlineNo_field" %}
             No. I don't want to receive information about the progress of campaigns that fight for a better Europe.

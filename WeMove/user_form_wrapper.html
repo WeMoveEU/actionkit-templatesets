@@ -37,7 +37,7 @@
 </p>
 
 {% if previous_actions and previous_actions != "0" %}
-<div id="already-signed">
+<div id="already-signed" hidden>
   <p class="text-white">
     {% if page.type == 'Letter'%}
       {% filter ak_text:"alreadyWrote_link" %}It appears that you have already sent an email. However, you can do more. Click below for next step.{% endfilter %}
@@ -56,7 +56,7 @@
 </div>
 {% endif %}
 
-<div id="unknown_user">
+<div id="unknown_user" class="ak-user-form">
   {% include "./user_form.html" %}
 </div>
 

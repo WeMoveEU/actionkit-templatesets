@@ -10,6 +10,7 @@ module.exports = {
         "wm-orange": "#ee6947",
         "wm-orange-alert": "#f77300",
         "wm-orangy-box": "#ffede9",
+        "wm-greeny-box": "#effffa",
         "wm-lightblue-box": "#f1efff",
         "wm-lightblue-video": "#e0f8fd",
         "wm-bg-form": "#7e6af0",
