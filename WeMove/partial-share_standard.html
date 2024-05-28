@@ -198,6 +198,7 @@
 
 <div class="my-8 text-center">
   <a
+    data-wm-skip-button
     href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
     class="p-4 border-2 inline-block font-bold !text-wm-yellow text-xl font-gilroy hover:!no-underline hover:border-wm-yellow hover:shadow transition-all">
     {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}

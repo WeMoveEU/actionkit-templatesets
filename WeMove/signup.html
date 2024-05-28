@@ -29,8 +29,7 @@
 		{% if page.custom_fields.next_step %}
 		<script>
 			(()=>{
-				// TODO
-				document.querySelector('a.skip.btn').href = '/act/{{ page.custom_fields.next_step }}';
+				document.querySelector('[data-wm-skip-button]').href = '/act/{{ page.custom_fields.next_step }}';
 			})();
 		</script>
 		{% endif %}

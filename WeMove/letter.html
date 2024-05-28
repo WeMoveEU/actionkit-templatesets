@@ -20,11 +20,11 @@
       <div class="p-4 mb-4 bg-blue-200 [&_p]:m-0">
         {% include_tmpl form.statement_leadin %}
 
-        <div id="recipients-wrapper" class="mt-2"></div>
+        <div id="recipients-wrapper"></div>
         <script type="text/ak-template" for="recipients-wrapper">
         [% if ( actionkit.context.recognized_user ) { %]
           [% if ( actionkit.context.targets && actionkit.context.targets.targets ) { %]
-            <div class="text-right mb-2">
+            <div class="text-right my-2">
               <button type="button" data-wm-toggle-button="recipients-list"
                 class="flex gap-2 ml-auto text-wm-pink">
                 <span data-wm-toggle-show-button>
@@ -58,7 +58,7 @@
   <aside>
     <form
       data-wm-floating-labels-form
-      class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below bg-wm-bg-form p-4"
+      class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below bg-wm-bg-form p-4 max-w-[500px] mx-auto"
       name="act"
       method="post"
       action="/act/"
