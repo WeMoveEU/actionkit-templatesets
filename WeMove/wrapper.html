@@ -135,6 +135,8 @@ actionkit.forms.initForm('act');
 </script>
 {% endblock %}
 
-{% include "./wemove-scripts.html" %}
+{% block wemove_scripts %}
+  {% include "./wemove-scripts.html" %}
+{% endblock %}
 </body>
 </html>
