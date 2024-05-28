@@ -1,15 +1,9 @@
 <div class="ak-grid-row" style="padding: 0 1rem;">
   <div class="ak-grid-col ak-grid-col-6-of-12">
     <h1>
-      {% if page.followup.send_taf %}
-        {% filter ak_text:"thanks_spreadTheWord_title" %}
-          Can you spread the word?
-        {% endfilter %}
-      {% else %}
-        {% filter ak_text:"notaf_thanks_banner" %}
-          Can you spread the word?
-        {% endfilter %}
-      {% endif %}
+      {% filter ak_text:"thanks_spreadTheWord_title" %}
+        Can you spread the word?
+      {% endfilter %}
     </h1>
 
     {% if page.type == "Signup" %}
