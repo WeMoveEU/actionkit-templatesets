@@ -41,18 +41,20 @@
 
     {% block meta_additions %}{% endblock %}
 
-    {% block css_additions %}{% endblock %}
     {% load_css %}
-      //127.0.0.1:8081/css/wemove.css
+      /media/modern/actionkit.css
+      //static.wemove.eu/action-kit/css/tw-wemove.css
 
       {% if args.embed and args.css == "1" and page.custom_fields.external_css %}
         {{ page.custom_fields.external_css }}
       {% endif %}
     {% end %}
+    {% block css_additions %}{% endblock %}
 
     <script>window.startTime = new Date();</script>
     {% load_js %}
         //ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
+        //static.wemove.eu/action-kit/js/assets/boostrap-5.1.3.min.js
         /resources/actionkit.js
     {% end %}
     {% block script_additions %}{% endblock %}
@@ -66,67 +68,87 @@
 <body
   {% if isEmbbeded == "true" %}data-wm-is-embbeded{% endif %}
   data-wm-page-id="{{ page.id }}"
-  class="{% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %} {% if isEmbbeded == "true" %}is-embbeded{% endif %} ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% block body_extra_classes %}{% endblock %}">
+  class="{% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %} ak-pagetype-{{ filename|split:'.'|nth:0 }} ak-lang-{{page.lang.iso_code|default:"unknown"}}{% if page.lang.is_rtl %} ak-rtl{% endif %} ak-no-js {% if isEmbbeded == "true" %} is-embbeded {% endif %}{% block body_extra_classes %}{% endblock %}">
 
   <script>actionkit.forms.initPage();</script>
 
-  {% if not isEmbbeded %}
-    {% include "./component-popup_blocker_alert.html" %}
-
-    {% if campaign_type == "youmove" %}
-      {% include "./component-header-youmove.html" %}
-    {% else %}
-      {% include "./component-header-wemove.html" %}
-    {% endif %}
-
-    <div class="modal popup" data-wm-modal-popup hidden>
-      <div class="modal-backdrop"></div>
-      <div class="modal-dialog">
-        <button type="button" class="close-popup--button" hidden data-wm-close-popup-button>
-          <span class="sr-only">
-            {% filter ak_text:"closePopup_button" %}Close popup{% endfilter %}
-          </span>
-          <span aria-hidden="true">x</span>
-        </button>
-        <div class="modal-content" data-wm-popup-content></div>
-      </div>
-    </div>
-
-    {% if not page.custom_fields.consent_version %}
-      {% block pre_action_share %}
-        {% if page.custom_fields.pre_action_share %}
-          {% store as share_page %}{% if page.custom_fields.pre_action_share == "1" %}{{ page.custom_fields.daisy_chain_action|default:page.name }}{% else %}{{ page.custom_fields.pre_action_share }}{% endif %}{% endstore %}
-          <div data-wm-popup-content-template hidden>
-            <h1 class="popup-title">{% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}</h1>
-            <div data-wm-external-content class="is-loading"></div>
-          </div>
-          <script>
-            const weMovePreShareUrl = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
-          </script>
-        {% endif %}
-      {% endblock %}
-    {% endif %}
-  {% endif %}
-
-  <main id="main-content" class="wrapper px-4">
     {% if not isEmbbeded %}
-      {% if page.custom_fields.finished_alert %}
-        <div class="p-4 bg-wm-orange-alert text-white mb-4 rounded" role="alert">
-            {{ page.custom_fields.finished_alert |safe }}
+      {% if campaign_type == "youmove" %}
+        {% include "./youmove-header.html" %}
+      {% else %}
+        {% include "./wemove-header.html" %}
+      {% endif %}
+
+      <div class="modal popup" data-wm-modal-popup hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-dialog">
+          <button type="button" class="close-popup--button" hidden data-wm-close-popup-button>
+            <span class="visually-hidden">
+              {% filter ak_text:"closePopup_button" %}Close popup{% endfilter %}
+            </span>
+            <span aria-hidden="true">x</span>
+          </button>
+          <div class="modal-content" data-wm-popup-content></div>
         </div>
+      </div>
+
+      {% if not page.custom_fields.consent_version %}
+        {% block pre_action_share %}
+          {% if page.custom_fields.pre_action_share %}
+            {% store as share_page %}{% if page.custom_fields.pre_action_share == "1" %}{{ page.custom_fields.daisy_chain_action|default:page.name }}{% else %}{{ page.custom_fields.pre_action_share }}{% endif %}{% endstore %}
+            <div data-wm-popup-content-template hidden>
+              <h1 class="popup-title">{% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}</h1>
+              <div data-wm-external-content class="is-loading"></div>
+            </div>
+            <script>
+              const weMovePreShareUrl = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
+            </script>
+          {% endif %}
+        {% endblock %}
       {% endif %}
     {% endif %}
 
-    {% block content %}{% endblock %}
-  </main>
+    <div id="wrapper">
+      <div id="content">
+        <div class="container-fluid">
+          {% if not isEmbbeded %}
+            {% block finished_alert %}
+              {% if page.custom_fields.finished_alert %}
+                <div class="alert alert-warning alert-finished" role="alert">
+                    {{ page.custom_fields.finished_alert |safe }}
+                </div>
+              {% endif %}
+            {% endblock %}
+          {% endif %}
 
-  {% if not isEmbbeded %}
-    {% if campaign_type == "youmove" %}
-      {% include "./component-footer-youmove.html" %}
-    {% else %}
-      {% include "./component-footer-wemove.html" %}
+          <div class="raction" id="rsign">
+            <div class="raction-content">
+              {% if not isEmbbeded %}
+                {% if page.custom_fields.consent_version %}
+                  <div data-wm-popup-content-template data-wm-popup-hide-close-button="true" hidden>
+                {% endif %}
+              {% endif %}
+
+              {% block content %}{% endblock %}
+
+              {% if not isEmbbeded %}
+                {% if page.custom_fields.consent_version %}
+                  </div>
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if not isEmbbeded %}
+      {% if campaign_type == "youmove" %}
+        {% include "./youmove-footer.html" %}
+      {% else %}
+        {% include "./wemove-footer.html" %}
+      {% endif %}
     {% endif %}
-  {% endif %}
 
 {% block below_form %}
 <script>
@@ -135,8 +157,6 @@ actionkit.forms.initForm('act');
 </script>
 {% endblock %}
 
-{% block wemove_scripts %}
-  {% include "./wemove-scripts.html" %}
-{% endblock %}
+{% include "./wemove-scripts.html" %}
 </body>
 </html>
