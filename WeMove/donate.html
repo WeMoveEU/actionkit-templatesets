@@ -2,17 +2,17 @@
 
 {% block css_additions %}
 {% load_css %}
-    {% if fundraiser_staging %}
-        //donate-ui.not-a2.eu/donate-main.css
-    {% else %}
-        //donate-ui.wemove.eu/donate-main.css
-    {% endif %}
+  {% if fundraiser_staging %}
+    //donate-ui.not-a2.eu/donate-main.css
+  {% else %}
+    //donate-ui.wemove.eu/donate-main.css
+  {% endif %}
 {% end %}
 {% endblock %}
 
 {% block content %}
 
-  <article class="nav-md:grid grid-cols-donate mb-16">
+  <article class="nav-md:grid grid-cols-donate mb-8">
     {% if form.ask_text %}
     <div class="mr-16">
       {% include_tmpl form.ask_text %}
@@ -34,13 +34,14 @@
       data-ak_locale="{{ link_iso }}"
       data-akid="{{ user.token|default_if_none:'' }}">
     </div>
+  </article>
 
-    {% if page.custom_fields.hide_skip_step_button != "1" %}
+  {% if page.custom_fields.hide_skip_step_button != "1" %}
       {% store as next_step %}
       {% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}&amp;action={{ args.action }}{% elif page.custom_fields.daisy_chain_action %}/thanks/{{ page.custom_fields.daisy_chain_action }}?share=1&amp;akid={{ akid }}&amp;action={{ args.action }}{% endif %}{% endstore %}
 
       {% if next_step %}
-        <div class="text-center my-4">
+        <div class="text-center mb-16">
           <a
             href="{{ next_step }}"
             class="button-fill button-fill--white border-gray-200 border-2 w-auto
@@ -50,8 +51,6 @@
         </div>
       {% endif %}
     {% endif %}
-
-  </article>
 
   <section class="mb-16 lg:grid grid-cols-2 gap-32">
     <div>
@@ -95,9 +94,9 @@
 {% endblock %}
 
 {% block below_form %}
-{% if fundraiser_staging %}
+  {% if fundraiser_staging %}
     <script type="module" src="//donate-ui.not-a2.eu/donate-main.js"></script>
-{% else %}
+  {% else %}
     <script type="module" src="//donate-ui.wemove.eu/donate-main.js"></script>
-{% endif %}
+  {% endif %}
 {% endblock %}
