@@ -5,7 +5,7 @@
         <div id="ak-fieldbox-taf_emails" class="ak-field">
             <label for="id_taf_emails">
                 {% filter ak_text:"inline_taf_ask" %}Optional: enter friends' email addresses to send them this page{% endfilter %}
-            </label> 
+            </label>
             <textarea id="id_taf_emails" name="taf_emails" style="margin-bottom: 0px;"></textarea>
         </div>
 
@@ -19,7 +19,7 @@
 
         <div id="ak-inline-taf-preview" class="ak-field ak-nodisplay">
             <div class="taf_subject">
-                <strong>{{ "Subject"|ak_field_label:"subject"|capfirst }}:</strong> 
+                <strong>{{ "Subject"|ak_field_label:"subject"|capfirst }}:</strong>
                 {% include_tmpl page.followup.taf_subject escaped %}
             </div>
 
@@ -29,7 +29,7 @@
                 </label>
                 <textarea id="id_taf_note" name="taf_note"></textarea>
             </div>
-            
+
             <div>
             {% filter referring_akid:akid|tag_links:"source=taf"|linebreaksbr %}{% include_tmpl page.followup.taf_body escaped %}{% endfilter %}
             </div>
@@ -38,3 +38,4 @@
     </div>
 
 {% endif %}
+
