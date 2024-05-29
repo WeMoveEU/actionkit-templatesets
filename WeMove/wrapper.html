@@ -74,9 +74,9 @@
     {% include "./component-popup_blocker_alert.html" %}
 
     {% if campaign_type == "youmove" %}
-      {% include "./component-header-youmove.html" %}
+      {% include "./partial-header_youmove.html" %}
     {% else %}
-      {% include "./component-header-wemove.html" %}
+      {% include "./partial-header_wemove.html" %}
     {% endif %}
 
     <div class="modal popup" data-wm-modal-popup hidden>
@@ -122,9 +122,9 @@
 
   {% if not isEmbbeded %}
     {% if campaign_type == "youmove" %}
-      {% include "./component-footer-youmove.html" %}
+      {% include "./partial-footer_youmove.html" %}
     {% else %}
-      {% include "./component-footer-wemove.html" %}
+      {% include "./partial-footer_wemove.html" %}
     {% endif %}
   {% endif %}
 
