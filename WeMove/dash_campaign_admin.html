@@ -903,7 +903,7 @@
 	////////////////////////////////////////////////////////////////////
 	// Create Pages / Mailings
 
-	function multilingualCampaignFor(campaign_name, action_type) {
+	function multilingualCampaignFor(campaign_name, action_type, second_time) {
 		if (action_type == 'share' && window.journeys.length) {
 			// This assumes that the share step is defined in the first step of the journey (for any language)
 			var first_language = Object.keys(journey.pages)[0];
@@ -916,8 +916,15 @@
 		var mcamp = Object.keys(multilingual_campaigns).find((uri) => multilingual_campaigns[uri].toLowerCase() == mcamp_name);
 		if (mcamp) {
 			return $.Deferred().resolve(mcamp);
+		} else if ( second_time ) {
+			return api('POST', 'multilingualcampaign/', { name: mcamp_name })
 		} else {
-			return api('POST', 'multilingualcampaign/', { name: mcamp_name });
+			return api('POST', 'multilingualcampaign/', { name: mcamp_name })
+				.fail(function(xhr, rstatus, rerror) {
+					return readMultilingualCampaigns(campaign_name).done( function() { 
+						return multilingualCampaignFor(campaign_name, action_type, 1)
+					} )
+				});
 		}
 	}
 
