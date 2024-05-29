@@ -1,0 +1,68 @@
+<header class="main-header nav-md:wrapper relative z-10 px-4 py-4 lg:px-4 mb-4">
+  <div class="mx-auto flex max-w-screen-2xl justify-between">
+    <a href="https://youmoveeurope.eu/{{ link_iso }}">
+      <img alt="YouMove logo" fetchpriority="high" width="242" height="112"
+        class="h-auto w-40 xl:w-52"
+        src="https://static.wemove.eu/action-kit/svg/youmove-iso-logo.svg" />
+    </a>
+
+    <nav
+      data-wm-fly-out-menu
+      class="main-nav flex items-center justify-center"
+      aria-label="{% filter ak_text:"a11y_mainMenu_title" %}Website main menu{% endfilter %}">
+
+      <button
+        class="nav-md:hidden"
+        type="button"
+        data-wm-fly-out-menu-trigger
+        aria-expanded="false">
+        <span aria-hidden="true">
+          {% include "./icon-hamburguer.html" %}
+        </span>
+
+        <span class="sr-only">
+          {% filter ak_text:"a11y_nav_showMainMenu_button" %}Show website menu{% endfilter %}
+        </span>
+      </button>
+
+      <ul
+        class="flyout-menu-list absolute left-0 top-[106px] m-auto mr-4 w-screen flex-col bg-white text-center shadow-sm shadow-gray-500
+        nav-md:relative nav-md:top-0 nav-md:mr-0 nav-md:!flex nav-md:w-auto nav-md:flex-row nav-md:items-center nav-md:justify-center nav-md:shadow-none nav-md:text-base"
+        hidden
+        data-wm-fly-out-menu-list>
+        <li class="py-2">
+          <a
+            href="https://www.youmoveeurope.eu/{{ link_iso }}/who-are-we"
+            class="text-wm-purple hover:text-wm-turquoise font-gilroy py-2 font-bold uppercase nav-md:mx-1 min-[1100px]:mx-2 xl:mx-5 regular-link regular-link--default">
+            {% filter ak_text:"nav_ym_whoAreWe" %}Who are we?{% endfilter %}
+          </a>
+        </li>
+        <li class="py-2">
+          <a href="https://www.youmoveeurope.eu/{{ link_iso }}/" class="text-wm-purple hover:text-wm-turquoise font-gilroy py-2 font-bold uppercase nav-md:mx-1 min-[1100px]:mx-2 xl:mx-5 regular-link regular-link--default">
+            {% filter ak_text:"nav_ym_youmoveCampaigns" %}YouMove Campaigns{% endfilter %}
+          </a>
+        </li>
+        <li class="py-2">
+          <a href="https://www.youmoveeurope.eu/{{ link_iso }}/campaign/create" class="text-white hover:text-wm-turquoise font-gilroy py-2 font-bold uppercase nav-md:mx-1 min-[1100px]:mx-2 xl:mx-5 button-fill button-fill--orange">
+            {% filter ak_text:"nav_ym_startCampaign" %}Start a campaign{% endfilter %}
+          </a>
+        </li>
+        <li class="py-2">
+          <a href="https://www.youmoveeurope.eu/{{ link_iso }}/auth/login" class="text-wm-purple hover:text-wm-turquoise font-gilroy py-2 font-bold uppercase nav-md:mx-1 min-[1100px]:mx-2 xl:mx-5 regular-link regular-link--default">
+            {% filter ak_text:"nav_ym_login" %}Log-in{% endfilter %}
+          </a>
+        </li>
+        <!-- <li class="py-2">
+          <a href="https://www.youmoveeurope.eu/{{ link_iso }}/campaign" class="text-wm-purple hover:text-wm-turquoise font-gilroy py-2 font-bold uppercase nav-md:mx-1 min-[1100px]:mx-2 xl:mx-5 regular-link regular-link--default">
+            {% filter ak_text:"nav_ym_myCampaigns" %}My campaigns{% endfilter %}
+          </a>
+        </li> -->
+        <li class="py-2">
+          <a href="https://www.youmoveeurope.eu/{{ link_iso }}/help" class="text-wm-purple hover:text-wm-turquoise font-gilroy py-2 font-bold uppercase nav-md:mx-1 min-[1100px]:mx-2 xl:mx-5 regular-link regular-link--default">
+            {% filter ak_text:"nav_ym_help" %}Help{% endfilter %}
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>

@@ -1,5 +1,5 @@
-<div class="ak-grid-row" style="padding: 0 1rem;">
-  <div class="ak-grid-col ak-grid-col-6-of-12">
+<div class="nav-md:grid gap-2 grid-cols-[60%_minmax(40%,_1fr)]">
+  <section>
     <h1>
       {% filter ak_text:"thanks_spreadTheWord_title" %}
         Can you spread the word?
@@ -7,45 +7,47 @@
     </h1>
 
     {% if page.type == "Signup" %}
-      {% store as featured_video %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
-      {% if featured_video %}
-        {% include "./featured-video.html" with featured_video=featured_video %}
-      {% endif %}
+      <div class="mb-4">
+        {% include "./component-featured_media.html" %}
+      </div>
     {% endif %}
 
-    <div>
-      {% include_tmpl form.thank_you_text %}
-    </div>
-  </div>
+    {% include_tmpl form.thank_you_text %}
+  </section>
 
-  <div class="ak-grid-col ak-grid-col-6-of-12" data-wm-share-buttons>
+  <aside data-wm-share-content>
+    <div class="p-8 bg-wm-orangy-box text-wm-purple mb-4">
+      <h3>{{ page.followup.share_title_value }}</h3>
 
-    <div class="facebook-share-preview-container">
-        <h3 class="facebook-share-preview--title">{{ page.followup.share_title_value }}</h3>
-        {% if page.custom_fields.featured_image or page.followup.share_image_value %}
-        <div class="facebook-share-preview-image">
-          <img src="{{ page.custom_fields.featured_image|default:page.followup.share_image_value }}">
+      <div class="xl:flex gap-2">
+      {% if page.custom_fields.featured_image or page.followup.share_image_value %}
+        <div class="mb-4 xl:mb-0 xl:w-1/3">
+          <img
+            width="100%"
+            height="100%"
+            alt="{{ page.followup.share_title_value }}"
+            src="{{ page.custom_fields.featured_image|default:page.followup.share_image_value }}" />
         </div>
-        {% endif %}
-        <div class="facebook-share-preview-description">
-          {{ page.followup.share_description_value }}
-        </div>
-        <div style="clear: both;"></div>
+      {% endif %}
+
+      <div class="xl:w-2/3">{{ page.followup.share_description_value }}</div>
       </div>
+    </div>
 
-      <div class="share-big whatsapp-share-container js-whatsapp-share-container">
+    <div class="mx-auto md:max-w-[500px]">
+      <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
-          class="btn btn-primary whatsapp-web"
+          class="transition-all text-center bg-whatsapp !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
           href="/thanks/{{ page.name }}?share=whatsapp&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
           target="_blank"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
           data-wm-pixel-content-name="WhatsApp"
           data-wm-pixel-trigger-event="click">
-          <i class="fa fa-whatsapp"></i>
-          <span class="share-text">
-            {% filter ak_text:"thanks_shareWhatsApp_button" %}Share on WhatsApp{% endfilter %}
+          <span aria-hidden="true" class="h-6 w-6">
+            {% include "./icon-whatsapp.html" %}
           </span>
+          <span>{% filter ak_text:"thanks_shareWhatsApp_button" %}Share on WhatsApp{% endfilter %}</span>
         </a>
 
         <script>
@@ -81,78 +83,82 @@
         </script>
       </div>
 
-      <div class="share-big facebook-share-container js-facebook-share-container">
+      <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
-          class="btn btn-primary facebook"
+          class="transition-all text-center bg-facebook !text-white font-bold uppercase p-3 block font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
           href="/share/link?type=fb&amp;page_name={{page.name}}&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
           target="_blank"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
           data-wm-pixel-content-name="Facebook"
           data-wm-pixel-trigger-event="click">
-          <i class="fa fa-facebook-square"></i>
-          <span class="share-text">
-            {% filter ak_text:"thanks_shareFacebook_button" %}Share on Facebook{% endfilter %}
+          <span aria-hidden="true" class="h-6 w-6">
+            {% include "./icon-facebook.html" %}
           </span>
+          <span>{% filter ak_text:"thanks_shareFacebook_button" %}Share on Facebook{% endfilter %}</span>
         </a>
       </div>
 
-      <div class="share-big twitter-share-container js-twitter-share-container">
+      <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
-          class="btn btn-primary twitter"
+          class="transition-all text-center bg-twitter !text-white font-bold uppercase p-3 block font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
           href="/share/link?type=tw&amp;page_name={{page.name}}&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
           target="_blank"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
           data-wm-pixel-content-name="Twitter"
           data-wm-pixel-trigger-event="click">
-          <i class="fa fa-twitter"></i> <span class="share-text">
-            {% filter ak_text:"thanks_shareTwitter_button" %}Share on Twitter{% endfilter %}
+          <span aria-hidden="true" class="h-6 w-6">
+            {% include "./icon-twitter.html" %}
           </span>
+          <span>{% filter ak_text:"thanks_shareTwitter_button" %}Share on Twitter{% endfilter %}</span>
         </a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
       </div>
 
       {% store as instagram_share_link %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "instagram_share_link" as field_name %}{% endstore %}
       {% if instagram_share_link %}
-      <div class="share-big instagram-share-container">
+      <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
-          class="btn btn-primary instagram"
+          class="transition-all text-center bg-instagram !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
           href="{{instagram_share_link}}"
           target="_blank"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
           data-wm-pixel-content-name="Instagram"
           data-wm-pixel-trigger-event="click">
-          <i class="fa fa-instagram"></i>
-          <span class="share-text">
-            {% filter ak_text:"thanks_shareInstagram_button" %}Share Story on Instagram{% endfilter %}
+          <span aria-hidden="true" class="h-4 w-4">
+            {% include "./icon-instagram.html" %}
           </span>
+          <span>{% filter ak_text:"thanks_shareInstagram_button" %}Share Story on Instagram{% endfilter %}</span>
         </a>
       </div>
       {% endif %}
 
       {% if page.followup.send_taf %}
-      <div class="share-big email-share-container js-email-share-container">
+      <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
-          class="btn btn-primary email"
+          class="transition-all text-center bg-wm-orange !text-white font-bold uppercase p-3 block font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
           href="mailto:?subject={{ page.followup.taf_subject|urlencode }}&amp;body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"
           target="_blank"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
           data-wm-pixel-content-name="Taf"
           data-wm-pixel-trigger-event="click">
-          <i class="fa fa-envelope-o"></i> <span class="share-text">{% filter ak_text:"thanks_shareEmail_button" %}Share by e-mail{% endfilter %}</span>
+          <span aria-hidden="true" class="h-6 w-6">
+            {% include "./icon-mail.html" %}
+          </span>
+          <span>{% filter ak_text:"thanks_shareEmail_button" %}Share by e-mail{% endfilter %}</span>
         </a>
       </div>
       {% endif %}
 
       <div
-        class="share-big copy-link"
+        class="border-[1px] border-wm-black rounded p-2 mb-4"
         data-wm-copy-to-clipboard="/share/link?type=ot{% if action %}&amp;action_id={{ action.id }}{% else %}&amp;page_name={{page.name}}&amp;akid={{ akid }}{% endif %}">
         <input
           type="text"
-          class="copy-link--textbox"
+          class="bg-gray-100 px-2 py-3 text-sm rounded border-[1px] border-gray-300 w-full mb-2"
           data-wm-copy-to-clipboard-textbox
           {% if page.custom_fields.sharing_step %}
             value="{{ page.custom_fields.sharing_step }}"
@@ -163,32 +169,37 @@
 
           <button
             type="button"
-            class="btn btn-primary copy-link--button"
+            class="transition-all text-center bg-copyurl !text-white font-bold uppercase p-3 block font-gilroy rounded hover:!no-underline hover:brightness-110
+            w-full"
             data-wm-copy-to-clipboard-button
             data-wm-pixel-event-type="Share"
             data-wm-pixel-track-type="trackCustom"
             data-wm-pixel-content-name="CopyLink"
             data-wm-pixel-trigger-event="click">
-          <span class="copy-link--text">
-            <i class="fa fa-link"></i>
-            <span class="share-text">
-              {% filter ak_text:"copyLink_button" %}Copy{% endfilter %}
+            <span class="copy-text">
+              <span aria-hidden="true" class="h-6 w-6">
+                {% include "./icon-link.html" %}
+              </span>
+              <span>{% filter ak_text:"copyLink_button" %}Copy{% endfilter %}</span>
             </span>
-          </span>
 
-          <span class="copy-link--alert">
-            <i class="fa fa-check"></i>
-            <span class="share-text">
-              {% filter ak_text:"linkCopied_alert" %}Link copied{% endfilter %}
+            <span class="copied-text">
+              <span aria-hidden="true" class="h-6 w-6">
+                {% include "./icon-check.html" %}
+              </span>
+              <span>{% filter ak_text:"linkCopied_alert" %}Link copied{% endfilter %}</span>
             </span>
-          </span>
         </button>
       </div>
-  </div>
+    </div>
+  </aside>
 </div>
 
-<div class="skip-step-wrapper" style="margin-top: 1rem; text-align: center;">
-  <a href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default" style="margin-top: 1rem;">
+<div class="my-8 text-center">
+  <a
+    data-wm-skip-button
+    href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
+    class="p-4 border-2 inline-block font-bold !text-wm-yellow text-xl font-gilroy hover:!no-underline hover:border-wm-yellow hover:shadow transition-all">
     {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
-    </a>
+  </a>
 </div>

@@ -19,16 +19,16 @@
 
 {% if args.done %}
   {# --- VIEW MODE "DONE" #}
-  <div class="thanks-message">
+  <div class="font-bold">
     {% if page.custom_fields.final_message %}
-      <div>{{ page.custom_fields.final_message|safe }}</div>
+      {{ page.custom_fields.final_message|safe }}
     {% else %}
       {% filter ak_text:"final_message" %}
         Thank you for standing for democracy with us. It is only together that we can truly be a force to be reckoned with.
       {% endfilter %}
     {% endif %}
 
-    <div class="go-home">
+    <div class="mt-4">
       <a href="https://wemove.eu/{{ link_iso }}">
         {% filter ak_text:"returnToHomepage_link" %}Return to the homepage{% endfilter %}
       </a>
@@ -87,17 +87,9 @@
 
       {# TODO Logic and partials to be removed after germanic ab test is done #}
       {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
-        {% if args.skip_abtest == "1" %}
-          {% include "./share-standard.html" %}
-        {% elif page.custom_fields.germanic_ab_test_mode == "campact" %}
-          {% include "./share-campact.html" %}
-        {% elif page.custom_fields.germanic_ab_test_mode == "innnit" %}
-          {% include "./share-innnit.html" %}
-        {% else %}
-          {% include "./share-standard.html" %}
-        {% endif %}
+        {% include "./partial-share_germanic.html" %}
       {% else %}
-        {% include "./share-standard.html" %}
+        {% include "./partial-share_standard.html" %}
       {% endif %}
 
 	  {% endif %}
