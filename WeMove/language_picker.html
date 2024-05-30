@@ -1,35 +1,47 @@
 {% if can_switch_lang and not isEmbbeded %}
-    {% with page.translations as translations %}
-        <!-- Remove this if you don't want popins like "This page also in English" -->
-				<div class="siblings dropdown">
-				    <button type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              id="dropdownsiblings"
-              class="btn btn-default dropdown-toggle">
-				      <img src="https://strapi.wemove.eu/uploads/icon_translate_eeaca63123.svg">
-	            {% for translated_page in translations %}
-	                {% if translated_page.id == page.id %}
-                    {% store as selectedLang_name %}language_{{ translated_page.lang.name }}{% endstore %}
-                    {% filter ak_text:selectedLang_name %}{{ translated_page.lang.name|default:"English" }}{% endfilter %}
-	                {% endif %}
-	            {% endfor %}
-				    </button>
+  {% with page.translations as translations %}
+    <!-- Remove this if you don't want popins like "This page also in English" -->
+    <aside class="language-pickers w-36 mb-4 nav-md:absolute nav-md:right-4" data-wm-fly-out-menu>
+      <button
+        type="button"
+        data-wm-fly-out-menu-trigger
+        aria-expanded="false"
+        class="relative rounded bg-neutral-100 hover:text-wm-purple flex p-3 gap-2 justify-between items-center font-gilroy font-bold uppercase text-neutral-600">
 
-				    <ul class="dropdown-menu" aria-labelledby="dropdownsiblings">
-	            {% for translated_page in translations %}
-	                {% if translated_page.id != page.id %}
-                    {% if translated_page.custom_fields.temp_is_widget != 'true' %}
-                        <li>
-                          <a href="{{ translated_page.derived.canonical_path }}{% for name, value in args.items %}{% if forloop.first %}?{{ name }}={{ value }}{% else %}&{{ name }}={{ value }}{% endif %}{% endfor %}">
-                          {% store as lang_name %}language_{{ translated_page.lang.name }}{% endstore %}
-                          {% filter ak_text:lang_name %}{{ translated_page.lang.name|default:"English" }}{% endfilter %}
-                          </a>
-                        </li>
-                    {% endif %}
-                  {% endif %}
-	            {% endfor %}
-				    </ul>
-				  </div>
-    {% endwith %}
+        <img aria-hidden="true" height="32" width="27" alt="Language selector" src="https://strapi.wemove.eu/uploads/icon_translate_eeaca63123.svg" />
+
+        <span class="pr-4 after:pointer-events-none after:absolute after:right-2 after:top-6
+        after:ml-1 after:inline-block after:border-[.3em] after:border-b-0 after:border-solid
+        after:border-neutral-600 after:border-l-transparent after:border-r-transparent after:align-[.25rem] after:content-['']
+         after:hover:border-t-wm-purple">
+          {% for translated_page in translations %}
+            {% if translated_page.id == page.id %}
+              {% store as selectedLang_name %}language_{{ translated_page.lang.name }}{% endstore %}
+              {% filter ak_text:selectedLang_name %}{{ translated_page.lang.name|default:"English" }}{% endfilter %}
+            {% endif %}
+          {% endfor %}
+        </span>
+      </button>
+
+      <ul
+        class="absolute mt-1 rounded bg-white border-[1px] border-gray-200 shadow min-w-[180px] z-10"
+        data-wm-fly-out-menu-list
+        hidden>
+        {% for translated_page in translations %}
+            {% if translated_page.id != page.id %}
+              {% if translated_page.custom_fields.temp_is_widget != 'true' %}
+                  <li class="px-6 p-[2px]">
+                    <a
+                      href="{{ translated_page.derived.canonical_path }}{% for name, value in args.items %}{% if forloop.first %}?{{ name }}={{ value }}{% else %}&{{ name }}={{ value }}{% endif %}{% endfor %}"
+                      class="text-sm !text-gray-400 hover:!no-underline hover:!text-gray-800">
+                    {% store as lang_name %}language_{{ translated_page.lang.name }}{% endstore %}
+                    {% filter ak_text:lang_name %}{{ translated_page.lang.name|default:"English" }}{% endfilter %}
+                    </a>
+                  </li>
+              {% endif %}
+            {% endif %}
+        {% endfor %}
+      </ul>
+    </aside>
+  {% endwith %}
 {% endif %}

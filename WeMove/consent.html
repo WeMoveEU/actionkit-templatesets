@@ -3,30 +3,31 @@
 <h2>{{ page.title }}</h2>
 
 <form class="action_form" name="act" method="POST" action="/act/" accept-charset="utf-8">
-	<div id="signup-story">
-		{% if page.custom_fields.featured_image %}
-		<img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
-		{% endif %}
+  <h2 class="text-wm-purple border-b border-black pb-4">{{ page.title }}</h2>
 
-		<div class="ak-abovefold">
-			{% include_tmpl form.introduction_text %}
-		</div>
+  {% if page.custom_fields.featured_image %}
+  <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
+  {% endif %}
 
-		<div class="ak-mobile-lead"></div>
-	</div>
+  <div
+    class="[&_p:last-child]:text-gray-400 [&_p:last-child]:text-sm [&_p:last-child]:mt-4
+    max-h-96 overflow-auto mb-4">
+    {% include_tmpl form.introduction_text %}
+  </div>
 
 	<div id="signup-form" class="ak-styled-fields ak-labels-overlaid ak-errs-below">
-	    <input type="hidden" name="akid" value="{{ akid }}">
-	    <input type="hidden" name="redirect" value="{{ args.next_step }}">
-	    <input type="hidden" name="opt_in" value="">
-	    <input type="hidden" name="action_consent_version" value="{{ page.custom_fields.consent_version }}">
-	    <input type="hidden" name="action_consent_action" value="">
-	    <input type="hidden" name="action_via_email" value="">
-	    <input type="hidden" name="action_trigger_page" value="{{ args.trigger_page }}">
-	    <input type="hidden" name="action_trigger_action" value="{{ args.trigger_action }}">
+    <input type="hidden" name="akid" value="{{ akid }}" />
+    <input type="hidden" name="redirect" value="{{ args.next_step }}" />
+    <input type="hidden" name="opt_in" value="" />
+    <input type="hidden" name="action_consent_version" value="{{ page.custom_fields.consent_version }}" />
+    <input type="hidden" name="action_consent_action" value="" />
+    <input type="hidden" name="action_via_email" value="" />
+    <input type="hidden" name="action_trigger_page" value="{{ args.trigger_page }}" />
+    <input type="hidden" name="action_trigger_action" value="{{ args.trigger_action }}" />
 
-		<div id="consent-buttons">
-				<button type="button" id="btn_optout" value="none_given" class="btn optout js-popup-consent-button">
+		<div class="md:flex justify-between gap-4">
+				<button type="button" id="btn_optout" value="none_given"
+          class="block mb-4 uppercase font-bold text-center bg-gray-200 rounded p-3 font-gilroy text-neutral-600 w-full text-sm hover:text-white hover:bg-wm-pink">
           {% filter ak_text:"consents_contactMeNo_button" %}No, I don't want to use my power{% endfilter %}
 				</button>
 
@@ -34,7 +35,7 @@
           type="button"
           id="btn_optin"
           value="explicit_opt_in"
-          class="btn optin js-popup-consent-button"
+          class="block mb-4 uppercase font-bold text-center bg-wm-bg-form rounded p-3 font-gilroy text-white w-full text-sm hover:text-white hover:bg-wm-pink"
           data-wm-pixel-event-type="OptIn"
           data-wm-pixel-track-type="trackCustom"
           data-wm-pixel-trigger-event="click">
@@ -47,36 +48,33 @@
 		</div>
 	</div>
 
-  <input type="hidden" name="page" value="{{ page.name }}">
+  <input type="hidden" name="page" value="{{ page.name }}" />
 </form>
 
 <script>
 {% if args.confirm %}
-  $('#consent-buttons div').toggle()
   $('input[name="action_consent_action"]').val('y');
   $('input[name="action_via_email"]').val(1);
-  $('form.action_form').get(0).submit();
+  $('form.action_form')[0].submit();
 {% elif args.decline %}
-  $('#consent-buttons div').toggle()
   $('input[name="action_consent_action"]').val('n');
   $('input[name="opt_in"]').val(1);
   $('input[name="action_via_email"]').val(1);
-  $('form.action_form').get(0).submit();
+  $('form.action_form')[0].submit();
 {% elif user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
-  $('#consent-buttons div').toggle()
   $('input[name="action_consent_action"]').val('e');
   $('input[name="opt_in"]').val(1);
-  $('form.action_form').get(0).submit();
+  $('form.action_form')[0].submit();
 {% else %}
 document.addEventListener("wm-popupReady", function () {
   $('#btn_optin').on('click', function () {
     $('input[name="action_consent_action"]').val('y');
-    $('form.action_form').get(0).submit();
+    $('form.action_form')[0].submit();
   });
   $('#btn_optout').on('click', function () {
     $('input[name="action_consent_action"]').val('n');
     $('input[name="opt_in"]').val(1);
-    $('form.action_form').get(0).submit();
+    $('form.action_form')[0].submit();
   });
 });
 {% endif %}

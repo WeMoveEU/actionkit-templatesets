@@ -14,60 +14,70 @@
 	{% endif %}
 {% endif %}
 
-<div id="known_user" class="known-member">
-  <div class="known-member-inner">
-    <p>
-      {% if page.type == 'Letter'%}
-        {% filter ak_text:"knownUser_writingAs" %}You are writing as{% endfilter %}
-      {% elif page.type == 'Survey'%}
-	      {% filter ak_text:"knownUser_surveyAs" %}You are submitting this as{% endfilter %}
-      {% else %}
-        {% filter ak_text:"knownUser_signingAs" %}Sign this as {% endfilter %}
-      {% endif %}
-      <strong id="known_user_name" data-wm-user-full-name></strong>
-      <br/>
+<p id="known_user" class="rounded bg-white p-2 mb-8 hidden">
+  {% if page.type == 'Letter'%}
+    {% filter ak_text:"knownUser_writingAs" %}You are writing as{% endfilter %}
+  {% elif page.type == 'Survey'%}
+    {% filter ak_text:"knownUser_surveyAs" %}You are submitting this as{% endfilter %}
+  {% else %}
+    {% filter ak_text:"knownUser_signingAs" %}Sign this as {% endfilter %}
+  {% endif %}
 
-      {% filter ak_text:"knownUser_notYou_button" %}Not you?{% endfilter %}
+  <strong id="known_user_name" class="font-bold"></strong>
+  <br/>
 
-      <button class="not-you--button" type="button" onclick="return actionkit.forms.logOut()">
-        {% filter ak_text:"clickHere_button" %}Not you?{% endfilter %}
-      </button>
-    </p>
-  </div>
+  {% filter ak_text:"knownUser_notYou_button" %}Not you?{% endfilter %}
 
-	{% if previous_actions and previous_actions != "0" %}
-	  <div class="already-signed">
-	    <p>
-        {% if page.type == 'Letter'%}
-          {% filter ak_text:"alreadyWrote_link" %}It appears that you have already sent an email. However, you can do more. Click below for next step.{% endfilter %}
-        {% elif page.type == 'Survey'%}
-          {% filter ak_text:"alreadySubmitSuvey_link" %}It appears that you have already submitted this form. However, you can do more. Click below for next step.{% endfilter %}
-        {% else %}
-          {% filter ak_text:"alreadySigned_link" %}It seems you have already signed. However, you can do more. Click below for next step.{% endfilter %}
-        {% endif %}
-      </p>
+  <button
+    class="inline bg-none p-0 normal-case text-wm-pink font-normal w-auto font-libre-franklin hover:shadow-none hover:underline"
+    type="button"
+    onclick="return actionkit.forms.logOut()">
+    {% filter ak_text:"clickHere_button" %}click here{% endfilter %}
+  </button>
+</p>
 
-        <a
-          class="btn btn-danger"
-          href="/thanks/{{ page.name }}?akid={{ akid }}">
-          {% filter ak_text:"continue_button" %}Continue{% endfilter %}
-        </a>
-	  </div>
-	{% endif %}
+{% if previous_actions and previous_actions != "0" %}
+<div id="already-signed" hidden>
+  <p class="text-white">
+    {% if page.type == 'Letter'%}
+      {% filter ak_text:"alreadyWrote_link" %}It appears that you have already sent an email. However, you can do more. Click below for next step.{% endfilter %}
+    {% elif page.type == 'Survey'%}
+      {% filter ak_text:"alreadySubmitSuvey_link" %}It appears that you have already submitted this form. However, you can do more. Click below for next step.{% endfilter %}
+    {% else %}
+      {% filter ak_text:"alreadySigned_link" %}It seems you have already signed. However, you can do more. Click below for next step.{% endfilter %}
+    {% endif %}
+  </p>
+
+  <a
+    class="button-fill--stone-white block text-center rounded uppercase p-3 font-bold font-gilroy w-full mb-4"
+    href="/thanks/{{ page.name }}?akid={{ akid }}">
+    {% filter ak_text:"continue_button" %}Continue{% endfilter %}
+  </a>
 </div>
+{% endif %}
 
 <div id="unknown_user" class="ak-user-form">
-    {% include "./user_form.html" %}
+  {% include "./user_form.html" %}
 </div>
+
+{% if page.type == 'Petition' %}
+  {% store as hide_comments_field %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "hide_comments_field" as field_name %}{% endstore %}
+  {% if not hide_comments_field == "1" %}
+  <div class="ak-field form-field hide-if-previously-signed">
+    <label for="id_comment">{% filter ak_text:"form_field_comments" %}Your comments:{% endfilter %}</label>
+    <textarea id="id_comment" name="action_comment"></textarea>
+  </div>
+  {% endif %}
+{% endif %}
 
 {% include "./privacy.html" %}
 
 {% if args.utm_source %}
-    <input type="hidden" name="action_utm_source" value="{{ args.utm_source }}">
+  <input type="hidden" name="action_utm_source" value="{{ args.utm_source }}">
 {% endif %}
 {% if args.utm_medium %}
-    <input type="hidden" name="action_utm_medium" value="{{ args.utm_medium }}">
+  <input type="hidden" name="action_utm_medium" value="{{ args.utm_medium }}">
 {% endif %}
 {% if args.utm_campaign %}
-    <input type="hidden" name="action_utm_campaign" value="{{ args.utm_campaign }}">
+  <input type="hidden" name="action_utm_campaign" value="{{ args.utm_campaign }}">
 {% endif %}

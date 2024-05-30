@@ -26,7 +26,7 @@ block.super }}{% endblock %}
             {% if page.custom_fields.featured_image %}
             <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
             {% endif %}
-            <div>{% include "./progress_meter.html" %}</div>
+            <div>{% include "./component-progress_meter.html" %}</div>
             {% include_tmpl form.ask_text %}
         </div>
 

@@ -1,0 +1,107 @@
+<footer class="bg-wm-purple text-white mt-8 py-8 px-4 pb-16 md:px-8 font-gilroy">
+  <div class="wrapper">
+    <div class="text-center md:flex md:justify-between md:items-center">
+      <a class="inline-block" href="https://wemove.eu/{{ link_iso }}/">
+        <img
+          alt="WeMove Europe logo"
+          src="https://static.wemove.eu/action-kit/svg/wemove-iso-logo__white-text.svg"
+          width="230"
+          height="111"
+          loading="lazy"
+          class="mx-auto max-w-[160px] mb-8 md:max-w-full"
+        />
+      </a>
+
+      <ul class="mb-8 md:flex md:gap-8">
+        <li class="mb-4 capitalize text-center">
+          <a
+            href="https://wemove.eu/{{ link_iso }}/community"
+            class="capitalize nav__link regular-link regular-link--default">
+            {% filter ak_text:"nav_wm_community" %}Community{% endfilter %}
+          </a>
+        </li>
+        <li class="mb-4 capitalize text-center">
+          <a
+            href="https://wemove.eu/{{ link_iso }}/campaigns"
+            class="capitalize nav__link regular-link regular-link--default">
+            {% filter ak_text:"nav_wm_campaigns" %}Campaigns{% endfilter %}
+          </a>
+        </li>
+        <li class="mb-4 capitalize text-center">
+          <a
+            href="https://action.wemove.eu/signup/wemove-join_en"
+            class="capitalize nav__link regular-link regular-link--default">
+            {% filter ak_text:"nav_wm_joinUs" %}Join us{% endfilter %}
+          </a>
+        </li>
+        <li class="mb-4 capitalize text-center">
+          <a
+            href="https://wemove.eu/{{ link_iso }}/contact-us"
+            class="capitalize nav__link regular-link regular-link--default">
+            {% filter ak_text:"nav_wm_contactUs" %}Contact{% endfilter %}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="flex flex-wrap justify-center md:justify-between">
+      <div
+        class="text-center text-xs order-last mt-8 md:order-none md:w-1/3 md:max-w-xs md:text-left">
+        <p class="text-gray-400 mb-6">
+          {% filter ak_text:"footer_wm_legalText_1" %}WeMove Europe is an
+            independent and values-based organisation that seeks to build people
+            power to transform Europe in the name of our community, future
+            generations and the planet.{% endfilter %}
+        </p>
+        <p>© 2024 WeMove Europe</p>
+      </div>
+
+      <div class="md:flex md:flex-col md:justify-end md:items-end">
+        <ul class="flex gap-4 justify-center items-end mb-8">
+          <li>
+            <a href="https://twitter.com/wemoveEU" target="_blank">
+              {% include "./icon-footer_twitter.html" %}
+            </a>
+          </li>
+          <li>
+            <a href="https://www.facebook.com/wemoveeurope/" target="_blank">
+              {% include "./icon-footer_facebook.html" %}
+            </a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/c/WeMoveEU" target="_blank">
+              {% include "./icon-footer_youtube.html" %}
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/company/wemove.eu/" target="_blank">
+              {% include "./icon-footer_linkedin.html" %}
+            </a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/wemove_europe/" target="_blank">
+              {% include "./icon-footer_instagram.html" %}
+            </a>
+          </li>
+        </ul>
+
+        <ul class="text-sm flex justify-center gap-2">
+          <li class="first:border-r-2 first:pr-2 first:border-gray-400">
+            <a
+              href="https://wemove.eu/{{ link_iso }}/privacy-policy"
+              class="capitalize font-normal text-gray-400 nav__link regular-link regular-link--default">
+              {% filter ak_text:"nav_wm_privacyPolicy" %}Privacy Policy{% endfilter %}
+            </a>
+          </li>
+          <li class="first:border-r-2 first:pr-2 first:border-gray-400">
+            <a
+              href="https://wemove.eu/{{ link_iso }}/impressum"
+              class="capitalize font-normal text-gray-400 nav__link regular-link regular-link--default">
+              {% filter ak_text:"nav_wm_impressum" %}Impressum{% endfilter %}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>

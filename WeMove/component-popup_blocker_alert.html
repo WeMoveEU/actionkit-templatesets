@@ -1,0 +1,11 @@
+<div
+  class="flex fixed justify-center top-[-300px] left-0 w-full p-4 text-center z-50 duration-700 transition-all border-b-4 border-b-wm-warning-highlight text-wm-warning-highlight bg-wm-warning-bg"
+  data-wm-popup-blocker-alert>
+
+  <p class="m-0 max-w-[600px]">
+    {% filter ak_text:"blockedPopup_alert" %}
+      It seems that your browser is blocking the popup window.
+      Please try to disable the block for this page and try again.
+    {% endfilter %}
+  </p>
+</div>
