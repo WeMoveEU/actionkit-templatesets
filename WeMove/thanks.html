@@ -42,25 +42,24 @@
     {% if page.send_via_cwc and page.is_targeting_us_senate and not action.custom_fields.cwc_prefix %}
 
       {# --- VIEW MODE "AFTER-ACTION, NAME PREFIX FOR US SENATE" #}
+      <h1>Information Needed</h1>
 
-      <div class="ak-grid-row" style="padding: 0 1rem;">
-        <div class="ak-grid-col ak-grid-col-6-of-12">
-          <h1>
-            Information Needed
-          </h1>
-          <div>
-            <p>To deliver your signature to the Senate <b>you must select a prefix</b> from the following list.  Your selection will only be used to deliver your signature.</p>
-            <select name="action_cwc_prefix">
-              <option>Mr.</option>
-              <option>Mrs.</option>
-              <option>Miss</option>
-              <option>Ms.</option>
-              <option>Dr.</option>
-            </select>
-            <button type="submit" class="ak-submit-button">Update</button>
-          </div>
-        </div>
-      </div>
+      <p>
+        To deliver your signature to the Senate <b>you must select a prefix</b>
+        from the following list.  Your selection will only be used to deliver your signature.
+      </p>
+
+      <select name="action_cwc_prefix">
+        <option>Mr.</option>
+        <option>Mrs.</option>
+        <option>Miss</option>
+        <option>Ms.</option>
+        <option>Dr.</option>
+      </select>
+
+      <button type="submit" class="ak-submit-button">
+        Update
+      </button>
 
     {% elif page.SUPPRESS_SHARING %}
 
