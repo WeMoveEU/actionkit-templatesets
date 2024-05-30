@@ -65,21 +65,21 @@
     {% elif page.SUPPRESS_SHARING %}
 
 	    {# --- VIEW MODE "AFTER-ACTION, NO SHARING" #}
+      <div class="flex gap-4 items-center mb-4">
+        <img src="/media/modern/stance-supportive.svg" height="34" width="34" alt="&#10003;" aria-hidden="true" />
 
-      <div class="ak-grid-row" style="padding: 0 1rem;">
-        <div class="ak-grid-col ak-grid-col-12-of-12">
-          <div class="thanks-header">
-            <img src="/media/modern/stance-supportive.svg" height="34" width="34" class="ak-checkmark-icon" alt="&#10003;">
-            <h2>{% filter ak_text:"noshare_thanks_banner" %}Thanks!{% endfilter %}</h2>
-          </div>
-
-          <div>{% include_tmpl form.thank_you_text %}</div>
-
-          {% if not page.type == 'Unsubscribe' %}
-          <a href="{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default"> {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}</a>
-          {% endif %}
-        </div>
+        <h2 class="text-wm-purple m-0">
+          {% filter ak_text:"noshare_thanks_banner" %}Thanks!{% endfilter %}
+        </h2>
       </div>
+
+      {% include_tmpl form.thank_you_text %}
+
+      {% if not page.type == 'Unsubscribe' %}
+        <a href="{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default">
+          {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
+        </a>
+      {% endif %}
 
     {% else %}
 
