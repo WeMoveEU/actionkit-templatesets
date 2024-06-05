@@ -85,7 +85,6 @@
 
       {# --- VIEW MODE "SHARING" #}
 
-      {# TODO Logic and partials to be removed after germanic ab test is done #}
       {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
         {% include "./partial-share_germanic.html" %}
       {% else %}
@@ -173,10 +172,14 @@
 
       {# 4. You have already been asked to consent, so jump to the next step. #}
 
-      <a href="{{ next_step }}">Please continue to the next step.</a>
-      <script>
-        window.location = '{{ next_step }}&consent=previous';
-      </script>
+      {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
+        {% include "./partial-share_germanic.html" %}
+      {% else %}
+        <a href="{{ next_step }}">Please continue to the next step.</a>
+        <script>
+          window.location = '{{ next_step }}&consent=previous';
+        </script>
+      {% endif %}
 
     {% else %}
 

@@ -3,14 +3,6 @@
 {% block content %}
 
 {% if page.custom_fields.consent_version %}
-  {% block css_additionss %}
-  <style>
-    body.ak-pagetype-signup.ak-lang-de {
-      visibility: hidden;
-    }
-  </style>
-  {% endblock %}
-
   {% include "./consent.html" %}
 {% elif page.custom_fields.sharing_step %}
   {% if args.akid and args.akid|first = 's' %}
