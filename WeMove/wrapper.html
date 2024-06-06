@@ -135,12 +135,6 @@ actionkit.forms.initForm('act');
 </script>
 {% endblock %}
 
-{% if args.embed and page.custom_fields.partner_custom_script %}
-<script>
-  {{ page.custom_fields.partner_custom_script|escapejs }}
-</script>
-{% endif %}
-
 {% block wemove_scripts %}
   {% include "./wemove-scripts.html" %}
 {% endblock %}
