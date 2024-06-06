@@ -139,7 +139,9 @@ actionkit.forms.initForm('act');
 {% endblock %}
 
 {% if args.embed and page.custom_fields.partner_custom_script %}
-  {{ page.custom_fields.partner_custom_script|json }}
+<script>
+  {{ page.custom_fields.partner_custom_script }}
+</script>
 {% endif %}
 
 {% block wemove_scripts %}
