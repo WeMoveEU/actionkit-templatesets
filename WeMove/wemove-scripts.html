@@ -28,9 +28,10 @@ window.wemove.page.shouldDisableForm = true
 </script>
 
 {% if isEmbbeded %}
-  {% if page.custom_fields.partner_custom_script %}
+  {% store as custom_js %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "partner_custom_script" as field_name %}{% endstore %}
+  {% if custom_js %}
     {% autoescape off %}
-      {{ page.custom_fields.partner_custom_script }}
+      {{ custom_js }}
     {% endautoescape %}
   {% endif %}
 {% else %}
