@@ -1,32 +1,27 @@
+<div class="germanic-share">
+  <h1>Fast fertig, <span class="font-bold">{{ user.name }}!</span></h1>
 
-<h1>Fast fertig, <span class="font-bold">{{ user.name }}!</span></h1>
+  <div class="pl-8">
+    <img
+      src="/media/modern/stance-supportive.svg"
+      height="22"
+      width="22"
+      alt="icon"
+      aria-hidden="true"
+      class="-ml-8 float-left"
+    />
 
-<div class="pl-8">
-  <img
-    src="/media/modern/stance-supportive.svg"
-    height="22"
-    width="22"
-    alt="icon"
-    aria-hidden="true"
-    class="-ml-8 float-left"
-  />
-
-  <p>
-    Den Bestätigungslink haben wir an die folgende E-Mail-Adresse geschickt:
-    <span class="user-email">{{ user.email }}</span>.
-  </p>
-  <p>
-    Bitte prüfen Sie jetzt Ihr Postfach und klicken Sie auf den enthaltenen
-    Link. Nur so wird Ihre Stimme gezählt!
-  </p>
-  <p>
-    Ihre Bestätigung ist wichtig - denn nur so können wir sicherstellen, dass
-    hinter jeder Teilnahme eine echte Person steht. Danke!
-  </p>
-
-  {% store as signup_page_name %}{% report "signup_page_for_list_language" with 1 as refresh page.list_id as list_id user.lang_id|default:100 as lang_id %}{% endstore %}
-  <a
-    class="resend-email--button"
-    href="/act/{{ signup_page_name }}?akid={{ akid }}&trigger_page={{ page.name }}&trigger_action={{ action.id }}&next_step=/thanks/{{ page.name }}%3Fshare%3D1%26akid%3D{{ akid }}%26action_id%3D{{ action.id }}"
-  >Erneut senden</a>
+    <p>
+      Den Bestätigungslink haben wir an die folgende E-Mail-Adresse geschickt:
+      <span class="user-email">{{ user.email }}</span>.
+    </p>
+    <p>
+      Bitte prüfen Sie jetzt Ihr Postfach und klicken Sie auf den enthaltenen
+      Link. Nur so wird Ihre Stimme gezählt!
+    </p>
+    <p>
+      Ihre Bestätigung ist wichtig - denn nur so können wir sicherstellen, dass
+      hinter jeder Teilnahme eine echte Person steht. Danke!
+    </p>
+  </div>
 </div>
