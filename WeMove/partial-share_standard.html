@@ -160,8 +160,8 @@
           type="text"
           class="bg-gray-100 px-2 py-3 text-sm rounded border-[1px] border-gray-300 w-full mb-2"
           data-wm-copy-to-clipboard-textbox
-          {% if page.custom_fields.sharing_step %}
-            value="{{ page.custom_fields.sharing_step }}"
+          {% if page.custom_fields.copy_url %}
+            value="{{ page.custom_fields.copy_url }}"
           {% endif %}
           readonly
           placeholder="{% filter ak_text:"loadingLink_placeholder" %}loading link...{% endfilter %}"
