@@ -18,8 +18,12 @@
             {% if translated_page.id == page.id %}
               {% store as selectedLang_name %}language_{{ translated_page.lang.name }}{% endstore %}
               {% filter ak_text:selectedLang_name %}{{ translated_page.lang.name|default:"English" }}{% endfilter %}
-              {% store as switcherAppendix %}({{page.custom_fields.language_switcher_appendix}}){% endstore %}
-              {% if switcherAppendix %}{{ switcherAppendix }}{% endif %}              
+
+              {% if page.custom_fields.language_switcher_appendix %}
+                <span class="text-sm font-normal normal-case">
+                  ({{ page.custom_fields.language_switcher_appendix }})
+                </span>
+              {% endif %}
             {% endif %}
           {% endfor %}
         </span>
@@ -38,8 +42,12 @@
                       class="text-sm !text-gray-400 hover:!no-underline hover:!text-gray-800">
                     {% store as lang_name %}language_{{ translated_page.lang.name }}{% endstore %}
                     {% filter ak_text:lang_name %}{{ translated_page.lang.name|default:"English" }}{% endfilter %}
-                    {% store as switcherAppendix %}({{page.custom_fields.language_switcher_appendix}}){% endstore %}
-                    {% if switcherAppendix %}{{ switcherAppendix }}{% endif %}                    
+
+                    {% if translated_page.id == page.id and page.custom_fields.language_switcher_appendix %}
+                      <span class="text-sm font-normal normal-case">
+                        ({{ page.custom_fields.language_switcher_appendix }})
+                      </span>
+                    {% endif %}
                     </a>
                   </li>
               {% endif %}
