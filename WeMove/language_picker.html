@@ -43,9 +43,15 @@
                     {% store as lang_name %}language_{{ translated_page.lang.name }}{% endstore %}
                     {% filter ak_text:lang_name %}{{ translated_page.lang.name|default:"English" }}{% endfilter %}
 
+<<<<<<< HEAD
                     {% if translated_page.custom_fields.language_switcher_appendix %}
                       <span class="text-xs font-normal normal-case">
                         ({{ translated_page.custom_fields.language_switcher_appendix }})
+=======
+                    {% if translated_page.id == page.id and page.custom_fields.language_switcher_appendix %}
+                      <span class="text-sm font-normal normal-case">
+                        ({{ page.custom_fields.language_switcher_appendix }})
+>>>>>>> c7a0ff2 (wiating for ak support)
                       </span>
                     {% endif %}
                     </a>
