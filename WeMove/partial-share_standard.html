@@ -6,7 +6,7 @@
       {% endfilter %}
     </h1>
 
-    {% if page.type == "Signup" %}
+    {% if page.type == "Signup" and not isEmbbeded %}
       <div class="mb-4">
         {% include "./component-featured_media.html" %}
       </div>
