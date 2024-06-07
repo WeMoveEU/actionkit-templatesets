@@ -85,7 +85,6 @@
 
       {# --- VIEW MODE "SHARING" #}
 
-      {# TODO Logic and partials to be removed after germanic ab test is done #}
       {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
         {% include "./partial-share_germanic.html" %}
       {% else %}
@@ -118,7 +117,7 @@
 	{% endfilter %}{% endstore %}
 
 	{% store as next_step %}{% filter strip %}
-		{{ destination }}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}
+		{{ destination }}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}
 	{% endfilter %}{% endstore %}
 	<!-- Daisy Chain: {{ page.custom_fields.daisy_chain_action }} -->
 	<!-- Next Step: {{ next_step }} -->

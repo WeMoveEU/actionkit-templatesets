@@ -45,8 +45,11 @@
     {% load_css %}
       //static.wemove.eu/action-kit/css/wemove.css?v=2.0.0
 
-      {% if args.embed and args.css == "1" and page.custom_fields.external_css %}
-        {{ page.custom_fields.external_css }}
+      {% if args.embed and args.css == "1" %}
+        {% store as external_css %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "external_css" as field_name %}{% endstore %}
+        {% if external_css %}
+          {{ external_css }}
+        {% endif %}
       {% endif %}
     {% end %}
 
