@@ -24,9 +24,7 @@
     hinter jeder Teilnahme eine echte Person steht. Danke!
   </p>
 
-  {% store as signup_page_name %}{% report "signup_page_for_list_language"
-  with 1 as refresh page.list_id as list_id user.lang_id|default:100 as
-  lang_id %}{% endstore %}
+  {% store as signup_page_name %}{% report "signup_page_for_list_language" with 1 as refresh page.list_id as list_id user.lang_id|default:100 as lang_id %}{% endstore %}
   <a
     class="resend-email--button"
     href="/act/{{ signup_page_name }}?akid={{ akid }}&trigger_page={{ page.name }}&trigger_action={{ action.id }}&next_step=/thanks/{{ page.name }}%3Fshare%3D1%26akid%3D{{ akid }}%26action_id%3D{{ action.id }}"

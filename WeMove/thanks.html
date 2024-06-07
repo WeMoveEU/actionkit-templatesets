@@ -101,7 +101,7 @@
 	{% endfilter %}{% endstore %}
 
 	{% store as next_step %}{% filter strip %}
-		{{ destination }}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}
+		{{ destination }}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&embed={{ args.css }}{% endif %}
 	{% endfilter %}{% endstore %}
 	<!-- Daisy Chain: {{ page.custom_fields.daisy_chain_action }} -->
 	<!-- Next Step: {{ next_step }} -->
