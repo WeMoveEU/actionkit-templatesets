@@ -1,4 +1,4 @@
-<div class="nav-md:grid gap-2 grid-cols-[60%_minmax(40%,_1fr)]">
+<div class="standard-share nav-md:grid gap-2 grid-cols-[60%_minmax(40%,_1fr)]">
   <section>
     <h1>
       {% filter ak_text:"thanks_spreadTheWord_title" %}
@@ -6,7 +6,7 @@
       {% endfilter %}
     </h1>
 
-    {% if page.type == "Signup" %}
+    {% if page.type == "Signup" and not isEmbbeded %}
       <div class="mb-4">
         {% include "./component-featured_media.html" %}
       </div>
@@ -160,8 +160,8 @@
           type="text"
           class="bg-gray-100 px-2 py-3 text-sm rounded border-[1px] border-gray-300 w-full mb-2"
           data-wm-copy-to-clipboard-textbox
-          {% if page.custom_fields.sharing_step %}
-            value="{{ page.custom_fields.sharing_step }}"
+          {% if page.custom_fields.copy_url %}
+            value="{{ page.custom_fields.copy_url }}"
           {% endif %}
           readonly
           placeholder="{% filter ak_text:"loadingLink_placeholder" %}loading link...{% endfilter %}"
@@ -198,7 +198,7 @@
 <div class="my-8 text-center">
   <a
     data-wm-skip-button
-    href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
+    href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}"
     class="p-4 border-2 inline-block font-bold !text-wm-yellow text-xl font-gilroy hover:!no-underline hover:border-wm-yellow hover:shadow transition-all">
     {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
   </a>

@@ -6,13 +6,14 @@
 
 {% if actionkit_user %}
   {% if recurring_update or recurring_cancel %}
-    <div class="ak-grid-row" style="padding: 0 1rem;">
-      <div class="ak-grid-col ak-grid-col-12-of-12">
-        <p>
-          {% filter ak_text:"logged_in_as" %}You are logged in as{% endfilter %} <a href="/me/">{{ actionkit_user.name|escape }}</a>.
-          <a href="/logout">{% filter ak_text:"logout" %}Click to log out.{% endfilter %}</a>
-        </p>
-      </div>
+    <div class="px-4">
+      <p>
+        {% filter ak_text:"logged_in_as" %}You are logged in as{% endfilter %} <a href="/me/">{{ actionkit_user.name|escape }}</a>.
+
+        <a href="/logout">
+          {% filter ak_text:"logout" %}Click to log out.{% endfilter %}
+        </a>
+      </p>
     </div>
   {% endif %}
 {% endif %}
@@ -84,7 +85,6 @@
 
       {# --- VIEW MODE "SHARING" #}
 
-      {# TODO Logic and partials to be removed after germanic ab test is done #}
       {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
         {% include "./partial-share_germanic.html" %}
       {% else %}
@@ -117,7 +117,7 @@
 	{% endfilter %}{% endstore %}
 
 	{% store as next_step %}{% filter strip %}
-		{{ destination }}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}
+		{{ destination }}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}
 	{% endfilter %}{% endstore %}
 	<!-- Daisy Chain: {{ page.custom_fields.daisy_chain_action }} -->
 	<!-- Next Step: {{ next_step }} -->
