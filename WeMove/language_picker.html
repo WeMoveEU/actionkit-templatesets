@@ -1,7 +1,7 @@
 {% if can_switch_lang and not isEmbbeded %}
   {% with page.translations as translations %}
     <!-- Remove this if you don't want popins like "This page also in English" -->
-    <aside class="language-pickers w-36 mb-4 nav-md:absolute nav-md:right-4" data-wm-fly-out-menu>
+    <aside class="language-pickers min-w-36 max-w-[168px] mb-4 nav-md:absolute nav-md:right-4" data-wm-fly-out-menu>
       <button
         type="button"
         data-wm-fly-out-menu-trigger
@@ -20,7 +20,7 @@
               {% filter ak_text:selectedLang_name %}{{ translated_page.lang.name|default:"English" }}{% endfilter %}
 
               {% if page.custom_fields.language_switcher_appendix %}
-                <span class="text-sm font-normal normal-case">
+                <span class="text-sm font-normal normal-case block">
                   ({{ page.custom_fields.language_switcher_appendix }})
                 </span>
               {% endif %}
@@ -36,7 +36,7 @@
         {% for translated_page in translations %}
             {% if translated_page.id != page.id %}
               {% if translated_page.custom_fields.temp_is_widget != 'true' %}
-                  <li class="px-6 p-[2px]">
+                  <li class="px-4 p-[2px]">
                     <a
                       href="{{ translated_page.derived.canonical_path }}{% for name, value in args.items %}{% if forloop.first %}?{{ name }}={{ value }}{% else %}&{{ name }}={{ value }}{% endif %}{% endfor %}"
                       class="text-sm !text-gray-400 hover:!no-underline hover:!text-gray-800">
