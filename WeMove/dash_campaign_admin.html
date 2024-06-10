@@ -577,6 +577,7 @@
 	} );
 
 	function reload_dashboard ( campaign_name ) {
+		$(window).off('beforeunload');
 		setTimeout( function () {
 			document.location = "?campaign=" + campaign_name
 		}, 1000 )
