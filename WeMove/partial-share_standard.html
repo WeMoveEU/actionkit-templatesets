@@ -1,4 +1,4 @@
-<div class="nav-md:grid gap-2 grid-cols-[60%_minmax(40%,_1fr)]">
+<div class="standard-share nav-md:grid gap-2 grid-cols-[60%_minmax(40%,_1fr)]">
   <section>
     <h1>
       {% filter ak_text:"thanks_spreadTheWord_title" %}
@@ -6,7 +6,7 @@
       {% endfilter %}
     </h1>
 
-    {% if page.type == "Signup" %}
+    {% if page.type == "Signup" and not isEmbbeded %}
       <div class="mb-4">
         {% include "./component-featured_media.html" %}
       </div>
@@ -160,8 +160,8 @@
           type="text"
           class="bg-gray-100 px-2 py-3 text-sm rounded border-[1px] border-gray-300 w-full mb-2"
           data-wm-copy-to-clipboard-textbox
-          {% if page.custom_fields.sharing_step %}
-            value="{{ page.custom_fields.sharing_step }}"
+          {% if page.custom_fields.copy_url %}
+            value="{{ page.custom_fields.copy_url }}"
           {% endif %}
           readonly
           placeholder="{% filter ak_text:"loadingLink_placeholder" %}loading link...{% endfilter %}"

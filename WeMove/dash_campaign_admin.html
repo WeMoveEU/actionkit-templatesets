@@ -352,7 +352,7 @@
 		$(this).toggleClass('expanded')
 	} );
 
-	function api(method, path, data) {
+	function api_call(method, path, data) {
 		var data_string = JSON.stringify(data);
 		api_log("Call:", method, path, data_string);
 		return $.ajax({
@@ -363,7 +363,13 @@
 			data: ( method == 'GET' ? data : JSON.stringify(data) )
 		}).done(function(result) {
 			api_log("Results:", method, path, data_string, '=>', result);
-		}).fail(function(xhr, rstatus, rerror) {
+		});
+	}
+
+	function api(method, path, data) {
+		var data_string = JSON.stringify(data);
+		return api_call(method, path, data)
+		.fail(function(xhr, rstatus, rerror) {
 			api_error("Error:", method, path, data_string, rstatus, rerror, xhr.status, xhr.responseText);
 		});
 	}
@@ -571,6 +577,7 @@
 	} );
 
 	function reload_dashboard ( campaign_name ) {
+		$(window).off('beforeunload');
 		setTimeout( function () {
 			document.location = "?campaign=" + campaign_name
 		}, 1000 )
@@ -855,6 +862,9 @@
 		$('#page_form').hide();
 		$('#add_mailing').hide();
 		$('#mailing_form').hide();
+		$('#campaign_output').hide();
+		$('#pages_output').hide();
+		$('#mailings_output').hide();
 	}
 
 	function createCampaignPage() {
@@ -903,7 +913,7 @@
 	////////////////////////////////////////////////////////////////////
 	// Create Pages / Mailings
 
-	function multilingualCampaignFor(campaign_name, action_type) {
+	async function multilingualCampaignFor(campaign_name, action_type, second_time) {
 		if (action_type == 'share' && window.journeys.length) {
 			// This assumes that the share step is defined in the first step of the journey (for any language)
 			var first_language = Object.keys(journey.pages)[0];
@@ -917,7 +927,20 @@
 		if (mcamp) {
 			return $.Deferred().resolve(mcamp);
 		} else {
-			return api('POST', 'multilingualcampaign/', { name: mcamp_name });
+		  return new Promise((resolve, reject) => {
+		    return api_call('POST', 'multilingualcampaign/', { name: mcamp_name })
+					.then(function(data, textStatus, jqXHR) {
+			      resolve(mcamp || jqXHR.getResponseHeader('Location'));
+					}, function(xhr, rstatus, rerror) {
+						if ( second_time ) {
+							reject(rerror)
+						} else {
+							return readMultilingualCampaigns(campaign_name).done( function() {
+								resolve( multilingualCampaignFor(campaign_name, action_type, 1) )
+							} )
+						}
+					});
+		  });
 		}
 	}
 
@@ -968,9 +991,8 @@
 			return;
 		}
 
-		multilingualCampaignFor(campaign.name, action_type).done(function(mcamp, _, xhr) {
+		multilingualCampaignFor(campaign.name, action_type).then(function(mcamp_uri) {
 			var calls = [];
-			var mcamp_uri = mcamp || xhr.getResponseHeader('Location');
 			$form.find('.language-picker input:checked').each(function() {
 				var fields = { campaign: campaign.id };
 					var lang = this.dataset.iso_code;
