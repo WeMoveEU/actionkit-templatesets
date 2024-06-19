@@ -172,18 +172,19 @@
       {% endif %}
     {% endif %}
 		
-    {% if not skip_consent %}
-      <script>
-        window.location = '{{ consent_link }}';
-      </script>
-    {% else %}
-	    <a href="{{ next_step }}">Please continue to the next step.</a>
-	    <script>
-	      window.location = '{{ next_step }}&consent={{ skip_consent }}';
-	    </script>
-    {% endif %}
-		
   {% endif %}
+	
+  {% if not skip_consent %}
+    <script>
+      window.location = '{{ consent_link }}';
+    </script>
+  {% else %}
+    <a href="{{ next_step }}">Please continue to the next step.</a>
+    <script>
+      window.location = '{{ next_step }}&consent={{ skip_consent }}';
+    </script>
+  {% endif %}
+
 {% endif %}
 {% endblock %}
 
