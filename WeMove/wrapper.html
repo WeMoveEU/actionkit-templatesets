@@ -7,6 +7,11 @@
 {% if args.embed %}
   {% remember "true" as isEmbbeded %}
 {% endif %}
+
+{% if page.id %}
+  {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
+{% endif %}
+
 <!DOCTYPE html>
 <html lang="{{page.lang.iso_code|default:'en'}}"{% if page.lang.is_rtl %} dir="rtl"{% endif %}>
 <head>
@@ -28,10 +33,6 @@
       {{ page.followup.share_image_tag }}
       {{ page.followup.share_url_tag }}
     {% endblock %}
-
-    {% if page.id %}
-    {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
-    {% endif %}
 
     {% if campaign_type == "youmove" %}
     <link href="https://youmoveeurope.eu/favicon.png" rel="icon" />
