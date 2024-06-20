@@ -16,6 +16,7 @@
       {% store as link %}/thanks/{{ page.name }}?share=1&akid={{ args.akid }}{% endstore %}
       {% remember link as target %}
     {% endif %}
+
     <a href="{{ target }}">Please continue to the next step.</a>
     <script>
       window.location = '{{ target }}';
