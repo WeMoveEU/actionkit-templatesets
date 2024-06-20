@@ -10,20 +10,20 @@
 <!DOCTYPE html>
 <html lang="{{page.lang.iso_code|default:'en'}}"{% if page.lang.is_rtl %} dir="rtl"{% endif %}>
 <head>
-    <meta charset="utf-8">
-    <title>{% block title %}{{ page.title }} | {% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}{% endblock %}</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="utf-8" />
+    <title>{% block title %}{{ page.title }} | {% if campaign_type == "youmove" %}YouMove Europe{% elif%}WeMove Europe{% endif %}{% endblock %}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
     {% block share_metatags %}
       {% if form.id %}
-        <meta name="description" property="og:description" content="{% block description %}{{ page.followup.share_description_value }}{% endblock %}">
+        <meta name="description" property="og:description" content="{% block description %}{{ page.followup.share_description_value }}{% endblock %}" />
       {% endif %}
 
-      <meta property="og:site_name" content="{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}">
-      <meta property="og:type" content="article">
+      <meta property="og:site_name" content="{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}" />
+      <meta property="og:type" content="article" />
 
-      <meta name="twitter:card" content="summary_large_image">
+      <meta name="twitter:card" content="summary_large_image" />
       {{ page.followup.share_title_tag }}
       {{ page.followup.share_image_tag }}
       {{ page.followup.share_url_tag }}
@@ -111,7 +111,7 @@
     {% endif %}
   {% endif %}
 
-  <main id="main-content" class="wrapper px-4">
+  <main id="main-content" class="wrapper px-5">
     {% if not isEmbbeded %}
       {% if page.custom_fields.finished_alert %}
         <div class="p-4 bg-wm-orange-alert text-white mb-4 rounded" role="alert">
