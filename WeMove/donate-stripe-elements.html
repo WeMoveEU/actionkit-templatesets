@@ -24,7 +24,7 @@ block.super }}{% endblock %}
 
         <div class="ak-grid-col ak-grid-col-8-of-12">
             {% if page.custom_fields.featured_image %}
-            <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
+            <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}" alt="main picture">
             {% endif %}
             <div>{% include "./component-progress_meter.html" %}</div>
             {% include_tmpl form.ask_text %}

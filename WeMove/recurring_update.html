@@ -307,7 +307,7 @@ function disable_invisibles(form) {
 <div class="ak-grid-row ak-grid-row-inverted">
     {% if page.custom_fields.featured_image %}
         <div class="ak-grid-col ak-grid-col-3-of-12">
-            <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
+            <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}" alt="main picture" />
         </div>
     {% endif %}
     <div class="ak-grid-col {% if page.custom_fields.featured_image %} ak-grid-col-9-of-12 {% else %}ak-grid-col-12-of-12 {% endif %}">
