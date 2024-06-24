@@ -14,7 +14,7 @@
 	recentSharers.shift();
 
 	recentSharers = recentSharers.map((n) => {
-		const rawSharedLabel = '{% filter ak_text:"userSharedThis_info" %}[% name %] shared it on [% socialMedia %]{% endfilter %}';
+		const rawSharedLabel = `{% filter ak_text:"userSharedThis_info" %}[% name %] shared it on [% socialMedia %]{% endfilter %}`;
 
 		const name = n[1];
 		const socialMedia = n[2].toLowerCase() === 'unknown'
