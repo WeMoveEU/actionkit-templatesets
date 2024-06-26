@@ -77,4 +77,14 @@
       </div>
     {% endif %}
 {% endif %}
+
+{% if page.custom_fields.remember_akid == "remember" %}
+<div style="color: white">
+  <label><input type="checkbox" id="remember_akid"> Remember me</label>
+  <div style="font-size: 85%">
+  (Don't use this feature on shared computers.)
+  </div>
+</div>
+{% endif %}
+
 {% endfilter %}
