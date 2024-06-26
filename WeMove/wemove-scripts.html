@@ -1,3 +1,6 @@
+{% if not have_included_scripts %}
+{% remember 1 as have_included_scripts %}
+
 <script>
 // WeMove library initial setup
 if (!window.wemove) {
@@ -50,3 +53,4 @@ window.wemove.page.shouldDisableForm = true
 {% endif %}
 
 <script src="//static.wemove.eu/action-kit/js/wemove-main.bundle.min.js?v=2.1.0"></script>
+{% endif %}
