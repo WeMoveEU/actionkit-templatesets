@@ -16,6 +16,7 @@
       {% store as link %}/thanks/{{ page.name }}?share=1&akid={{ args.akid }}{% endstore %}
       {% remember link as target %}
     {% endif %}
+
     <a href="{{ target }}">Please continue to the next step.</a>
     <script>
       window.location = '{{ target }}';
@@ -24,7 +25,6 @@
     {% remember "1" as share_mode %}
     {% remember "1" as isEmbbeded %}
     {% include "./thanks.html" %}
-    {% block wemove_scripts %}{% endblock %}
 
     {% if page.custom_fields.next_step %}
     <script>
@@ -85,7 +85,7 @@
           </button>
         </div>
 
-        <div class="privacy-statement">
+        <div class="privacy-statement hide-if-previously-signed">
           {% store as consent_text %}{% report "signup_text_for_list_language" with 1 as refresh page.list_id as list_id page.lang_id|default:100 as lang_id %}{% endstore %}
           {{ consent_text }}
         </div>

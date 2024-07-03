@@ -24,7 +24,7 @@ block.super }}{% endblock %}
 
         <div class="ak-grid-col ak-grid-col-8-of-12">
             {% if page.custom_fields.featured_image %}
-            <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
+            <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}" alt="main picture">
             {% endif %}
             <div>{% include "./component-progress_meter.html" %}</div>
             {% include_tmpl form.ask_text %}
@@ -596,13 +596,13 @@ block.super }}{% endblock %}
             <div class="col-md-5">
                 We want to be transparent and accountable about how we spend your donations - for more information
                 please see our
-                <strong><a href="https://www.wemove.eu/how-we-are-funded" target="_blank">Donation Policy</a></strong>.
+                <strong><a href="https://wemove.eu/how-we-are-funded" target="_blank">Donation Policy</a></strong>.
                 <br>
                 <br>
                 Your personal information will be kept private and held securely. By submitting information you are
                 agreeing to WeMove Europe keeping you informed about campaigns and agree to the use of cookies in
                 accordance with our
-                <strong><a href="https://www.wemove.eu/privacy-policy" target="_blank">privacy policy</a></strong>.
+                <strong><a href="https://wemove.eu/privacy-policy" target="_blank">privacy policy</a></strong>.
             </div>
         </div>
     </div>

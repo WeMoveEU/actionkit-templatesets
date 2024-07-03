@@ -7,43 +7,43 @@
 {% if args.embed %}
   {% remember "true" as isEmbbeded %}
 {% endif %}
+
+{% if page.id %}
+  {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
+{% endif %}
 <!DOCTYPE html>
 <html lang="{{page.lang.iso_code|default:'en'}}"{% if page.lang.is_rtl %} dir="rtl"{% endif %}>
 <head>
-    <meta charset="utf-8">
-    <title>{% block title %}{{ page.title }} | {% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}{% endblock %}</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="utf-8" />
+    <title>{% block title %}{{ page.title }} | {% if campaign_type == 'youmove' %}YouMove{% else %}WeMove{% endif %} Europe{% endblock %}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
     {% block share_metatags %}
       {% if form.id %}
-        <meta name="description" property="og:description" content="{% block description %}{{ page.followup.share_description_value }}{% endblock %}">
+        <meta name="description" property="og:description" content="{% block description %}{{ page.followup.share_description_value }}{% endblock %}" />
       {% endif %}
 
-      <meta property="og:site_name" content="{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}">
-      <meta property="og:type" content="article">
+      <meta property="og:site_name" content="{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}" />
+      <meta property="og:type" content="article" />
 
-      <meta name="twitter:card" content="summary_large_image">
+      <meta name="twitter:card" content="summary_large_image" />
       {{ page.followup.share_title_tag }}
       {{ page.followup.share_image_tag }}
       {{ page.followup.share_url_tag }}
     {% endblock %}
 
-    {% if page.id %}
-    {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
-    {% endif %}
-
     {% if campaign_type == "youmove" %}
     <link href="https://youmoveeurope.eu/favicon.png" rel="icon" />
     {% else %}
-    <link href="https://www.wemove.eu/favicon.png" rel="icon"  />
+    <link href="https://wemove.eu/favicon.png" rel="icon"  />
     {% endif %}
 
     {% block meta_additions %}{% endblock %}
 
     {% block css_additions %}{% endblock %}
     {% load_css %}
-      //static.wemove.eu/action-kit/css/wemove.css?v=2.1.0
+      //static.wemove.eu/action-kit/css/wemove.css?v=2.1.1
 
       {% if args.embed and args.css == "1" %}
         {% store as external_css %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "external_css" as field_name %}{% endstore %}
@@ -62,6 +62,61 @@
 
     {% if not isEmbbeded %}
     <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="162c81a4-03c4-483c-891c-188b89eaf09c" data-culture="{{page.lang.iso_code}}" async></script>
+    {% endif %}
+
+    {% if page.custom_fields.remember_akid %}
+    <script>
+
+      // When submitting an action form, ask if it has a remember-me checkbox
+      window.actionkitBeforeSubmit = function () {
+        const remember_chk = $('input[type="checkbox"]#remember_akid');
+        if ( remember_chk.length ) {
+          if ( remember_chk.is(':checked') ) {
+            // If user wants remember-me, set a local flag for ten seconds
+            localStorage.setItem("akid", ( Date.now() + 10_000 ).toString());
+          } else {
+            // User doesn't want remember-me, so clear the local value
+            localStorage.removeItem("akid");
+          }
+        }
+      }
+
+      // When ActionKit parses query string arguments, add our extra logic
+      const original_getArgs = actionkit.utils.getArgs;
+      actionkit.utils.getArgs = function (argsStr) {
+        // Start by running the built-in ActionKit functionality, then...
+        var args = original_getArgs(argsStr);
+        const remembered = localStorage.getItem("akid");
+        if ( remembered ) {
+          if ( args['akid'] ) {
+            if ( remembered.match(/^\d+$/) ) {
+              // Local storage is purely numeric: treat it as a timestamp
+              if ( Date.now() < parseInt(remembered) ) {
+                // Local flag hasn't expired, and we found an AKID: remember it
+                localStorage.setItem("akid", args['akid']);
+              } else {
+                // Local flag has expired: clear the flag and give up
+                localStorage.removeItem("akid");
+              }
+            }
+          } else {
+            if ( remembered.match(/\.\d/) ) {
+              // No AKID in the query string, but we have one saved: use it
+              args['akid'] = remembered;
+            }
+          }
+        }
+        return args;
+      };
+
+      // If the user clicks "Not you? Click here!" link, clear the saved AKID
+      const original_logOut = actionkit.forms.logOut;
+      actionkit.forms.logOut = function() {
+        localStorage.removeItem("akid");
+        original_logOut();
+      };
+
+    </script>
     {% endif %}
 
     {% load_ak_context context %}

@@ -85,7 +85,7 @@
 
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
-          class="transition-all text-center bg-facebook !text-white font-bold uppercase p-3 block font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
+          class="transition-all text-center bg-facebook !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
           href="/share/link?type=fb&amp;page_name={{page.name}}&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
           target="_blank"
           data-wm-pixel-event-type="Share"
@@ -101,7 +101,7 @@
 
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
-          class="transition-all text-center bg-twitter !text-white font-bold uppercase p-3 block font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
+          class="transition-all text-center bg-twitter !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
           href="/share/link?type=tw&amp;page_name={{page.name}}&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
           target="_blank"
           data-wm-pixel-event-type="Share"
@@ -138,7 +138,7 @@
       {% if page.followup.send_taf %}
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
-          class="transition-all text-center bg-wm-orange !text-white font-bold uppercase p-3 block font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
+          class="transition-all text-center bg-wm-orange !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
           href="mailto:?subject={{ page.followup.taf_subject|urlencode }}&amp;body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"
           target="_blank"
           data-wm-pixel-event-type="Share"
