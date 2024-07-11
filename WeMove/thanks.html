@@ -28,14 +28,12 @@
         Thank you for standing for democracy with us. It is only together that we can truly be a force to be reckoned with.
       {% endfilter %}
     {% endif %}
-
+		
 		{#
-
+    
 		{% include_tmpl form.thank_you_text %}
-
+			
 		 #}
-
-		{# {% include_tmpl form.thank_you_text %} #}
 
 		{# {% include_tmpl form.thank_you_text %} #}
 
@@ -100,12 +98,12 @@
 				/act/{{ page.custom_fields.next_step }}?
 			{% endif %}
 		{% else %}
-			/thanks/{{ page.custom_fields.daisy_chain_action|default:page.name }}?{% if page.custom_fields.disable_sharing %}done=1{% else %}share=1{% endif %}&
+			/thanks/{{ page.custom_fields.daisy_chain_action|default:page.name }}?share=1&
 		{% endif %}
 	{% endfilter %}{% endstore %}
 
 	{% store as next_step %}{% filter strip %}
-		{{ destination }}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if action.custom_fields.utm_source %}&utm_source={{ action.custom_fields.utm_source }}{% endif %}{% if action.custom_fields.utm_medium %}&utm_medium={{ action.custom_fields.utm_medium }}{% endif %}{% if action.custom_fields.utm_campaign %}&utm_campaign={{ action.custom_fields.utm_campaign }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}
+		{{ destination }}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}
 	{% endfilter %}{% endstore %}
 	<!-- Daisy Chain: {{ page.custom_fields.daisy_chain_action }} -->
 	<!-- Next Step: {{ next_step }} -->
@@ -136,6 +134,14 @@
 
     {# 1B. User isn't Germanic, so consent question was on action form. #}
     {% remember "inline" as skip_consent %}
+
+	{% elif user.country != 'Germany' and user.country != 'Austria' and user.country|lower != 'de' and user.country|lower != 'at' %}
+
+    {# 1B. User isn't Germanic, so consent question was on action form. #}
+    <a href="{{ next_step }}">Please continue to the next step.</a>
+    <script>
+      window.location = '{{ next_step }}&consent=inline';
+    </script>
 
   {% elif user.subscription_status == 'subscribed' %}
 

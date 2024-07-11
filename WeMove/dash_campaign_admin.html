@@ -723,7 +723,7 @@
 						var after_action = page.followup ? page.followup.url : '';
 						var match = after_action.match(/thanks/);
 						if ( match && match[0] ) {
-							var action_type = ( after_action.endsWith("?done=1") || page.fields.disable_sharing ) ? "thanks" : "share";
+							var action_type = after_action.endsWith("?done=1") ? "thanks" : "share";
 							const daisy_action = page.fields.daisy_chain_action;
 							const daisy_page = daisy_action ? pages[lang].find( (p) => p.name == daisy_action ) : null;
 							const daisy_thanks = daisy_page ? daisy_page.name : page.name;
