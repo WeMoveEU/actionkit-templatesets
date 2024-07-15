@@ -28,7 +28,7 @@
 
     {% if page.custom_fields.next_step %}
     <script>
-      (()=>{
+      (() => {
         document.querySelector('[data-wm-skip-button]').href = '/act/{{ page.custom_fields.next_step }}';
       })();
     </script>
@@ -64,6 +64,7 @@
       method="post"
       action="/act/"
       accept-charset="utf-8"
+      data-wm-form="sursignupvey"
       data-wm-floating-labels-form
       data-wm-pixel-event-type="Subscribe"
       data-wm-pixel-track-type="track"
