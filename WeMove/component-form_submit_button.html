@@ -1,11 +1,23 @@
-<div class="form-field hide-if-previously-signed mb-4">
-  <button type="submit" class="button--primary">
-    {% if page.custom_fields.sign_petition_button %}
-      {{ page.custom_fields.sign_petition_button }}
-    {% else %}
-      {% filter ak_text:"button_sign_petition" %}
-        Sign the Petition
-      {% endfilter %}
-    {% endif %}
-  </button>
-</div>
+{% if page.type == 'Petition' %}
+  <div class="form-field mb-4">
+    <button type="submit" class="button--primary">
+      {% if page.custom_fields.sign_petition_button %}
+        {{ page.custom_fields.sign_petition_button }}
+      {% else %}
+        {% filter ak_text:"button_sign_petition" %}
+          Sign the Petition
+        {% endfilter %}
+      {% endif %}
+    </button>
+  </div>
+{% elif page.type == 'Survey' %}
+  <div class="mb-4">
+    <button type="submit" class="mx-auto max-w-[60%]">
+      {% if page.custom_fields.sign_petition_button %}
+        {{ page.custom_fields.sign_petition_button }}
+      {% else %}
+        {% filter ak_text:"submitSurvey_button" %}Send{% endfilter %}
+      {% endif %}
+    </button>
+  </div>
+{% endif %}

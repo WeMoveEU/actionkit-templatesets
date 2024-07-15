@@ -32,17 +32,6 @@
 
       {% include "./user_form_wrapper.html" %}
     </section>
-
-    <div class="mb-4">
-      <button type="submit" class="mx-auto max-w-[60%]">
-        {% filter ak_text:"submitSurvey_button" %}Send{% endfilter %}
-      </button>
-    </div>
-
-    <div class="privacy-statement hide-if-previously-signed text-wm-purple [&_p_a]:!text-wm-pink">
-      {% store as consent_text %}{% report "signup_text_for_list_language" with 1 as refresh page.list_id as list_id page.lang_id|default:100 as lang_id %}{% endstore %}
-      {{ consent_text }}
-    </div>
 </form>
 
 {% endblock %}
