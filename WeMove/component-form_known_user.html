@@ -1,0 +1,24 @@
+<div id="known_user" class="rounded bg-white p-2 mb-2 hidden">
+  <p class="m-0">
+    {% if page.type == 'Letter'%}
+      {% filter ak_text:"knownUser_writingAs" %}You are writing as{% endfilter %}
+    {% elif page.type == 'Survey'%}
+      {% filter ak_text:"knownUser_surveyAs" %}You are submitting this as{% endfilter %}
+    {% else %}
+      {% filter ak_text:"knownUser_signingAs" %}Sign this as {% endfilter %}
+    {% endif %}
+
+    <strong id="known_user_name" class="font-bold"></strong>
+  </p>
+
+  <p class="m-0">
+    {% filter ak_text:"knownUser_notYou_button" %}Not you?{% endfilter %}
+
+    <button
+      class="inline bg-none p-0 normal-case text-wm-pink font-normal w-auto font-libre-franklin hover:shadow-none hover:underline"
+      type="button"
+      onclick="return actionkit.forms.logOut()">
+      {% filter ak_text:"clickHere_button" %}click here{% endfilter %}
+    </button>
+  </p>
+</div>

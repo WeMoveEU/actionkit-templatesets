@@ -1,4 +1,8 @@
-<div class="consent-inline form-field field-type--radio required ak-err-below" data-wm-consent-inline>
+<div
+  class="consent-inline form-field field-type--radio required ak-err-below"
+  data-wm-consent-inline
+  data-wm-remove-if-user-is-known
+  hidden>
   <legend class="static mx-0 my-1 p-0 text-white text-sm font-bold border-0">
     {% if page.type == 'Survey'  or page.type == 'Signup' %}
       {% filter ak_text:"joinUsConsentInline_legend" %}Do you want to join our community?{% endfilter %}

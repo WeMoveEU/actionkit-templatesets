@@ -1,48 +1,18 @@
 <ul class="compact" id="ak-errors"></ul>
 
-<div id="known_user" class="rounded bg-white p-2 mb-2 hidden">
-  <p class="m-0">
-    {% if page.type == 'Letter'%}
-      {% filter ak_text:"knownUser_writingAs" %}You are writing as{% endfilter %}
-    {% elif page.type == 'Survey'%}
-      {% filter ak_text:"knownUser_surveyAs" %}You are submitting this as{% endfilter %}
-    {% else %}
-      {% filter ak_text:"knownUser_signingAs" %}Sign this as {% endfilter %}
-    {% endif %}
-
-    <strong id="known_user_name" class="font-bold"></strong>
-  </p>
-
-  <p class="m-0">
-    {% filter ak_text:"knownUser_notYou_button" %}Not you?{% endfilter %}
-
-    <button
-      class="inline bg-none p-0 normal-case text-wm-pink font-normal w-auto font-libre-franklin hover:shadow-none hover:underline"
-      type="button"
-      onclick="return actionkit.forms.logOut()">
-      {% filter ak_text:"clickHere_button" %}click here{% endfilter %}
-    </button>
-  </p>
-</div>
+{% include "./component-form_known_user.html" %}
 
 <div id="unknown_user" class="ak-user-form">
   {% include "./user_form.html" %}
 </div>
 
-{% if page.type == 'Petition' %}
-  {% store as hide_comments_field %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "hide_comments_field" as field_name %}{% endstore %}
-  {% if not hide_comments_field == "1" %}
-  <div class="ak-field form-field hide-if-previously-signed">
-    <label for="id_comment">
-      {% filter ak_text:"form_field_comments" %}Your comments:{% endfilter %}
-    </label>
-
-    <textarea id="id_comment" name="action_comment"></textarea>
-  </div>
-  {% endif %}
-{% endif %}
+{% include "./component-form_comments.html" %}
 
 {% include "./privacy.html" %}
+
+{% include "./component-form_submit_button.html" %}
+
+{% include "./component-form_privacy_statement.html" %}
 
 {% if args.utm_source %}
   <input type="hidden" name="action_utm_source" value="{{ args.utm_source }}" />

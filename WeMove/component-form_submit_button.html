@@ -1,0 +1,11 @@
+<div class="form-field hide-if-previously-signed mb-4">
+  <button type="submit" class="button--primary">
+    {% if page.custom_fields.sign_petition_button %}
+      {{ page.custom_fields.sign_petition_button }}
+    {% else %}
+      {% filter ak_text:"button_sign_petition" %}
+        Sign the Petition
+      {% endfilter %}
+    {% endif %}
+  </button>
+</div>
