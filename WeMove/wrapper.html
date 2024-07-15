@@ -64,61 +64,6 @@
     <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="162c81a4-03c4-483c-891c-188b89eaf09c" data-culture="{{page.lang.iso_code}}" async></script>
     {% endif %}
 
-    {% if page.custom_fields.remember_akid %}
-    <script>
-
-      // When submitting an action form, ask if it has a remember-me checkbox
-      window.actionkitBeforeSubmit = function () {
-        const remember_chk = $('input[type="checkbox"]#remember_akid');
-        if ( remember_chk.length ) {
-          if ( remember_chk.is(':checked') ) {
-            // If user wants remember-me, set a local flag for ten seconds
-            localStorage.setItem("akid", ( Date.now() + 10_000 ).toString());
-          } else {
-            // User doesn't want remember-me, so clear the local value
-            localStorage.removeItem("akid");
-          }
-        }
-      }
-
-      // When ActionKit parses query string arguments, add our extra logic
-      const original_getArgs = actionkit.utils.getArgs;
-      actionkit.utils.getArgs = function (argsStr) {
-        // Start by running the built-in ActionKit functionality, then...
-        var args = original_getArgs(argsStr);
-        const remembered = localStorage.getItem("akid");
-        if ( remembered ) {
-          if ( args['akid'] ) {
-            if ( remembered.match(/^\d+$/) ) {
-              // Local storage is purely numeric: treat it as a timestamp
-              if ( Date.now() < parseInt(remembered) ) {
-                // Local flag hasn't expired, and we found an AKID: remember it
-                localStorage.setItem("akid", args['akid']);
-              } else {
-                // Local flag has expired: clear the flag and give up
-                localStorage.removeItem("akid");
-              }
-            }
-          } else {
-            if ( remembered.match(/\.\d/) ) {
-              // No AKID in the query string, but we have one saved: use it
-              args['akid'] = remembered;
-            }
-          }
-        }
-        return args;
-      };
-
-      // If the user clicks "Not you? Click here!" link, clear the saved AKID
-      const original_logOut = actionkit.forms.logOut;
-      actionkit.forms.logOut = function() {
-        localStorage.removeItem("akid");
-        original_logOut();
-      };
-
-    </script>
-    {% endif %}
-
     {% load_ak_context context %}
 </head>
 <body
