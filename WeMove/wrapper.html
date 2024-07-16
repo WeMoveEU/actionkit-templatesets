@@ -43,7 +43,7 @@
 
     {% block css_additions %}{% endblock %}
     {% load_css %}
-      //static.wemove.eu/action-kit/css/wemove.css?v=2.1.1
+      //static.wemove.eu/action-kit/css/wemove.css?v=2.2.0
 
       {% if args.embed and args.css == "1" %}
         {% store as external_css %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "external_css" as field_name %}{% endstore %}

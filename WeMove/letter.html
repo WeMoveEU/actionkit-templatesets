@@ -71,9 +71,12 @@
             {% if page.custom_fields.letter_body_required == "0" %}{% else %}<span class="ak-required-flag">*</span>{% endif %}
           </label>
 
-          <textarea id="id_comment" name="action_comment">
-            {% include_tmpl form.letter_text escaped %}
-          </textarea>
+          <textarea
+            id="id_comment"
+            name="action_comment"
+            class="">{% include_tmpl form.letter_text escaped %}</textarea>
+
+          <input type="hidden" name="required" value="action_comment"/>
 
           {% if page.custom_fields.letter_body_required != "0" %}
             <input type="hidden" name="required" value="action_comment"/>
