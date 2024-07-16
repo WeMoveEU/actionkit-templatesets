@@ -62,8 +62,10 @@
     {% else %}
 
       {# --- VIEW MODE "SHARING" #}
-
-      {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
+      {% if user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
+        {% remember 1 as is_germanic %}
+      {% endif %}
+      {% if user and is_germanic and not args.germanic %}
         {% include "./partial-share_germanic.html" %}
       {% else %}
         {% include "./partial-share_standard.html" %}
@@ -83,7 +85,9 @@
 	{# --- VIEW UNCERTAIN; DETERMINE NEXT STEP #}
 
 	{% store as destination %}{% filter strip %}
-		{% if page.custom_fields.next_step %}
+		{% if action.custom_fields.continue %}
+			{{ action.custom_fields.continue|safe }}{% if "?" not in action.custom_fields.redirect %}?{% else %}&{% endif %}
+		{% elif page.custom_fields.next_step %}
 			{% if "//" in page.custom_fields.next_step %}
 				{% if "{" in page.custom_fields.next_step %}{% include_tmpl page.custom_fields.next_step %}{% else %}{{ page.custom_fields.next_step }}{% endif %}{% if "?" not in page.custom_fields.next_step %}?{% else %}&{% endif %}
 			{% else %}
@@ -165,7 +169,7 @@
 		    {% remember "nolang" as skip_consent %}
       {% else %}
 
-        {% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&trigger_page={{ page.name }}&trigger_action={{ action.id }}{% endif %}&next_step={{ next_step|urlencode }}{% endstore %}
+        {% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&trigger_page={{ page.name }}&trigger_action={{ action.id }}{% endif %}&next_step={{ next_step|urlencode }}%26germanic=consent{% endstore %}
         {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
         {% else %}
           {% remember "inline" as skip_consent %}
