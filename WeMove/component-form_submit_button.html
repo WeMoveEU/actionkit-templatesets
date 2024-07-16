@@ -1,7 +1,7 @@
 {% if page.type == 'Petition' %}
 
   <div class="form-field mb-4">
-    <button type="submit" class="button--primary">
+    <button type="submit" class="ak-submit-button">
       {% if page.custom_fields.sign_petition_button %}
         {{ page.custom_fields.sign_petition_button }}
       {% else %}
@@ -15,7 +15,7 @@
 {% elif page.type == 'Survey' %}
 
   <div class="mb-4">
-    <button type="submit" class="mx-auto max-w-[60%]">
+    <button type="submit" class="ak-submit-button mx-auto max-w-[60%]">
       {% if page.custom_fields.sign_petition_button %}
         {{ page.custom_fields.sign_petition_button }}
       {% else %}
@@ -39,7 +39,8 @@
 {% elif page.type == 'Call' %}
 
   <button
-    class="mb-2 flex w-full bg-wm-orange hover:bg-wm-orange-alert text-white gap-2 justify-center p-3 uppercase font-bold rounded font-gilroy"
+    class="ak-submit-button
+    mb-2 flex w-full bg-wm-orange hover:bg-wm-orange-alert text-white gap-2 justify-center p-3 uppercase font-bold rounded font-gilroy"
     {% if page.custom_fields.call_page_mode == 'tweet' %}disabled{% endif %}
     data-wm-{{ page.custom_fields.call_page_mode }}-submit>
 
@@ -67,7 +68,7 @@
 {% elif page.type == 'Letter' %}
 
   <div class="mb-2">
-    <button type="submit">
+    <button type="submit" class="ak-submit-button">
         {% if page.custom_fields.sign_petition_button %}
           {{ page.custom_fields.sign_petition_button }}
         {% else %}
