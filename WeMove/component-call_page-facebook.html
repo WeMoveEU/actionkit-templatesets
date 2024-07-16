@@ -6,32 +6,6 @@
 
 {% include "./user_form_wrapper.html" %}
 
-<div class="hide-if-previously-signed">
-    <button
-      class="mb-2 flex w-full bg-wm-orange hover:bg-wm-orange-alert text-white gap-2 justify-center p-3 uppercase font-bold rounded font-gilroy"
-      data-js-event-category="tweet"
-      data-js-event-action="action"
-      data-wm-facebook-submit
-      >
-        <span aria-label="hidden">
-          {% include "./icon-facebook.html" %}
-        </span>
-
-        {% if page.custom_fields.sign_petition_button %}
-          {{ page.custom_fields.sign_petition_button }}
-        {% else %}
-          {% filter ak_text:"sendFacebook_button" %}Open Facebook{% endfilter %}
-        {% endif %}
-    </button>
-
-  <a
-    href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
-    class="button-fill button-fill--white
-    flex w-full gap-2 justify-center p-3 font-bold rounded font-gilroy text-xl">
-    {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
-  </a>
-</div>
-
 <script>
   const queryTargets = [{% report "call_page_target_information" with page.id as page_id %}];
   queryTargets.shift();

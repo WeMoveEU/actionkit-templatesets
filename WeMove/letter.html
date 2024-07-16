@@ -82,23 +82,6 @@
       {% endif %}
 
       {% include "./user_form_wrapper.html" %}
-
-      <div class="mb-2">
-        <button type="submit">
-            {% if page.custom_fields.sign_petition_button %}
-              {{ page.custom_fields.sign_petition_button }}
-            {% else %}
-              {% filter ak_text:"button_send_email" %}Send Email{% endfilter %}
-            {% endif %}
-        </button>
-      </div>
-
-      <a
-        href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
-        class="button-fill button-fill--white
-          flex w-full gap-2 justify-center p-3 font-bold rounded font-gilroy text-xl">
-        {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
-      </a>
     </form>
   </aside>
 </div>
