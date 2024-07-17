@@ -3,6 +3,9 @@
   data-wm-consent-inline
   data-wm-remove-if-user-is-known
   hidden>
+
+  <input type="hidden" data-wm-is-germanic-hidden name="action_isGermanic" value="false">
+
   <legend class="static mx-0 my-1 p-0 text-white text-sm font-bold border-0">
     {% if page.type == 'Survey'  or page.type == 'Signup' %}
       {% filter ak_text:"joinUsConsentInline_legend" %}Do you want to join our community?{% endfilter %}
