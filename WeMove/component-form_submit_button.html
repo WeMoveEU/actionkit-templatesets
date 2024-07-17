@@ -1,0 +1,82 @@
+{% if page.type == 'Petition' %}
+
+  <div class="form-field mb-4">
+    <button type="submit" class="ak-submit-button">
+      {% if page.custom_fields.sign_petition_button %}
+        {{ page.custom_fields.sign_petition_button }}
+      {% else %}
+        {% filter ak_text:"button_sign_petition" %}
+          Sign the Petition
+        {% endfilter %}
+      {% endif %}
+    </button>
+  </div>
+
+{% elif page.type == 'Survey' %}
+
+  <div class="mb-4">
+    <button type="submit" class="ak-submit-button mx-auto max-w-[60%]">
+      {% if page.custom_fields.sign_petition_button %}
+        {{ page.custom_fields.sign_petition_button }}
+      {% else %}
+        {% filter ak_text:"submitSurvey_button" %}Send{% endfilter %}
+      {% endif %}
+    </button>
+  </div>
+
+{% elif page.type == 'Signup' %}
+
+  <div class="mb-4 form-field">
+    <button type="submit">
+      {% if page.custom_fields.sign_petition_button %}
+        {{ page.custom_fields.sign_petition_button }}
+      {% else %}
+        {% filter ak_text:"button_sign_petition" %}I'm joining!{% endfilter %}
+      {% endif %}
+    </button>
+  </div>
+
+{% elif page.type == 'Call' %}
+
+  <button
+    class="ak-submit-button
+    mb-2 flex w-full bg-wm-orange hover:bg-wm-orange-alert text-white gap-2 justify-center p-3 uppercase font-bold rounded font-gilroy"
+    {% if page.custom_fields.call_page_mode == 'tweet' %}disabled{% endif %}
+    data-wm-{{ page.custom_fields.call_page_mode }}-submit>
+
+      <span aria-label="hidden">
+        {% if page.custom_fields.call_page_mode == 'tweet' %}
+          {% include "./icon-twitter.html" %}
+        {% elif page.custom_fields.call_page_mode == 'facebook' %}
+          {% include "./icon-facebook.html" %}
+        {% endif %}
+      </span>
+
+      {% if page.custom_fields.sign_petition_button %}
+        {{ page.custom_fields.sign_petition_button }}
+      {% else %}
+        {% if page.custom_fields.call_page_mode == 'tweet' %}
+          {% filter ak_text:"sendTweet_button" %}Tweet{% endfilter %}
+        {% elif page.custom_fields.call_page_mode == 'facebook' %}
+          {% filter ak_text:"sendFacebook_button" %}Open Facebook{% endfilter %}
+        {% endif %}
+      {% endif %}
+  </button>
+
+  {% include "./component-skip_button.html" %}
+
+{% elif page.type == 'Letter' %}
+
+  <div class="mb-2">
+    <button type="submit" class="ak-submit-button">
+        {% if page.custom_fields.sign_petition_button %}
+          {{ page.custom_fields.sign_petition_button }}
+        {% else %}
+          {% filter ak_text:"button_send_email" %}Send Email{% endfilter %}
+        {% endif %}
+    </button>
+  </div>
+
+  {% include "./component-skip_button.html" %}
+
+{% endif %}

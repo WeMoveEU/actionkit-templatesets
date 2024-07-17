@@ -27,7 +27,7 @@
         {% if page.custom_fields.featured_image or page.goal %}
         <div class="ak-grid-col ak-grid-col-4-of-12">
             {% if page.custom_fields.featured_image %}
-            <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
+            <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}" />
             {% endif %}
             {% include "./component-progress_meter.html" %}
         </div>

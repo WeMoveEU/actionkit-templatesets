@@ -55,6 +55,7 @@
 
   <aside>
     <form
+      data-wm-form="letter"
       data-wm-floating-labels-form
       class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below bg-wm-bg-form p-4 max-w-[500px] mx-auto"
       name="act"
@@ -70,9 +71,12 @@
             {% if page.custom_fields.letter_body_required == "0" %}{% else %}<span class="ak-required-flag">*</span>{% endif %}
           </label>
 
-          <textarea id="id_comment" name="action_comment">
-            {% include_tmpl form.letter_text escaped %}
-          </textarea>
+          <textarea
+            id="id_comment"
+            name="action_comment"
+            class="">{% include_tmpl form.letter_text escaped %}</textarea>
+
+          <input type="hidden" name="required" value="action_comment"/>
 
           {% if page.custom_fields.letter_body_required != "0" %}
             <input type="hidden" name="required" value="action_comment"/>
@@ -81,23 +85,6 @@
       {% endif %}
 
       {% include "./user_form_wrapper.html" %}
-
-      <div class="mb-2 hide-if-previously-signed">
-        <button type="submit">
-            {% if page.custom_fields.sign_petition_button %}
-              {{ page.custom_fields.sign_petition_button }}
-            {% else %}
-              {% filter ak_text:"button_send_email" %}Send Email{% endfilter %}
-            {% endif %}
-        </button>
-      </div>
-
-      <a
-        href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
-        class="button-fill button-fill--white
-          flex w-full gap-2 justify-center p-3 font-bold rounded font-gilroy text-xl">
-        {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
-      </a>
     </form>
   </aside>
 </div>

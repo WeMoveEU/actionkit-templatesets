@@ -32,17 +32,17 @@
                 <td>
                     {% if not target.stance.view %}
                         <div class="ak-whipcount-icon">
-                            <img src="/media/modern/stance-unknown.svg">
+                            <img src="/media/modern/stance-unknown.svg" />
                         </div>
                         <span class="ak-target-stance">Unknown</span>
                     {% elif target.stance.view == 'supportive' %}
                         <div class="ak-whipcount-icon">
-                            <img src="/media/modern/stance-supportive.svg">
+                            <img src="/media/modern/stance-supportive.svg" />
                         </div>
                         <span class="ak-target-stance">{{ target.stance.view|title}}</span>
                     {% elif target.stance.view == 'opposed' %}
                         <div class="ak-whipcount-icon">
-                            <img src="/media/modern/stance-opposed.svg">
+                            <img src="/media/modern/stance-opposed.svg" />
                         </div>
                         <span class="ak-target-stance">{{ target.stance.view|title}}</span>
                     {% elif target.stance.view == 'uncommitted' %}

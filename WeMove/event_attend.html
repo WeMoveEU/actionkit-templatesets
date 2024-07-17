@@ -71,7 +71,7 @@ $(window).on('load', function (){
         <div class="ak-grid-row ak-grid-row-inverted">
             {% if page.custom_fields.featured_image %}
             <div class="ak-grid-col ak-grid-col-3-of-12">
-                <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}">
+                <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}" alt="main picture">
             </div>
             {% endif %}
 
@@ -117,7 +117,7 @@ $(window).on('load', function (){
                 {% if event.search_show_map %}
                 <!--<img src="http://maps.google.com/maps/api/staticmap?sensor=false&size=500x300&markers={{ event.address1|urlencode }}, {{ event.city_etc|urlencode }}">-->
                 {% if not event.is_virtual %}
-                <h5><a href="https://www.google.com/maps/place/{{ event.address1|urlencode }},%20{{ event.city_etc|urlencode }}" target="_blank" class="ak-larger-text"><small><img src="/media/modern/blue_marker.png" class="ak-marker"/> Click to see larger</a></small></h5>
+                <h5><a href="https://www.google.com/maps/place/{{ event.address1|urlencode }},%20{{ event.city_etc|urlencode }}" target="_blank" class="ak-larger-text"><small><img src="/media/modern/blue_marker.png" class="ak-marker" /> Click to see larger</a></small></h5>
                 {% endif %}
                 <div id="ak-map"></div>
 

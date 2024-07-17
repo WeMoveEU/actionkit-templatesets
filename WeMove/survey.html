@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<form class="ak-form survey-form" name="act" method="post" action="/act/" accept-charset="utf-8">
+<form class="ak-form survey-form" data-wm-form="survey" name="act" method="post" action="/act/" accept-charset="utf-8">
     <input type="hidden" name="page" value="{{ page.name }}" />
 
     <h1>{{ page.title }}</h1>
@@ -32,12 +32,6 @@
 
       {% include "./user_form_wrapper.html" %}
     </section>
-
-    <div class="mb-6">
-      <button type="submit" class="mx-auto max-w-[60%]">
-        {% filter ak_text:"submitSurvey_button" %}Send{% endfilter %}
-      </button>
-    </div>
 </form>
 
 {% endblock %}
