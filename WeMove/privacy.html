@@ -1,3 +1,7 @@
+{% if user and user.subscription_status == 'subscribed' %}
+  <!-- USER SUBCRIBED: no need to render the inline consents -->
+  <input type="hidden" name="opt_in" value="1">
+  {% include "./component-consent_inline.html" %}
 {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
   <!-- KNOWN GERMANIC USER: no need to render the inline consents -->
   <input type="hidden" name="opt_in" value="1">
