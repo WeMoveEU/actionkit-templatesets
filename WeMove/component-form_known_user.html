@@ -1,4 +1,6 @@
-<div id="known_user" class="rounded bg-white p-2 mb-2 hidden">
+<div data-wm-remove-if-user-is-unknown class="rounded bg-white p-2 mb-2" hidden>
+  <input type="hidden" name="opt_in" value="1" />
+
   <p class="m-0">
     {% if page.type == 'Letter'%}
       {% filter ak_text:"knownUser_writingAs" %}You are writing as{% endfilter %}
