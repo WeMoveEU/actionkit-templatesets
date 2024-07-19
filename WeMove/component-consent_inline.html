@@ -1,8 +1,11 @@
 <div
   class="consent-inline form-field field-type--radio required ak-err-below"
-  data-wm-consent-inline
-  data-wm-remove-if-user-is-known
-  hidden>
+  data-wm-consent-inline>
+
+  {% if user %}
+    <input data-wm-user-subscription-status type="hidden" name="wm_user_subscription_status" value="{{ user.subscription_status|lower }}" />
+    <input data-wm-user-country type="hidden" name="wm_user-country" value="{{ user.country|lower }}" />
+  {% endif %}
 
   <legend class="static mx-0 my-1 p-0 text-white text-sm font-bold border-0">
     {% if page.type == 'Survey'  or page.type == 'Signup' %}

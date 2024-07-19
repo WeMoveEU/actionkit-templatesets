@@ -1,4 +1,6 @@
-<div class="privacy-statement{% if page.type == 'Survey' %} text-wm-purple [&_p_a]:!text-wm-pink{% endif %}" data-wm-remove-if-user-is-known hidden>
+<div
+  class="privacy-statement{% if page.type == 'Survey' %} text-wm-purple [&_p_a]:!text-wm-pink{% endif %}"
+  data-wm-consent-inline-privacy-statement>
   {% store as consent_text %}{% report "signup_text_for_list_language" with 1 as refresh page.list_id as list_id page.lang_id|default:100 as lang_id %}{% endstore %}
   {{ consent_text }}
 </div>
