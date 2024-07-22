@@ -1,6 +1,8 @@
 <ul class="compact" id="ak-errors"></ul>
 
-{% include "./component-form_skeleton-preloader.html" %}
+{% if page.type == "Petition" %}
+  {% include "./component-form_skeleton-preloader.html" %}
+{% endif %}
 
 {% include "./component-form_known_user.html" %}
 
