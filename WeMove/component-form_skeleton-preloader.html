@@ -1,6 +1,7 @@
 <div
   data-wm-form-skeleton-preloader
-  class="absolute left-0 top-0 z-50 bg-wm-bg-form h-full w-full p-4"
+  class="absolute left-0 top-0 z-50 h-full w-full p-4
+  {% if campaign_type == "youmove" %}bg-ym-bg-form{% else %}bg-wm-bg-form{% endif %}"
 >
   <div class="animate-pulse">
     <div class="mb-4">
