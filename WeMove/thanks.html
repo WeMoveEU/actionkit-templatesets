@@ -111,6 +111,7 @@
   {% comment %}
 		There are five cases where we skip consent and go to your next destination:
 		1. unidentified user, so we can't subscribe
+		1B. user is not in Germany or Austria
 		2. already subscribed, so don't ask again
 		3. is an unsubscribe page, so we shouldn't re-subscribe
 		4. user was recently shown this consent page, so don't ask again
@@ -131,14 +132,6 @@
 
     {# 1B. User isn't Germanic, so consent question was on action form. #}
     {% remember "inline" as skip_consent %}
-
-	{% elif user.country != 'Germany' and user.country != 'Austria' and user.country|lower != 'de' and user.country|lower != 'at' %}
-
-    {# 1B. User isn't Germanic, so consent question was on action form. #}
-    <a href="{{ next_step }}">Please continue to the next step.</a>
-    <script>
-      window.location = '{{ next_step }}&consent=inline';
-    </script>
 
   {% elif user.subscription_status == 'subscribed' %}
 
@@ -166,15 +159,12 @@
         {% comment %}
           5. You should be asked to consent, but we don't have a consent page
           for that list in your language, so jump to the next step.
+          (Perhaps this should change to using the English consent page?)
         {% endcomment %}
 		    {% remember "nolang" as skip_consent %}
       {% else %}
 
         {% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&trigger_page={{ page.name }}&trigger_action={{ action.id }}{% endif %}&next_step={{ next_step|urlencode }}%26germanic=consent{% endstore %}
-        {% if user and user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
-        {% else %}
-          {% remember "inline" as skip_consent %}
-        {% endif %}
 
       {% endif %}
     {% endif %}
