@@ -22,7 +22,7 @@
   {# --- VIEW MODE "DONE" #}
   <div class="font-bold">
     {% if page.custom_fields.final_message %}
-      {% include_tmpl page.custom_fields.final_message|safe %}
+      {% include_tmpl page.custom_fields.final_message %}
     {% else %}
       {% filter ak_text:"final_message" %}
         Thank you for standing for democracy with us. It is only together that we can truly be a force to be reckoned with.
