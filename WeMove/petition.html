@@ -94,18 +94,7 @@
 			data-wm-pixel-content-name="{{ page.title }}"
 			data-wm-pixel-trigger-event="submit"
 			data-wm-pixel-custom-logic="consentInline">
-
-			{% if args.fb == "1" %}
-					<button type="button"
-							data-wm-pixel-event-type="Search"
-							data-wm-pixel-track-type="track"
-							data-wm-pixel-content-name="TESTING_SERVER"
-							data-wm-pixel-trigger-event="click">
-							testing fb
-					</button>
-			{% endif %}
-
-			<input type="hidden" name="page" value="{{ page.name }}">
+			<input type="hidden" name="page" value="{{ page.name }}" />
 
 			<div class="mb-4 h-[88px]">
 				<div data-wm-floating-meter class="floating-progress-meter">
