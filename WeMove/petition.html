@@ -3,16 +3,6 @@
 {% block content %}
 
 <div class="nav-md:grid grid-cols-petition">
-	{% if args.fb == "1" %}
-		<button type="button"
-				data-wm-pixel-event-type="Share"
-				data-wm-pixel-track-type="trackCustom"
-				data-wm-pixel-content-name="TESTING"
-				data-wm-pixel-trigger-event="click">
-				testing fb
-		</button>
-{% endif %}
-
 	{% if not isEmbbeded %}
 		<article>
 			<div class="relative">
@@ -104,6 +94,16 @@
 			data-wm-pixel-content-name="{{ page.title }}"
 			data-wm-pixel-trigger-event="submit"
 			data-wm-pixel-custom-logic="consentInline">
+
+			{% if args.fb == "1" %}
+					<button type="button"
+							data-wm-pixel-event-type="Share"
+							data-wm-pixel-track-type="trackCustom"
+							data-wm-pixel-content-name="TESTING"
+							data-wm-pixel-trigger-event="click">
+							testing fb
+					</button>
+			{% endif %}
 
 			<input type="hidden" name="page" value="{{ page.name }}">
 
