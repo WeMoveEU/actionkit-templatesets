@@ -2,11 +2,7 @@
 
 {% block css_additions %}
 {% load_css %}
-  {% if fundraiser_staging %}
-    //donate-ui.not-a2.eu/donate-main.css
-  {% else %}
-    //donate-ui.wemove.eu/donate-main.css
-  {% endif %}
+//donate-ui.not-a2.eu/donate-main.css
 {% end %}
 {% endblock %}
 
@@ -94,9 +90,7 @@
 {% endblock %}
 
 {% block below_form %}
-  {% if fundraiser_staging %}
+
     <script type="module" src="//donate-ui.not-a2.eu/donate-main.js"></script>
-  {% else %}
-    <script type="module" src="//donate-ui.wemove.eu/donate-main.js"></script>
-  {% endif %}
+
 {% endblock %}
