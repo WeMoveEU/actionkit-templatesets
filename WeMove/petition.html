@@ -71,8 +71,6 @@
 				</div>
 				{% endif %}
 			</div>
-
-			{% include "./component-recent_actions.html" %}
 		</article>
 	{% endif %}
 
@@ -119,8 +117,9 @@
 
 		{% if not isEmbbeded %}
 			{% include "./component-recent_comments.html" %}
+			{% include "./component-recent_actions.html" %}
 		{% endif %}
-	<aside>
+	</aside>
 </div>
 
 {% endblock %}
