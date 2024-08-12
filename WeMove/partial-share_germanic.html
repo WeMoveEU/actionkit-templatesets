@@ -12,16 +12,15 @@
     />
 
     <p>
-      Den Bestätigungslink haben wir an die folgende E-Mail-Adresse geschickt:
-      <span class="user-email">{{ user.email }}</span>.
+      Vielen Dank für Ihre Unterschrift.<br/>
+
+      Wir haben Ihnen eine E-Mail an folgende Adresse geschickt:
+      <span class=”user-email”>{{ user.email }}</span>.
     </p>
     <p>
-      Bitte prüfen Sie jetzt Ihr Postfach und klicken Sie auf den enthaltenen
-      Link. Nur so wird Ihre Stimme gezählt!
-    </p>
-    <p>
-      Ihre Bestätigung ist wichtig - denn nur so können wir sicherstellen, dass
-      hinter jeder Teilnahme eine echte Person steht. Danke!
+      Wenn Sie weiterhin über diese und andere Kampagnen von WeMove Europe informiert werden möchten,
+      können Sie sich über den dort angegebenen Link in unseren Verteiler eintragen und Teil der
+      WeMove Europe Community werden.
     </p>
 
     {% store as signup_page_name %}{% report "signup_page_for_list_language" with 1 as refresh page.list_id as list_id user.lang_id|default:100 as lang_id %}{% endstore %}
