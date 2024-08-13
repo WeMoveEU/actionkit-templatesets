@@ -30,7 +30,7 @@ module.exports = {
         "nav-md": "940px",
       },
       gridTemplateColumns: {
-        petition: "66% 34%",
+        petition: "66% minmax(34%, 1fr)",
         donate: "1fr max-content",
       },
       fontFamily: {
