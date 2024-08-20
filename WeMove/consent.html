@@ -29,6 +29,9 @@
   optIn.value = 1;
 {% endif %}
 
-  // XXX: NEEDS RECAPTCHA
-  form.submit();
+$( function () {
+    setTimeout( function () {
+      form.submit();
+    } );
+  } );
 </script>

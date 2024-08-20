@@ -123,7 +123,12 @@
 
   <!-- Substatus: {{ user.subscription_status }} -->
 
-  {% if not user %}
+  {% if page.custom_fields.consent_version %}
+
+    {# 0. Don't ask for consent after sending consent email. #}
+    {% remember "emailed" as skip_consent %}
+
+  {% elif not user %}
 
     {# 1. We don't know who you are, so we can't deal with consents. #}
     {% remember "anonymous" as skip_consent %}
