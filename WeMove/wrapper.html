@@ -110,7 +110,7 @@
         {% if page.custom_fields.pre_action_share %}
           {% store as share_page %}{% if page.custom_fields.pre_action_share == "1" %}{{ page.custom_fields.daisy_chain_action|default:page.name }}{% else %}{{ page.custom_fields.pre_action_share }}{% endif %}{% endstore %}
           <div data-wm-popup-content-template hidden>
-            <h1 class="popup-title">{% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}</h1>
+            <h2 class="popup-title">{% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}</h2>
             <div data-wm-external-content class="is-loading"></div>
           </div>
           <script>

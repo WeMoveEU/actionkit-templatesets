@@ -3,125 +3,128 @@
 {% block content %}
 
 <div class="nav-md:grid grid-cols-petition">
-	{% if not isEmbbeded %}
-		<article>
-			<div class="relative">
-				{% include "./language_picker.html" %}
-				<h1 class="text-5xl mb-8 pr-40">{{ page.title }}</h1>
-			</div>
+  {% if not isEmbbeded %}
+    <article>
+      <div class="relative">
+        {% include "./language_picker.html" %}
 
-			{% include "./component-featured_media.html" %}
+        <h1 class="text-4xl nav-md:text-5xl nav-md:mb-8 nav-md:pr-40 break-normal">
+          {{ page.title }}
+        </h1>
+      </div>
 
-			<div class="nav-md:mr-4">
-				{% if form.statement_leadin %}
-					<h3 class="mt-8 italic font-normal text-base font-libre-franklin">
-						{% include_tmpl form.statement_leadin %}
-					</h3>
-				{% endif %}
+      {% include "./component-featured_media.html" %}
 
-				{% if page.custom_fields.youmove_initiator_name %}
-					<p data-wm-initiator-name="{{ page.custom_fields.youmove_initiator_name }}"
-						class="italic text-sm invisible">
-						{% filter ak_text:"statement_initiator" %}This petition is run by [% inititator_name %]{% endfilter %}
-					</p>
-				{% endif %}
+      <div class="nav-md:mr-4">
+        {% if form.statement_leadin %}
+          <h3 class="mt-8 italic font-normal text-base font-libre-franklin">
+            {% include_tmpl form.statement_leadin %}
+          </h3>
+        {% endif %}
 
-				<div class="petition--text text-wm-purple p-6 bg-wm-orangy-box mb-8">
-					<h2 class="uppercase border-b-[1px] text-2xl pb-2 border-wm-purple">
-						{% filter ak_text:"petition_title" %}Petition{% endfilter %}
-					</h2>
+        {% if page.custom_fields.youmove_initiator_name %}
+          <p data-wm-initiator-name="{{ page.custom_fields.youmove_initiator_name }}"
+            class="italic text-sm invisible">
+            {% filter ak_text:"statement_initiator" %}This petition is run by [% inititator_name %]{% endfilter %}
+          </p>
+        {% endif %}
 
-					{% include_tmpl form.statement_text %}
-				</div>
+        <div class="petition--text text-wm-purple p-6 bg-wm-orangy-box mb-8">
+          <h2 class="uppercase border-b-[1px] text-2xl pb-2 border-wm-purple">
+            {% filter ak_text:"petition_title" %}Petition{% endfilter %}
+          </h2>
 
-				<div class="why-is-important--text text-wm-purple p-6 bg-wm-lightblue-box mb-8">
-					{% if form.about_text %}
-					<h2 class="uppercase border-b-[1px] text-2xl pb-2 border-wm-purple">
-						{% filter ak_text:"whyIsThisImportant_title" %}Why is this important?{% endfilter %}
-					</h2>
+          {% include_tmpl form.statement_text %}
+        </div>
 
-					{% include_tmpl form.about_text %}
-					{% endif %}
+        <div class="why-is-important--text text-wm-purple p-6 bg-wm-lightblue-box mb-8">
+          {% if form.about_text %}
+          <h2 class="uppercase border-b-[1px] text-2xl pb-2 border-wm-purple">
+            {% filter ak_text:"whyIsThisImportant_title" %}Why is this important?{% endfilter %}
+          </h2>
 
-					{% store as references %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "references" as field_name %}{% endstore %}
-					{% if references %}
-					<h4 class="border-t-[1px] inline-block text-black pr-4 pt-4 border-wm-purple">
-						{% filter ak_text:"references" %}References:{% endfilter %}
-					</h4>
+          {% include_tmpl form.about_text %}
+          {% endif %}
 
-					<div class="references text-sm">
-						{{ references }}
-					</div>
-					{% endif %}
-				</div>
+          {% store as references %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "references" as field_name %}{% endstore %}
+          {% if references %}
+          <h4 class="border-t-[1px] inline-block text-black pr-4 pt-4 border-wm-purple">
+            {% filter ak_text:"references" %}References:{% endfilter %}
+          </h4>
 
-				{% store as partnership_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "partnership_icons" as field_name %}{% endstore %}
-				{% if partnership_icons %}
-				<div class="partnerships text-wm-purple mb-8">
-					<h3>{% filter ak_text:"in_partnership_with" %}In partnership with:{% endfilter %}</h3>
-					{{ partnership_icons }}
-				</div>
-				{% endif %}
+          <div class="references text-sm">
+            {{ references }}
+          </div>
+          {% endif %}
+        </div>
 
-				{% store as supporters_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "supporters_icons" as field_name %}{% endstore %}
-				{% if supporters_icons %}
-				<div class="supporters text-wm-purple mb-8">
-					<h3>{% filter ak_text:"supported_by" %}Supported by:{% endfilter %}</h3>
-					{{ supporters_icons }}
-				</div>
-				{% endif %}
-			</div>
-		</article>
-	{% endif %}
+        {% store as partnership_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "partnership_icons" as field_name %}{% endstore %}
+        {% if partnership_icons %}
+        <div class="partnerships text-wm-purple mb-8">
+          <h3>{% filter ak_text:"in_partnership_with" %}In partnership with:{% endfilter %}</h3>
+          {{ partnership_icons }}
+        </div>
+        {% endif %}
 
-	<aside class="relative">
-		<form
-			class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below {% if not isEmbbeded %}is-floating mx-auto max-w-[500px]{% endif %}
-				petition-form
-			bg-wm-bg-form p-4 h-fit"
-			name="act"
-			id="petition-form"
-			method="post"
-			action="/act/"
-			accept-charset="utf-8"
-			data-wm-floating-labels-form
-			data-wm-form="petition"
-			data-wm-pixel-event-type="Lead"
-			data-wm-pixel-track-type="track"
-			data-wm-pixel-content-id="{{ page.id }}"
-			data-wm-pixel-content-name="{{ page.title }}"
-			data-wm-pixel-trigger-event="submit"
-			data-wm-pixel-custom-logic="consentInline">
-			<input type="hidden" name="page" value="{{ page.name }}" />
+        {% store as supporters_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "supporters_icons" as field_name %}{% endstore %}
+        {% if supporters_icons %}
+        <div class="supporters text-wm-purple mb-8">
+          <h3>{% filter ak_text:"supported_by" %}Supported by:{% endfilter %}</h3>
+          {{ supporters_icons }}
+        </div>
+        {% endif %}
+      </div>
+    </article>
+  {% endif %}
 
-			<div class="mb-4 h-[88px]">
-				<div data-wm-floating-meter class="floating-progress-meter">
-					{% include "./component-progress_meter.html" %}
+  <aside class="relative">
+    <form
+      class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below {% if not isEmbbeded %}is-floating mx-auto max-w-[500px]{% endif %}
+        petition-form
+      bg-wm-bg-form p-4 h-fit"
+      name="act"
+      id="petition-form"
+      method="post"
+      action="/act/"
+      accept-charset="utf-8"
+      data-wm-floating-labels-form
+      data-wm-form="petition"
+      data-wm-pixel-event-type="Lead"
+      data-wm-pixel-track-type="track"
+      data-wm-pixel-content-id="{{ page.id }}"
+      data-wm-pixel-content-name="{{ page.title }}"
+      data-wm-pixel-trigger-event="submit"
+      data-wm-pixel-custom-logic="consentInline">
+      <input type="hidden" name="page" value="{{ page.name }}" />
 
-					<a href="#petition-form" class="fake-submit-button hover:!no-underline">
-						{% if page.custom_fields.sign_petition_button %}
-							{{ page.custom_fields.sign_petition_button }}
-						{% else %}
-							{% filter ak_text:"button_sign_petition" %}
-								Sign the Petition
-							{% endfilter %}
-						{% endif %}
-					</a>
-				</div>
-			</div>
+      <div class="mb-4 h-[88px]">
+        <div data-wm-floating-meter class="floating-progress-meter">
+          {% include "./component-progress_meter.html" %}
 
-			<div class="form-wrapper-container">
-				{% include "./user_form_wrapper.html" %}
-			</div>
-		</form>
+          <a href="#petition-form" class="fake-submit-button hover:!no-underline">
+            {% if page.custom_fields.sign_petition_button %}
+              {{ page.custom_fields.sign_petition_button }}
+            {% else %}
+              {% filter ak_text:"button_sign_petition" %}
+                Sign the Petition
+              {% endfilter %}
+            {% endif %}
+          </a>
+        </div>
+      </div>
 
-		{% if not isEmbbeded %}
-			<div class="sticky top-4">
-				{% include "./component-recent_comments.html" %}
-				{% include "./component-recent_actions.html" %}
-			</div>
-		{% endif %}
-	</aside>
+      <div class="form-wrapper-container">
+        {% include "./user_form_wrapper.html" %}
+      </div>
+    </form>
+
+    {% if not isEmbbeded %}
+      <div class="sticky top-4">
+        {% include "./component-recent_comments.html" %}
+        {% include "./component-recent_actions.html" %}
+      </div>
+    {% endif %}
+  </aside>
 </div>
 
 {% endblock %}
