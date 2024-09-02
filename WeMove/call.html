@@ -4,14 +4,14 @@
 
 <div class="nav-md:grid grid-cols-petition mb-8">
   <article>
-		<h1>{{ page.title }}</h1>
+    <h1 class="nav-md:mr-4">{{ page.title }}</h1>
 
     {% include "./component-featured_media.html" %}
 
     <div class="mt-4 nav-md:mr-4">
       {% include_tmpl form.introduction_text %}
     </div>
-	</article>
+  </article>
 
   <aside>
     <form
@@ -33,7 +33,7 @@
         {% include "./component-call_page-call.html" %}
       {% endif %}
     </form>
-	</aside>
+  </aside>
 </div>
 
 {% endblock %}
