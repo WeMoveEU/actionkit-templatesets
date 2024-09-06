@@ -2,38 +2,39 @@
 
 {% block content %}
 
-<div class="survey-intro">
-  <h1>{{ page.title }}</h1>
+<div class="survey-form">
+  <div class="survey-intro">
+    <h1>{{ page.title }}</h1>
 
-  {% include "./component-featured_media.html" %}
+    {% include "./component-featured_media.html" %}
 
-  {% include_tmpl form.introduction_text %}
+    {% include_tmpl form.introduction_text %}
+  </div>
+
+  <form class="ak-form" data-wm-form="survey" name="act" method="post" action="/act/" accept-charset="utf-8">
+    <input type="hidden" name="page" value="{{ page.name }}" />
+
+    {% for question in form.surveyquestion_set.all %}
+      <div class="ak-errs-below relative mb-6">
+        <label class="block font-gilroy text-wm-purple text-xl mb-2">
+          {{ question.question_label|safe }}
+
+          {% if question.is_required %}
+            <span class="ak-required-flag" aria-hidden="true">*</span>
+          {% endif %}
+        </label>
+
+        {{ question.input_html|safe }}
+      </div>
+    {% endfor %}
+
+    <section class="ak-errs-below">
+      <h2 class="text-wm-purple">
+        {% filter ak_text:"personalData_title" %}Your information{% endfilter %}
+      </h2>
+
+      {% include "./user_form_wrapper.html" %}
+    </section>
+  </form>
 </div>
-
-<form class="ak-form survey-form" data-wm-form="survey" name="act" method="post" action="/act/" accept-charset="utf-8">
-  <input type="hidden" name="page" value="{{ page.name }}" />
-
-  {% for question in form.surveyquestion_set.all %}
-    <div class="ak-errs-below relative mb-6">
-      <label class="block font-gilroy text-wm-purple text-xl mb-2">
-        {{ question.question_label|safe }}
-
-        {% if question.is_required %}
-          <span class="ak-required-flag" aria-hidden="true">*</span>
-        {% endif %}
-      </label>
-
-      {{ question.input_html|safe }}
-    </div>
-  {% endfor %}
-
-  <section class="ak-errs-below">
-    <h2 class="text-wm-purple">
-      {% filter ak_text:"personalData_title" %}Your information{% endfilter %}
-    </h2>
-
-    {% include "./user_form_wrapper.html" %}
-  </section>
-</form>
-
 {% endblock %}
