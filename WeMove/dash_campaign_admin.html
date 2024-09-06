@@ -294,6 +294,7 @@
 </style>
 
 <script>
+
 	"use strict";
 
 	////////////////////////////////////////////////////////////////////
@@ -787,7 +788,7 @@
 	}
 
 	function displayMailings(campaign) {
-		api('GET', "mailer/", { field__name: 'campaign', field__value: campaign.id, limit: 500 } ).done(function(result) {
+		api('GET', "mailer/", { field__name: 'campaign', field__value: campaign.id, _limit: 500 } ).done(function(result) {
 			var mailings = result.objects;
 			mailings.sort((m1,m2) => m1.notes.localeCompare(m2.notes));
 			const mailing_table = $('#mailings_output table');
