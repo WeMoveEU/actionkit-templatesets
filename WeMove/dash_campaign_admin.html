@@ -8,13 +8,32 @@
 	#campaign_form,
   #campaign_output,
   #campaign_matches,
-  #pages_output,
-  #mailings_output,
   #not_found,
   #page_form,
   #mailing_form {
 		display: none;
 	}
+
+  #pages_output,
+  #mailings_output {
+    &.is-loading {
+      .main-content {
+        display: none;
+      }
+
+      .spinner-wrapper {
+        display: flex;
+      }
+    }
+
+    .main-content {
+      display: block;
+    }
+
+    .spinner-wrapper {
+      display: none;
+    }
+  }
 
 	#campaign_matches ul {
 		list-style: initial;
@@ -108,6 +127,11 @@
 
     &[hidden] {
       display: none;
+    }
+
+    &.loading-info {
+      width: 166px;
+      margin: 2rem auto;
     }
   }
 </style>
@@ -244,85 +268,99 @@
 	<button id="save_campaign" class="button-main">Save</button>
 </section>
 
-<section id="pages_output">
+<section id="pages_output" class="is-loading" data-wm-pages-section>
 	<h2>Action Pages</h2>
 
-  <div class="spinner-wrapper" data-wm-spinner hidden>
+  <div class="spinner-wrapper loading-info">
     <span class="spinner"></span>
     <span>Loading pages...</span>
   </div>
 
-	<table>
-	</table>
-	<div class="button-row"><button id="add_step" class="button-small-alternate">Add A Step</button></div>
+	<div class="main-content">
+    <table>
+	  </table>
+
+	  <div class="button-row">
+      <button id="add_step" class="button-small-alternate">
+        Add A Step
+      </button>
+    </div>
+  </div>
 </section>
 
 <form>
-<fieldset id="page_form" style="display: none">
-	<h2>Add a Journey Step</h2>
-	<div class="fieldset-contents">
-		<div class="form-row form-row-CheckboxInput language-picker">
-			<div class="form-label col span_1_of_4"><label>Languages:</label></div>
-			<div class="form-control col span_3_of_4"></div>
-		</div>
-		<div class="form-row form-row-CheckboxInput">
-			<div class="form-label col span_1_of_4"><label>Action type:</label></div>
-			<div class="form-control col span_3_of_4">
-				<label><input type="radio" name="action_type" value="petition" checked> Petition</label>
-				<label><input type="radio" name="action_type" value="sharing"> Share</label>
-				<label><input type="radio" name="action_type" value="donation"> Donation</label>
-				<label><input type="radio" name="action_type" value="letter"> Email</label>
-				<label><input type="radio" name="action_type" value="tweet"> Tweet</label>
-				<label><input type="radio" name="action_type" value="facebook"> Facebook</label>
-				<label><input type="radio" name="action_type" value="call" disabled> Call</label>
-			</div>
-		</div>
-		<div class="form-row step-picker">
-			<div class="form-label col span_1_of_4"><label>Step:</label></div>
-			<div class="form-control col span_3_of_4">
-				<select name="after_step">
-					<option value="">First step of journey</option>
-				</select>
-			</div>
-		</div>
-		<div class="form-row">
-			<div class="form-label col span_1_of_4"><label>Internal Name: </label></div>
-			<div class="form-control col span_3_of_4">
-				<input type="text" name="notes" value="">-XX<br/>
-				<p class="help">This will be used to also initialise the URL slug (ActionKit's "short name"), so don't forget to change it!</p>
-			</div>
-		</div>
+  <fieldset id="page_form" style="display: none">
+    <h2>Add a Journey Step</h2>
+    <div class="fieldset-contents">
+      <div class="form-row form-row-CheckboxInput language-picker">
+        <div class="form-label col span_1_of_4"><label>Languages:</label></div>
+        <div class="form-control col span_3_of_4"></div>
+      </div>
+      <div class="form-row form-row-CheckboxInput">
+        <div class="form-label col span_1_of_4"><label>Action type:</label></div>
+        <div class="form-control col span_3_of_4">
+          <label><input type="radio" name="action_type" value="petition" checked> Petition</label>
+          <label><input type="radio" name="action_type" value="sharing"> Share</label>
+          <label><input type="radio" name="action_type" value="donation"> Donation</label>
+          <label><input type="radio" name="action_type" value="letter"> Email</label>
+          <label><input type="radio" name="action_type" value="tweet"> Tweet</label>
+          <label><input type="radio" name="action_type" value="facebook"> Facebook</label>
+          <label><input type="radio" name="action_type" value="call" disabled> Call</label>
+        </div>
+      </div>
+      <div class="form-row step-picker">
+        <div class="form-label col span_1_of_4"><label>Step:</label></div>
+        <div class="form-control col span_3_of_4">
+          <select name="after_step">
+            <option value="">First step of journey</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-label col span_1_of_4"><label>Internal Name: </label></div>
+        <div class="form-control col span_3_of_4">
+          <input type="text" name="notes" value="">-XX<br/>
+          <p class="help">This will be used to also initialise the URL slug (ActionKit's "short name"), so don't forget to change it!</p>
+        </div>
+      </div>
 
-		<div class="form-row cta-row" data-wm-create-pages-button>
-      <button id="create_pages" class="button-main">Create Pages</button>
+      <div class="form-row cta-row" data-wm-create-pages-button>
+        <button id="create_pages" class="button-main">Create Pages</button>
 
-      <div class="spinner-wrapper" data-wm-spinner hidden>
-        <span class="spinner"></span>
-        <span>Creating pages...</span>
+        <div class="spinner-wrapper" data-wm-spinner hidden>
+          <span class="spinner"></span>
+          <span>Creating pages...</span>
+        </div>
       </div>
     </div>
-	</div>
-</fieldset>
+  </fieldset>
 </form>
 
-<section id="mailings_output">
+<section id="mailings_output" class="is-loading">
 	<h2>Mailings</h2>
 
-  <div class="spinner-wrapper" data-wm-spinner hidden>
+  <div class="spinner-wrapper loading-info" data-wm-spinner>
     <span class="spinner"></span>
     <span>Loading mailings...</span>
   </div>
 
-	<table style="min-width: 300px">
-		<tr>
-			<th scope="column">ID</th>
-			<th scope="column">Name</th>
-			<th scope="column">Status</th>
-			<th scope="column">Send date</th>
-			<th scope="column"></th>
-		</tr>
-	</table>
-	<div class="button-row"><button id="add_mailing" class="button-small-alternate">Add Mailings</button></div>
+	<div class="main-content">
+    <table style="min-width: 300px">
+      <tr>
+        <th scope="column">ID</th>
+        <th scope="column">Name</th>
+        <th scope="column">Status</th>
+        <th scope="column">Send date</th>
+        <th scope="column"></th>
+      </tr>
+    </table>
+
+    <div class="button-row">
+      <button id="add_mailing" class="button-small-alternate">
+        Add Mailings
+      </button>
+    </div>
+  </div>
 </section>
 
 <form>
@@ -779,7 +817,7 @@
 			}
 			window.journeys = lang_journeys;
 			$('#page_form').data('campaign', campaign);
-			$('#pages_output').show();
+			$('#pages_output').removeClass('is-loading');
 			$('#page_form input[name=action_type]').on('click', function() {
 				$('#page_form input[name=notes]').val(campaign.name + "-" + this.value);
 			});
@@ -896,7 +934,7 @@
 				mailing_table.html('<tr><td colspan="4">No mailing yet</td></tr>');
 			}
 			$('#mailing_form').data('campaign', campaign);
-			$('#mailings_output').show();
+			$('#mailings_output').removeClass('is-loading');
 			$('#create_mailings').on('click', createMailings);
 			$('#add_mailing').on('click', function () {
 				$('#add_mailing').hide();
