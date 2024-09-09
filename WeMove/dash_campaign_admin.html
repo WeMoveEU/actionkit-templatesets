@@ -72,9 +72,9 @@
 	}
 
   .spinner {
-    width: 48px;
-    height: 48px;
-    border: 5px solid #27bbdd;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid #27bbdd;
     border-bottom-color: transparent;
     border-radius: 50%;
     display: inline-block;
@@ -91,6 +91,17 @@
       transform: rotate(360deg);
     }
    }
+
+  .cta-row {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .spinner-wrapper {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
 </style>
 
 {% store as campaign %}{% if campaign %}{{ campaign }}{% else %}{{ searched_name }}{% endif %}{% endstore %}
@@ -268,12 +279,12 @@
 			</div>
 		</div>
 
-		<div class="form-row">
+		<div class="form-row cta-row" data-wm-create-pages-button>
       <button id="create_pages" class="button-main">Create Pages</button>
 
-      <div class="spinner-wrapper" hidden>
+      <div class="spinner-wrapper" data-wm-spinner hidden>
         <span class="spinner"></span>
-        <span>Creating...</span>
+        <span>Creating pages...</span>
       </div>
     </div>
 	</div>
@@ -1021,7 +1032,11 @@
 
 	async function createPages(evt) {
 		evt.preventDefault();
-    document.querySelector('#create_pages').disabled = true;
+
+    const buttonWrapper = document.querySelector('[data-wm-create-pages-button]');
+    buttonWrapper.querySelector('button').disabled = true;
+    buttonWrapper.querySelector('[data-wm-spinner]').hidden = false;
+
 
 		const $form = $('#page_form');
 		var page_prefix = $form.find('input[name=notes]').val();
