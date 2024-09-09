@@ -927,7 +927,9 @@
       .done((result) => {
         const mailings = result.objects;
         debugger
+        console.table(mailings)
         mailings.sort((m1,m2) => m1.notes.localeCompare(m2.notes));
+        console.table(mailings)
 
         let tableContent = "";
 
