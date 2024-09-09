@@ -463,6 +463,7 @@
 
 	function api_log() {
 		console.log( "AK API:", ...arguments );
+
 		$('<div>').text( [...arguments].map(
 			(i) => typeof(i) == 'string' ? i : JSON.stringify(i, null, 2)
 		).join(' ') ).appendTo('#api-log');
@@ -929,9 +930,8 @@
           // order_by: '-id',
           _limit: API_LIMIT,
           _offset: offset,
-        })
-      .done((result) => result.objects);
-
+        });
+      debugger
       mailings = [...mailings, ...tempMailings.objects];
 
       if (tempMailings.objects.length < API_LIMIT) {
