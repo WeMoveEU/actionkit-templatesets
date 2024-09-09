@@ -915,7 +915,7 @@
 		return ( view_href ? `<a title="View ${title_txt}" href="${view_href}">${action_label}</a>` : action_label ) + ` <a class="dash-icon-btn" title="Edit ${name_txt}" href="${edit_href}">✎</a>`;
 	}
 
-  const getSortedMailingsFromAPI = async () => {
+  const getSortedMailingsFromAPI = async (campaignId)=> {
     const API_LIMIT = 100;
     let offset = 0;
     let mailings = [];
@@ -926,8 +926,8 @@
         "mailer/",
         {
           field__name: 'campaign',
-          field__value: campaign.id,
-          // order_by: '-id',
+          field__value: campaignId,
+          order_by: '-id',
           _limit: API_LIMIT,
           _offset: offset,
         });
@@ -945,7 +945,7 @@
   };
 
 	const displayMailings = async (campaign) => {
-    const mailings = await getSortedMailingsFromAPI();
+    const mailings = await getSortedMailingsFromAPI(campaign.id);
 
     let tableContent = "";
 
