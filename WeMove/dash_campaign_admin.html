@@ -914,51 +914,65 @@
 		return ( view_href ? `<a title="View ${title_txt}" href="${view_href}">${action_label}</a>` : action_label ) + ` <a class="dash-icon-btn" title="Edit ${name_txt}" href="${edit_href}">✎</a>`;
 	}
 
-	const displayMailings = (campaign) => {
-		api(
-      'GET',
-      "mailer/",
-      {
-        field__name: 'campaign',
-        field__value: campaign.id,
-        _limit: 100,
-        order_by: '-id',
-      })
-      .done((result) => {
-        const mailings = result.objects;
-        debugger
-        console.table(result.objects, 'copy')
-        mailings.sort((m1,m2) => m1.notes.localeCompare(m2.notes));
-        console.table(mailings, 'copy')
+  const getSortedMailingsFromAPI = async () => {
+    const API_LIMIT = 100;
+    let offset = 0;
+    let mailings = [];
 
-        let tableContent = "";
+    while (true) {
+      const tempMailings = await api(
+        'GET',
+        "mailer/",
+        {
+          field__name: 'campaign',
+          field__value: campaign.id,
+          order_by: '-id',
+          _limit: API_LIMIT,
+          _offset: offset,
+        })
+      .done((result) => result.objects);
 
-        if (mailings.length) {
-          mailings.forEach((mailing) => {
-            tableContent = tableContent +
-              `<tr>
-                <td>${mailing.id}</td>
-                <td>${mailing.notes}</td>
-                <td>${mailing.status}</td>
-                <td>${(mailing.started_at || '').replace(/:\d\d\..*/, '')}</td>
-                <td>${mailingLink(mailing)}</td>
-              </tr>`;
-          });
-        } else {
-          tableContent = '<tr><td colspan="4">No mailing yet</td></tr>';
-        }
+      mailings = [...mailings, ...tempMailings.objects];
 
-        document.querySelector('#mailings_output table').innerHTML = tableContent;
+      if (tempMailings.objects.length < API_LIMIT) {
+        break;
+      }
 
-        $('#mailing_form').data('campaign', campaign);
-        $('#mailings_output').removeClass('is-loading');
-        $('#create_mailings').on('click', createMailings);
-        $('#add_mailing').on('click', () => {
-          $('#add_mailing').hide();
-          $('#mailing_form').show();
-        });
-		});
-	}
+      offset = offset + API_LIMIT;
+    };
+
+    return mailings.sort((m1,m2) => m1.notes.localeCompare(m2.notes));
+  };
+
+	const displayMailings = async (campaign) => {
+    const mailings = await getSortedMailingsFromAPI();
+
+    let tableContent = "";
+
+    if (mailings.length) {
+      mailings.forEach((mailing) => {
+        tableContent = tableContent +
+          `<tr>
+            <td>${mailing.id}</td>
+            <td>${mailing.notes}</td>
+            <td>${mailing.status}</td>
+            <td>${(mailing.started_at || '').replace(/:\d\d\..*/, '')}</td>
+            <td>${mailingLink(mailing)}</td>
+          </tr>`;
+      });
+    } else {
+      tableContent = '<tr><td colspan="4">No mailing yet</td></tr>';
+    }
+
+    document.querySelector('#mailings_output table').innerHTML = tableContent;
+    $('#mailing_form').data('campaign', campaign);
+    $('#mailings_output').removeClass('is-loading');
+    $('#create_mailings').on('click', createMailings);
+    $('#add_mailing').on('click', () => {
+      $('#add_mailing').hide();
+      $('#mailing_form').show();
+    });
+	};
 
 	function mailingLink(mailing) {
 		var label = "✎ Edit", path = "drafts/compose";
