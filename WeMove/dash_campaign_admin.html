@@ -968,9 +968,7 @@
 
 	async function createPages(evt) {
 		evt.preventDefault();
-
-        const createPagesButton = document.querySelector('#create_pages');
-        createPagesButton.disabled = true;
+    document.querySelector('#create_pages').disabled = true;
 
 		const $form = $('#page_form');
 		var page_prefix = $form.find('input[name=notes]').val();
@@ -1037,10 +1035,7 @@
 					}
 			});
 			$.when(...calls).done(
-				() => {
-                    createPagesButton.disabled = true;
-                    return reload_dashboard( campaign.name )
-                }
+				() => reload_dashboard(campaign.name)
 			);
 		});
 	}
