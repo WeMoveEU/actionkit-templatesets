@@ -342,7 +342,7 @@
 			<div class="form-control col span_3_of_4"><input type="text" name="notes" value="">-XX</div>
 		</div>
 
-    <div class="form-row cta-row" data-wm-create-pages-button>
+    <div class="form-row cta-row" data-wm-create-mailings-button>
       <button id="create_mailings" class="button-main">
         Create Mailings
       </button>
@@ -1165,6 +1165,10 @@
 
 	function createMailings(evt) {
 		evt.preventDefault();
+    const buttonWrapper = document.querySelector('[data-wm-create-mailings-button]');
+    buttonWrapper.querySelector('button').disabled = true;
+    buttonWrapper.querySelector('[data-wm-spinner]').hidden = false;
+
 		const $form = $('#mailing_form');
 		var mailmodel = $form.find('select[name=mailmodel]').val();
 		var mailing_name = $form.find('input[name=notes]').val();
