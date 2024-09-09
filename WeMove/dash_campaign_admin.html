@@ -1,6 +1,10 @@
 <script src="/static/admin/js/collapse.js"></script>
 
 <style>
+  #api-log > div { padding: 1px; border-bottom: 1px solid #f7f7f7; padding-left: 1.5em; text-indent:-1.5em; white-space: pre-wrap; max-height: 83px; overflow: auto; }
+	#api-log > div:nth-child(even) { background: #fcfcfc; }
+	#api-log > div.expanded { max-height: none; }
+
 	#campaign_form,
   #campaign_output,
   #campaign_matches,
@@ -242,6 +246,12 @@
 
 <section id="pages_output">
 	<h2>Action Pages</h2>
+
+  <div class="spinner-wrapper" data-wm-spinner hidden>
+    <span class="spinner"></span>
+    <span>Loading pages...</span>
+  </div>
+
 	<table>
 	</table>
 	<div class="button-row"><button id="add_step" class="button-small-alternate">Add A Step</button></div>
@@ -297,6 +307,12 @@
 
 <section id="mailings_output">
 	<h2>Mailings</h2>
+
+  <div class="spinner-wrapper" data-wm-spinner hidden>
+    <span class="spinner"></span>
+    <span>Loading mailings...</span>
+  </div>
+
 	<table style="min-width: 300px">
 		<tr>
 			<th scope="column">ID</th>
@@ -365,11 +381,6 @@
 		</div>
 	</fieldset>
 </div>
-<style>
-	#api-log > div { padding: 1px; border-bottom: 1px solid #f7f7f7; padding-left: 1.5em; text-indent:-1.5em; white-space: pre-wrap; max-height: 83px; overflow: auto; }
-	#api-log > div:nth-child(even) { background: #fcfcfc; }
-	#api-log > div.expanded { max-height: none; }
-</style>
 
 <script>
 
