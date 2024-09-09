@@ -927,11 +927,11 @@
         {
           field__name: 'campaign',
           field__value: campaignId,
-          order_by: '-id',
+          // order_by: '-id',
           _limit: API_LIMIT,
           _offset: offset,
         });
-      debugger
+
       mailings = [...mailings, ...tempMailings.objects];
 
       if (tempMailings.objects.length < API_LIMIT) {
