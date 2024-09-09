@@ -341,7 +341,17 @@
 			<div class="form-label col span_1_of_4"><label>Name: </label></div>
 			<div class="form-control col span_3_of_4"><input type="text" name="notes" value="">-XX</div>
 		</div>
-		<button id="create_mailings" class="button-main">Create Mailings</button>
+
+    <div class="form-row cta-row" data-wm-create-pages-button>
+      <button id="create_mailings" class="button-main">
+        Create Mailings
+      </button>
+
+      <div class="spinner-wrapper" data-wm-spinner hidden>
+        <span class="spinner"></span>
+        <span>Creating mailings...</span>
+      </div>
+    </div>
 	</div>
 </fieldset>
 </form>
