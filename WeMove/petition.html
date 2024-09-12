@@ -31,11 +31,7 @@
 
         <div class="petition--text text-wm-purple p-6 bg-wm-orangy-box mb-8">
           <h2 class="uppercase border-b-[1px] text-2xl pb-2 border-wm-purple">
-            {% if page.custom_fields.petition_title %}
-              {{ page.custom_fields.petition_title }}
-            {% else %}
-              {% filter ak_text:"petition_title" %}Petition{% endfilter %}
-            {% endif %}
+            {% filter ak_text:"petition_title" %}Petition{% endfilter %}
           </h2>
 
           {% include_tmpl form.statement_text %}
