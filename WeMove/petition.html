@@ -31,7 +31,11 @@
 
         <div class="petition--text text-wm-purple p-6 bg-wm-orangy-box mb-8">
           <h2 class="uppercase border-b-[1px] text-2xl pb-2 border-wm-purple">
-            {% filter ak_text:"petition_title" %}Petition{% endfilter %}
+            {% if page.custom_fields.petition_title %}
+              {{ page.custom_fields.petition_title }}
+            {% else %}
+              {% filter ak_text:"petition_title" %}Petition{% endfilter %}
+            {% endif %}
           </h2>
 
           {% include_tmpl form.statement_text %}
@@ -40,7 +44,11 @@
         <div class="why-is-important--text text-wm-purple p-6 bg-wm-lightblue-box mb-8">
           {% if form.about_text %}
           <h2 class="uppercase border-b-[1px] text-2xl pb-2 border-wm-purple">
-            {% filter ak_text:"whyIsThisImportant_title" %}Why is this important?{% endfilter %}
+            {% if page.custom_fields.why_is_this_important_title %}
+              {{ page.custom_fields.why_is_this_important_title }}
+            {% else %}
+              {% filter ak_text:"whyIsThisImportant_title" %}Why is this important?{% endfilter %}
+            {% endif %}
           </h2>
 
           {% include_tmpl form.about_text %}
