@@ -1,3 +1,8 @@
+{% store as cache_key %}
+  {% right_now %}
+  {{ now|date:"U"|divide:60|floatformat:0 }}
+{% endstore %}
+
 {% if page.lang.iso_code in "de,it,nl,pl,fr,es" %}
   {% remember page.lang.iso_code as link_iso %}
 {% else %}
@@ -9,7 +14,7 @@
 {% endif %}
 
 {% if page.id %}
-  {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "campaign_type" as field_name %}{% endstore %}
+  {% store as campaign_type %}{% report "custom_field_from_page_or_campaign" with cache_key as cache_key page.id as page_id "campaign_type" as field_name %}{% endstore %}
 {% endif %}
 <!DOCTYPE html>
 <html
@@ -48,7 +53,7 @@
     //static.wemove.eu/action-kit/css/wemove.css?v=2.5.2
 
       {% if args.embed and args.css == "1" %}
-        {% store as external_css %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "external_css" as field_name %}{% endstore %}
+        {% store as external_css %}{% report "custom_field_from_page_or_campaign" with cache_key as cache_key page.id as page_id "external_css" as field_name %}{% endstore %}
         {% if external_css %}
           {{ external_css }}
         {% endif %}

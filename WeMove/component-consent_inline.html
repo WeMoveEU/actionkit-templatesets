@@ -69,7 +69,7 @@
     <input type="hidden" name="opt_in" value="1" data-wm-consent-hidden-optin />
     <input type="hidden" name="action_consent_action" value="n" data-wm-consent-hidden-consent-action />
 
-    {% store as consent_version %}{% report "consent_version_for_list_language" with 1 as refresh page.list_id as list_id page.lang_id|default:100 as lang_id %}{% endstore %}
+    {% store as consent_version %}{% report "consent_version_for_list_language" with cache_key as cache_key page.list_id as list_id page.lang_id|default:100 as lang_id %}{% endstore %}
     <input type="hidden" name="action_consent_version" value="{{ consent_version }}">
   </div>
 
