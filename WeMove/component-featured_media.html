@@ -1,5 +1,5 @@
-{% store as featured_video %}{% report "custom_field_from_page_or_campaign" with cache_key as cache_key page.id as page_id "featured_video" as field_name %}{% endstore %}
-{% store as featured_image %}{% report "custom_field_from_page_or_campaign" with cache_key as cache_key page.id as page_id "featured_image" as field_name %}{% endstore %}
+{% store as featured_video %}{% report "custom_field_from_page_or_campaign" with cache_key as refresh page.id as page_id "featured_video" as field_name %}{% endstore %}
+{% store as featured_image %}{% report "custom_field_from_page_or_campaign" with cache_key as refresh page.id as page_id "featured_image" as field_name %}{% endstore %}
 {% if featured_video %}
   {% include "./component-featured-video.html" with featured_video=featured_video %}
 {% elif featured_image %}
