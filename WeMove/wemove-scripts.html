@@ -29,7 +29,7 @@ window.wemove.page.shouldDisableForm = true
 {% endif %}
 </script>
 
-{% store as wemove_custom_script %}{% report "custom_field_from_page_or_campaign" with cache_key as cache_key page.id as page_id "wemove_custom_script" as field_name %}{% endstore %}
+{% store as wemove_custom_script %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "wemove_custom_script" as field_name %}{% endstore %}
 {% if wemove_custom_script %}
   {% autoescape off %}
     {{ wemove_custom_script }}
@@ -37,7 +37,7 @@ window.wemove.page.shouldDisableForm = true
 {% endif %}
 
 {% if isEmbbeded %}
-  {% store as partner_custom_script %}{% report "custom_field_from_page_or_campaign" with cache_key as cache_key page.id as page_id "partner_custom_script" as field_name %}{% endstore %}
+  {% store as partner_custom_script %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "partner_custom_script" as field_name %}{% endstore %}
   {% if partner_custom_script %}
     {% autoescape off %}
       {{ partner_custom_script }}
