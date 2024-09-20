@@ -1,5 +1,5 @@
 {% if page.type == 'Petition' %}
-  {% store as hide_comments_field %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "hide_comments_field" as field_name %}{% endstore %}
+  {% store as hide_comments_field %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "hide_comments_field" as field_name %}{% endstore %}
   {% if not hide_comments_field == "1" %}
   <div class="ak-field form-field">
     <label for="id_comment">
