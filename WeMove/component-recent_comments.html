@@ -1,5 +1,8 @@
 <div data-wm-recent-comments class="recent-comments hidden w-full max-w-[500px] mx-auto">
-  <h4 class="text-wm-purple mb-4 text-2xl">Recent comments</h4>
+  <h4 class="text-wm-purple mb-4 text-2xl">
+    {% filter ak_text:"recentComments_title" %}Recent comments{% endfilter %}
+  </h4>
+
   <div data-wm-recent-comment-text class="bg-wm-lightblue-box text-wm-purple p-6 text-sm shadow-lg">
     <div data-wm-comment-by class="italic text-right font-bold"></div>
     <div data-wm-comment-text></div>
