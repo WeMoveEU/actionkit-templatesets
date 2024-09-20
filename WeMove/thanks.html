@@ -149,7 +149,7 @@
     {% remember "bypass" as skip_consent %}
   {% else %}
 
-    {% store as previous_consents %}{% report "previous_user_consent_for_list" with 1 as refresh user.id as user_id page.list_id as list_id %}{% endstore %}
+    {% store as previous_consents %}{% report "previous_user_consent_for_list" with cache_key as key user.id as user_id page.list_id as list_id %}{% endstore %}
     <!-- Previous consents: {{ previous_consents }} -->
 
     {% if previous_consents != "" and previous_consents != "0" %}
@@ -158,7 +158,7 @@
     {% else %}
 
       <!-- Lang ID: {{ user.lang_id }} -->
-      {% store as signup_page_name %}{% report "signup_page_for_list_language" with 1 as refresh page.list_id as list_id user.lang_id|default:100 as lang_id %}{% endstore %}
+      {% store as signup_page_name %}{% report "signup_page_for_list_language" with cache_key as key page.list_id as list_id user.lang_id|default:100 as lang_id %}{% endstore %}
       <!-- Signup Page: {{ signup_page_name }} -->
       {% if not signup_page_name %}
         {% comment %}

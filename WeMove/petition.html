@@ -50,7 +50,7 @@
           {% include_tmpl form.about_text %}
           {% endif %}
 
-          {% store as references %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "references" as field_name %}{% endstore %}
+          {% store as references %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "references" as field_name %}{% endstore %}
           {% if references %}
           <h4 class="border-t-[1px] inline-block text-black pr-4 pt-4 border-wm-purple">
             {% filter ak_text:"references" %}References:{% endfilter %}
@@ -62,7 +62,7 @@
           {% endif %}
         </div>
 
-        {% store as partnership_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "partnership_icons" as field_name %}{% endstore %}
+        {% store as partnership_icons %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "partnership_icons" as field_name %}{% endstore %}
         {% if partnership_icons %}
         <div class="partnerships text-wm-purple mb-8">
           <h3>{% filter ak_text:"in_partnership_with" %}In partnership with:{% endfilter %}</h3>
@@ -70,7 +70,7 @@
         </div>
         {% endif %}
 
-        {% store as supporters_icons %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "supporters_icons" as field_name %}{% endstore %}
+        {% store as supporters_icons %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "supporters_icons" as field_name %}{% endstore %}
         {% if supporters_icons %}
         <div class="supporters text-wm-purple mb-8">
           <h3>{% filter ak_text:"supported_by" %}Supported by:{% endfilter %}</h3>

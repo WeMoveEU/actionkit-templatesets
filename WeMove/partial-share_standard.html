@@ -116,7 +116,7 @@
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
       </div>
 
-      {% store as instagram_share_link %}{% report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "instagram_share_link" as field_name %}{% endstore %}
+      {% store as instagram_share_link %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "instagram_share_link" as field_name %}{% endstore %}
       {% if instagram_share_link %}
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a

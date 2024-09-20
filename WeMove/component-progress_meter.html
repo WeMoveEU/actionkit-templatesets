@@ -7,9 +7,9 @@
         [% with (progress) { %]
             [% if ( goal && total ) { %]
                 [% progress.current = goal_type == 'dollars' ? total.dollars : goal_type == 'money' ? total.money : total.actions; %]
-                {% cache_report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "external_signature_count" as field_name %}
+                {% cache_report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "external_signature_count" as field_name %}
                 {% remember custom_field_from_page_or_campaign as ext_sig_count %}
-                {% cache_report "custom_field_from_page_or_campaign" with 1 as refresh page.id as page_id "external_signature_extras" as field_name %}
+                {% cache_report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "external_signature_extras" as field_name %}
                 {% remember custom_field_from_page_or_campaign as ext_sig_extras %}
                 [% progress.current = parseInt(progress.current) + {{ ext_sig_count|default:"0" }} + {{ ext_sig_extras|default:"0" }}; %]
                 [% if ( goal_type == 'users' || goal_type == 'actions' ) { %]
