@@ -37,37 +37,62 @@
 
         <p>{% include_tmpl form.update_card_text %}</p>
 
-{% comment %}
-<ul>
-{% for profile in actionkit_user.lazy_recurring_orders %}
-<li>{{ profile.status }} on {{ profile.updated_at }}. Started on {{ profile.start }}, {% with profile.payment_count as count %} {{ count }} {{ profile.get_period_display|lower }} payment{{ count|pluralize }}{% endwith %} were made for a total of {{ profile.payment_total_amt }}.</li>
-{% endfor %}
-</ul> {% endcomment %}
+        {% comment %}
+        <ul>
+        {% for profile in actionkit_user.lazy_recurring_orders %}
+        <li>{{ profile.status }} on {{ profile.updated_at }}. Started on {{ profile.start }}, {% with profile.payment_count as count %} {{ count }} {{ profile.get_period_display|lower }} payment{{ count|pluralize }}{% endwith %} were made for a total of {{ profile.payment_total_amt }}.</li>
+        {% endfor %}
+        </ul> {% endcomment %}
 
-<form>
-{% for profile in actionkit_user.lazy_recurring_orders %}
-    {% if profile.status == 'active' or profile.status == 'past_due' %}
-        {% record profile in active_recurring %}
-        {{profile.as_dict}}
+        {% record "init" in active_recurring %}
+        {% record "init" in other_recurring %}
 
-        <div data-wm-form-field="first_name" id="ak-fieldbox-first_name" class="form-field required ak-err-below">
-            <label for="id_first_name" class="ak-is-overlaid ak-error" style="cursor: text; pointer-events: none;">
-                Nome:<span class="ak-required-flag">*</span>
-            </label>
-            <input type="text" name="first_name" id="id_first_name" class="ak-userfield-input ak-has-overlay ak-error">
-            <ul class="ak-err" style="display: block;">
-                <li>Nome obbligatorio</li>
-            </ul>
-        </div>
+        {% for profile in actionkit_user.lazy_recurring_orders %}
+            {% if profile.status == 'active' or profile.status == 'past_due' %}
+                {% record profile in active_recurring %}
+            {% else %}
+                {% record profile in other_recurring %}
+            {% endif %}
+        {% endfor %}
 
-    {% comment %} {# Uncomment if you want to show inactive profiles #} {% endcomment %}
-    {% comment %} {% elif profile.status == 'inactive' %}
-        {% record profile in inactive_recurring %} {% endcomment %}
-    {% endif %}
-{% endfor %}
-</form>
+        {% with profile.payment_processor_information as pp %}
 
-{{ active_recurring }}
+            Monthly recurring:
+
+            {% for profile in active_recurring|slice:"1:" %}
+            <form id="change_profile_{{ profile.id }}">
+                <p>{{ profile.status }} for {{ profile.payment_total_amt }}</p>
+                {{ profile.as_dict }}
+
+                <div data-wm-form-field="first_name" id="ak-fieldbox-first_name" class="form-field required ak-err-below">
+                    <label for="id_first_name" class="ak-is-overlaid ak-error" style="cursor: text; pointer-events: none;">
+                        Name:<span class="ak-required-flag">*</span>
+                    </label>
+                    <input type="text" name="first_name" id="id_first_name" class="ak-userfield-input ak-has-overlay ak-error">
+                    <ul class="ak-err" style="display: block;">
+                        <li>Name required</li>
+                    </ul>
+                </div>
+            </form>
+            {% empty %}
+                <p>Whoops! You don't have any active recurring donations to update.</p>
+            {% endfor %}
+
+        {% endwith %}
+
+        <hr>
+
+        Past recurring:
+        <ul>
+            {% for profile in other_recurring|slice:"1:" %}
+            <li>{{ profile.status }} on {{ profile.updated_at }}. Started on {{ profile.start }}, {% with profile.payment_count as count %} {{ count }} {{ profile.get_period_display|lower }} payment{{ count|pluralize }}{% endwith %} were made for a total of {{ profile.payment_total_amt }}.</li>
+            {% empty %}
+            <p> You have no inactive recurring donations </p>
+            {% endfor %}
+        </ul>
+
+
+        {{ active_recurring }}
 
         {% comment %} {% if not active_recurring %}
             <p>Whoops! You don't have any active recurring donations to update.</p>
@@ -92,7 +117,6 @@
         {% endcomment %}
 
     </div>
-
 </div>
 
 {% log_context %}
