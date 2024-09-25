@@ -1082,7 +1082,7 @@
 		//If the action type is share but there is no page yet in the journey, this will create a multilingual campaign for it
 		//TODO Maybe not what we want?
 		var mcamp_name = campaign_name + ': ' + action_type;
-		var mcamp = Object.keys(multilingual_campaigns).find((uri) => multilingual_campaigns[uri].toLowerCase() == mcamp_name);
+		var mcamp = Object.keys(multilingual_campaigns).find((uri) => multilingual_campaigns[uri].toLowerCase() == mcamp_name.toLowerCase());
 		if (mcamp) {
 			return $.Deferred().resolve(mcamp);
 		} else {
