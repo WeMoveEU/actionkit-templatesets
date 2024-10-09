@@ -76,7 +76,7 @@
 
         <div data-wm-form-field="subject" class="form-field required field-ak-type--subject field-type--text ak-err-below">
           <label for="id_subject">
-            {% filter ak_text:"letterMailSubject_field" %}Email subject:{% endfilter %}
+            {% filter ak_text:"letterMailSubject_field" %}Email subject{% endfilter %}:
             <span class="ak-required-flag">*</span>
           </label>
 
@@ -93,7 +93,7 @@
       {% if not page.custom_fields.hide_comments_field == "1" %}
         <div data-wm-form-field="body" class="form-field{% if page.custom_fields.letter_body_required == "0" %}{% else %} required{% endif %} field-ak-type--body field-type--textarea  ak-err-below">
           <label for="id_comment">
-            {% filter ak_text:"letterMailBody_field" %}Email message:{% endfilter %}
+            {% filter ak_text:"letterMailBody_field" %}Email message{% endfilter %}:
             {% if page.custom_fields.letter_body_required == "0" %}{% else %}<span class="ak-required-flag">*</span>{% endif %}
           </label>
 
