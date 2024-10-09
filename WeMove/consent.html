@@ -23,7 +23,9 @@
 {% if args.confirm %}
   consentAction.value = "y";
   viaEmail.value = 1;
+  {% if user and user.subscription_status == 'never' %}
   localStorage.setItem("GermanicLead", true);
+  {% endif %}
   submitForm();
 
 {% elif args.decline %}
