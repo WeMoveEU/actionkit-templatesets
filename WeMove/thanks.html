@@ -168,9 +168,7 @@
         {% endcomment %}
 		    {% remember "nolang" as skip_consent %}
       {% else %}
-
         {% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&trigger_page={{ page.name }}&trigger_action={{ action.id }}{% endif %}&next_step={{ next_step|urlencode }}%26germanic=consent{% endstore %}
-
       {% endif %}
     {% endif %}
 

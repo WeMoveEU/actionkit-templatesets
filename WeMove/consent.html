@@ -25,13 +25,13 @@
   optIn.value = 1;
   viaEmail.value = 1;
 {% elif user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
+  if (window.Cookiebot?.consent?.marketing) {
+    fbq('trackCustom', 'Germanic_optin');
+  }
+
   consentAction.value = "e";
   optIn.value = 1;
 {% endif %}
 
-$( function () {
-    setTimeout( function () {
-      form.submit();
-    } );
-  } );
+setTimeout(() => { form.submit(); }, 1);
 </script>
