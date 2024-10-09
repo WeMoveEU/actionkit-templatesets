@@ -20,14 +20,24 @@
 {% if args.confirm %}
   consentAction.value = "y";
   viaEmail.value = 1;
+
+  setTimeout(() => {
+    if (window.Cookiebot?.consent?.marketing) {
+      fbq("trackCustom", "GermanicLead");
+    }
+
+    form.submit();
+  }, 1000);
 {% elif args.decline %}
   consentAction.value = "n";
   optIn.value = 1;
   viaEmail.value = 1;
+  setTimeout(() => { form.submit(); }, 1);
 {% elif user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
   consentAction.value = "e";
   optIn.value = 1;
+  setTimeout(() => { form.submit(); }, 1);
 {% endif %}
-
-setTimeout(() => { form.submit(); }, 1);
 </script>
+
+
