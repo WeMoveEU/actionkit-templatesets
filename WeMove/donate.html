@@ -90,13 +90,9 @@
 {% endblock %}
 
 {% block below_form %}
-{% if args.test %}
-<script type="module" src="https://static.wemove.eu/action-kit/js/widget-test.js"></script>
-{% else %}
   {% if fundraiser_staging %}
     <script type="module" src="//donate-ui.not-a2.eu/donate-main.js"></script>
   {% else %}
     <script type="module" src="//donate-ui.wemove.eu/donate-main.js"></script>
   {% endif %}
-{% endif %}
 {% endblock %}
