@@ -62,6 +62,38 @@
       accept-charset="utf-8">
       <input type="hidden" name="page" value="{{ page.name }}">
 
+      {% if page.custom_fields.mailto_action == "1" %}
+          <script>
+	          $(function() {
+            window.actionkitBeforeSubmit = function(e) {
+              mailto = 'mailto:{% for target in context.targets.targets %}{{ target.email }}{% if not forloop.last %},{% endif %}{% endfor %}?subject='
+                + encodeURIComponent(actionkit.form.elements.id_subject.value)
+                + '&body='
+                + encodeURIComponent(actionkit.form.elements.id_comment.value)
+                + '';
+              console.log(mailto);
+              window.open(mailto);
+              return true
+            }
+          });
+
+          </script>
+          <div class="form-field required">
+          <label for="id_comment">
+            {% filter ak_text:"form_field_message" %}Please write your subject here{% endfilter %}
+            <span class="ak-required-flag">*</span>
+          </label>
+
+          <input
+            id="id_subject"
+            name="action_subject"
+            class="">{% include_tmpl page.custom_fields.mailto_subject %}</input>
+
+          <input type="hidden" name="required" value="action_subject"/>
+
+          </div>
+      {% endif %}
+
       {% if not page.custom_fields.hide_comments_field == "1" %}
         <div class="form-field{% if page.custom_fields.letter_body_required == "0" %}{% else %} required{% endif %}">
           <label for="id_comment">
