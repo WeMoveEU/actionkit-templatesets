@@ -11,39 +11,23 @@
   <input type="hidden" name="page" value="{{ page.name }}" />
 </form>
 
-<script async>
+<script>
   const form = document.querySelector('[data-wm-consent-form]');
   const viaEmail = document.querySelector('input[name="action_via_email"]');
   const consentAction = document.querySelector('input[name="action_consent_action"]');
   const optIn = document.querySelector('input[name="opt_in"]');
-  let timeout = 1;
 
 {% if args.confirm %}
   consentAction.value = "y";
   viaEmail.value = 1;
-
-  form.submit();
 {% elif args.decline %}
   consentAction.value = "n";
   optIn.value = 1;
   viaEmail.value = 1;
-
-  form.submit();
 {% elif user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
   consentAction.value = "e";
   optIn.value = 1;
-
-  setTimeout(() => {
-    if (window.Cookiebot?.consent?.marketing) {
-      fbq("trackCustom", "GermanicLead", {
-        content_ids: ["{{ page.id }}"],
-        content_names: "{{ page.title }}",
-      });
-
-      fbq('track', 'Search');
-    }
-
-    form.submit();
-  }, 1000);
 {% endif %}
+
+setTimeout(() => { form.submit(); }, 1);
 </script>
