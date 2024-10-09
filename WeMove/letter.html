@@ -60,56 +60,47 @@
       method="post"
       action="/act/"
       accept-charset="utf-8">
-      <input type="hidden" name="page" value="{{ page.name }}">
+      <input type="hidden" name="page" value="{{ page.name }}" />
 
       {% if page.custom_fields.mailto_action == "1" %}
-          <script>
-	          $(function() {
-            window.actionkitBeforeSubmit = function(e) {
-              mailto = 'mailto:{% for target in context.targets.targets %}{{ target.email }}{% if not forloop.last %},{% endif %}{% endfor %}?subject='
-                + encodeURIComponent(actionkit.form.elements.id_subject.value)
-                + '&body='
-                + encodeURIComponent(actionkit.form.elements.id_comment.value)
-                + '';
-              console.log(mailto);
-              window.open(mailto);
-              return true
-            }
-          });
+        <script async>
+          actionkitBeforeSubmit = () => {
+            const mailTo = 'mailto:{% for target in context.targets.targets %}{{ target.email }}{% if not forloop.last %},{% endif %}{% endfor %}?subject='
+              + encodeURIComponent(actionkit.form.elements.id_subject.value)
+              + '&body='
+              + encodeURIComponent(actionkit.form.elements.id_comment.value);
 
-          </script>
-          <div class="form-field required">
-          <label for="id_comment">
-            {% filter ak_text:"form_field_message" %}Please write your subject here{% endfilter %}
+            window.open(mailTo, "_self");
+          }
+        </script>
+
+        <div data-wm-form-field="subject" class="form-field required field-ak-type--subject field-type--text ak-err-below">
+          <label for="id_subject">
+            {% filter ak_text:"letterMailSubject_field" %}Email subject:{% endfilter %}
             <span class="ak-required-flag">*</span>
           </label>
 
           <input
+            class="ak-userfield-input ak-has-overlay"
             id="id_subject"
             name="action_subject"
-            class="">{% include_tmpl page.custom_fields.mailto_subject %}</input>
+            value="{% include_tmpl page.custom_fields.mailto_subject %}" />
 
-          <input type="hidden" name="required" value="action_subject"/>
-
-          </div>
+          <input type="hidden" name="required" value="action_subject" />
+        </div>
       {% endif %}
 
       {% if not page.custom_fields.hide_comments_field == "1" %}
-        <div class="form-field{% if page.custom_fields.letter_body_required == "0" %}{% else %} required{% endif %}">
+        <div data-wm-form-field="body" class="form-field{% if page.custom_fields.letter_body_required == "0" %}{% else %} required{% endif %} field-ak-type--body field-type--textarea  ak-err-below">
           <label for="id_comment">
-            {% filter ak_text:"form_field_message" %}Please write your message here{% endfilter %}
+            {% filter ak_text:"letterMailBody_field" %}Email message:{% endfilter %}
             {% if page.custom_fields.letter_body_required == "0" %}{% else %}<span class="ak-required-flag">*</span>{% endif %}
           </label>
 
-          <textarea
-            id="id_comment"
-            name="action_comment"
-            class="">{% include_tmpl form.letter_text escaped %}</textarea>
-
-          <input type="hidden" name="required" value="action_comment"/>
+          <textarea id="id_comment" name="action_comment">{% include_tmpl form.letter_text escaped %}</textarea>
 
           {% if page.custom_fields.letter_body_required != "0" %}
-            <input type="hidden" name="required" value="action_comment"/>
+            <input type="hidden" name="required" value="action_comment" />
           {% endif %}
         </div>
       {% endif %}
