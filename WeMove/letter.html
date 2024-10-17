@@ -64,6 +64,10 @@
 
       {% if page.custom_fields.mailto_action == "1" %}
         <script async>
+          window.actionkitUserFormShown = () => {
+              const ln = window.location;
+              window.location.pathname = ln.pathname.replace('letter', 'sign').replace('letter', 'petition');
+          }
           actionkitBeforeSubmit = () => {
             const mailTo = 'mailto:{% for target in context.targets.targets %}{{ target.email }}{% if not forloop.last %},{% endif %}{% endfor %}?subject='
               + encodeURIComponent(actionkit.form.elements.id_subject.value)
