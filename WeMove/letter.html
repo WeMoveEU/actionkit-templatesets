@@ -69,7 +69,7 @@
               window.location.pathname = ln.pathname.replace('letter', 'sign').replace('letter', 'petition');
           }
           actionkitBeforeSubmit = () => {
-            const mailTo = 'mailto:{% for target in context.targets.targets %}{{ target.email }},mailto@wemove.eu?subject='
+            const mailTo = 'mailto:{% for target in context.targets.targets %}{{ target.email }}{% endfor %},mailto@wemove.eu?subject='
               + encodeURIComponent(actionkit.form.elements.id_subject.value)
               + '&body='
               + encodeURIComponent(actionkit.form.elements.id_comment.value);
