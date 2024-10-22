@@ -65,7 +65,7 @@
       {% if page.custom_fields.mailto_action == "1" %}
         <script async>
           window.actionkitUserFormShown = () => {
-              const path = window.location.pathname;
+              let path = window.location.pathname;
               path = path.replace(RegExp('^/[^/]+/'), '/sign/');
               path = path.replace('-letter-', '-petition-');
               window.location.pathname = path;
