@@ -27,6 +27,9 @@
 {% if args.utm_campaign %}
   <input type="hidden" name="action_utm_campaign" value="{{ args.utm_campaign }}" />
 {% endif %}
+{% if args.utm_content %}
+  <input type="hidden" name="action_utm_content" value="{{ args.utm_content }}" />
+{% endif %}
 
 {% if isEmbbeded %}
   <input type="hidden" name="redirect" value="{{ page.followup.url }}?embed={{ args.embed }}{% if args.css == "1" %}&css=1{% endif %}" />
