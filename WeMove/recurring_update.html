@@ -55,7 +55,7 @@ TODO:
                 <div
                     class="donate-widget"
                     data-ak_locale="en"
-                    data-akid="{{ args.akid }}"
+                    data-akid="{{ logged_in_user.token }}"
                     data-mode="change"
                     data-recurring_id="{{ args.profile }}"
                     data-change_amount="{{ amount }}"
@@ -68,17 +68,43 @@ TODO:
         {% endif %}
 
 
-        {% if not active %}
-            <!-- p>Whoops! You don't have any active recurring donations to update.</!-->
-        {% else %}
-            {% for profile in active %}
-                {% include "./recurring_info.html" %}
-            {% endfor %}
-        {% endif %}
+        <div id="active-donations">
+        </div>
+
+
+        {% comment %}
+
+        OK, the code below  gets the current user's active recurring donations, but it has
+        a few problems before we can do anything interesting like "Hey Bob! You currently
+        have a monthly/weekly donation for X that started on Y and you've given Z total!"
+
+        - a field to tell if the donation is weekly / monthly needs to be added in the report
+        - translations need to be added
+
+        So totally doable if we need it.
+
+        <script>
+        const donations = [{% report "recurring_donations_for_user" with logged_in_user.id as user_id "active" as status args.t as cache_key %}];
+        const subscriptions = donations[0];
+        let info = '<ul>';
+        const fields = subscriptions[0];
+        for (var i=1; i<subscriptions.length; i++) {
+            const d = {};
+            for (var x=0;x<fields.length;x++) {
+                d[fields[x]] = subscriptions[i][x]
+            }
+            info += `<b>${d.recurring_id}</b>`;
+        }
+        info += '</ul>';
+        document.getElementById('active-donations').innerHTML = info;
+        </script> {% endcomment %}
+
+
 
         {% comment %}
             This is an example of how to show inactive profiles.
             {% if inactive %}
+
 
                 <label class="ak-label-above">Your old, no longer active recurring donations</label>
                 <ul>
