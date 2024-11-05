@@ -1,57 +1,77 @@
 {% extends "./wrapper.html" %}
 
+
 {% block content %}
 
-<div class="ak-grid-row">
-    <div class="ak-grid-col ak-grid-col-4-of-12 ak-grid-centered">
-        <h2>Log In</h2>
+{% comment %}
 
-        <div class="area">
-            {% if error_message %}
-                <p class="errornote">{{ error_message }}</p>
-            {% endif %}
-            {% if invalid %}
-                <p class="errornote">Incorrect email or password.  Try again, or <a href="{% url 'user_password_forgot' %}?next={{ next }}&email={{ email }}">we can email you a link to reset your password</a>.</p>
-            {% endif %}
+TODO:
 
-            <div id="content-main">
-                {% if no_password %}
-                    <p>It looks like you've never logged in before. <a href="{% url 'user_password_forgot' %}?email={{ email }}">Click here to set up a password.</a>.</p>
-                {% endif %}
-                {% if wrong_account %}
-                    <p>It looks like you may need another email address to view that page, or the page may no longer be accessible.</p>
-                {% endif %}
-                <form action="{{ app_path }}" method="post" id="login-form" name="login-form">
-                    <input type="hidden" name="this_is_the_login_form" value="1">
-                    <input type="hidden" name="next" value="{{ next }}">
-                    <input type="hidden" name="required" value="password">
-                    
-                    <div class="ak-styled-fields ak-labels-above ak-errs-below ak-clearfix">
-                    
-                        <div>
-                            <label for="id_email">Email</label>
-                            <input type="text" name="email" value="{{ email }}" id="id_email" class="ak-full-width">
-                        </div>
-                        <div>
-                            <label for="id_password">Password</label>
-                            <input type="password" name="password" id="id_password" class="ak-full-width">
-                        </div>
-                        
-                        <button type="submit" class="ak-submit-button">Log In</button>
+ - update styles to login from peititon
 
-                    </div>
+{% endcomment %}
 
-                    <div>
-                        <a href="{% url 'user_password_forgot' %}?next={{ next }}&amp;email={{ email }}">Forgot your password?</a>
-                    </div>
-                    <div>
-                        <a href="{% url 'user_password_forgot' %}?next={{ next }}&amp;first=1&amp;email={{ email }}">Never logged in before?</a>
-                    </div>
+<div class="nav-md:grid grid-cols-petition">
+  <article>
+    <div class="relative">
 
-                </form>
-            </div>
-        </div>
+      <h1 class="nav-md:mb-8 nav-md:pr-40">
+          {% filter ak_text:"login_title" %}Oops, we need to verify who you are before showing you that page!{% endfilter %}
+      </h1>
+
     </div>
+
+    {% comment %}{% include "./component-featured-image.html" with featured_image="https://wemove.eu/_next/image?url=%2Fuploads%2Fdeep_sea_c5eae5733c.jpg&w=2048&q=75"  %} {% endcomment %}
+
+    <div class="nav-md:mr-4">
+      <div class="text-wm-purple p-6 bg-wm-lightblue-box mt-4 mb-8 font-normal text-base font-libre-franklin">
+        {% filter ak_text:"magic_link_explanation" %}We'll send a magic link to your email to log you in.{% endfilter %}
+      </div>
+
+    <form
+      class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below is-floating
+      bg-wm-bg-form p-4 h-fit mx-auto max-w-[500px]"
+      name="login-form"
+      method="post"
+      action="/act/"
+      accept-charset="utf-8"
+      data-wm-form="sursignupvey"
+      data-wm-floating-labels-form>
+
+      <input type="hidden" name="page" value="magic-link-confirmation" />
+      <input type="hidden" name="action_redirect_to" value="{{ request.GET.next }}" />
+
+      {% if request.GET.akid %}
+
+      <input type="hidden" name="akid" value="{{ request.GET.akid }}" />
+
+      {% else %}
+
+
+      <div class="form-wrapper-container" style="min-height: auto;">
+        <div data-wm-form-field="email" id="ak-fieldbox-email" 
+             class="form-field required field-ak-type--user field-type--text ak-err-below">
+            <label for="id_email" class="ak-is-overlaid ak-error" style="cursor: text; pointer-events: none;">
+                Your email:
+            </label>
+            <input type="text" name="email" id="id_email" class="ak-userfield-input ak-has-overlay ak-error">
+            <ul class="ak-err"><li>Your email is required.</li></ul>
+        </div>
+      </div>
+
+      {% endif %}
+
+      <div class="mb-2">
+        <button type="submit" class="ak-submit-button">
+            {% filter ak_text:"button_send_email" %}Send Email{% endfilter %}
+        </button>
+      </div>
+
+    </div>
+  </article>
+
+</form>
+
 </div>
 
 {% endblock %}
@@ -59,10 +79,13 @@
 {% block below_form %}
 
 <script>
+    // not sure we need or want context here
     actionkit.forms.contextRoot = '/context/';
-    actionkit.forms.initValidation('login-form');
+    actionkit.forms.initPage();
+    actionkit.forms.initForm('login-form');
     
-    document.getElementById('id_{% if email %}password{% else %}email{% endif %}').focus()
+    const email = document.getElementById('id_email');
+    if (email) { email.focus(); }
 </script>
 
 {% endblock %}
