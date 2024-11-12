@@ -1,6 +1,20 @@
 {% extends "./wrapper.html" %}
 {% load humanize %}
 
+{% comment %} 
+
+Update your recurring donation
+=================================
+
+There are a couple ways to update a recurring donation:
+
+ - Change the amount (upscaling). DONE.
+ - Change the payment method.     TODO.
+
+For now this page is entirely dependent on the query string ! If we ever need to pull in data about the current recurring donation(s), we'll need to use a report. I couldn't figure out why the built-in ActionKit template doesn't find any recurring donations. Maybe it ignored "Import Stub" payment accounts? I don't know.
+
+{% endcomment %}
+
 {% block css_additions %}
 <link rel="stylesheet" href="https://donate-ui.not-a2.eu/donate-main.css" />
 
@@ -17,13 +31,6 @@
     </div>
 </div>
 
-{% comment %}
-TODO:
-
-- active has nothing in it even for users that have active recurring donations
-- inactive has some
-
-{% endcomment %}
 <div class="ak-grid-row ak-grid-row-inverted">
     {% if page.custom_fields.featured_image %}
         <div class="ak-grid-col ak-grid-col-3-of-12">
@@ -43,12 +50,38 @@ TODO:
 
         <p>{% include_tmpl form.update_card_text %}</p>
 
+        {% comment %} 
+          
+        This report returns these fields in this order:
+
+            amount, currency, status, account, start_date
+
+        {% endcomment %}
+        {% store as profiles %}
+        {% report "recurring_profile" with args.profile as recurring_id logged_in_user.id as user_id %}
+        {% endstore %}
+
+        {% remember profiles.0 as profile %}
+
         {% if action %}
             <h3>Update saved!</h3>
             <div>
                 {% include_tmpl form.thank_you_text %}
             </div>
         {% else %}
+
+            <div style="display: none;">
+                <form id="actionkit-form" name="act" action="/act/" method="POST">
+                    <input type="hidden" name="page" value="upscaled-donation-tracking" />
+                    <input type="hidden" name="akid" value="{{ logged_in_user.token }}" />
+                    <input type="hidden" name="action_upscale_page" value="{{ page.name }}" />
+                    <input type="hidden" name="action_upscale_amount" value="" />
+                    <input type="hidden" name="action_upscale_currency" value="{{ profile.currency }}" />
+                    <input type="hidden" name="action_upscale_previous_amount" value="{{ profile.amount }}" />
+                </form>
+            </div>
+
+            <div id="confirm-amount-change">
 
             {% for amount in args.amounts|split:',' %}
                 <div style="padding: 1em;">
@@ -64,57 +97,23 @@ TODO:
                 </div>
             {% endfor %}
 
+            </div>
+
+            <script>
+                const confirm = document.getElementById('confirm-amount-change')
+                confirm.addEventListener('wemove:complete', (evt) => {
+                    const form = document.getElementById('actionkit-form');
+                    // TODO: evt.amount is just a made-up placeholder, update to whatever the 
+                    //       widget actually sends.
+                    form.action_upscale_amount.value = evt.amount;
+                    form.submit();
+                })
+            </script>
+
 
         {% endif %}
 
 
-        <div id="active-donations">
-        </div>
-
-
-        {% comment %}
-
-        OK, the code below  gets the current user's active recurring donations, but it has
-        a few problems before we can do anything interesting like "Hey Bob! You currently
-        have a monthly/weekly donation for X that started on Y and you've given Z total!"
-
-        - a field to tell if the donation is weekly / monthly needs to be added in the report
-        - translations need to be added
-
-        So totally doable if we need it.
-
-        <script>
-        const donations = [{% report "recurring_donations_for_user" with logged_in_user.id as user_id "active" as status args.t as cache_key %}];
-        const subscriptions = donations[0];
-        let info = '<ul>';
-        const fields = subscriptions[0];
-        for (var i=1; i<subscriptions.length; i++) {
-            const d = {};
-            for (var x=0;x<fields.length;x++) {
-                d[fields[x]] = subscriptions[i][x]
-            }
-            info += `<b>${d.recurring_id}</b>`;
-        }
-        info += '</ul>';
-        document.getElementById('active-donations').innerHTML = info;
-        </script> {% endcomment %}
-
-
-
-        {% comment %}
-            This is an example of how to show inactive profiles.
-            {% if inactive %}
-
-
-                <label class="ak-label-above">Your old, no longer active recurring donations</label>
-                <ul>
-                    {% for profile in inactive %}
-                    <li>{{ profile.id }} - {{ profile.status }} on {{ profile.updated_at }}. Started on {{ profile.start }}, {% with profile.payment_count as count %} {{ count }} {{ profile.get_period_display|lower }} payment{{ count|pluralize }}{% endwith %} were made for a total of {{ profile.payment_total_amt }}.</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-
-        {% endcomment %}
 
     </div>
 
