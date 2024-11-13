@@ -18,28 +18,11 @@
       <div class="p-4 mb-4 bg-blue-200 [&_p]:m-0">
         {% include_tmpl form.statement_leadin %}
 
-        <div id="recipients-wrapper"></div>
+        <div id="recipients-wrapper" class="space-y-4"></div>
         <script type="text/ak-template" for="recipients-wrapper">
         [% if ( actionkit.context.recognized_user ) { %]
-          [% if ( actionkit.context.targets && actionkit.context.targets.targets ) { %]
-            <div class="text-right my-2">
-              <button type="button" data-wm-toggle-button="recipients-list"
-                class="flex gap-2 ml-auto text-wm-pink">
-                <span data-wm-toggle-show-button>
-                  {% filter ak_text:"show_recipients_button" %}show recipients{% endfilter %}
-                </span>
-
-                <span data-wm-toggle-hide-button>
-                  {% filter ak_text:"hide_recipients_button" %}hide recipients{% endfilter %}
-                </span>
-
-                <span class="chevron-icon" aria-hidden="true">
-                  {% include "./icon-chevron.html" %}
-                </span>
-              </button>
-            </div>
-
-            <ul class="list-disc pl-4" data-wm-toggle-content="recipients-list">
+          [% if ( actionkit.context.targets && actionkit.context.targets.targets ) { %]        
+            <ul class="list-disc pl-4">
               [% for ( var t of actionkit.context.targets.targets ) { %]
                 <li>[%= t.title_full %]</li>
               [% } %]
@@ -59,27 +42,12 @@
       name="act"
       method="post"
       action="/act/"
-      accept-charset="utf-8">
+      accept-charset="utf-8"
+      id="mailto-letter-form">
       <input type="hidden" name="page" value="{{ page.name }}" />
 
       {% if page.custom_fields.mailto_action == "1" %}
-        <script async>
-          window.actionkitUserFormShown = () => {
-              let path = window.location.pathname;
-              path = path.replace(RegExp('^/[^/]+/'), '/sign/');
-              path = path.replace('-letter-', '-petition-');
-              window.location.pathname = path;
-            }
-
-          window.actionkitBeforeSubmit = () => {
-            const mailTo = 'mailto:{% for target in context.targets.targets %}{{ target.email }}{% if not forloop.last %},{% endif %}{% endfor %}?cc=mailto@wemove.eu&subject='
-              + encodeURIComponent(actionkit.form.elements.id_subject.value)
-              + '&body='
-              + encodeURIComponent(actionkit.form.elements.id_comment.value);
-
-            window.open(mailTo, "_self");
-          }
-        </script>
+   
 
         <div data-wm-form-field="subject" class="form-field required field-ak-type--subject field-type--text ak-err-below">
           <label for="id_subject">
@@ -114,7 +82,125 @@
 
       {% include "./user_form_wrapper.html" %}
     </form>
-  </aside>
+
+    <div id="fallback" class="" style="display: none;">
+
+      <h2 class="mb-4">Thanks !</h2>
+
+      <a id="next-step" href="/cms/thanks/{{ page.name }}?akid={{ args.akid }}" class="button-fill button-fill--orange
+  mb-4 flex w-full gap-2 justify-center p-3 font-bold rounded font-gilroy text-xl">
+          <span class="text-white ">Continue</span>
+      </a>
+
+      <p>Email didn't open? You can still send your message ! Just copy and paste the information below into a new email draft:</p>
+      <div>
+      
+        <div class="mb-2 font-bold">To: &nbsp;&nbsp; <a onclick="copyText(this, 'fallback-to')">[Copy]</a> </div>
+        <div class="mb-2 px-2" id="fallback-to"> </div>
+        
+        <div class="mb-2 font-bold">Subject: &nbsp;&nbsp; <a onclick="copyText(this, 'fallback-subject')">[Copy]</a></div>
+        <div class="mb-2 px-2" id="fallback-subject"> </div>
+
+        <div class="mb-2 font-bold">Message: &nbsp;&nbsp; <a onclick="copyText(this, 'fallback-message')">[Copy]</a></div>
+        <div class="mb-2 px-2"  style="white-space: pre-wrap;" id="fallback-message"> </div>
+    
+      </div>
+    </div>     
+    
+    <script type="text/ak-template" for="fallback-to">
+        [% if ( actionkit.context.targets && actionkit.context.targets.targets ) { %]        
+            [% for ( var t of actionkit.context.targets.targets ) { %]
+              <div class="mb-1"> "[%= t.title_full %]" &lt;[%= t.email %]&gt<span style="display:none">,</span></div>
+            [% } %]  
+              <p>"WeMove Europe" &lt;mailto@wemove.eu&gt;</p>
+            </ul>
+        [% } %]
+      </script>
+
+     
+    </div>
+
+
+
+    {% if page.custom_fields.mailto_action == "1" %}
+
+    <script async>
+      window.actionkitUserFormShown = () => {
+          let path = window.location.pathname;
+          path = path.replace(RegExp('^/[^/]+/'), '/sign/');
+          path = path.replace('-letter-', '-petition-');
+          window.location.pathname = path;
+      }
+
+      window.actionkitBeforeSubmit = () => {
+        const form = document.forms.act;
+
+        const mailTo = 'mailto:{% for target in context.targets.targets %}{{ target.email }}{% if not forloop.last %},{% endif %}{% endfor %}?cc=mailto@wemove.eu&subject='
+          + encodeURIComponent(actionkit.form.elements.id_subject.value)
+          + '&body='
+          + encodeURIComponent(actionkit.form.elements.id_comment.value);
+
+        // new tab so that we can ask them to go to the next step
+        // window.open(mailTo, "_blank");
+
+        const fd = new FormData(form);
+
+        var body = {};
+        fd.forEach(function(value, key){
+            body[key] = value;
+        });
+
+        // actually submit the action
+        const request = fetch(
+          "/rest/v1/action/", 
+          { method: "POST", 
+            body: JSON.stringify(body),
+            redirect: "manual",   
+            headers: {
+              "Content-Type": "application/json",
+          }}
+        );
+        request.then((response) => {
+          const location = response.headers.get('location')
+          let action_id;
+          try {
+            action_id = location.match(/\/(\d+)\//)[1];
+
+            const ns =document.getElementById('next-step');
+            ns.href = ns.href + `&action_id=${action_id}`;
+          }
+          catch {
+            // no action_id, that's fine
+            console.log(`No action id from ${location}`)
+          }
+          // show everyone the "Didn't work? copy / paste this ... " message 
+          displayFallbackMessage(form);
+
+        })
+           
+        return false;
+      }
+      
+      window.displayFallbackMessage = (form) => {
+        document.getElementById('mailto-letter-form').style.display = 'none';
+        document.getElementById('fallback-subject').textContent = form.action_subject.value;
+        document.getElementById('fallback-message').textContent = form.action_comment.value;
+        document.getElementById('fallback').style.display = '';
+      }
+
+      window.copyText = (self, id) => {
+        const el = document.getElementById(id);
+        navigator.clipboard.writeText(el.innerText);
+        self.innerText = 'Copied!'
+        window.setTimeout(() => { self.innerText = '[Copy]'}, 2000)
+      } 
+      
+      // Send the action with AJAX call
+      // Replace the form with a static version, "If your email client didn't open ... "
+    </script>
+    {% endif %}
+
+</aside>
 </div>
 
 {% endblock %}
