@@ -878,12 +878,20 @@
 				}
 			});
 			var lang_journeys = [];
+			var pages_seen = {};
 			var start_pages = pages[lang].filter((p) => !p.previous_step);
 			// Don't link a page to itself, or an earlier page in the chain!
 			start_pages.forEach(function(first_page) {
 				var journey = [];
 				var cur_page = first_page;
 				while (cur_page) {
+					const visit_index = cur_page.id + ( cur_page.action_label || '' )
+					if ( pages_seen[visit_index] ) {
+						console.log(`Loop detected in language ${lang} daisy chain starting with ${first_page.id} at ${cur_page.id}`);
+						journey.push({ id: cur_page.id, type: 'loop', action_label: 'Circular Journey', name: cur_page.name, title: cur_page.title });
+						break;
+					}
+					pages_seen[visit_index] = 1;
 					journey.push(cur_page);
 					cur_page = cur_page.next_step;
 				}
@@ -894,6 +902,7 @@
 	}
 
 	const non_viewable_action_types = {
+		'loop': 1,
 		'import': 1,
 		'donation-import': 1,
 	};
