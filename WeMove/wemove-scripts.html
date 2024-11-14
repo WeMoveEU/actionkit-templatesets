@@ -51,5 +51,9 @@ window.wemove.page.shouldDisableForm = true
   <script type="text/plain" data-cookieconsent="marketing" src="https://static.wemove.eu/shared-scripts/matomo-loader.js?v=1.1.2" async></script>
 {% endif %}
 
+{% if args.dev == "1" %}
+<script src="//127.0.0.1:8081/action-kit/js/wemove-main.bundle.min.js?v=2.5.0"></script>
+{% else %}
 <script src="//static.wemove.eu/action-kit/js/wemove-main.bundle.min.js?v=2.5.0"></script>
+{% endif %}
 {% endif %}
