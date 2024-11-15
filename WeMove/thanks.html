@@ -100,7 +100,7 @@
 	{% endfilter %}{% endstore %}
 
 	{% store as next_step %}{% filter strip %}
-		{{ destination }}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if action.custom_fields.utm_source %}&utm_source={{ action.custom_fields.utm_source }}{% endif %}{% if action.custom_fields.utm_medium %}&utm_medium={{ action.custom_fields.utm_medium }}{% endif %}{% if action.custom_fields.utm_campaign %}&utm_campaign={{ action.custom_fields.utm_campaign }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}
+		{{ destination }}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if action.custom_fields.utm_source %}&utm_source={{ action.custom_fields.utm_source }}{% endif %}{% if action.custom_fields.utm_medium %}&utm_medium={{ action.custom_fields.utm_medium }}{% endif %}{% if action.custom_fields.utm_campaign %}&utm_campaign={{ action.custom_fields.utm_campaign }}{% endif %}{% if action.custom_fields.utm_content %}&utm_content={{ action.custom_fields.utm_content }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}
 	{% endfilter %}{% endstore %}
 	<!-- Daisy Chain: {{ page.custom_fields.daisy_chain_action }} -->
 	<!-- Next Step: {{ next_step }} -->
