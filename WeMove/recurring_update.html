@@ -72,7 +72,7 @@ For now this page is entirely dependent on the query string ! If we ever need to
 
             <div style="display: none;">
                 <form id="actionkit-form" name="act" action="/act/" method="POST">
-                    <input type="hidden" name="page" value="upscaled-donation-tracking" />
+                    <input type="hidden" name="page" value="tracking-upscaled-donations" />
                     <input type="hidden" name="akid" value="{{ logged_in_user.token }}" />
                     <input type="hidden" name="action_upscale_page" value="{{ page.name }}" />
                     <input type="hidden" name="action_upscale_amount" value="" />
@@ -100,9 +100,9 @@ For now this page is entirely dependent on the query string ! If we ever need to
             </div>
 
             <script>
-                const confirm = document.getElementById('confirm-amount-change')
-                confirm.addEventListener('wemove:complete', (evt) => {
+                document.addEventListener('payment-update', (evt) => {
                     const form = document.getElementById('actionkit-form');
+                    console.debug(evt);
                     // TODO: evt.amount is just a made-up placeholder, update to whatever the 
                     //       widget actually sends.
                     form.action_upscale_amount.value = evt.amount;
