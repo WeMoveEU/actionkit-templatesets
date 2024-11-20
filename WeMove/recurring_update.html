@@ -57,24 +57,28 @@ For now this page is entirely dependent on the query string ! If we ever need to
             amount, currency, status, account, start_date
 
         {% endcomment %}
-        {% store as profiles %}
+        {% store as profile_details %}
         {% report "recurring_profile" with args.profile as recurring_id logged_in_user.id as user_id %}
         {% endstore %}
 
-        {% remember profiles.0 as profile %}
+        {% with profile_details|load_json as profile %}
 
         {% if action %}
+
             <h3>Update saved!</h3>
             <div>
                 {% include_tmpl form.thank_you_text %}
             </div>
-        {% else %}
+
+            {% else %}
 
             <div style="display: none;">
                 <form id="actionkit-form" name="act" action="/act/" method="POST">
-                    <input type="hidden" name="page" value="tracking-upscaled-donations" />
+                    <input type="hidden" name="page" value="tracking-upscaled-donations-{{ page.lang.iso_code }}" />
                     <input type="hidden" name="akid" value="{{ logged_in_user.token }}" />
                     <input type="hidden" name="action_upscale_page" value="{{ page.name }}" />
+                    <input type="hidden" name="action_profile" value="{{ profile.id }}" />
+                    <input type="hidden" name="action_recurring_id" value="{{ profile.recurring_id }}" />
                     <input type="hidden" name="action_upscale_amount" value="" />
                     <input type="hidden" name="action_upscale_currency" value="{{ profile.currency }}" />
                     <input type="hidden" name="action_upscale_previous_amount" value="{{ profile.amount }}" />
@@ -113,6 +117,7 @@ For now this page is entirely dependent on the query string ! If we ever need to
 
         {% endif %}
 
+        {% endwith %}
 
 
     </div>
