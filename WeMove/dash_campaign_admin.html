@@ -878,10 +878,10 @@
 				}
 			});
 			var lang_journeys = [];
-			var pages_seen = {};
 			var start_pages = pages[lang].filter((p) => !p.previous_step);
 			// Don't link a page to itself, or an earlier page in the chain!
 			start_pages.forEach(function(first_page) {
+				var pages_seen = {};
 				var journey = [];
 				var cur_page = first_page;
 				while (cur_page) {
