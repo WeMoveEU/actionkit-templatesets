@@ -11,12 +11,10 @@ There are a couple ways to update a recurring donation:
  - Change the amount (upscaling). DONE.
  - Change the payment method.     TODO.
 
-For now this page is entirely dependent on the query string ! If we ever need to pull in data about the current recurring donation(s), we'll need to use a report. I couldn't figure out why the built-in ActionKit template doesn't find any recurring donations. Maybe it ignored "Import Stub" payment accounts? I don't know.
-
 {% endcomment %}
 
 {% block css_additions %}
-<link rel="stylesheet" href="https://donate-ui.not-a2.eu/donate-main.css" />
+<link rel="stylesheet" href="https://donate-ui.wemove.eu/donate-main.css" />
 
 {% endblock %}
 
@@ -50,13 +48,6 @@ For now this page is entirely dependent on the query string ! If we ever need to
 
         <p>{% include_tmpl form.update_card_text %}</p>
 
-        {% comment %} 
-          
-        This report returns these fields in this order:
-
-            amount, currency, status, account, start_date
-
-        {% endcomment %}
         {% store as profile_details %}
         {% report "recurring_profile" with args.profile as recurring_id logged_in_user.id as user_id %}
         {% endstore %}
@@ -123,5 +114,5 @@ For now this page is entirely dependent on the query string ! If we ever need to
     </div>
 
 </div>
-<script type="module" src="https://donate-ui.not-a2.eu/donate-main.js"></script>
+<script type="module" src="https://donate-ui.wemove.eu/donate-main.js"></script>
 {% endblock %}
