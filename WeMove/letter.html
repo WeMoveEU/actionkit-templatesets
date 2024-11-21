@@ -141,10 +141,8 @@
 
     <script async>
       window.actionkitUserFormShown = () => {
-          let path = window.location.pathname;
-          path = path.replace(RegExp('^/[^/]+/'), '/sign/');
-          path = path.replace('-letter-', '-petition-');
-          window.location.pathname = path;
+        // if we don't know who you are, back to the start. we probably need a better fallback here huh!?
+        window.location.pathname = '/sign/{{ page.custom_fields.daisy_chain_action }}/';
       }
 
       window.actionkitBeforeSubmit = () => {
