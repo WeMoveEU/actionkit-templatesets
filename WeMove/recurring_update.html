@@ -98,9 +98,7 @@ There are a couple ways to update a recurring donation:
                 document.addEventListener('payment-update', (evt) => {
                     const form = document.getElementById('actionkit-form');
                     console.debug(evt);
-                    // TODO: evt.amount is just a made-up placeholder, update to whatever the 
-                    //       widget actually sends.
-                    form.action_upscale_amount.value = evt.amount;
+                    form.action_upscale_amount.value = evt.detail.amount;
                     form.submit();
                 })
             </script>
