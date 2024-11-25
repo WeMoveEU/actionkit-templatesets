@@ -40,7 +40,7 @@
       {{ page.followup.share_url_tag }}
     {% endblock %}
 
-    {% if campaign_type == "trial" %}
+    {% if campaign_type == "trial" or page.custom_fields.avoid_search_engines_indexing == "true" %}
     <meta name="robots" content="noindex, nofollow" />
     {% endif %}
 
