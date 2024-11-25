@@ -40,6 +40,10 @@
       {{ page.followup.share_url_tag }}
     {% endblock %}
 
+    {% if campaign_type == "trial" %}
+    <meta name="robots" content="noindex, nofollow" />
+    {% endif %}
+
     {% if campaign_type == "youmove" %}
     <link href="https://youmoveeurope.eu/favicon.png" rel="icon" />
     {% else %}
