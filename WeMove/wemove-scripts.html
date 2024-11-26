@@ -39,11 +39,13 @@ window.wemove.page.shouldDisableForm = true;
   {% endif %}
 {% else %}
 
-  {% if campaign_type == "youmove" %}
-  <script>window.matomoSiteId = "4";</script>
-  {% else %}
-  <script>window.matomoSiteId = "1";</script>
-  {% endif %}
+  <script>
+    {% if campaign_type == "youmove" %}
+    window.matomoSiteId = "4";
+    {% else %}
+    window.matomoSiteId = "1";
+    {% endif %}
+  </script>
 
   <!-- Meta Pixel Code -->
   <script data-cookieconsent="ignore" src="https://static.wemove.eu/shared-scripts/pixel-loader.js?v=1.2.0"></script>
