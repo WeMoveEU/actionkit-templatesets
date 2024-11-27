@@ -94,15 +94,15 @@
       <div>
       
         <div class="mb-2 font-bold">To: &nbsp;&nbsp; <a onclick="copyEmailsToClipboard(this)"
-          >[{% filter ak_text:"label_copy" %}Copy]{% endfilter %}</a> </div>
+          >[{% filter ak_text:"copyLink_button" %}Copy]{% endfilter %}</a> </div>
         <div class="mb-2 px-2" id="fallback-to"> </div>
         
         <div class="mb-2 font-bold">Subject: &nbsp;&nbsp; <a onclick="copyText(this, 'fallback-subject')"
-          >[{% filter ak_text:"label_copy" %}Copy{% endfilter %}]</a></div>
+          >[{% filter ak_text:"copyLink_button" %}Copy{% endfilter %}]</a></div>
         <div class="mb-2 px-2" id="fallback-subject"> </div>
 
         <div class="mb-2 font-bold">Message: &nbsp;&nbsp; <a onclick="copyText(this, 'fallback-message')"
-          >[{% filter ak_text:"label_copy" %}Copy{% endfilter %}]</a></div>
+          >[{% filter ak_text:"copyLink_button" %}Copy{% endfilter %}]</a></div>
         <div class="mb-2 px-2"  style="white-space: pre-wrap;" id="fallback-message"> </div>
     
       </div>
@@ -205,7 +205,7 @@
         const el = document.getElementById(id);
         navigator.clipboard.writeText(el.innerText);
         const restore = self.innerHTML;
-        self.innerText = '{% filter ak_text:"Copied" %}Copied!{% endfilter %}'
+        self.innerText = '{% filter ak_text:"linkCopied_alert:" %}Copied!{% endfilter %}'
         window.setTimeout(() => { self.innerHTML = restore}, 2000)
       } 
 
