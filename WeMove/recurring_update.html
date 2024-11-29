@@ -81,6 +81,7 @@ There are a couple ways to update a recurring donation:
             {% for amount in args.amounts|split:',' %}
                 <div style="padding: 1em;">
                 <div
+                    data-wm-donate-widget
                     class="donate-widget"
                     data-ak_locale="en"
                     data-akid="{{ logged_in_user.token }}"
