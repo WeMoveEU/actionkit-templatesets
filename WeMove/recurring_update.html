@@ -53,7 +53,6 @@ There are a couple ways to update a recurring donation:
 
         {% with profile_details|load_json as profile %}
 
-        <div class="recurring-update-about-text">{% include_tmpl form.update_card_text %}</div>
 
         {% if action %}
 
@@ -64,46 +63,7 @@ There are a couple ways to update a recurring donation:
 
         {% else %}
 
-            <div style="display: none;">
-                <form id="actionkit-form" name="act" action="/act/" method="POST">
-                    <input type="hidden" name="page" value="tracking-upscaled-donations-{{ page.lang.iso_code }}" />
-                    <input type="hidden" name="akid" value="{{ logged_in_user.token }}" />
-                    <input type="hidden" name="action_upscale_page" value="{{ page.name }}" />
-                    <input type="hidden" name="action_profile" value="{{ profile.id }}" />
-                    <input type="hidden" name="action_recurring_id" value="{{ profile.recurring_id }}" />
-                    <input type="hidden" name="action_upscale_amount" value="" />
-                    <input type="hidden" name="action_upscale_currency" value="{{ profile.currency }}" />
-                    <input type="hidden" name="action_upscale_previous_amount" value="{{ profile.amount }}" />
-                    <input type="hidden" name="action_upscale_mailing_clicked_amount" value="{{ args.clicked }}" />
-                </form>
-            </div>
-
-            <div id="confirm-amount-change">
-
-            {% for amount in args.amounts|split:',' %}
-                <div style="padding: 1em;">
-                <div
-                    data-wm-donate-widget
-                    class="donate-widget{% if amount == args.clicked %} selected{% endif %}"
-                    data-ak_locale="en"
-                    data-akid="{{ logged_in_user.token }}"
-                    data-mode="change"
-                    data-recurring_id="{{ args.profile }}"
-                    data-change_amount="{{ amount }}"
-                    data-selected_currency="{{ args.currency }}"
-                    ></div>
-                </div>
-            {% endfor %}
-
-            </div>
-
-            <script>
-                document.addEventListener('payment-update', (evt) => {
-                    const form = document.getElementById('actionkit-form');
-                    form.action_upscale_amount.value = evt.detail.amount;
-                    form.submit();
-                })
-            </script>
+        <div class="recurring-update-about-text">{% include_tmpl form.update_card_text %}</div>
 
 
         {% endif %}
