@@ -46,13 +46,14 @@ There are a couple ways to update a recurring donation:
             <div id="known_user"><span id="known_user_name"></span></div>
         </div>
 
-        <p>{% include_tmpl form.update_card_text %}</p>
 
         {% store as profile_details %}
         {% report "recurring_profile" with args.profile as recurring_id logged_in_user.id as user_id %}
         {% endstore %}
 
         {% with profile_details|load_json as profile %}
+
+        <div class="recurring-update-about-text">{% include_tmpl form.update_card_text %}</div>
 
         {% if action %}
 
@@ -61,7 +62,7 @@ There are a couple ways to update a recurring donation:
                 {% include_tmpl form.thank_you_text %}
             </div>
 
-            {% else %}
+        {% else %}
 
             <div style="display: none;">
                 <form id="actionkit-form" name="act" action="/act/" method="POST">
@@ -73,6 +74,7 @@ There are a couple ways to update a recurring donation:
                     <input type="hidden" name="action_upscale_amount" value="" />
                     <input type="hidden" name="action_upscale_currency" value="{{ profile.currency }}" />
                     <input type="hidden" name="action_upscale_previous_amount" value="{{ profile.amount }}" />
+                    <input type="hidden" name="action_upscale_mailing_clicked_amount" value="{{ args.clicked }}" />
                 </form>
             </div>
 
@@ -82,7 +84,7 @@ There are a couple ways to update a recurring donation:
                 <div style="padding: 1em;">
                 <div
                     data-wm-donate-widget
-                    class="donate-widget"
+                    class="donate-widget{% if amount == args.clicked %} selected{% endif %}"
                     data-ak_locale="en"
                     data-akid="{{ logged_in_user.token }}"
                     data-mode="change"
@@ -98,7 +100,6 @@ There are a couple ways to update a recurring donation:
             <script>
                 document.addEventListener('payment-update', (evt) => {
                     const form = document.getElementById('actionkit-form');
-                    console.debug(evt);
                     form.action_upscale_amount.value = evt.detail.amount;
                     form.submit();
                 })
