@@ -297,57 +297,52 @@ function disable_invisibles(form) {
 {% endblock %}
 
 {% block content %}
+    <h1>{{ page.title }}</h1>
 
-<div class="ak-grid-row">
-    <div class="ak-grid-col ak-grid-col-12-of-12">
-        <h1>{{ page.title }}</h1>
-    </div>
-</div>
-
-<div class="ak-grid-row ak-grid-row-inverted">
     {% if page.custom_fields.featured_image %}
-        <div class="ak-grid-col ak-grid-col-3-of-12">
-            <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}" alt="main picture" />
-        </div>
+        {% include "./component-featured_media.html" %}
     {% endif %}
-    <div class="ak-grid-col {% if page.custom_fields.featured_image %} ak-grid-col-9-of-12 {% else %}ak-grid-col-12-of-12 {% endif %}">
 
-        <div>
-            <p>Logged in as <a href="/me/">{{ logged_in_user.name }}</a>. <a href="/logout/">Log out</a></p>
-        </div>
-        <div style="display:none">{% comment %}actionkit.js wants this, but we don't{% endcomment %}
+    <p>
+        Logged in as <a href="/me/">{{ logged_in_user.name }}</a>.
+        <br/>
+        <a href="/logout/">Log out</a>
+    </p>
+
+    {% comment %}
+    actionkit.js wants this, but we don't
+        <div style="display:none">
             <p id="unknown_user"></p>
             <div id="known_user"><span id="known_user_name"></span></div>
         </div>
-        {% if action %}
-            <h3>Update saved!</h3>
-            <div>
-                {% include_tmpl form.thank_you_text %}
-            </div>
-        {% endif %}
+    {% endcomment %}
 
-        <p>{% include_tmpl form.update_card_text %}</p>
+    {% if action %}
+        <h2>Update saved!</h2>
+        <div>{% include_tmpl form.thank_you_text %}</div>
+    {% endif %}
 
-        {% if not active %}
-            <p>Whoops! You don't have any active recurring donations to update.</p>
-        {% else %}
-            {% for profile in active %}
+    <div>{% include_tmpl form.update_card_text %}</div>
+
+    {% if not active %}
+        <p>Whoops! You don't have any active recurring donations to update.</p>
+    {% else %}
+        {% for profile in active %}
+            <div class="upscaling-buttons flex flex-wrap justify-center">
                 {% include "./recurring_info.html" %}
-            {% endfor %}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% comment %}
+        This is an example of how to show inactive profiles.
+        {% if inactive %}
+            <label class="ak-label-above">Your old, no longer active recurring donations</label>
+            <ul>
+                {% for profile in inactive %}
+                <li>{{ profile.status }} on {{ profile.updated_at }}. Started on {{ profile.start }}, {% with profile.payment_count as count %} {{ count }} {{ profile.get_period_display|lower }} payment{{ count|pluralize }}{% endwith %} were made for a total of {{ profile.payment_total_amt }}.</li>
+                {% endfor %}
+            </ul>
         {% endif %}
-
-        {% comment %}
-            This is an example of how to show inactive profiles.
-            {% if inactive %}
-
-                <label class="ak-label-above">Your old, no longer active recurring donations</label>
-                <ul>
-                    {% for profile in inactive %}
-                    <li>{{ profile.status }} on {{ profile.updated_at }}. Started on {{ profile.start }}, {% with profile.payment_count as count %} {{ count }} {{ profile.get_period_display|lower }} payment{{ count|pluralize }}{% endwith %} were made for a total of {{ profile.payment_total_amt }}.</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endcomment %}
-    </div>
-</div>
+    {% endcomment %}
 {% endblock %}
