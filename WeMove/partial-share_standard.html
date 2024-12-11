@@ -38,7 +38,7 @@
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
           class="transition-all text-center bg-whatsapp !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          href="/thanks/{{ page.name }}?share=whatsapp&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
+          href="/thanks/{{ page.name }}?share=whatsapp&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}"
           target="_blank"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
@@ -86,7 +86,7 @@
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
           class="transition-all text-center bg-facebook !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          href="/share/link?type=fb&amp;page_name={{page.name}}&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
+          href="/share/link?type=fb&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}"
           target="_blank"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
@@ -102,7 +102,7 @@
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
           class="transition-all text-center bg-twitter !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          href="/share/link?type=tw&amp;page_name={{page.name}}&amp;akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}"
+          href="/share/link?type=tw&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}"
           target="_blank"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
@@ -139,7 +139,7 @@
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
           class="transition-all text-center bg-wm-orange !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          href="mailto:?subject={{ page.followup.taf_subject|urlencode }}&amp;body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"
+          href="mailto:?subject={{ page.followup.taf_subject|urlencode }}&body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"
           target="_blank"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
@@ -155,7 +155,7 @@
 
       <div
         class="border-[1px] border-wm-black rounded p-2 mb-4"
-        data-wm-copy-to-clipboard="/share/link?type=ot&source=copypaste{% if action %}&amp;action_id={{ action.id }}{% else %}&amp;page_name={{page.name}}&amp;akid={{ akid }}{% endif %}">
+        data-wm-copy-to-clipboard="/share/link?type=ot&source=copypaste{% if action %}&action_id={{ action.id }}{% else %}&page_name={{page.name}}&akid={{ akid }}{% endif %}">
         <input
           type="text"
           class="bg-gray-100 px-2 py-3 text-sm rounded border-[1px] border-gray-300 w-full mb-2"
@@ -195,7 +195,7 @@
 <div class="my-8 text-center">
   <a
     data-wm-skip-button
-    href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}"
+    href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&{% endif %}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}"
     class="p-4 border-2 inline-block font-bold !text-wm-yellow text-xl font-gilroy hover:!no-underline hover:border-wm-yellow hover:shadow transition-all">
     {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
   </a>
