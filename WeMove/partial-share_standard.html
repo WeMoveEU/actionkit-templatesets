@@ -38,7 +38,7 @@
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
           class="transition-all text-center bg-whatsapp !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          href="/thanks/{{ page.name }}?share=whatsapp&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}"
+          href="/thanks/{{ page.name }}?share=whatsapp&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}"
           target="_blank"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
@@ -86,7 +86,7 @@
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
           class="transition-all text-center bg-facebook !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          href="/share/link?type=fb&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}"
+          href="/share/link?type=fb&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}"
           target="_blank"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
@@ -102,7 +102,7 @@
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
           class="transition-all text-center bg-twitter !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          href="/share/link?type=tw&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}"
+          href="/share/link?type=tw&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}"
           target="_blank"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
