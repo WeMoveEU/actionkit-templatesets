@@ -1,7 +1,7 @@
 {% extends "./wrapper.html" %}
 {% load humanize %}
 
-{% comment %} 
+{% comment %}
 
 Update your recurring donation
 =================================
@@ -63,7 +63,101 @@ There are a couple ways to update a recurring donation:
 
         {% else %}
 
-        <div class="recurring-update-about-text">{% include_tmpl form.update_card_text %}</div>
+        <div class="recurring-update-about-text">
+
+            {% store as currency_name %} {% if profile.currency == 'PLN' %} złoty {% elif profile.currency == 'GBP' %} pounds {% else %} euros {% endif %} {% endstore %}
+            {% store as currency_sym %} {% if profile.currency == 'PLN' %} zł {% elif profile.currency == 'GBP' %} £ {% else %} € {% endif %} {% endstore %}
+            {% store as increases %} {% if profile.currency == 'PLN' %}0,1,2,3,5{% else %}0,1,2,3,5{% endif %}{% endstore %}
+
+            <style>
+                .selected {
+                    scale: 110%;
+                    font-weight: bold;
+                }
+                .donate-widget.upscale-button :is(.whitespace-nowrap) {
+                    white-space: wrap;
+                    height: auto;
+                }
+                #confirm-amount-change {
+                    text-align: center;
+                }
+            </style>
+
+
+            {% include_tmpl form.update_card_text %}
+
+
+            <div style="display: none;">
+                <form id="actionkit-form" name="act" action="/act/" method="POST">
+                    <input type="hidden" name="page" value="tracking-upscaled-donations-{{ page.lang.iso_code }}" />
+                    <input type="hidden" name="akid" value="{{ logged_in_user.token }}" />
+                    <input type="hidden" name="action_upscale_page" value="{{ page.name }}" />
+                    <input type="hidden" name="action_profile" value="{{ profile.id }}" />
+                    <input type="hidden" name="action_recurring_id" value="{{ profile.recurring_id }}" />
+                    <input type="hidden" name="action_upscale_amount" value="" />
+                    <input type="hidden" name="action_upscale_currency" value="{{ profile.currency }}" />
+                    <input type="hidden" name="action_upscale_previous_amount" value="{{ profile.amount }}" />
+                    <input type="hidden" name="action_upscale_mailing_clicked_amount" value="{{ args.clicked }}" />
+                </form>
+            </div>
+
+            <div id="confirm-amount-failed" style="display: {% if args.show_messages %}block;{% else %}none{% endif %};">
+                <h2>{% include_tmpl page.custom_fields.custom_upscale_error_message %}</h2>
+            </div>
+
+            <div id="confirm-amount-working" style="display: {% if args.show_messages %}block;{% else %}none{% endif %};">
+                <h2>{% include_tmpl page.custom_fields.custom_upscale_working_it %}</h2>
+            </div>
+
+            <div id="confirm-amount-change">
+
+                    {% remember args.clicked|add:profile.amount as starting_amount %}
+                    {% remember args.clicked as initial_increase %}
+
+                    {% for inc in increases|split:',' %}
+
+                        {% remember starting_amount|add:inc as change_amount %}
+                        {% remember initial_increase|add:inc as increase %}
+
+                        <div style="padding: 1em;">
+                        <div
+                            data-wm-donate-widget
+                            class="donate-widget upscale-button{% if change_amount == starting_amount %} selected{% endif %}"
+                            data-ak_locale="en"
+                            data-akid="{{ logged_in_user.token }}"
+                            data-mode="change"
+                            data-recurring_id="{{ args.profile }}"
+                            data-change_button_text="{% include_tmpl page.custom_fields.custom_upscale_button_ask %}"
+                            data-change_amount="{{ change_amount }}"
+                            data-selected_currency="{{ args.currency }}"
+                            ></div>
+                        </div>
+                    {% endfor %}
+
+            </div>
+
+            <script>
+                document.addEventListener('payment-update-started', (evt) => {
+                    var btns = document.querySelectorAll('#confirm-amount-change button');
+                    btns.forEach((btn) => { btn.disabled = 1 });
+                    document.getElementById('confirm-amount-working').style.display = 'block';
+                })
+                document.addEventListener('payment-update-completed', (evt) => {
+                    const form = document.getElementById('actionkit-form');
+
+                    if (! evt.detail.success) {
+                        document.getElementById('confirm-amount-working').style.display = 'none';
+                        document.getElementById('confirm-amount-failed').style.display = 'block';
+                        return;
+                    }
+
+                    form.action_upscale_amount.value = evt.detail.amount;
+                    form.submit();
+                })
+            </script>
+
+
+        </div>
 
 
         {% endif %}
