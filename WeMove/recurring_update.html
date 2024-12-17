@@ -38,7 +38,11 @@ There are a couple ways to update a recurring donation:
     <div class="ak-grid-col {% if page.custom_fields.featured_image %} ak-grid-col-9-of-12 {% else %}ak-grid-col-12-of-12 {% endif %}">
 
         <div>
-            <p>Hello {{ logged_in_user.name }} ! If you're not {{ logged_in_user.name }}, please <a href="/logout/">click here.</a></p>
+            <p>
+            {% filter ak_text:"knownuser_Hello" %}Hello {% endfilter %}{{ logged_in_user.name }}!
+            {% filter ak_text:"knownUser_notYou_button" %}Not you?{% endfilter %}
+            <a href="/logout/">{% filter ak_text:"clickHere_button" %}click here{% endfilter %}</a>
+            </p>
         </div>
 
         <div style="display:none">{% comment %}actionkit.js wants this, but we don't{% endcomment %}
