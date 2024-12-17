@@ -67,7 +67,7 @@ There are a couple ways to update a recurring donation:
 
             {% store as currency_name %} {% if profile.currency == 'PLN' %} złoty {% elif profile.currency == 'GBP' %} pounds {% else %} euros {% endif %} {% endstore %}
             {% store as currency_sym %} {% if profile.currency == 'PLN' %} zł {% elif profile.currency == 'GBP' %} £ {% else %} € {% endif %} {% endstore %}
-            {% store as increases %} {% if profile.currency == 'PLN' %}0,1,2,3,5{% else %}0,1,2,3,5{% endif %}{% endstore %}
+            {% store as increases %} {% if profile.currency == 'PLN' %}0,2,4,6,8{% else %}0,1,2,3,5{% endif %}{% endstore %}
 
             <style>
                 .selected {
