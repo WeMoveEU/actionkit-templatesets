@@ -39,7 +39,7 @@ There are a couple ways to update a recurring donation:
 
         <div>
             <p>
-            {% filter ak_text:"knownuser_Hello" %}Hello {% endfilter %}{{ logged_in_user.name }}!
+            {% filter ak_text:"knownuser_Hello" %}Hello {{ logged_in_user.name }}!{% endfilter %}
             {% filter ak_text:"knownUser_notYou_button" %}Not you?{% endfilter %}
             <a href="/logout/">{% filter ak_text:"clickHere_button" %}click here{% endfilter %}</a>
             </p>
