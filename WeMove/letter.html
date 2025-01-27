@@ -94,7 +94,7 @@
       <div>
       
         <div class="mb-2 font-bold">To: &nbsp;&nbsp; <a onclick="copyEmailsToClipboard(this)"
-          >[{% filter ak_text:"copyLink_button" %}Copy]{% endfilter %}</a> </div>
+          >[{% filter ak_text:"copyLink_button" %}Copy{% endfilter %}]</a> </div>
         <div class="mb-2 px-2" id="fallback-to"> </div>
         
         <div class="mb-2 font-bold">Subject: &nbsp;&nbsp; <a onclick="copyText(this, 'fallback-subject')"
@@ -121,7 +121,7 @@
 
            for ( var t of targets ) {
         %]
-                <div class="mb-1"> "[%= t.title_full %]" &lt;[%= t.email %]&gt;<span style='display:none;'>,</span></div>
+                <div class="mb-1">"[%= t.title_full %]" &lt;[%= t.email %]&gt;<span style='display:none;'>,</span></div>
         [% 
             }
             if (targets.length > to_show ) {
@@ -213,7 +213,7 @@
         let to = [];
 
         for ( var t of actionkit.context.targets.targets ) { 
-          to.push(`"${t.title_full}"" <${t.email}>`);
+          to.push(`"${t.title_full}" <${t.email}>`);
         } 
         to.push(`"WeMove Europe" <mailto@wemove.eu>`);
         navigator.clipboard.writeText(to.join(', '));
