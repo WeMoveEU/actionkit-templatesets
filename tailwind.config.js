@@ -29,6 +29,11 @@ module.exports = {
       screens: {
         "nav-md": "940px",
       },
+      gridAutoRows: {
+        "campaign-card": "240px auto 1fr",
+        "update-card": "248px auto auto auto",
+        "victory-card": "248px auto 140px",
+      },
       gridTemplateColumns: {
         petition: "66% minmax(34%, 1fr)",
         donate: "1fr max-content",

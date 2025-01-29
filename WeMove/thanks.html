@@ -31,13 +31,13 @@
       {% endfilter %}
     {% endif %}
 
-    {% include "./component-related_campaigns.html" %}
-
     <div class="mt-4">
       <a href="https://wemove.eu/{{ link_iso }}">
         {% filter ak_text:"returnToHomepage_link" %}Return to the homepage{% endfilter %}
       </a>
     </div>
+
+    {% include "./component-related_campaigns.html" %}
   </div>
 
 {% elif args.share or share_mode %}
