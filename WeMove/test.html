@@ -1,0 +1,13 @@
+{% if args.test_campaigns == "1" %}
+<div class="loading mx-auto mt-16 max-w-[400px] md:max-w-none" data-wm-related-campaigns>
+    <h2 class="text-wm-purple mb-2">
+        {% filter ak_text:"featuredCampaigns_title" %}Featured Campaigns{% endfilter %}
+    </h2>
+
+    <div class="mb-8 grid grid-flow-dense auto-rows-campaign-card gap-8 md:grid-cols-3 lg:gap-6 xl:gap-10">
+        {% include "./component-related_campaign_card.html" %}
+        {% include "./component-related_campaign_card.html" %}
+        {% include "./component-related_campaign_card.html" %}
+    </div>
+</div>
+{% endif %}
