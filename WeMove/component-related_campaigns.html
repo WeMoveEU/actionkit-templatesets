@@ -1,3 +1,4 @@
+{% if args.test-related-campaigns == "1" %}
 <div class="loading mx-auto mt-16 max-w-[400px] md:max-w-none" data-wm-related-campaigns>
     <h2 class="text-wm-purple mb-2">
         Related campaigns
@@ -9,3 +10,4 @@
         {% include "./component-related_campaigns_card.html" %}
     </div>
 </div>
+{% endif %}
