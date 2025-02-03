@@ -1,4 +1,6 @@
-{% extends "./wrapper.html" %}
+{% if not avoid_extending_wrapper %}
+  {% extends "./wrapper.html" %}
+{% endif %}
 
 {% block pre_action_share %}{% endblock %}
 
