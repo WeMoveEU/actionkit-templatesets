@@ -1,0 +1,69 @@
+<article
+    data-wm-related-campaign-card
+    class="transition-all rounded overflow-hidden relative row-span-3 grid grid-rows-[subgrid] gap-2 bg-gray-100">
+
+    <a
+        data-wm-related-campaign-card-link
+        class="relative"
+        href="#">
+        <span
+            data-wm-related-campaign-card-preloader
+            class="animate-pulse h-6 bg-slate-400 min-w-28 rounded-sm absolute bottom-14 right-2">
+        </span>
+
+        <span
+            data-wm-related-campaign-card-signatures-wrapper
+            class="absolute bottom-14 right-2 z-20 flex items-center justify-center bg-wm-purple px-2 py-1 font-libre-franklin text-xs font-bold uppercase text-white">
+            <span data-wm-related-campaign-card-signatures></span>
+            &nbsp;{% filter ak_text:"signers_label" %}signers{% endfilter %}
+        </span>
+
+        <img
+            data-wm-related-campaign-card-image
+            width="750"
+            height="416"
+            class="relative h-full w-full object-cover"
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" />
+
+        <span class="absolute uppercase bottom-0 block w-full bg-wm-orange py-3 text-center text-white font-gilroy text-lg hover:bg-wm-pink duration-150 transition-all">
+            {% filter ak_text:"takeAction_link" %}Take action{% endfilter %} →
+        </span>
+    </a>
+
+    <h3 class="mx-4 mt-0 mb-0 line-clamp-3 leading-7">
+        <span
+            data-wm-related-campaign-card-preloader
+            class="animate-pulse h-10 bg-slate-300 block w-full rounded-sm">
+            &nbsp;
+        </span>
+
+        <a
+            href="#"
+            data-wm-related-campaign-card-link
+            data-wm-related-campaign-card-title
+            class="uppercase !text-black">
+            &nbsp;
+        </a>
+    </h3>
+
+    <div class="mx-4 mb-4 font-normal text-sm">
+        <p
+            data-wm-related-campaign-card-description>
+            <span
+                data-wm-related-campaign-card-preloader>
+                <span
+                    class="animate-pulse mt-2 h-6 bg-slate-300 block w-full rounded-sm">
+                    &nbsp;
+                </span>
+                <span
+                    class="animate-pulse h-6 mt-2 bg-slate-300 block w-full rounded-sm">
+                    &nbsp;
+                </span>
+                <span
+                    class="animate-pulse mt-2 h-6 bg-slate-300 block w-full rounded-sm">
+                    &nbsp;
+                </span>
+            </span>
+        </p>
+    </div>
+</article>
