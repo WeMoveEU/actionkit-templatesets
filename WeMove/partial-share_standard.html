@@ -101,19 +101,19 @@
 
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
-          class="transition-all text-center bg-twitter !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          href="/share/link?type=tw&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}"
+          class="transition-all text-center bg-bluesky !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
+          href="https://bsky.app/intent/compose?text={{page.name}}"
+          data-wm-bluesky-link="/share/link?type=ot&source=bluesky{% if action %}&action_id={{ action.id }}{% else %}&page_name={{page.name}}&akid={{ akid }}{% endif %}"
           target="_blank"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
-          data-wm-pixel-content-name="Twitter"
+          data-wm-pixel-content-name="Bluesky"
           data-wm-pixel-trigger-event="click">
-          <span aria-hidden="true" class="h-6 w-6">
-            {% include "./icon-twitter.html" %}
+          <span aria-hidden="true" class="h-4 w-4">
+            {% include "./icon-bluesky.html" %}
           </span>
-          <span>{% filter ak_text:"thanks_shareTwitter_button" %}Share on Twitter{% endfilter %}</span>
+          <span>{% filter ak_text:"thanks_shareBluesky_button" %}Share on Bluesky{% endfilter %}</span>
         </a>
-        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
       </div>
 
       {% store as instagram_share_link %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "instagram_share_link" as field_name %}{% endstore %}
