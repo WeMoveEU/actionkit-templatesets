@@ -22,6 +22,7 @@ module.exports = {
         whatsapp: "#2eb82e",
         facebook: "#4966b7",
         twitter: "#55acee",
+        bluesky: "#1185fe",
         instagram: "#c552df",
         taf: "#c552df",
         copyurl: "#c552df",

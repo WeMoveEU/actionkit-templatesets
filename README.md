@@ -36,15 +36,12 @@ See the [actionkit stripe integration](https://gitlab.wemove.eu/internal/actionk
 
 ## Local assets proxy
 
-To develop CSS and JS, use the ssh://git@gitlab.wemove.eu:2222/internal/pubstatic.git repository and run the local server (yarn run dev). 
+To develop CSS and JS, use the ssh://git@gitlab.wemove.eu:2222/internal/pubstatic.git repository and run the local server (yarn run dev).
 
 If you pass dev=1 to a page, it will use the following URLs to load the assets:
 
     //127.0.0.1:8081/js/wemove-main.bundle.min.js
     //127.0.0.1:8081/css/wemove.css
-
-
-
 
 # TODOs
 
