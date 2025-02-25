@@ -100,11 +100,11 @@
       </div>
 
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
-        <a
-          class="transition-all text-center bg-bluesky !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          href="https://bsky.app/intent/compose?text={{page.name}}"
+        <button
+          type="button"
+          class="transition-all text-center w-full bg-bluesky !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
+          data-wm-page-name="{{page.name}}"
           data-wm-bluesky-link="/share/link?type=ot&source=bluesky{% if action %}&action_id={{ action.id }}{% else %}&page_name={{page.name}}&akid={{ akid }}{% endif %}"
-          target="_blank"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
           data-wm-pixel-content-name="Bluesky"
@@ -113,7 +113,7 @@
             {% include "./icon-bluesky.html" %}
           </span>
           <span>{% filter ak_text:"thanks_shareBluesky_button" %}Share on Bluesky{% endfilter %}</span>
-        </a>
+        </button>
       </div>
 
       {% store as instagram_share_link %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "instagram_share_link" as field_name %}{% endstore %}
