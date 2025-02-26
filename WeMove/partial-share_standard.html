@@ -100,10 +100,12 @@
       </div>
 
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
+        <script>
+          const blueskyShareText = decodeHTML(`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
+        </script>
         <button
           type="button"
           class="transition-all text-center w-full bg-bluesky !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          data-wm-bluesky-text="{{ page.followup.twitter_message }}"
           data-wm-bluesky-link="/share/link?type=ot&source=bluesky{% if action %}&action_id={{ action.id }}{% else %}&page_name={{page.name}}&akid={{ akid }}{% endif %}"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
