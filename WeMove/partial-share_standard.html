@@ -58,18 +58,12 @@
               return;
             }
 
-            const decodeHTML = function (html) {
-              var txt = document.createElement('textarea');
-              txt.innerHTML = html;
-              return txt.value;
-            };
-
             const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             const whatsAppURL = isMobile()
               ? "whatsapp://send/"
               : "https://wa.me/";
 
-            const title = decodeHTML(`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
+            const title = wemove.utilities.decodeHTML(`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
             const sharePageURL = "/share/link?type=ot&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}";
 
             const whatsAppText = await fetch(sharePageURL)
@@ -101,7 +95,7 @@
 
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <script>
-          //const blueskyShareText = decodeHTML(`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
+          const blueskyShareText = wemove.utilities.decodeHTML(`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
         </script>
         <button
           type="button"
