@@ -50,37 +50,9 @@
           <span>{% filter ak_text:"thanks_shareWhatsApp_button" %}Share on WhatsApp{% endfilter %}</span>
         </a>
 
-        <script>
-          (async () => {
-            const urlParams = new URLSearchParams(window.location.search);
-
-            if (urlParams.get('share') !== 'whatsapp') {
-              return;
-            }
-
-            const decodeHTML = function (html) {
-              var txt = document.createElement('textarea');
-              txt.innerHTML = html;
-              return txt.value;
-            };
-
-            const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            const whatsAppURL = isMobile()
-              ? "whatsapp://send/"
-              : "https://wa.me/";
-
-            const title = decodeHTML(`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
-            const sharePageURL = "/share/link?type=ot&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}";
-
-            const whatsAppText = await fetch(sharePageURL)
-              .then(async (result) => {
-                const urlToShare = await result.text();
-                return encodeURIComponent(`${title} ${urlToShare}&source=whatsapp`);
-              });
-
-            window.location.href = `${whatsAppURL}?text=${whatsAppText}`;
-          })();
-        </script>
+        {% if args.share == "whatsapp" %}
+          {% include "./component-share_from_mailings_script.html" %}
+        {% endif %}
       </div>
 
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
@@ -105,6 +77,11 @@
             window.blueskyShareText = wemove.utilities.decodeHTML(`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
           });
         </script>
+
+        {% if args.share == "bluesky" %}
+          {% include "./component-share_from_mailings_script.html" %}
+        {% endif %}
+
         <button
           type="button"
           class="transition-all text-center w-full bg-bluesky !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"

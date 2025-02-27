@@ -1,5 +1,6 @@
 <script>
   (async () => {
+    debugger
     const socialType = "{{ args.share }}";
 
     const decodeHTML = (html) => {
@@ -32,6 +33,6 @@
 
     const shareTextWithURL = encodeURIComponent(`${title} ${URLToShare}&source=${socialType}`)
 
-    window.location.href = `${socialURL}?text=${shareTextWithURL}`;
+    window.location.href = `${socialURL()}?text=${shareTextWithURL}`;
   })();
 </script>
