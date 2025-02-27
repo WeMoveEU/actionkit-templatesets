@@ -1,0 +1,37 @@
+<script>
+  (async () => {
+    const socialType = "{{ args.share }}";
+
+    const decodeHTML = (html) => {
+      var txt = document.createElement('textarea');
+      txt.innerHTML = html;
+
+      return txt.value;
+    };
+
+    const title = decodeHTML(`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
+
+    const AKSharePageURL = "/share/link?type=ot&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}";
+
+    const URLToShare = await fetch(AKSharePageURL)
+      .then(async (result) => {
+        return await result.text();
+      });
+
+    const socialURL = () => {
+      if (socialType === "whatsapp") {
+        const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        return isMobile()
+          ? "whatsapp://send/"
+          : "https://wa.me/";
+      }
+
+      // Bluesky
+      return "https://bsky.app/intent/compose";
+    };
+
+    const shareTextWithURL = encodeURIComponent(`${title} ${URLToShare}&source=${socialType}`)
+
+    window.location.href = `${socialURL}?text=${shareTextWithURL}`;
+  })();
+</script>
