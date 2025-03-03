@@ -99,9 +99,10 @@
     {% if page.lang.is_rtl %}ak-rtl{% endif %}
     {% block body_extra_classes %}{% endblock %}">
 
-  <script>actionkit.forms.initPage();</script>
+    <script>actionkit.forms.initPage();</script>
 
   {% if not isEmbbeded %}
+    {% include "./component-a11y_skip_buttons.html" %}
     {% include "./component-popup_blocker_alert.html" %}
 
     {% if campaign_type == "youmove" %}
