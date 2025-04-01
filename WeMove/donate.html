@@ -35,8 +35,8 @@
       data-ak_page_name="{{ page.name }}"
       data-ak_parent_page_name="{{ page.custom_fields.campaign }}"
       data-ak_locale="{{ link_iso }}"
-      data-akid="{{ user.token|default:'true' }}"
-      data-show_payment_fees="{{ page.custom_fields.show_payment_fees }}">
+      data-akid="{{ user.token|default_if_none:'' }}"
+      data-show_payment_fees="{{ page.custom_fields.show_payment_fees|default:'true' }}">
     </div>
   </article>
 
