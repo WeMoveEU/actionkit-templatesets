@@ -98,6 +98,14 @@
 {% endblock %}
 
 {% block below_form %}
+  {% comment %}A/B Test need a call to initForm() and a form, so give them one.{% endcomment %}
+  <form style="display:none;" name="act">
+  <input type="hidden" name="page" value="{{ page.name }}" />
+  </form>
+  <script>
+  actionkit.forms.initForm('act');
+  </script>
+
   {% if fundraiser_staging or args.staging == "1" %}
     <script type="module" src="//donate-ui.not-a2.eu/donate-main.js"></script>
   {% else %}
