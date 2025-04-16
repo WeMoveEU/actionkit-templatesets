@@ -1,12 +1,26 @@
 <div class="standard-share nav-md:grid gap-2 grid-cols-[60%_minmax(40%,_1fr)]">
   <section>
     <h1>
-      {% if tests.19 %}
-        {{ page.custom_fields.share_ab_test_1_heading }}
+      {#
+      --- AB TEST #1 - LAnguage variations ---
+      - A: Pychology
+      - B: Emotion
+      - C: Outcome
+      - D: Urgency
+      - E: Community
+      #}
+      {% if tests.19.letter = "A" %}
+        {% filter ak_text:"share_psychologyVariant_title" %}Thousands are already sharing — join them{% endfilter %}
+      {% elif tests.19.letter = "B" %}
+        {% filter ak_text:"share_emotionVariant_title" %}Tell your friends to make a difference{% endfilter %}
+      {% elif tests.19.letter = "C" %}
+        {% filter ak_text:"share_outcomeVariant_title" %}Every share brings us closer to change{% endfilter %}
+      {% elif tests.19.letter = "D" %}
+       {% filter ak_text:"share_urgencyVariant_title" %}The more we are, the louder our voice{% endfilter %}
+      {% elif tests.19.letter = "E" %}
+        {% filter ak_text:"share_communityVariant_title" %}Share to show how you care{% endfilter %}
       {% else %}
-        {% filter ak_text:"thanks_spreadTheWord_title" %}
-          Can you spread the word?
-        {% endfilter %}
+        {% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}
       {% endif %}
     </h1>
 
@@ -16,8 +30,16 @@
       </div>
     {% endif %}
 
-    {% if tests.19 %}
-        {{ page.custom_fields.share_ab_test_1_body }}
+    {% if tests.19.letter = "A" %}
+        {% filter ak_text:"share_psychologyVariant_body" %}This campaign is spreading fast. Help it go even further.{% endfilter %}
+      {% elif tests.19.letter = "B" %}
+        {% filter ak_text:"share_emotionVariant_body" %}Think of a friend who’d care — send it to them now.{% endfilter %}
+      {% elif tests.19.letter = "C" %}
+        {% filter ak_text:"share_outcomeVariant_body" %}Your share could be the reason we win this. Help us get there.{% endfilter %}
+      {% elif tests.19.letter = "D" %}
+       {% filter ak_text:"share_urgencyVariant_body" %}It only takes 5 seconds. Even one share will make a difference.{% endfilter %}
+      {% elif tests.19.letter = "E" %}
+        {% filter ak_text:"share_communityVariant_body" %}Change happens when we act together.{% endfilter %}
       {% else %}
         {% include_tmpl form.thank_you_text %}
       {% endif %}
