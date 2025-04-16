@@ -12,6 +12,8 @@
           {% filter ak_text:"share_urgencyVariant_title" %}The more we are, the louder our voice{% endfilter %}
         {% elif page.custom_fields.share_step_ab_test_1_language_variations == "community" %}
           {% filter ak_text:"share_communityVariant_title" %}Share to show how you care{% endfilter %}
+        {% elif page.custom_fields.share_step_ab_test_1_language_variations == "default" %}
+          {% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}
         {% endif %}
       {% else %}
         {% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}
@@ -35,6 +37,8 @@
         {% filter ak_text:"share_urgencyVariant_body" %}It only takes 5 seconds. Even one share will make a difference.{% endfilter %}
       {% elif page.custom_fields.share_step_ab_test_1_language_variations == "community" %}
         {% filter ak_text:"share_communityVariant_body" %}Change happens when we act together.{% endfilter %}
+      {% elif page.custom_fields.share_step_ab_test_1_language_variations == "default" %}
+        {% include_tmpl form.thank_you_text %}
       {% endif %}
     {% else %}
       {% include_tmpl form.thank_you_text %}
