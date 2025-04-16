@@ -1,7 +1,14 @@
 <div class="standard-share nav-md:grid gap-2 grid-cols-[60%_minmax(40%,_1fr)]">
   <section>
     <h1>
-
+      {% comment %}
+      --- AB TEST #1 - LAnguage variations ---
+      - A: Pychology
+      - B: Emotion
+      - C: Outcome
+      - D: Urgency
+      - E: Community
+      {% endcomment %}
       {% if tests.19.letter = "A" %}
         {% filter ak_text:"share_psychologyVariant_title" %}Thousands are already sharing — join them{% endfilter %}
       {% elif tests.19.letter = "B" %}
