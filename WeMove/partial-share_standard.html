@@ -1,9 +1,13 @@
 <div class="standard-share nav-md:grid gap-2 grid-cols-[60%_minmax(40%,_1fr)]">
   <section>
     <h1>
-      {% filter ak_text:"thanks_spreadTheWord_title" %}
-        Can you spread the word?
-      {% endfilter %}
+      {% if tests.19 %}
+        {{ page.custom_fields.share_ab_test_1_heading }}
+      {% else %}
+        {% filter ak_text:"thanks_spreadTheWord_title" %}
+          Can you spread the word?
+        {% endfilter %}
+      {% endif %}
     </h1>
 
     {% if page.type == "Signup" and not isEmbbeded %}
@@ -12,7 +16,11 @@
       </div>
     {% endif %}
 
-    {% include_tmpl form.thank_you_text %}
+    {% if tests.19 %}
+        {{ page.custom_fields.share_ab_test_1_body }}
+      {% else %}
+        {% include_tmpl form.thank_you_text %}
+      {% endif %}
   </section>
 
   <aside data-wm-share-content>
@@ -30,7 +38,7 @@
         </div>
       {% endif %}
 
-      <div class="xl:w-2/3">{{ page.followup.share_description_value }}</div>
+        <div class="xl:w-2/3">{{ page.followup.share_description_value }}</div>
       </div>
     </div>
 
