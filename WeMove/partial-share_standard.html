@@ -161,7 +161,7 @@
           target="_blank"
           data-wm-taf-button
           data-wm-taf-button-mailto="mailto:?subject={{ page.followup.taf_subject|urlencode }}&body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"
-          data-wm-taf-track-url="/share/link?type=ot&source=taf{% if args.consent == "emailed" %}&page_name={{ pageName }}{% endif %}{% elif action %}&action_id={{ action.id }}{% else %}&page_name={{ pageName }}{% endif %}&akid={{ akid }}{% endif %}"
+          data-wm-taf-track-url="/share/link?type=ot&source=taf{% if args.consent == "emailed" %}&page_name={{ pageName }}{% elif action %}&action_id={{ action.id }}{% else %}&page_name={{ pageName }}&akid={{ akid }}{% endif %}"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
           data-wm-pixel-content-name="Taf"
@@ -179,7 +179,7 @@
           type="button"
           class="transition-all text-center bg-copyurl !text-white font-bold uppercase p-3 block font-gilroy rounded hover:!no-underline hover:brightness-110
           w-full"
-          data-wm-copy-to-clipboard="/share/link?type=ot&source=copypaste{% if args.consent == "emailed" %}&page_name={{ pageName }}{% endif %}{% elif action %}&action_id={{ action.id }}{% else %}&page_name={{ pageName }}{% endif %}&akid={{ akid }}{% endif %}"
+          data-wm-copy-to-clipboard="/share/link?type=ot&source=copypaste{% if args.consent == "emailed" %}&page_name={{ pageName }}{% elif action %}&action_id={{ action.id }}{% else %}&page_name={{ pageName }}&akid={{ akid }}{% endif %}"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
           data-wm-pixel-content-name="CopyLink"
