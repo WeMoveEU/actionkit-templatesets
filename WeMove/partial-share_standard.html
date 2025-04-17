@@ -45,6 +45,12 @@
     {% endif %}
   </section>
 
+  {% if page.custom_fields.daisy_chain_action %}
+    {% remember {{ page.custom_fields.daisy_chain_action }} as pageName %}
+  {% else %}
+    {% remember {{ page.name }} as pageName %}
+  {% endif %}
+
   <aside data-wm-share-content>
     <div class="p-8 bg-wm-orangy-box text-wm-purple mb-4">
       <h3>{{ page.followup.share_title_value }}</h3>
@@ -68,7 +74,7 @@
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
           class="transition-all text-center bg-whatsapp !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          href="/thanks/{{ page.name }}?share=whatsapp&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}"
+          href="/thanks/{{ pageName }}?share=whatsapp&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}"
           target="_blank"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
@@ -88,7 +94,7 @@
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
         <a
           class="transition-all text-center bg-facebook !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          href="/share/link?type=fb&page_name={% if page.custom_fields.daisy_chain_action %}{{ page.custom_fields.daisy_chain_action }}{% else %}{{page.name}}{% endif %}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}"
+          href="/share/link?type=fb&page_name={{ pageName }}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}"
           target="_blank"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
@@ -115,7 +121,7 @@
         <button
           type="button"
           class="transition-all text-center w-full bg-bluesky !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          data-wm-bluesky-link="/share/link?type=ot&source=bluesky{% if action %}&action_id={{ action.id }}{% else %}&page_name={{page.name}}&akid={{ akid }}{% endif %}"
+          data-wm-bluesky-link="/share/link?type=ot&source=bluesky{% if action %}&action_id={{ action.id }}{% else %}&page_name={{ pageName }}&akid={{ akid }}{% endif %}"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
           data-wm-pixel-content-name="Bluesky"
@@ -134,7 +140,7 @@
           class="transition-all text-center bg-instagram !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
           href="{{instagram_share_link}}"
           target="_blank"
-          data-wm-send-share-to-action-kit="/share/link?type=ot&page_name={{page.name}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}"
+          data-wm-send-share-to-action-kit="/share/link?type=ot&page_name={{ pageName }}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
           data-wm-pixel-content-name="Instagram"
@@ -149,10 +155,13 @@
 
       {% if page.followup.send_taf %}
       <div class="border-[1px] border-wm-black rounded p-2 mb-4">
-        <a
-          class="transition-all text-center bg-wm-orange !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          href="mailto:?subject={{ page.followup.taf_subject|urlencode }}&body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"
+        <button
+          type="button"
+          class="transition-all w-full text-center bg-wm-orange !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
           target="_blank"
+          data-wm-taf-button
+          data-wm-taf-button-mailto="mailto:?subject={{ page.followup.taf_subject|urlencode }}&body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"
+          data-wm-taf-track-url="/share/link?type=ot&source=taf{% if args.consent == "emailed" %}&page_name={{ pageName }}{% endif %}{% elif action %}&action_id={{ action.id }}{% else %}&page_name={{ pageName }}{% endif %}&akid={{ akid }}{% endif %}"
           data-wm-pixel-event-type="Share"
           data-wm-pixel-track-type="trackCustom"
           data-wm-pixel-content-name="Taf"
@@ -161,43 +170,33 @@
             {% include "./icon-mail.html" %}
           </span>
           <span>{% filter ak_text:"thanks_shareEmail_button" %}Share by e-mail{% endfilter %}</span>
-        </a>
+        </button>
       </div>
       {% endif %}
 
-      <div
-        class="border-[1px] border-wm-black rounded p-2 mb-4"
-        data-wm-copy-to-clipboard="/share/link?type=ot&source=copypaste{% if args.consent == "emailed" %}&page_name={{page.name}}{% elif action %}&action_id={{ action.id }}{% else %}&page_name={{page.name}}&akid={{ akid }}{% endif %}">
-        <input
-          type="text"
-          class="bg-gray-100 px-2 py-3 text-sm rounded border-[1px] border-gray-300 w-full mb-2"
-          data-wm-copy-to-clipboard-textbox
-          readonly
-          placeholder="{% filter ak_text:"loadingLink_placeholder" %}loading link...{% endfilter %}"
-          />
-
-          <button
-            type="button"
-            class="transition-all text-center bg-copyurl !text-white font-bold uppercase p-3 block font-gilroy rounded hover:!no-underline hover:brightness-110
-            w-full"
-            data-wm-copy-to-clipboard-button
-            data-wm-pixel-event-type="Share"
-            data-wm-pixel-track-type="trackCustom"
-            data-wm-pixel-content-name="CopyLink"
-            data-wm-pixel-trigger-event="click">
-            <span class="copy-text">
-              <span aria-hidden="true" class="h-6 w-6">
-                {% include "./icon-link.html" %}
-              </span>
-              <span>{% filter ak_text:"copyLink_button" %}Copy{% endfilter %}</span>
+      <div class="border-[1px] border-wm-black rounded p-2 mb-4">
+        <button
+          type="button"
+          class="transition-all text-center bg-copyurl !text-white font-bold uppercase p-3 block font-gilroy rounded hover:!no-underline hover:brightness-110
+          w-full"
+          data-wm-copy-to-clipboard="/share/link?type=ot&source=copypaste{% if args.consent == "emailed" %}&page_name={{ pageName }}{% endif %}{% elif action %}&action_id={{ action.id }}{% else %}&page_name={{ pageName }}{% endif %}&akid={{ akid }}{% endif %}"
+          data-wm-pixel-event-type="Share"
+          data-wm-pixel-track-type="trackCustom"
+          data-wm-pixel-content-name="CopyLink"
+          data-wm-pixåel-trigger-event="click">
+          <span class="copy-text">
+            <span aria-hidden="true" class="h-6 w-6">
+              {% include "./icon-link.html" %}
             </span>
+            <span>{% filter ak_text:"copyLink_button" %}Copy{% endfilter %}</span>
+          </span>
 
-            <span class="copied-text">
-              <span aria-hidden="true" class="h-6 w-6">
-                {% include "./icon-check.html" %}
-              </span>
-              <span>{% filter ak_text:"linkCopied_alert" %}Link copied{% endfilter %}</span>
+          <span class="copied-text">
+            <span aria-hidden="true" class="h-6 w-6">
+              {% include "./icon-check.html" %}
             </span>
+            <span>{% filter ak_text:"linkCopied_alert" %}Link copied{% endfilter %}</span>
+          </span>
         </button>
       </div>
     </div>
