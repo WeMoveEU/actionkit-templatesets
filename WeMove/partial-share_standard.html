@@ -46,9 +46,9 @@
   </section>
 
   {% if page.custom_fields.daisy_chain_action %}
-    {% remember {{ page.custom_fields.daisy_chain_action }} as pageName %}
+    {% remember page.custom_fields.daisy_chain_action as pageName %}
   {% else %}
-    {% remember {{ page.name }} as pageName %}
+    {% remember page.name as pageName %}
   {% endif %}
 
   <aside data-wm-share-content>
