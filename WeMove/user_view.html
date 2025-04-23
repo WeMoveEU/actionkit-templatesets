@@ -1,127 +1,98 @@
-{% extends './wrapper.html' %}
+{% extends "./wrapper.html" %}
 
 {% block content %}
 
-<div class="ak-grid-row">
-    <div class="ak-grid-col ak-grid-col-12-of-12">
-        <h2 class="ak-display-inline-block">{{ actionkit_user.name }}</h2> 
-        &nbsp; <a href="/logout/">Log Out</a>
-    </div>
-</div>
+  <h1>Your donations</h1>
 
-<div class="ak-grid-row">
-    <div class="ak-grid-col ak-grid-col-12-of-12">
+  <section class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8">
+    <aside class="flex justify-between mb-4">
+      <div class="flex items-center gap-1">
+        <span aria-hidden="true" class="bg-green-500 rounded-full border-black inline-block h-3 w-3"></span>
+        <span class="">active</span>
+      </div>
 
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li>
-                        {{ message }}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        
-        <h3>Email And Address</h3>
-        <div><strong>{{ actionkit_user.email }}</strong></div>
+      <button type="button" class="bg-gray-700 rounded block py-0 px-3 text-white hover:bg-wm-purple transition-all">
+        cancel
+      </div>
+    </aside>
 
-        <div class="ak-full-address">{{ actionkit_user.full_address }}</div>
+    <main>
+      <div class="flex items-center  justify-center text-4xl my-8">€12 / monthly</div>
 
-        <div><a href="update/">Update your email or address.</a></div>
+      <div class="text-center">
+        <div class="mb-2">
+          <h5 class="mb-0">Payment method</h5>
+          <span>Credit card (mastercard)</span>
+        </div>
 
-        <h3> Subscription History </h3>
+        <div>
+          <h5 class="mb-0">Next payment</h5>
+          <span>12/05/2025</span>
+        </div>
+      </div>
+    </main>
+  </section>
 
-        <ul class="ak-margin-none">
-            {% for subscription in actionkit_user.subscription_history %}
-            <li>
-                {{ subscription.list.name }}, {{ subscription.change.name }}, at {{ subscription.created_at|date:"m/d/Y" }}
-            </li>
-            {% endfor %}
-        </ul>
+  <section>
+    <h2>Donations</h2>
 
-        {% if actionkit_user.is_subscribed %}
-        <div><a href="/cms/unsubscribe/unsubscribe/?akid={{ actionkit_user.token }}">Unsubscribe</a></div>
-        {% endif %}
+    <ol>
+      <li class="relative">
+        <div class="py-2 px-4 rounded-xl border-[1px] border-gray-400 mb-8">
+          <div class="text-xl font-bold text-wm-purple">
+            €12
+          </div>
 
-        {% if recurring_donations %}
-        <h3> Your Recurring Donations </h3>
-        <ul class="ak-margin-none">
-            {% for profile in recurring_donations %}
-            <li>
-                <strong>{{ profile.amt }}</strong> a {{ profile.inverse_period_display|lower }}, started on {{ profile.created_at|date:"m/d/Y" }}. 
-                You've given a total of {{ profile.payment_total_amt }}. 
-                {% if profile.is_active and not profile.is_import_stub %}
-                    {% if profile.order.payment_method != "paypal" %}
-                        <a href="/cms/pledge/update/update/">Manage your recurring profile.</a>
-                    {% else %}
-                        <a href="/cms/pledge/cancel/monthly/">Cancel at any time.</a>
-                    {% endif %} 
-                {% else %}
-                    <b>{{ profile.get_status_display }} on {{ profile.updated_at|date:"m/d/Y" }} </b>
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+          <div class="text-sm">
+            <span class="font-bold text-wm-purple">recurring</span>
+            <span class="text-gray-500">(monthly)</span>
+          </div>
 
-        {% for campaign, upcoming_event_count in campaigns_moderating.items %}
-          {% if forloop.first %}
-            <h3>Event Moderation</h3>
-            <ul>
-          {% endif %}
-          <li>
-            <b>{{ campaign.title }}</b> campaign with <b>{{ upcoming_event_count }}</b> upcoming events ({{ campaign.event_set.count }} total). <a href='/event/{{campaign.moderate_page.name}}/moderator_search/?akid={{akid}}'>Moderate</a>
-          </li>
-          {% if forloop.last %}
-            </ul>
-          {% endif %}
-        {% endfor %}
+          <div class="text-xs text-gray-500">12/04/2025</div>
+        </div>
 
-        {% for event in upcoming_events %}
-          {% if forloop.first %}
-            <h3>Upcoming Events</h3>
-            <ul>
-          {% endif %}
-          <li>
-            <b>{{ event.event.starts_at_dt|date:"l, F j, Y, g:i A" }}:</b>
-            {% if event.role == 'host' %}Hosting <a href="{% url 'event_host_tools' event.event.campaign.local_name event.event.id %}?action_id={{ event.action.id }}&akid={{ event.action.user.akid }}">
-            {% else %} Attending <a href="{% url 'event_attendee_tools' event.event.campaign.local_name event.event.id %}?action_id={{ event.action.id }}&akid={{ event.action.user.akid }}">
-            {% endif %}
-            {{ event.event.title }}</a>
-          </li>
-          {% if forloop.last %}
-            </ul>
-          {% endif %}
-        {% endfor %}
+        <button type="button" class="absolute right-4 top-2 z-10">
+          <span aria-hidden="true" class="icon">
+            {% include "./icon-print.html" %}
+          </span>
+          <span class="text-gray-500">print receipt</span>
+        </button>
+      </li>
 
-        {% for event in past_events %}
-          {% if forloop.first %}
-            <h3>Past Events</h3>
-            <ul>
-          {% endif %}
-          <li>
-            <b>{{ event.event.starts_at_dt|date:"l, F j, Y, g:i A" }}:</b>
-            {% if event.role == 'host' %}Hosted <a href="{% url 'event_host_tools' event.event.campaign.local_name event.event.id %}?action_id={{ event.action.id }}&akid={{ event.action.user.akid }}">
-            {% else %} Attended <a href="{% url 'event_attendee_tools' event.event.campaign.local_name event.event.id %}?action_id={{ event.action.id }}&akid={{ event.action.user.akid }}">
-            {% endif %}
-            {{ event.event.title }}</a>
-          </li>
-          {% if forloop.last %}
-            </ul>
-          {% endif %}
-        {% endfor %}
+      <li>
+        <div class="">
+          <div><strong>€12</strong> recurring (monthly)</div>
+          <div>12/04/2025</div>
+        </div>
 
-        {% if donations %}
-            <h3> Donation History </h3>
-            <ul>
-                {% for donation in donations %}
-                    <li>
-                        {{ donation.amt }} on {{ donation.created_at|date:"m/d/Y" }}  {% if donation.recurring %} (Recurring) {% endif %}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </div>
-</div>
+        <button type="button">
+          <span aria-hidden="true" class="icon"></span>
+          <span class="">print receipt</span>
+        </button>
+      </li>
+
+      <li>
+        <div class="">
+          <div><strong>€12</strong> recurring (monthly)</div>
+          <div>12/04/2025</div>
+        </div>
+
+        <button type="button">
+          <span aria-hidden="true" class="icon"></span>
+          <span class="">print receipt</span>
+        </button>
+      </li>
+    </ol>
+  </section>
+
+  <div class="">
+    <a href="#">Make a donation now</a>
+  </div>
+
+  <section class="">
+    <h3>How we are funded</h3>
+    <p>If you want to know more about how we are funded, how we use your donation, or other commonly asked question, you can visit this page.</p>
+    <p>You can also contact us anytime if at <a href="mailto:donation@wemove.eu">donation@wemove.eu</a></p>
+  </section>
 
 {% endblock %}
