@@ -4,7 +4,7 @@
 
   <h1>Your account</h1>
 
-  <menu data-wm-tab class="mb-4 border-b-2 relative font-gilroy text-lg">
+  <menu data-wm-tab class="mb-8 border-b-2 relative font-gilroy text-lg">
     <div class="flex justify-start gap-2 -bottom-0.5 relative">
       <button data-wm-tab-button="account" class="text-gray-600 border-b-2 [&.active]:border-wm-pink [&.active]:text-wm-purple p-2 active" type="button">Account</button>
       <button data-wm-tab-button="donations" class="text-gray-600 border-b-2 [&.active]:border-wm-pink [&.active]:text-wm-purple p-2" type="button">Donations</button>
@@ -60,6 +60,9 @@
     <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8">
       <div class="flex justify-between items-center mb-4">
         <div class="flex items-center gap-1">
+          <span aria-hidden="true" class="w-5 h-5 mr-1 inline-block not-sr-only" title="Print">
+            {% include "./icon-subscription.html" %}
+          </span>
           <span class="font-bold text-wm-purple font-gilroy text-lg">Subscription history</span>
         </div>
       </div>
