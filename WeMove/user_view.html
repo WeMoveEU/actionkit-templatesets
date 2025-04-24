@@ -7,8 +7,36 @@
   <section class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8">
     <aside class="flex justify-between mb-4">
       <div class="flex items-center gap-1">
+        someuserwith@email.com
+      </div>
+
+      <a href="#" class="bg-gray-700 rounded block py-0 px-3 !text-white hover:bg-wm-purple transition-all">
+        logout
+      </a>
+    </aside>
+
+    <main>
+      <div class="flex items-center  justify-center text-4xl my-8">€12 / monthly</div>
+
+      <div class="text-center">
+        <div class="mb-2">
+          <h5 class="mb-0">Payment method</h5>
+          <span>Credit card (mastercard)</span>
+        </div>
+
+        <div>
+          <h5 class="mb-0">Next payment</h5>
+          <span>12/05/2025</span>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <section class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8">
+    <aside class="flex justify-between mb-4">
+      <div class="flex items-center gap-1">
         <span aria-hidden="true" class="bg-green-500 rounded-full border-black inline-block h-3 w-3"></span>
-        <span class="">active</span>
+        <span>active</span>
       </div>
 
       <button type="button" class="bg-gray-700 rounded block py-0 px-3 text-white hover:bg-wm-purple transition-all">
@@ -34,11 +62,11 @@
   </section>
 
   <section>
-    <h2>Donations</h2>
+    <h2 class="text-wm-purple border-b-2">Donations</h2>
 
     <ol>
-      <li class="relative">
-        <div class="py-2 px-4 rounded-xl border-[1px] border-gray-400 mb-8">
+      <li class="relative mb-4">
+        <div class="py-2 px-4 rounded-xl border-[1px] border-gray-400">
           <div class="text-xl font-bold text-wm-purple">
             €12
           </div>
@@ -51,48 +79,70 @@
           <div class="text-xs text-gray-500">12/04/2025</div>
         </div>
 
-        <button type="button" class="absolute right-4 top-2 z-10">
-          <span aria-hidden="true" class="icon">
+        <button type="button" class="absolute right-4 top-4 z-10">
+          <span aria-hidden="true" class="icon w-8 h-8 inline-block not-sr-only" title="Print">
             {% include "./icon-print.html" %}
           </span>
-          <span class="text-gray-500">print receipt</span>
+          <span class="text-gray-500 sr-only">print receipt</span>
         </button>
       </li>
+      <li class="relative mb-4">
+        <div class="py-2 px-4 rounded-xl border-[1px] border-gray-400">
+          <div class="text-xl font-bold text-wm-purple">
+            €12
+          </div>
 
-      <li>
-        <div class="">
-          <div><strong>€12</strong> recurring (monthly)</div>
-          <div>12/04/2025</div>
+          <div class="text-sm">
+            <span class="font-bold text-wm-purple">recurring</span>
+            <span class="text-gray-500">(monthly)</span>
+          </div>
+
+          <div class="text-xs text-gray-500">12/04/2025</div>
         </div>
 
-        <button type="button">
-          <span aria-hidden="true" class="icon"></span>
-          <span class="">print receipt</span>
+        <button type="button" class="absolute right-4 top-4 z-10">
+          <span aria-hidden="true" class="icon w-8 h-8 inline-block not-sr-only" title="Print">
+            {% include "./icon-print.html" %}
+          </span>
+          <span class="text-gray-500 sr-only">print receipt</span>
         </button>
       </li>
+      <li class="relative mb-4">
+        <div class="py-2 px-4 rounded-xl border-[1px] border-gray-400">
+          <div class="text-xl font-bold text-wm-purple">
+            €12
+          </div>
 
-      <li>
-        <div class="">
-          <div><strong>€12</strong> recurring (monthly)</div>
-          <div>12/04/2025</div>
+          <div class="text-sm">
+            <span class="font-bold text-wm-purple">recurring</span>
+            <span class="text-gray-500">(monthly)</span>
+          </div>
+
+          <div class="text-xs text-gray-500">12/04/2025</div>
         </div>
 
-        <button type="button">
-          <span aria-hidden="true" class="icon"></span>
-          <span class="">print receipt</span>
+        <button type="button" class="absolute right-4 top-4 z-10">
+          <span aria-hidden="true" class="icon w-8 h-8 inline-block not-sr-only" title="Print">
+            {% include "./icon-print.html" %}
+          </span>
+          <span class="text-gray-500 sr-only">print receipt</span>
         </button>
       </li>
     </ol>
   </section>
 
-  <div class="">
-    <a href="#">Make a donation now</a>
+  <div class="bg-wm-purple rounded my-4 p-8">
+    <a
+      class="uppercase p-4 text-center font-bold text-lg font-gilroy bg-wm-pink min-h-10 w-full !text-white block rounded transition-all hover:brightness-110"
+      href="https://action.wemove.eu/donate/chip-in-wemove">
+      Make a donation now!
+    </a>
   </div>
 
-  <section class="">
-    <h3>How we are funded</h3>
+  <section class="bg-gray-100 p-4 rounded-lg">
+    <h2 class="text-wm-purple border-b-2 border-b-gray-400">How we are funded</h2>
     <p>If you want to know more about how we are funded, how we use your donation, or other commonly asked question, you can visit this page.</p>
-    <p>You can also contact us anytime if at <a href="mailto:donation@wemove.eu">donation@wemove.eu</a></p>
+    <p>You can also contact us anytime if at: <a class="hover:underline transition-all" href="mailto:donation@wemove.eu">donation@wemove.eu</a></p>
   </section>
 
 {% endblock %}
