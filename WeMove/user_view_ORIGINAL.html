@@ -4,7 +4,7 @@
 
 <div class="ak-grid-row">
     <div class="ak-grid-col ak-grid-col-12-of-12">
-        <h2 class="ak-display-inline-block">{{ actionkit_user.name }}</h2> 
+        <h2 class="ak-display-inline-block">{{ actionkit_user.name }}</h2>
         &nbsp; <a href="/logout/">Log Out</a>
     </div>
 </div>
@@ -21,7 +21,7 @@
                 {% endfor %}
             </ul>
         {% endif %}
-        
+
         <h3>Email And Address</h3>
         <div><strong>{{ actionkit_user.email }}</strong></div>
 
@@ -32,7 +32,7 @@
         <h3> Subscription History </h3>
 
         <ul class="ak-margin-none">
-            {% for subscription in actionkit_user.subscription_history %}
+            {% for subscription in actionkit_user.subscription_history.0 %}
             <li>
                 {{ subscription.list.name }}, {{ subscription.change.name }}, at {{ subscription.created_at|date:"m/d/Y" }}
             </li>
@@ -48,14 +48,14 @@
         <ul class="ak-margin-none">
             {% for profile in recurring_donations %}
             <li>
-                <strong>{{ profile.amt }}</strong> a {{ profile.inverse_period_display|lower }}, started on {{ profile.created_at|date:"m/d/Y" }}. 
-                You've given a total of {{ profile.payment_total_amt }}. 
+                <strong>{{ profile.amt }}</strong> a {{ profile.inverse_period_display|lower }}, started on {{ profile.created_at|date:"m/d/Y" }}.
+                You've given a total of {{ profile.payment_total_amt }}.
                 {% if profile.is_active and not profile.is_import_stub %}
                     {% if profile.order.payment_method != "paypal" %}
                         <a href="/cms/pledge/update/update/">Manage your recurring profile.</a>
                     {% else %}
                         <a href="/cms/pledge/cancel/monthly/">Cancel at any time.</a>
-                    {% endif %} 
+                    {% endif %}
                 {% else %}
                     <b>{{ profile.get_status_display }} on {{ profile.updated_at|date:"m/d/Y" }} </b>
                 {% endif %}
