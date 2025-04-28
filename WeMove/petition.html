@@ -66,7 +66,7 @@
         {% if partnership_icons %}
         <div class="partnerships text-wm-purple mb-8">
           <h3>{% filter ak_text:"in_partnership_with" %}In partnership with:{% endfilter %}</h3>
-          <div class="grid auto-cols-max grid-flow-col items-center gap-4">
+          <div class="logos">
             {{ partnership_icons }}
           </div>
         </div>
@@ -76,7 +76,7 @@
         {% if supporters_icons %}
         <div class="supporters text-wm-purple mb-8">
           <h3>{% filter ak_text:"supported_by" %}Supported by:{% endfilter %}</h3>
-          <div class="grid auto-cols-max grid-flow-col items-center gap-4">
+          <div class="logos">
             {{ supporters_icons }}
           </div>
         </div>
