@@ -35,160 +35,158 @@
     });
   </script>
 
-  <div class="md:w-3/5 md:mx-auto">
-    <section data-wm-tab-section="account" class="md:flex justify-between gap-4">
-      <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8 md:w-1/2">
-        <div class="flex justify-between items-center mb-4">
-          <div class="flex items-center gap-1">
-            <span aria-hidden="true" class="w-5 h-5 mr-1 inline-block not-sr-only" title="Print">
-              {% include "./icon-user.html" %}
-            </span>
-            <span class="font-bold text-wm-purple font-gilroy text-lg">Personal data</span>
-          </div>
-
-          <a href="#" class="bg-gray-700 rounded block py-0 px-3 !text-white hover:bg-wm-purple transition-all">
-            Edit
-          </a>
+  <section data-wm-tab-section="account" class="md:grid md:grid-cols-2 gap-4 lg:w-3/5 lg:mx-auto">
+    <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8">
+      <div class="flex justify-between items-center mb-4">
+        <div class="flex items-center gap-1">
+          <span aria-hidden="true" class="w-5 h-5 mr-1 inline-block not-sr-only" title="Print">
+            {% include "./icon-user.html" %}
+          </span>
+          <span class="font-bold text-wm-purple font-gilroy text-lg">Personal data</span>
         </div>
 
-        <ul>
-          <li class="font-bold text-wm-purple mb-2">someuserwith@email.com</li>
-          <li class="mb-2">France 41049</li>
-          <li><a href="#">log out</a></li>
-        </ul>
-      </div>
-
-      <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8 md:w-1/2">
-        <div class="flex justify-between items-center mb-4">
-          <div class="flex items-center gap-1">
-            <span aria-hidden="true" class="w-5 h-5 mr-1 inline-block not-sr-only" title="Print">
-              {% include "./icon-subscription.html" %}
-            </span>
-            <span class="font-bold text-wm-purple font-gilroy text-lg">Subscription history</span>
-          </div>
-        </div>
-
-        <ul>
-          <li class="text-wm-purple mb-2">Subscribed on 04/10/2024</li>
-          <li><a href="#">unsubscribe</a></li>
-        </ul>
-      </div>
-    </section>
-
-    <section hidden data-wm-tab-section="donations" class="md:flex justify-between md:justify-center gap-4 flex-wrap">
-      <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8 w-full">
-        <aside class="flex justify-between mb-4">
-          <div class="flex items-center gap-1">
-            <span aria-hidden="true" class="bg-green-500 rounded-full border-black inline-block h-3 w-3"></span>
-            <span>active</span>
-          </div>
-
-          <button type="button" class="bg-gray-700 rounded block py-0 px-3 text-white hover:bg-wm-purple transition-all">
-            cancel
-          </button>
-        </aside>
-
-        <main>
-          <div class="flex items-center  justify-center text-4xl my-8">€12 / monthly</div>
-
-          <div class="text-center">
-            <div class="mb-2">
-              <h5 class="mb-0">Payment method</h5>
-              <span>Credit card (mastercard)</span>
-            </div>
-
-            <div>
-              <h5 class="mb-0">Next payment</h5>
-              <span>12/05/2025</span>
-            </div>
-          </div>
-        </main>
-      </div>
-
-      <div class="w-full">
-        <h2 class="text-wm-purple border-b-2">Donations</h2>
-
-        <ol>
-          <li class="relative mb-4">
-            <div class="py-2 px-4 rounded-xl border-[1px] border-gray-400">
-              <div class="text-xl font-bold text-wm-purple">
-                €12
-              </div>
-
-              <div class="text-sm">
-                <span class="font-bold text-wm-purple">recurring</span>
-                <span class="text-gray-500">(monthly)</span>
-              </div>
-
-              <div class="text-xs text-gray-500">12/04/2025</div>
-            </div>
-
-            <button type="button" class="absolute right-4 top-4 z-10">
-              <span aria-hidden="true" class="w-8 h-8 inline-block not-sr-only" title="Print">
-                {% include "./icon-print.html" %}
-              </span>
-              <span class="text-gray-500 sr-only">print receipt</span>
-            </button>
-          </li>
-          <li class="relative mb-4">
-            <div class="py-2 px-4 rounded-xl border-[1px] border-gray-400">
-              <div class="text-xl font-bold text-wm-purple">
-                €12
-              </div>
-
-              <div class="text-sm">
-                <span class="font-bold text-wm-purple">recurring</span>
-                <span class="text-gray-500">(monthly)</span>
-              </div>
-
-              <div class="text-xs text-gray-500">12/04/2025</div>
-            </div>
-
-            <button type="button" class="absolute right-4 top-4 z-10">
-              <span aria-hidden="true" class="w-8 h-8 inline-block not-sr-only" title="Print">
-                {% include "./icon-print.html" %}
-              </span>
-              <span class="text-gray-500 sr-only">print receipt</span>
-            </button>
-          </li>
-          <li class="relative mb-4">
-            <div class="py-2 px-4 rounded-xl border-[1px] border-gray-400">
-              <div class="text-xl font-bold text-wm-purple">
-                €12
-              </div>
-
-              <div class="text-sm">
-                <span class="font-bold text-wm-purple">recurring</span>
-                <span class="text-gray-500">(monthly)</span>
-              </div>
-
-              <div class="text-xs text-gray-500">12/04/2025</div>
-            </div>
-
-            <button type="button" class="absolute right-4 top-4 z-10">
-              <span aria-hidden="true" class="w-8 h-8 inline-block not-sr-only" title="Print">
-                {% include "./icon-print.html" %}
-              </span>
-              <span class="text-gray-500 sr-only">print receipt</span>
-            </button>
-          </li>
-        </ol>
-      </div>
-
-      <div class="bg-wm-purple rounded my-12 p-8 w-full">
-        <a
-          class="max-w-96 m-auto uppercase p-4 text-center font-bold text-lg font-gilroy bg-wm-pink min-h-10 w-full !text-white block rounded transition-all hover:brightness-110"
-          href="https://action.wemove.eu/donate/chip-in-wemove">
-          Make a donation now!
+        <a href="#" class="bg-gray-700 rounded block py-0 px-3 !text-white hover:bg-wm-purple transition-all">
+          edit
         </a>
       </div>
 
-      <div class="bg-gray-100 p-4 rounded-lg w-full">
-        <h2 class="text-wm-purple border-b-2 border-b-gray-400">How we are funded</h2>
-        <p>If you want to know more about how we are funded, how we use your donation, or other commonly asked question, you can visit this page.</p>
-        <p>You can also contact us anytime if at: <a class="hover:underline transition-all" href="mailto:donation@wemove.eu">donation@wemove.eu</a></p>
+      <ul>
+        <li class="font-bold text-wm-purple mb-2">someuserwith@email.com</li>
+        <li class="mb-2">France 41049</li>
+        <li><a href="#">log out</a></li>
+      </ul>
+    </div>
+
+    <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8">
+      <div class="flex justify-between items-center mb-4">
+        <div class="flex items-center gap-1">
+          <span aria-hidden="true" class="w-5 h-5 mr-1 inline-block not-sr-only" title="Print">
+            {% include "./icon-subscription.html" %}
+          </span>
+          <span class="font-bold text-wm-purple font-gilroy text-lg">Subscription history</span>
+        </div>
       </div>
-    </section>
-  </div>
+
+      <ul>
+        <li class="text-wm-purple mb-2">Subscribed on 04/10/2024</li>
+        <li><a href="#">unsubscribe</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section hidden data-wm-tab-section="donations" class="md:flex justify-between md:justify-center gap-4 flex-wrap lg:w-3/5 lg:mx-auto">
+    <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8 w-full">
+      <aside class="flex justify-between mb-4">
+        <div class="flex items-center gap-1">
+          <span aria-hidden="true" class="bg-green-500 rounded-full border-black inline-block h-3 w-3"></span>
+          <span>active</span>
+        </div>
+
+        <button type="button" class="bg-gray-700 rounded block py-0 px-3 text-white hover:bg-wm-purple transition-all">
+          cancel
+        </button>
+      </aside>
+
+      <main>
+        <div class="flex items-center  justify-center text-4xl my-8">€12 / monthly</div>
+
+        <div class="text-center">
+          <div class="mb-2">
+            <h5 class="mb-0">Payment method</h5>
+            <span>Credit card (mastercard)</span>
+          </div>
+
+          <div>
+            <h5 class="mb-0">Next payment</h5>
+            <span>12/05/2025</span>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="w-full">
+      <h2 class="text-wm-purple border-b-2">Donations</h2>
+
+      <ol>
+        <li class="relative mb-4">
+          <div class="py-2 px-4 rounded-xl border-[1px] border-gray-400">
+            <div class="text-xl font-bold text-wm-purple">
+              €12
+            </div>
+
+            <div class="text-sm">
+              <span class="font-bold text-wm-purple">recurring</span>
+              <span class="text-gray-500">(monthly)</span>
+            </div>
+
+            <div class="text-xs text-gray-500">12/04/2025</div>
+          </div>
+
+          <button type="button" class="absolute right-4 top-4 z-10">
+            <span aria-hidden="true" class="w-8 h-8 inline-block not-sr-only" title="Print">
+              {% include "./icon-print.html" %}
+            </span>
+            <span class="text-gray-500 sr-only">print receipt</span>
+          </button>
+        </li>
+        <li class="relative mb-4">
+          <div class="py-2 px-4 rounded-xl border-[1px] border-gray-400">
+            <div class="text-xl font-bold text-wm-purple">
+              €12
+            </div>
+
+            <div class="text-sm">
+              <span class="font-bold text-wm-purple">recurring</span>
+              <span class="text-gray-500">(monthly)</span>
+            </div>
+
+            <div class="text-xs text-gray-500">12/04/2025</div>
+          </div>
+
+          <button type="button" class="absolute right-4 top-4 z-10">
+            <span aria-hidden="true" class="w-8 h-8 inline-block not-sr-only" title="Print">
+              {% include "./icon-print.html" %}
+            </span>
+            <span class="text-gray-500 sr-only">print receipt</span>
+          </button>
+        </li>
+        <li class="relative mb-4">
+          <div class="py-2 px-4 rounded-xl border-[1px] border-gray-400">
+            <div class="text-xl font-bold text-wm-purple">
+              €12
+            </div>
+
+            <div class="text-sm">
+              <span class="font-bold text-wm-purple">recurring</span>
+              <span class="text-gray-500">(monthly)</span>
+            </div>
+
+            <div class="text-xs text-gray-500">12/04/2025</div>
+          </div>
+
+          <button type="button" class="absolute right-4 top-4 z-10">
+            <span aria-hidden="true" class="w-8 h-8 inline-block not-sr-only" title="Print">
+              {% include "./icon-print.html" %}
+            </span>
+            <span class="text-gray-500 sr-only">print receipt</span>
+          </button>
+        </li>
+      </ol>
+    </div>
+
+    <div class="bg-wm-purple rounded my-12 p-8 w-full">
+      <a
+        class="max-w-96 m-auto uppercase p-4 text-center font-bold text-lg font-gilroy bg-wm-pink min-h-10 w-full !text-white block rounded transition-all hover:brightness-110"
+        href="https://action.wemove.eu/donate/chip-in-wemove">
+        Make a donation now!
+      </a>
+    </div>
+
+    <div class="bg-gray-100 p-4 rounded-lg w-full">
+      <h2 class="text-wm-purple border-b-2 border-b-gray-400">How we are funded</h2>
+      <p>If you want to know more about how we are funded, how we use your donation, or other commonly asked question, you can visit this page.</p>
+      <p>You can also contact us anytime if at: <a class="hover:underline transition-all" href="mailto:donation@wemove.eu">donation@wemove.eu</a></p>
+    </div>
+  </section>
 
 {% endblock %}
