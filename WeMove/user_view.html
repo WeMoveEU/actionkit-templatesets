@@ -35,7 +35,7 @@
     });
   </script>
 
-  <section data-wm-tab-section="account" class="md:grid md:grid-cols-2 gap-4 lg:w-3/5 lg:mx-auto">
+  <section hidden data-wm-tab-section="account" class="md:grid md:grid-cols-2 gap-4 xl:w-3/5 xl:mx-auto">
     <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8">
       <div class="flex justify-between items-center mb-4">
         <div class="flex items-center gap-1">
@@ -45,15 +45,15 @@
           <span class="font-bold text-wm-purple font-gilroy text-lg">Personal data</span>
         </div>
 
-        <a href="#" class="bg-gray-700 rounded block py-0 px-3 !text-white hover:bg-wm-purple transition-all">
+        <a href="#" data-temp="update/" class="bg-gray-700 rounded block py-0 px-3 !text-white hover:bg-wm-purple transition-all">
           edit
         </a>
       </div>
 
       <ul>
-        <li class="font-bold text-wm-purple mb-2">someuserwith@email.com</li>
-        <li class="mb-2">France 41049</li>
-        <li><a href="#">log out</a></li>
+        <li class="font-bold text-wm-purple mb-2">{{ actionkit_user.email }}</li>
+        <li class="mb-2">{{ actionkit_user.postal }} {{ actionkit_user.country }}</li>
+        <li><a href="/logout">log out</a></li>
       </ul>
     </div>
 
@@ -67,41 +67,67 @@
         </div>
       </div>
 
-      <ul>
-        <li class="text-wm-purple mb-2">Subscribed on 04/10/2024</li>
-        <li><a href="#">unsubscribe</a></li>
+      <ul class="text-wm-purple">
+        <li class="mb-2">
+          <strong>Status:</strong>
+          {% if actionkit_user.is_subscribed %}
+            subscribed
+          {% else %}
+            unsubscribed
+          {% endif %}
+        </li>
+        {% if actionkit_user.is_subscribed %}
+          <li>
+            <a href="/cms/unsubscribe/unsubscribe/?akid={{ actionkit_user.token }}">unsubscribe</a>
+          </li>
+        {% endif %}
       </ul>
     </div>
   </section>
 
-  <section hidden data-wm-tab-section="donations" class="md:flex justify-between md:justify-center gap-4 flex-wrap lg:w-3/5 lg:mx-auto">
+  <section !hidden data-wm-tab-section="donations" class="md:flex justify-between md:justify-center gap-4 flex-wrap lg:w-3/5 lg:mx-auto">
     <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8 w-full">
-      <aside class="flex justify-between mb-4">
-        <div class="flex items-center gap-1">
-          <span aria-hidden="true" class="bg-green-500 rounded-full border-black inline-block h-3 w-3"></span>
-          <span>active</span>
+      {% if recurring_donations %}
+        <div id="recurring">
+          <aside class="flex justify-between mb-4">
+            <div class="flex items-center gap-1">
+              <span aria-hidden="true" class="bg-green-500 rounded-full border-black inline-block h-3 w-3"></span>
+              <span>active</span>
+            </div>
+
+            <button type="button" class="bg-gray-700 rounded block py-0 px-3 text-white hover:bg-wm-purple transition-all">
+              cancel
+            </button>
+          </aside>
+
+          <main>
+            <div class="flex items-center justify-center text-4xl my-8">€12 / monthly</div>
+
+            <div class="text-center">
+              <div class="mb-2">
+                <h5 class="mb-0">Payment method</h5>
+                <span>Credit card (mastercard)</span>
+              </div>
+
+              <div>
+                <h5 class="mb-0">Next payment</h5>
+                <span>12/05/2025</span>
+              </div>
+            </div>
+          </main>
         </div>
-
-        <button type="button" class="bg-gray-700 rounded block py-0 px-3 text-white hover:bg-wm-purple transition-all">
-          cancel
-        </button>
-      </aside>
-
-      <main>
-        <div class="flex items-center  justify-center text-4xl my-8">€12 / monthly</div>
-
-        <div class="text-center">
-          <div class="mb-2">
-            <h5 class="mb-0">Payment method</h5>
-            <span>Credit card (mastercard)</span>
-          </div>
-
-          <div>
-            <h5 class="mb-0">Next payment</h5>
-            <span>12/05/2025</span>
-          </div>
+      {% else %}
+        <div id="never-recurring">
+          <main class="text-center text-xl">
+            <p>You don't have recurring donations</p>
+            <a
+              class="max-w-96 m-auto uppercase p-4 text-center text-base font-bold font-gilroy bg-wm-pink min-h-10 w-full !text-white block rounded transition-all hover:brightness-110"
+              href="https://action.wemove.eu/donate/chip-in-wemove?selected_frequency=recurring">
+              Begin a recurring donation
+            </a>
+          </main>
         </div>
-      </main>
+      {% endif %}
     </div>
 
     <div class="w-full">
