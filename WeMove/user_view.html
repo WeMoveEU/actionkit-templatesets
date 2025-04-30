@@ -45,7 +45,10 @@
           <span class="font-bold text-wm-purple font-gilroy text-lg">Personal data</span>
         </div>
 
-        <a href="#" data-temp="update/" class="bg-gray-700 rounded block py-0 px-3 !text-white hover:bg-wm-purple transition-all">
+        <button
+          type="button"
+          data-temp="update/"
+          class="bg-wm-pink rounded block py-0 px-3 !text-white hover:brightness-110 transition-all">
           edit
         </a>
       </div>
@@ -85,8 +88,8 @@
     </div>
   </section>
 
-  <section !hidden data-wm-tab-section="donations" class="md:flex justify-between md:justify-center gap-4 flex-wrap lg:w-3/5 lg:mx-auto">
-    <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8 w-full">
+  <section !hidden data-wm-tab-section="donations" class="flex justify-center gap-6 flex-wrap lg:w-3/5 lg:mx-auto">
+    <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple w-full">
       {% if recurring_donations %}
         <div id="recurring">
           <aside class="flex justify-between mb-4">
@@ -121,7 +124,7 @@
           <main class="text-center text-xl">
             <p>You don't have recurring donations</p>
             <a
-              class="w-auto m-auto uppercase py-2 px-6 text-center text-base font-bold font-gilroy bg-wm-pink min-h-8 inline-block !text-white rounded transition-all hover:brightness-110"
+              class="hover:!no-underline w-auto m-auto uppercase py-2 px-6 text-center text-base font-bold font-gilroy bg-wm-pink min-h-8 inline-block !text-white rounded transition-all hover:brightness-110"
               href="https://action.wemove.eu/donate/chip-in-wemove?selected_frequency=recurring">
               Begin a recurring donation
             </a>
@@ -131,19 +134,59 @@
     </div>
 
     <div class="w-full">
-      <h2 class="text-wm-purple border-b-2">Donations</h2>
+      <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink">Donations</h2>
 
       <ol>
         {% if donations %}
           {% for donation in donations %}
-              <li class="relative mb-4">
-                <div class="py-2 px-4 rounded-xl border-[1px] border-gray-400">
-                  <div class="text-xl font-bold text-wm-purple">
+              <li class="relative mt-2">
+                <div class="py-2 px-4 rounded-xl border-[1px] border-wm-pink">
+                  <div class="text-xl font-bold text-wm-purple flex items-center gap-4">
                     {{ donation.amt }}
+
+                    <span class="text-sm font-bold text-wm-purple">
+                      {% if donation.recurring %}recurring{% else %}one off{% endif %}
+                    </span>
                   </div>
 
-                  <div class="text-sm">
-                    <span class="font-bold text-wm-purple">{% if donation.recurring %}recurring{% else %}one off{% endif %}</span>
+                  <div class="text-xs text-gray-500">{{ donation.created_at|date:"m/d/Y" }}</div>
+                </div>
+
+                <button type="button" class="absolute right-4 top-4 z-10">
+                  <span aria-hidden="true" class="w-6 h-6 inline-block not-sr-only" title="Print">
+                    {% include "./icon-print.html" %}
+                  </span>
+                  <span class="text-gray-500 sr-only">print receipt</span>
+                </button>
+              </li>
+              <li class="relative mt-2">
+                <div class="py-2 px-4 rounded-xl border-[1px] border-wm-pink">
+                  <div class="text-xl font-bold text-wm-purple flex items-center gap-4">
+                    {{ donation.amt }}
+
+                    <span class="text-sm font-bold text-wm-purple">
+                      {% if donation.recurring %}recurring{% else %}one off{% endif %}
+                    </span>
+                  </div>
+
+                  <div class="text-xs text-gray-500">{{ donation.created_at|date:"m/d/Y" }}</div>
+                </div>
+
+                <button type="button" class="absolute right-4 top-4 z-10">
+                  <span aria-hidden="true" class="w-6 h-6 inline-block not-sr-only" title="Print">
+                    {% include "./icon-print.html" %}
+                  </span>
+                  <span class="text-gray-500 sr-only">print receipt</span>
+                </button>
+              </li>
+              <li class="relative mt-2">
+                <div class="py-2 px-4 rounded-xl border-[1px] border-wm-pink">
+                  <div class="text-xl font-bold text-wm-purple flex items-center gap-4">
+                    {{ donation.amt }}
+
+                    <span class="text-sm font-bold text-wm-purple">
+                      {% if not donation.recurring %}recurring{% else %}one off{% endif %}
+                    </span>
                   </div>
 
                   <div class="text-xs text-gray-500">{{ donation.created_at|date:"m/d/Y" }}</div>
@@ -165,15 +208,15 @@
       </ol>
     </div>
 
-    <div class="bg-wm-purple rounded mt-8 mb-12 p-8 w-full">
+    <div class="bg-wm-purple rounded my-4 p-8 w-full">
       <a
-        class="max-w-96 m-auto uppercase p-4 text-center font-bold text-lg font-gilroy bg-wm-pink min-h-10 w-full !text-white block rounded transition-all hover:brightness-110"
+        class="hover:!no-underline max-w-96 m-auto uppercase p-4 text-center font-bold text-lg font-gilroy bg-wm-pink min-h-10 w-full !text-white block rounded transition-all hover:brightness-110"
         href="https://action.wemove.eu/donate/chip-in-wemove">
         Make a donation now!
       </a>
     </div>
 
-    <div class="bg-gray-100 p-4 rounded-lg w-full mb-8">
+    <div class="bg-gray-200 p-4 rounded-lg w-full mb-8">
       <h2 class="text-wm-purple border-b-2 border-b-gray-400">How we are funded</h2>
       <p>If you want to know more about how we are funded, how we use your donation, or other commonly asked question, you can visit this page.</p>
       <p>You can also contact us anytime if at: <a class="hover:underline transition-all" href="mailto:donation@wemove.eu">donation@wemove.eu</a></p>
