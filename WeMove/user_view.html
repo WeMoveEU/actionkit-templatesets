@@ -89,36 +89,97 @@
   </section>
 
   <section !hidden data-wm-tab-section="donations" class="flex justify-center gap-6 flex-wrap lg:w-3/5 lg:mx-auto">
-    <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple w-full">
-      {% if recurring_donations %}
-        <div id="recurring">
-          <aside class="flex justify-between mb-4">
-            <div class="flex items-center gap-1">
-              <span aria-hidden="true" class="bg-green-500 rounded-full border-black inline-block h-3 w-3"></span>
-              <span>active</span>
-            </div>
+    <div class="p-4 rounded-xl border-[1px] border-wm-pink text-wm-purple w-full">
+      {% if recurring_donations and recurring_donations|length > 1 %}
+          <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink">Recurring donations</h2>
 
-            <button type="button" class="bg-gray-700 rounded block py-0 px-3 text-white hover:bg-wm-purple transition-all">
-              cancel
+          <ol>
+              {% for donation in recurring_donations %}
+                  <li class="relative mt-2">
+                    <div class="py-2 px-4 rounded-xl border-[1px] border-wm-pink">
+                      <div class="text-xl font-bold text-wm-purple flex items-center gap-4">
+                        {{ donation.amt }}
+
+                        <span class="text-sm font-bold text-wm-purple">
+                          {% if donation.recurring %}recurring{% else %}one off{% endif %}
+                        </span>
+                      </div>
+
+                      <div class="text-xs text-gray-500">{{ donation.created_at|date:"m/d/Y" }}</div>
+                    </div>
+
+                    <button type="button" class="absolute right-4 top-4 z-10">
+                      <span aria-hidden="true" class="w-6 h-6 inline-block not-sr-only" title="Print">
+                        {% include "./icon-print.html" %}
+                      </span>
+                      <span class="text-gray-500 sr-only">print receipt</span>
+                    </button>
+                  </li>
+              {% endfor %}
+          </ol>
+
+      {% elif recurring_donations %}
+        <aside class="flex justify-between">
+          <div class="flex items-center gap-1">
+            <span aria-hidden="true" class="{% if profile.is_active %}bg-green-500{% else %}bg-gray-500{% endif %} rounded-full border-black inline-block h-3 w-3"></span>
+            <span>{% if profile.is_active %}active{% else %}inactive{% endif %}</span>
+          </div>
+
+          {% if profile.is_active %}
+            <button type="button" class="bg-gray-700 rounded block py-1 px-3 text-white hover:bg-wm-purple transition-all">
+              cancel subscription
             </button>
-          </aside>
+          {% else %}
+            <!-- TODO: 2.0 -->
+            <button hidden type="button" class="bg-gray-700 rounded block py-1 px-3 text-white hover:bg-wm-purple transition-all">
+              update subscription
+            </button>
+          {% endif %}
+        </aside>
 
-          <main>
-            <div class="flex items-center justify-center text-4xl my-8">€12 / monthly</div>
+        <main>
+          {% for profile in recurring_donations %}
+            <div class="flex items-center justify-center text-4xl my-4 lowercase">
+              {{ profile.amt }}
+              <span class="mx-2"> / </span>
+              {{ profile.get_period_display }}
+            </div>
 
             <div class="text-center">
               <div class="mb-2">
                 <h5 class="mb-0">Payment method</h5>
-                <span>Credit card (mastercard)</span>
+                <span>
+                  {% if profile.account|lower == "wm-card" %}
+                    Credit card
+                  {% elif profile.account|lower == "wm-stripe" %}
+                    Stripe
+                  {% elif profile.account|lower == "wm-sepa" %}
+                    Sepa
+                  {% elif profile.account|lower == "wm-paypal" %}
+                    Paypal
+                  {% endif %}
+                  </span>
               </div>
 
               <div>
-                <h5 class="mb-0">Next payment</h5>
-                <span>12/05/2025</span>
+                <h5 class="mb-0">First payment</h5>
+                <span>{{ profile.first_payment_date|date }}</span>
               </div>
+
+              {% if profile.is_active %}
+                <div>
+                  <h5 class="mb-0">Next payment</h5>
+                  <span>{{ profile.next_payment_date|date }}</span>
+                </div>
+              {% else %}
+                <div>
+                  <h5 class="mb-0">Last payment</h5>
+                  <span>{{ profile.last_payment_date|date }}</span>
+                </div>
+              {% endif %}
             </div>
-          </main>
-        </div>
+          {% endfor %}
+        </main>
       {% else %}
         <div id="never-recurring">
           <main class="text-center text-xl">
@@ -134,7 +195,7 @@
     </div>
 
     <div class="w-full">
-      <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink">Donations</h2>
+      <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink">Transactions</h2>
 
       <ol>
         {% if donations %}
@@ -146,46 +207,6 @@
 
                     <span class="text-sm font-bold text-wm-purple">
                       {% if donation.recurring %}recurring{% else %}one off{% endif %}
-                    </span>
-                  </div>
-
-                  <div class="text-xs text-gray-500">{{ donation.created_at|date:"m/d/Y" }}</div>
-                </div>
-
-                <button type="button" class="absolute right-4 top-4 z-10">
-                  <span aria-hidden="true" class="w-6 h-6 inline-block not-sr-only" title="Print">
-                    {% include "./icon-print.html" %}
-                  </span>
-                  <span class="text-gray-500 sr-only">print receipt</span>
-                </button>
-              </li>
-              <li class="relative mt-2">
-                <div class="py-2 px-4 rounded-xl border-[1px] border-wm-pink">
-                  <div class="text-xl font-bold text-wm-purple flex items-center gap-4">
-                    {{ donation.amt }}
-
-                    <span class="text-sm font-bold text-wm-purple">
-                      {% if donation.recurring %}recurring{% else %}one off{% endif %}
-                    </span>
-                  </div>
-
-                  <div class="text-xs text-gray-500">{{ donation.created_at|date:"m/d/Y" }}</div>
-                </div>
-
-                <button type="button" class="absolute right-4 top-4 z-10">
-                  <span aria-hidden="true" class="w-6 h-6 inline-block not-sr-only" title="Print">
-                    {% include "./icon-print.html" %}
-                  </span>
-                  <span class="text-gray-500 sr-only">print receipt</span>
-                </button>
-              </li>
-              <li class="relative mt-2">
-                <div class="py-2 px-4 rounded-xl border-[1px] border-wm-pink">
-                  <div class="text-xl font-bold text-wm-purple flex items-center gap-4">
-                    {{ donation.amt }}
-
-                    <span class="text-sm font-bold text-wm-purple">
-                      {% if not donation.recurring %}recurring{% else %}one off{% endif %}
                     </span>
                   </div>
 
