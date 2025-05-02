@@ -47,24 +47,7 @@
 
       const printReceipt = async (event) => {
         const printUrl = encodeURI(event.currentTarget.dataset.wmPrintTransaction);
-
-        try {
-          const response = await fetch(printUrl);
-
-          if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-          }
-
-          const receiptHTML = response.text();
-
-        } catch (error) {
-          console.error(error.message);
-        }
-
-        const receiptPopUp = window.open(printUrl, 'Print your receipt', 'height=400,width=600');
-        receiptPopUp.document.write(receiptHTML);
-        receiptPopUp.print();
-        receiptPopUp.close();
+        const receiptPopUp = window.open(printUrl, '', 'width=800,height=800');
       };
 
       printButtons.forEach((buttona) => {
@@ -297,7 +280,7 @@
               <button
                 type="button"
                 class="absolute right-4 top-4 z-10"
-                data-wm-print-transaction="https://wemove.eu/{{ link_iso }}/print-receipt?user_firstName=à{{ actionkit_user.first_name }}&user_lastName={{ actionkit_user.last_name }}&user_email={{ actionkit_user.email }}&payment_method={{ currentPaymentMethod }}&payment_date={{ donation.created_at|date:"m/d/Y" }}&payment_amount={{ donation.amt }}&payment_frequency={{ currentPaymentFrequency }}">
+                data-wm-print-transaction="https://wemove.eu/print-receipt?language={{ link_iso }}&user_firstName={{ actionkit_user.first_name }}&user_lastName={{ actionkit_user.last_name }}&user_email={{ actionkit_user.email }}&payment_method={{ currentPaymentMethod }}&payment_date={{ donation.created_at|date:"m/d/Y" }}&payment_amount={{ donation.amt }}&payment_frequency={{ currentPaymentFrequency }}">
                 <span aria-hidden="true" class="w-6 h-6 inline-block not-sr-only" title="Print">
                   {% include "./icon-print.html" %}
                 </span>
