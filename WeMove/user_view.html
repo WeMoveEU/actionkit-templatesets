@@ -6,8 +6,18 @@
 
   <menu data-wm-tab class="mb-8 border-b-2 relative font-gilroy text-lg">
     <div class="flex justify-start gap-2 -bottom-0.5 relative">
-      <button data-wm-tab-button="account" class="text-gray-600 border-b-2 [&.active]:border-wm-pink [&.active]:text-wm-purple p-2 active" type="button">Account</button>
-      <button data-wm-tab-button="donations" class="text-gray-600 border-b-2 [&.active]:border-wm-pink [&.active]:text-wm-purple p-2" type="button">Donations</button>
+      <button
+        type="button"
+        data-wm-tab-button="account"
+        class="text-gray-600 border-b-2 [&.active]:border-wm-pink [&.active]:text-wm-purple p-2 active">
+          Profile
+      </button>
+      <button
+        type="button"
+        data-wm-tab-button="donations"
+        class="text-gray-600 border-b-2 [&.active]:border-wm-pink [&.active]:text-wm-purple p-2">
+          Donations
+      </button>
     </div>
   </menu>
 
@@ -81,43 +91,61 @@
         </li>
         {% if actionkit_user.is_subscribed %}
           <li>
-            <a href="/cms/unsubscribe/unsubscribe/?akid={{ actionkit_user.token }}">unsubscribe</a>
+            <a href="/cms/unsubscribe/unsubscribe_{{ link_iso }}/?akid={{ actionkit_user.token }}">unsubscribe</a>
           </li>
         {% endif %}
       </ul>
     </div>
   </section>
 
+  {% if recurring_donations and recurring_donations|length > 1 %}
+    {% for donation in recurring_donations %}
+      {% if donation.is_active %}
+        {% remember "true" as hasMultipleActiveRecurringDonations %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
   <section !hidden data-wm-tab-section="donations" class="flex justify-center gap-6 flex-wrap lg:w-3/5 lg:mx-auto">
-    <div class="p-4 rounded-xl border-[1px] border-wm-pink text-wm-purple w-full">
-      {% if recurring_donations and recurring_donations|length > 1 %}
-          <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink">Recurring donations</h2>
+    <div class="{% if not hasMultipleActiveRecurringDonations %}rounded-xl p-4 border-[1px] border-wm-pink{% endif %} text-wm-purple w-full">
+      {% if hasMultipleActiveRecurringDonations %}
+        <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink">Active recurring donations</h2>
 
-          <ol>
-              {% for donation in recurring_donations %}
-                  <li class="relative mt-2">
-                    <div class="py-2 px-4 rounded-xl border-[1px] border-wm-pink">
-                      <div class="text-xl font-bold text-wm-purple flex items-center gap-4">
-                        {{ donation.amt }}
+        {% for donation in recurring_donations reversed %}
+          {% if donation.is_active %}
+              <div class="relative mt-2">
+                <div class="py-2 px-4 rounded-xl border-[1px] border-wm-pink">
+                  <div class="text-xl font-bold text-wm-purple flex items-center gap-4">
+                    {{ donation.amt }}
 
-                        <span class="text-sm font-bold text-wm-purple">
-                          {% if donation.recurring %}recurring{% else %}one off{% endif %}
-                        </span>
-                      </div>
+                    <span class="text-sm font-bold text-wm-purple">
+                      {% if donation.recurring %}recurring{% else %}one off{% endif %}
 
-                      <div class="text-xs text-gray-500">{{ donation.created_at|date:"m/d/Y" }}</div>
-                    </div>
+                      <span class="text-wm-pink">/</span>
 
-                    <button type="button" class="absolute right-4 top-4 z-10">
-                      <span aria-hidden="true" class="w-6 h-6 inline-block not-sr-only" title="Print">
-                        {% include "./icon-print.html" %}
-                      </span>
-                      <span class="text-gray-500 sr-only">print receipt</span>
-                    </button>
-                  </li>
-              {% endfor %}
-          </ol>
+                      {% if donation.account|lower == "wm-card" %}
+                        Credit card
+                      {% elif donation.account|lower == "wm-stripe" %}
+                        Stripe
+                      {% elif donation.account|lower == "wm-sepa" %}
+                        Sepa
+                      {% elif donation.account|lower == "wm-paypal" %}
+                        paypal
+                      {% endif %}
+                    </span>
+                  </div>
 
+                  <div class="text-xs text-wm-pink">{{ donation.created_at|date:"m/d/Y" }}</div>
+                </div>
+
+                <button
+                  type="button"
+                  class="absolute right-4 top-4 z-10 bg-gray-700 text-sm rounded block py-1 px-2 text-white hover:bg-wm-purple transition-all">
+                  cancel subscription
+                </button>
+              </div>
+          {% endif %}
+        {% endfor %}
       {% elif recurring_donations %}
         <aside class="flex justify-between">
           <div class="flex items-center gap-1">
@@ -128,11 +156,6 @@
           {% if profile.is_active %}
             <button type="button" class="bg-gray-700 rounded block py-1 px-3 text-white hover:bg-wm-purple transition-all">
               cancel subscription
-            </button>
-          {% else %}
-            <!-- TODO: 2.0 -->
-            <button hidden type="button" class="bg-gray-700 rounded block py-1 px-3 text-white hover:bg-wm-purple transition-all">
-              update subscription
             </button>
           {% endif %}
         </aside>
@@ -149,16 +172,16 @@
               <div class="mb-2">
                 <h5 class="mb-0">Payment method</h5>
                 <span>
-                  {% if profile.account|lower == "wm-card" %}
-                    Credit card
-                  {% elif profile.account|lower == "wm-stripe" %}
-                    Stripe
-                  {% elif profile.account|lower == "wm-sepa" %}
-                    Sepa
-                  {% elif profile.account|lower == "wm-paypal" %}
-                    Paypal
+                  {% if donation.account|lower == "wm-card" or donation.account|lower == "legacy-card" %}
+                    credit card
+                  {% elif donation.account|lower == "wm-stripe" or donation.account|lower == "legacy-stripe" %}
+                    stripe
+                  {% elif donation.account|lower == "wm-sepa" or donation.account|lower == "legacy-sepa" or donation.account|lower == "legacy-banktransfer" %}
+                    sepa
+                  {% elif donation.account|lower == "wm-paypal" or donation.account|lower == "legacy-paypal" %}
+                    paypal
                   {% endif %}
-                  </span>
+                </span>
               </div>
 
               <div>
@@ -194,47 +217,57 @@
       {% endif %}
     </div>
 
-    <div class="w-full">
-      <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink">Transactions</h2>
-
-      <ol>
-        {% if donations %}
-          {% for donation in donations %}
-              <li class="relative mt-2">
-                <div class="py-2 px-4 rounded-xl border-[1px] border-wm-pink">
-                  <div class="text-xl font-bold text-wm-purple flex items-center gap-4">
-                    {{ donation.amt }}
-
-                    <span class="text-sm font-bold text-wm-purple">
-                      {% if donation.recurring %}recurring{% else %}one off{% endif %}
-                    </span>
-                  </div>
-
-                  <div class="text-xs text-gray-500">{{ donation.created_at|date:"m/d/Y" }}</div>
-                </div>
-
-                <button type="button" class="absolute right-4 top-4 z-10">
-                  <span aria-hidden="true" class="w-6 h-6 inline-block not-sr-only" title="Print">
-                    {% include "./icon-print.html" %}
-                  </span>
-                  <span class="text-gray-500 sr-only">print receipt</span>
-                </button>
-              </li>
-          {% endfor %}
-        {% else %}
-          <li class="text-gray-600 mb-4">
-            No donations found.
-          </li>
-        {% endif %}
-      </ol>
-    </div>
-
     <div class="bg-wm-purple rounded my-4 p-8 w-full">
       <a
         class="hover:!no-underline max-w-96 m-auto uppercase p-4 text-center font-bold text-lg font-gilroy bg-wm-pink min-h-10 w-full !text-white block rounded transition-all hover:brightness-110"
         href="https://action.wemove.eu/donate/chip-in-wemove">
         Make a donation now!
       </a>
+    </div>
+
+    <div class="w-full">
+      <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink">Past transactions</h2>
+
+      {% if donations %}
+        {% for donation in donations reversed %}
+            <div class="relative mt-2">
+              <div class="py-2 px-4 rounded-xl border-[1px] border-wm-pink">
+                <div class="text-xl font-bold text-wm-purple flex items-center gap-4">
+                  {{ donation.amt }}
+
+                  <span class="text-sm font-bold text-wm-purple">
+                    {% if donation.recurring %}recurring{% else %}one off{% endif %}
+
+                    <span class="text-wm-pink">/</span>
+
+                    {% if donation.account|lower == "wm-card" or donation.account|lower == "legacy-card" %}
+                      credit card
+                    {% elif donation.account|lower == "wm-stripe" or donation.account|lower == "legacy-stripe" %}
+                      stripe
+                    {% elif donation.account|lower == "wm-sepa" or donation.account|lower == "legacy-sepa" or donation.account|lower == "legacy-banktransfer" %}
+                      sepa
+                    {% elif donation.account|lower == "wm-paypal" or donation.account|lower == "legacy-paypal" %}
+                      paypal
+                    {% endif %}
+                  </span>
+                </div>
+
+                <div class="text-xs text-wm-pink">{{ donation.created_at|date:"m/d/Y" }}</div>
+              </div>
+
+              <button type="button" class="absolute right-4 top-4 z-10">
+                <span aria-hidden="true" class="w-6 h-6 inline-block not-sr-only" title="Print">
+                  {% include "./icon-print.html" %}
+                </span>
+                <span class="text-gray-500 sr-only">print receipt</span>
+              </button>
+            </div>
+        {% endfor %}
+      {% else %}
+        <div class="text-gray-600 mb-4">
+          No donations found.
+        </div>
+      {% endif %}
     </div>
 
     <div class="bg-gray-200 p-4 rounded-lg w-full mb-8">
