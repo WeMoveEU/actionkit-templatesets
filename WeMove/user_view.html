@@ -47,7 +47,24 @@
 
       const printReceipt = async (event) => {
         const printUrl = encodeURI(event.currentTarget.dataset.wmPrintTransaction);
-        const receiptPopUp = window.open(printUrl, '', 'width=800,height=800');
+
+        try {
+          const receiptHTML = await fetch(printUrl).then(async (response) => {
+            if (!response.ok) {
+              throw new Error(`Response status: ${response.status}`);
+            }
+
+            return await response.text();
+          });
+
+          const receiptPopUp = window.open('', '', 'height=800,width=800');
+          receiptPopUp.document.write(receiptHTML.replaceAll('"/_next/', '"https://wemove.eu/_next/'));
+          receiptPopUp.print();
+          receiptPopUp.close();
+
+        } catch (error) {
+          console.error(error.message);
+        }
       };
 
       printButtons.forEach((buttona) => {
