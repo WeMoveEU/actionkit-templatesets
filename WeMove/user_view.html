@@ -42,31 +42,35 @@
       tabButtons.forEach((button) => {
         button.addEventListener('click', toggleTab);
       });
+
+      const printButtons = [...document.querySelectorAll('[data-wm-print-transaction]')];
+
+      const printReceipt = async (event) => {
+        const printUrl = encodeURI(event.currentTarget.dataset.wmPrintTransaction);
+
+        try {
+          const response = await fetch(printUrl);
+
+          if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+          }
+
+          const receiptHTML = response.text();
+
+        } catch (error) {
+          console.error(error.message);
+        }
+
+        const receiptPopUp = window.open(printUrl, 'Print your receipt', 'height=400,width=600');
+        receiptPopUp.document.write(receiptHTML);
+        receiptPopUp.print();
+        receiptPopUp.close();
+      };
+
+      printButtons.forEach((buttona) => {
+        buttona.addEventListener('click', printReceipt);
+      });
     });
-  </script>
-
-  <script>
-    const printReceipt = (event) => {
-      /*
-      name
-      email
-      date
-      method
-      amount
-      */
-
-      const mywindow = window.open('', 'Print your receipt', 'height=400,width=600');
-
-      mywindow.document.write(`<html><head><title>Print your receipt</title></head><body>`);
-      mywindow.document.write('<h1>' + document.title  + '</h1>');
-      mywindow.document.write(document.getElementById(elem).innerHTML);
-      mywindow.document.write('</body></html>');
-
-      mywindow.print();
-      mywindow.close();
-
-      return true;
-    };
   </script>
 
   <section hidden data-wm-tab-section="account" class="md:grid md:grid-cols-2 gap-4 xl:w-3/5 xl:mx-auto">
@@ -88,6 +92,7 @@
       </div>
 
       <ul>
+        <li class="font-bold text-wm-purple mb-2">{{ actionkit_user.first_name }} {{ actionkit_user.last_name }}</li>
         <li class="font-bold text-wm-purple mb-2">{{ actionkit_user.email }}</li>
         <li class="mb-2">{{ actionkit_user.postal }} {{ actionkit_user.country }}</li>
         <li><a href="/logout">log out</a></li>
@@ -260,18 +265,28 @@
                   {{ donation.amt }}
 
                   <span class="text-sm font-bold text-wm-purple">
-                    {% if donation.recurring %}recurring{% else %}one off{% endif %}
+                    {% if donation.recurring %}
+                      recurring
+                      {% remember "recurring" as currentPaymentFrequency %}
+                    {% else %}
+                      one off
+                      {% remember "one-off" as currentPaymentFrequency %}
+                    {% endif %}
 
                     <span class="text-wm-pink">/</span>
 
                     {% if donation.account|lower == "wm-card" or donation.account|lower == "legacy-card" %}
                       credit card
+                      {% remember "credit card" as currentPaymentMethod %}
                     {% elif donation.account|lower == "wm-stripe" or donation.account|lower == "legacy-stripe" %}
                       stripe
+                      {% remember "stripe" as currentPaymentMethod %}
                     {% elif donation.account|lower == "wm-sepa" or donation.account|lower == "legacy-sepa" or donation.account|lower == "legacy-banktransfer" %}
                       sepa
+                      {% remember "sepa" as currentPaymentMethod %}
                     {% elif donation.account|lower == "wm-paypal" or donation.account|lower == "legacy-paypal" %}
                       paypal
+                      {% remember "paypal" as currentPaymentMethod %}
                     {% endif %}
                   </span>
                 </div>
@@ -279,7 +294,10 @@
                 <div class="text-xs text-wm-pink">{{ donation.created_at|date:"m/d/Y" }}</div>
               </div>
 
-              <button type="button" class="absolute right-4 top-4 z-10">
+              <button
+                type="button"
+                class="absolute right-4 top-4 z-10"
+                data-wm-print-transaction="https://wemove.eu/{{ link_iso }}/print-receipt?user_firstName=à{{ actionkit_user.first_name }}&user_lastName={{ actionkit_user.last_name }}&user_email={{ actionkit_user.email }}&payment_method={{ currentPaymentMethod }}&payment_date={{ donation.created_at|date:"m/d/Y" }}&payment_amount={{ donation.amt }}&payment_frequency={{ currentPaymentFrequency }}">
                 <span aria-hidden="true" class="w-6 h-6 inline-block not-sr-only" title="Print">
                   {% include "./icon-print.html" %}
                 </span>
