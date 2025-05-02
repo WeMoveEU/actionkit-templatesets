@@ -58,9 +58,14 @@
           });
 
           const receiptPopUp = window.open('', '', 'height=800,width=800');
-          receiptPopUp.document.write(receiptHTML.replaceAll('"/_next/', '"https://wemove.eu/_next/'));
-          receiptPopUp.print();
-          receiptPopUp.close();
+          const x = receiptHTML.replaceAll('"/_next/', '"https://wemove.eu/_next/')
+          receiptPopUp.document.write(x);
+
+          setTimeout(() => {
+            receiptPopUp.print();
+            receiptPopUp.close();
+          }, 500);
+
 
         } catch (error) {
           console.error(error.message);
