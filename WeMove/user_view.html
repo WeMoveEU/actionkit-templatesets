@@ -4,6 +4,8 @@
 
   <h1 class="mb-2">Your account</h1>
 
+  {% include "./icon-twitter.html" %}
+
   <menu data-wm-tab class="mb-8 border-b-2 relative font-gilroy text-lg">
     <div class="flex justify-start gap-2 -bottom-0.5 relative">
       <button
@@ -20,79 +22,6 @@
       </button>
     </div>
   </menu>
-
-  <script>
-    $(document).ready(()=>{
-      // TABS
-      const tabs = document.querySelector('[data-wm-tab]');
-      const tabButtons = [...tabs.querySelectorAll('[data-wm-tab-button]')];
-      const tabSections = [...document.querySelectorAll('[data-wm-tab-section]')];
-
-      const toggleTab = (event) => {
-        const activeTabSection = event.currentTarget.dataset.wmTabButton;
-
-        tabButtons.forEach((button) => {
-          button.classList.toggle('active', button.dataset.wmTabButton === activeTabSection);
-        });
-
-        tabSections.forEach((section) => {
-          section.hidden = section.dataset.wmTabSection !== activeTabSection;
-        });
-      };
-
-      tabButtons.forEach((button) => {
-        button.addEventListener('click', toggleTab);
-      });
-
-      // PRINT
-      const printButtons = [...document.querySelectorAll('[data-wm-print-transaction]')];
-
-      const printReceipt = async (event) => {
-        const printUrl = encodeURI(event.currentTarget.dataset.wmPrintTransaction);
-
-        try {
-          const receiptHTML = await fetch(printUrl).then(async (response) => {
-            if (!response.ok) {
-              throw new Error(`Response status: ${response.status}`);
-            }
-
-            return await response.text();
-          });
-
-          const receiptPopUp = window.open('', '', 'height=800,width=800');
-          const receiptContent = receiptHTML.replaceAll('"/_next/', '"https://wemove.eu/_next/');
-          receiptPopUp.document.write(receiptContent);
-
-          setTimeout(() => {
-            receiptPopUp.print();
-            receiptPopUp.close();
-          }, 500);
-        } catch (error) {
-          console.error(error.message);
-        }
-      };
-
-      printButtons.forEach((buttona) => {
-        buttona.addEventListener('click', printReceipt);
-      });
-
-      // EXPAND
-      const expandButton = document.querySelector('[data-wm-expand-transactions-wrapper]');
-
-      const expandTransactionsWrapper = () => {
-        const wrapper = document.querySelector('[data-wm-transactions-wrapper]');
-        wrapper.classList.add('expanded');
-        wrapper.style.height = `calc(70px*${wrapper.dataset.wmTransactionsWrapper})`;
-        document.querySelector('[data-wm-transactions-overlay]').hidden = true;
-        expandButton.style.height = '0';
-      };
-
-      if (expandButton) {
-        expandButton.addEventListener('click', expandTransactionsWrapper);
-      }
-
-    });
-  </script>
 
   <section hidden data-wm-tab-section="account" class="md:grid md:grid-cols-2 gap-4 xl:w-3/5 xl:mx-auto">
     <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8">
@@ -190,7 +119,8 @@
 
                 <button
                   type="button"
-                  class="absolute right-4 top-4 z-10 bg-gray-700 text-sm rounded block py-1 px-2 text-white hover:bg-wm-purple transition-all">
+                  class="absolute right-4 top-4 z-10 bg-gray-700 text-sm rounded block py-1 px-2 text-white hover:bg-wm-purple transition-all"
+                  data-wm-cancel-recurring-donation="">
                   cancel subscription
                 </button>
               </div>
@@ -339,7 +269,7 @@
             active:outline-none text-wm-purple transition-all overflow-hidden block"
             data-wm-expand-transactions-wrapper>
             View older transactions &darr;
-          </div>
+          </button>
         {% endif %}
       {% else %}
         <div class="text-gray-600 mb-4">
@@ -355,4 +285,25 @@
     </div>
   </section>
 
+  <script>
+    if (!window.wemove) {
+      window.wemove = {
+        site: {},
+        page: {
+          name: "{{page.name}}",
+        },
+      };
+    }
+
+    window.wemove.page.language = {
+      name: "{{ page.lang_or_en }}",
+      iso: "{{page.lang.iso_code|default:'en'}}",
+    };
+    </script>
+
+  {% if request.GET.dev == "1" %}
+    <script src="//127.0.0.1:8081/js/wemove-main.bundle.min.js"></script>
+  {% else %}
+    <script src="//static.wemove.eu/action-kit/js/wemove-main.bundle.min.js?v=2.10.0"></script>
+  {% endif %}
 {% endblock %}
