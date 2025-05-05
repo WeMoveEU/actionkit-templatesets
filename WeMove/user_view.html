@@ -209,7 +209,7 @@
       <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink">Past transactions</h2>
 
       {% if donations %}
-        <div data-wm-transactions-wrapper="{{ donations|length }}" {% if donations|length > 5 %}class="h-[420px] overflow-hidden transition-all duration-[.5s] relative"{% endif %}>
+        <div data-wm-transactions-wrapper="{{ donations|length }}" {% if donations|length > 5 %}class="h-[280px] overflow-hidden transition-all duration-[.5s] relative"{% endif %}>
           {% if donations|length > 5 %}
             <div data-wm-transactions-overlay class="overlay absolute z-10 bottom-0 w-full h-[70px] bg-gradient-to-b from-transparent to-60% to-white"></div>
           {% endif %}
