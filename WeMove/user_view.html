@@ -23,6 +23,7 @@
 
   <script>
     $(document).ready(()=>{
+      // TABS
       const tabs = document.querySelector('[data-wm-tab]');
       const tabButtons = [...tabs.querySelectorAll('[data-wm-tab-button]')];
       const tabSections = [...document.querySelectorAll('[data-wm-tab-section]')];
@@ -43,6 +44,7 @@
         button.addEventListener('click', toggleTab);
       });
 
+      // PRINT
       const printButtons = [...document.querySelectorAll('[data-wm-print-transaction]')];
 
       const printReceipt = async (event) => {
@@ -58,15 +60,13 @@
           });
 
           const receiptPopUp = window.open('', '', 'height=800,width=800');
-          const x = receiptHTML.replaceAll('"/_next/', '"https://wemove.eu/_next/')
-          receiptPopUp.document.write(x);
+          const receiptContent = receiptHTML.replaceAll('"/_next/', '"https://wemove.eu/_next/');
+          receiptPopUp.document.write(receiptContent);
 
           setTimeout(() => {
             receiptPopUp.print();
             receiptPopUp.close();
           }, 500);
-
-
         } catch (error) {
           console.error(error.message);
         }
@@ -75,6 +75,22 @@
       printButtons.forEach((buttona) => {
         buttona.addEventListener('click', printReceipt);
       });
+
+      // EXPAND
+      const expandButton = document.querySelector('[data-wm-expand-transactions-wrapper]');
+
+      const expandTransactionsWrapper = () => {
+        const wrapper = document.querySelector('[data-wm-transactions-wrapper]');
+        wrapper.classList.add('expanded');
+        wrapper.style.height = `calc(70px*${wrapper.dataset.wmTransactionsWrapper})`;
+        document.querySelector('[data-wm-transactions-overlay]').hidden = true;
+        expandButton.style.height = '0';
+      };
+
+      if (expandButton) {
+        expandButton.addEventListener('click', expandTransactionsWrapper);
+      }
+
     });
   </script>
 
@@ -263,8 +279,13 @@
       <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink">Past transactions</h2>
 
       {% if donations %}
-        {% for donation in donations reversed %}
-            <div class="relative mt-2">
+        <div data-wm-transactions-wrapper="{{ donations|length }}" {% if donations|length > 5 %}class="h-[420px] overflow-hidden transition-all duration-[.5s] relative"{% endif %}>
+          {% if donations|length > 5 %}
+            <div data-wm-transactions-overlay class="overlay absolute z-10 bottom-0 w-full h-[70px] bg-gradient-to-b from-transparent to-60% to-white"></div>
+          {% endif %}
+
+          {% for donation in donations reversed %}
+            <div class="relative mb-2">
               <div class="py-2 px-4 rounded-xl border-[1px] border-wm-pink">
                 <div class="text-xl font-bold text-wm-purple flex items-center gap-4">
                   {{ donation.amt }}
@@ -309,15 +330,25 @@
                 <span class="text-gray-500 sr-only">print receipt</span>
               </button>
             </div>
-        {% endfor %}
+          {% endfor %}
+        </div>
+        {% if donations|length > 5 %}
+          <button
+            type="button"
+            class="max-w-96 hover:underline m-auto font-gilroy text-center
+            active:outline-none text-wm-purple transition-all overflow-hidden block"
+            data-wm-expand-transactions-wrapper>
+            View older transactions &darr;
+          </div>
+        {% endif %}
       {% else %}
         <div class="text-gray-600 mb-4">
-          No donations found.
+          No transactions found.
         </div>
       {% endif %}
     </div>
 
-    <div class="bg-gray-200 p-4 rounded-lg w-full mb-8">
+    <div class="bg-gray-200 p-4 rounded-lg w-full my-8">
       <h2 class="text-wm-purple border-b-2 border-b-gray-400">How we are funded</h2>
       <p>If you want to know more about how we are funded, how we use your donation, or other commonly asked question, you can visit this page.</p>
       <p>You can also contact us anytime if at: <a class="hover:underline transition-all" href="mailto:donation@wemove.eu">donation@wemove.eu</a></p>
