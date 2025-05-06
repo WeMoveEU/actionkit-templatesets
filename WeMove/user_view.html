@@ -1,10 +1,12 @@
 {% extends "./wrapper.html" %}
 
+{% block title %}
+Your account | WeMove Europe
+{% endblock %}
+
 {% block content %}
 
-  <h1 class="mb-2">Your account</h1>
-
-  {% include "./icon-twitter.html" %}
+  <h1 class="mb-2">{{ page.title }}</h1>
 
   <menu data-wm-tab class="mb-8 border-b-2 relative font-gilroy text-lg">
     <div class="flex justify-start gap-2 -bottom-0.5 relative">
@@ -23,7 +25,7 @@
     </div>
   </menu>
 
-  <section hidden data-wm-tab-section="account" class="md:grid md:grid-cols-2 gap-4 xl:w-3/5 xl:mx-auto">
+  <section data-wm-tab-section="account" class="md:grid md:grid-cols-2 gap-4 xl:w-3/5 xl:mx-auto">
     <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8">
       <div class="flex justify-between items-center mb-4">
         <div class="flex items-center gap-1">
@@ -85,7 +87,7 @@
     {% endfor %}
   {% endif %}
 
-  <section !hidden data-wm-tab-section="donations" class="flex justify-center gap-6 flex-wrap lg:w-3/5 lg:mx-auto">
+  <section hidden data-wm-tab-section="donations" class="flex justify-center gap-6 flex-wrap lg:w-3/5 lg:mx-auto">
     <div class="{% if not hasMultipleActiveRecurringDonations %}rounded-xl p-4 border-[1px] border-wm-pink{% endif %} text-wm-purple w-full">
       {% if hasMultipleActiveRecurringDonations %}
         <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink">Active recurring donations</h2>
