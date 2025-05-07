@@ -25,7 +25,7 @@ Your account | WeMove Europe
     </div>
   </menu>
 
-  <section hidden data-wm-tab-section="account" class="md:grid md:grid-cols-2 gap-4 xl:w-3/5 xl:mx-auto">
+  <section data-wm-tab-section="account" class="md:grid md:grid-cols-2 gap-4 xl:w-3/5 xl:mx-auto">
     <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8">
       <div class="flex justify-between items-center mb-4">
         <div class="flex items-center gap-1">
@@ -95,15 +95,13 @@ Your account | WeMove Europe
     </div>
   </section>
 
-  {% if recurring_donations and recurring_donations|length > 1 %}
-    {% for donation in recurring_donations %}
-      {% if donation.is_active %}
-        {% remember "true" as hasActiveRecurringDonations %}
-      {% endif %}
-    {% endfor %}
-  {% endif %}
+  {% for donation in recurring_donations %}
+    {% if donation.is_active %}
+      {% remember "true" as hasActiveRecurringDonations %}
+    {% endif %}
+  {% endfor %}
 
-  <section !hidden data-wm-tab-section="donations" class="flex justify-center gap-6 flex-wrap lg:w-3/5 lg:mx-auto">
+  <section hidden data-wm-tab-section="donations" class="flex justify-center gap-6 flex-wrap lg:w-3/5 lg:mx-auto">
     <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink w-full">Active recurring donations</h2>
 
     {% if hasActiveRecurringDonations %}
