@@ -25,7 +25,7 @@ Your account | WeMove Europe
     </div>
   </menu>
 
-  <section data-wm-tab-section="account" class="md:grid md:grid-cols-2 gap-4 xl:w-3/5 xl:mx-auto">
+  <section hidden data-wm-tab-section="account" class="md:grid md:grid-cols-2 gap-4 xl:w-3/5 xl:mx-auto">
     <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8">
       <div class="flex justify-between items-center mb-4">
         <div class="flex items-center gap-1">
@@ -37,10 +37,26 @@ Your account | WeMove Europe
 
         <button
           type="button"
-          data-temp="update/"
+          data-wm-open-dialog-cta="data-wm-edit-profile-dialog"
           class="bg-wm-pink rounded block py-0 px-3 !text-white hover:brightness-110 transition-all">
           edit
-        </a>
+        </button>
+
+        <dialog data-wm-edit-profile-dialog>
+          <button
+            type="button"
+            data-wm-close-dialog-cta>
+            <span class="sr-only">
+              {% filter ak_text:"closePopup_button" %}Close popup{% endfilter %}
+            </span>
+            <span aria-hidden="true">x</span>
+          </button>
+
+          <h2>Edit your profile</h2>
+          <form method="dialog">
+            <button>OK</button>
+          </form>
+        </dialog>
       </div>
 
       <ul>
@@ -82,122 +98,90 @@ Your account | WeMove Europe
   {% if recurring_donations and recurring_donations|length > 1 %}
     {% for donation in recurring_donations %}
       {% if donation.is_active %}
-        {% remember "true" as hasMultipleActiveRecurringDonations %}
+        {% remember "true" as hasActiveRecurringDonations %}
       {% endif %}
     {% endfor %}
   {% endif %}
 
-  <section hidden data-wm-tab-section="donations" class="flex justify-center gap-6 flex-wrap lg:w-3/5 lg:mx-auto">
-    <div class="{% if not hasMultipleActiveRecurringDonations %}rounded-xl p-4 border-[1px] border-wm-pink{% endif %} text-wm-purple w-full">
-      {% if hasMultipleActiveRecurringDonations %}
-        <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink">Active recurring donations</h2>
+  <section !hidden data-wm-tab-section="donations" class="flex justify-center gap-6 flex-wrap lg:w-3/5 lg:mx-auto">
+    <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink w-full">Active recurring donations</h2>
 
-        {% for donation in recurring_donations reversed %}
-          {% if donation.is_active %}
-              <div class="relative mt-2">
-                <div class="py-2 px-4 rounded-xl border-[1px] border-wm-pink">
-                  <div class="text-xl font-bold text-wm-purple flex items-center gap-4">
-                    {{ donation.amt }}
+    {% if hasActiveRecurringDonations %}
+      {% for donation in recurring_donations reversed %}
+        {% if donation.is_active %}
+          <div class="rounded-xl p-4 border-[1px] border-wm-pink text-wm-purple w-full relative">
+            <aside class="flex justify-between">
+              <div class="flex items-center gap-1">
+                <span aria-hidden="true" class="{% if donation.is_active %}bg-green-500{% else %}bg-gray-500{% endif %} rounded-full border-black inline-block h-3 w-3"></span>
+                <span>{% if donation.is_active %}active{% else %}inactive{% endif %}</span>
+              </div>
 
-                    <span class="text-sm font-bold text-wm-purple">
-                      {% if donation.recurring %}recurring{% else %}one off{% endif %}
-
-                      <span class="text-wm-pink">/</span>
-
-                      {% if donation.account|lower == "wm-card" %}
-                        Credit card
-                      {% elif donation.account|lower == "wm-stripe" %}
-                        Stripe
-                      {% elif donation.account|lower == "wm-sepa" %}
-                        Sepa
-                      {% elif donation.account|lower == "wm-paypal" %}
-                        paypal
-                      {% endif %}
-                    </span>
-                  </div>
-
-                  <div class="text-xs text-wm-pink">{{ donation.created_at|date:"m/d/Y" }}</div>
-                </div>
-
+              {% if donation.is_active %}
                 <button
-                  type="button"
-                  class="absolute right-4 top-4 z-10 bg-gray-700 text-sm rounded block py-1 px-2 text-white hover:bg-wm-purple transition-all"
-                  data-wm-cancel-recurring-donation="">
+                type="button"
+                class="absolute right-4 top-4 z-10 bg-gray-700 text-sm rounded block py-1 px-2 text-white hover:bg-wm-purple transition-all"
+                data-wm-cancel-recurring-donation="{{ donation.recurring_id }}">
                   cancel subscription
                 </button>
-              </div>
-          {% endif %}
-        {% endfor %}
-      {% elif recurring_donations %}
-        <aside class="flex justify-between">
-          <div class="flex items-center gap-1">
-            <span aria-hidden="true" class="{% if profile.is_active %}bg-green-500{% else %}bg-gray-500{% endif %} rounded-full border-black inline-block h-3 w-3"></span>
-            <span>{% if profile.is_active %}active{% else %}inactive{% endif %}</span>
-          </div>
-
-          {% if profile.is_active %}
-            <button type="button" class="bg-gray-700 rounded block py-1 px-3 text-white hover:bg-wm-purple transition-all">
-              cancel subscription
-            </button>
-          {% endif %}
-        </aside>
-
-        <main>
-          {% for profile in recurring_donations %}
-            <div class="flex items-center justify-center text-4xl my-4 lowercase">
-              {{ profile.amt }}
-              <span class="mx-2"> / </span>
-              {{ profile.get_period_display }}
-            </div>
-
-            <div class="text-center">
-              <div class="mb-2">
-                <h5 class="mb-0">Payment method</h5>
-                <span>
-                  {% if donation.account|lower == "wm-card" or donation.account|lower == "legacy-card" %}
-                    credit card
-                  {% elif donation.account|lower == "wm-stripe" or donation.account|lower == "legacy-stripe" %}
-                    stripe
-                  {% elif donation.account|lower == "wm-sepa" or donation.account|lower == "legacy-sepa" or donation.account|lower == "legacy-banktransfer" %}
-                    sepa
-                  {% elif donation.account|lower == "wm-paypal" or donation.account|lower == "legacy-paypal" %}
-                    paypal
-                  {% endif %}
-                </span>
-              </div>
-
-              <div>
-                <h5 class="mb-0">First payment</h5>
-                <span>{{ profile.first_payment_date|date }}</span>
-              </div>
-
-              {% if profile.is_active %}
-                <div>
-                  <h5 class="mb-0">Next payment</h5>
-                  <span>{{ profile.next_payment_date|date }}</span>
-                </div>
-              {% else %}
-                <div>
-                  <h5 class="mb-0">Last payment</h5>
-                  <span>{{ profile.last_payment_date|date }}</span>
-                </div>
               {% endif %}
-            </div>
-          {% endfor %}
+            </aside>
+
+            <main>
+              <div class="flex items-center justify-center text-4xl my-4 lowercase">
+                {{ donation.amt }}
+                <span class="mx-2"> / </span>
+                {{ donation.get_period_display }}
+              </div>
+
+              <div class="text-center">
+                <div class="mb-2">
+                  <h5 class="mb-0">Payment method</h5>
+                  <span>
+                    {% if donation.account|lower == "wm-card" or donation.account|lower == "legacy-card" %}
+                      credit card
+                    {% elif donation.account|lower == "wm-stripe" or donation.account|lower == "legacy-stripe" %}
+                      stripe
+                    {% elif donation.account|lower == "wm-sepa" or donation.account|lower == "legacy-sepa" or donation.account|lower == "legacy-banktransfer" %}
+                      sepa
+                    {% elif donation.account|lower == "wm-paypal" or donation.account|lower == "legacy-paypal" %}
+                      paypal
+                    {% endif %}
+                  </span>
+                </div>
+
+                <div>
+                  <h5 class="mb-0">First payment</h5>
+                  <span>{{ donation.first_payment_date|date }}</span>
+                </div>
+
+                {% if donation.is_active %}
+                  <div>
+                    <h5 class="mb-0">Next payment</h5>
+                    <span>{{ donation.next_payment_date|date }}</span>
+                  </div>
+                {% else %}
+                  <div>
+                    <h5 class="mb-0">Last payment</h5>
+                    <span>{{ donation.last_payment_date|date }}</span>
+                  </div>
+                {% endif %}
+              </div>
+            </main>
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      <div class="rounded-xl p-4 border-[1px] border-wm-pink text-wm-purple w-full">
+        <main class="text-center text-xl">
+          <p>You don't have recurring donations</p>
+          <a
+            class="hover:!no-underline w-auto m-auto uppercase py-2 px-6 text-center text-base font-bold font-gilroy bg-wm-pink min-h-8 inline-block !text-white rounded transition-all hover:brightness-110"
+            href="https://action.wemove.eu/donate/chip-in-wemove?selected_frequency=recurring">
+            Begin a recurring donation
+          </a>
         </main>
-      {% else %}
-        <div id="never-recurring">
-          <main class="text-center text-xl">
-            <p>You don't have recurring donations</p>
-            <a
-              class="hover:!no-underline w-auto m-auto uppercase py-2 px-6 text-center text-base font-bold font-gilroy bg-wm-pink min-h-8 inline-block !text-white rounded transition-all hover:brightness-110"
-              href="https://action.wemove.eu/donate/chip-in-wemove?selected_frequency=recurring">
-              Begin a recurring donation
-            </a>
-          </main>
-        </div>
-      {% endif %}
-    </div>
+      </div>
+    {% endif %}
 
     <div class="bg-wm-purple rounded my-4 p-8 w-full">
       <a
