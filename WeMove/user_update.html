@@ -8,15 +8,16 @@
 
             {% switch field.name %}
                 {% case 'country' %}
-                        <select name="{{ input_name_prefix }}country" id="id_{{ input_name_prefix }}country" {% if onchange %}onchange="{{ onchange }}" onblur="{{ onchange }}"{% endif %}>
+                    <select name="{{ input_name_prefix }}country" id="id_{{ input_name_prefix }}country" {% if onchange %}onchange="{{ onchange }}" onblur="{{ onchange }}"{% endif %}>
                         <option selected="{{ field.value }}">{{ field.value }}</option>
                         {% for std_name,name in templateset.lang.country_names_us_first %}
                             <option value="{{ std_name|escapeall }}">{{ name|escapeall }}</option>
                         {% endfor %}
                     </select>
                 {% else %}
-                        {{ field }}
+                    {{ field }}
             {% endswitch %}
+
             {{ field.errors }}
         </div>
     {% endfor %}
