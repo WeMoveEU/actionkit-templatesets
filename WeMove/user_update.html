@@ -1,12 +1,9 @@
 {% load switchcase %}
 
-<form
-    data-wm-edit-profile-form
-    data-wm-floating-labels-form
-    class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below {% if not isEmbbeded %}is-floating mx-auto max-w-[500px]{% endif %}
-    petition-form bg-wm-bg-form p-4 h-fit">
-
-    <h2 class="text-wm-purple">Edit your profile</h2>
+<form class="mx-auto min-w-96 max-w-[400px] mt-2
+    [&_input]:border-[1px] [&_input]:border-wm-pink [&_input]:p-1 [&_input]:rounded
+    [&_select]:border-[1px] [&_select]:border-wm-pink [&_select]:p-1 [&_select]:rounded">
+    <h2 class="text-wm-purple border-b-2 w-full">Edit your profile</h2>
 
     {% for field in form.visible_fields %}
         {% switch field.name %}
@@ -23,41 +20,27 @@
             {% case 'lang' %}
                 <!-- no need for these fields -->
             {% case 'country' %}
-                <div
-                    data-wm-form-field="{{ field.name }}"
-                    id="ak-fieldbox-{{ field.name }}"
-                    class="form-field
-                    {% if field.name|is_in:context.required %}required{% endif %}
-                    field-ak-type--{{ field.type }}
-                    field-type--{{ field.input }}">
-
-                    <label for="id_{{ field.name }}">
-                        {{ field.label }}:{% if field.name|is_in:context.required %}<span class="ak-required-flag">*</span>{% endif %}
+                <div class="flex flex-col mb-3">
+                    <label for="id_{{ field.name }}" class="text-wm-purple font-bold">
+                        {{ field.label }}
                     </label>
-                    <select name="{{ input_name_prefix }}country" id="id_{{ input_name_prefix }}country" {% if onchange %}onchange="{{ onchange }}" onblur="{{ onchange }}"{% endif %}>
-                        <option selected="{{ field.value }}">{{ field.value }}</option>
-                        {% for std_name,name in templateset.lang.country_names_us_first %}
-                            <option value="{{ std_name|escapeall }}">{{ name|escapeall }}</option>
-                        {% endfor %}
-                    </select>
+
+                    {% include "./country_select.html" with country_selected=field.value %}
                 </div>
             {% else %}
-                <div
-                    data-wm-form-field="{{ field.name }}"
-                    id="ak-fieldbox-{{ field.name }}"
-                    class="form-field
-                    {% if field.name|is_in:context.required %}required{% endif %}
-                    field-ak-type--{{ field.type }}
-                    field-type--{{ field.input }}">
-                    <label for="id_{{ field.name }}">
-                        {{ field.label }}:{% if field.name|is_in:context.required %}<span class="ak-required-flag">*</span>{% endif %}
+                <div class="flex flex-col mb-3">
+                    <label for="id_{{ field.name }}" class="text-wm-purple font-bold">
+                        {{ field.label }}
                     </label>
+
                     {{ field }}
                 </div>
             {% endswitch %}
         </div>
     {% endfor %}
 
-    <button type="button" data-wm-edit-form-cta-save>Save</button>
-    <button type="button" data-wm-close-dialog-cta>Cancel</button>
+    <div class="grid grid-cols-2 gap-4 mt-4">
+        <button type="button" class="bg-slate-500 rounded p-2 hover:brightness-110 text-white font-bold" data-wm-close-dialog-cta>Cancel</button>
+        <button type="button" class="bg-wm-pink rounded p-2 hover:brightness-110 text-white font-bold" data-wm-edit-form-cta-save>Save</button>
+    </div>
 </form>
