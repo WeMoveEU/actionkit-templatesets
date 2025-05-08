@@ -3,6 +3,7 @@
 <form class="mx-auto min-w-96 max-w-[400px] mt-2
     [&_input]:border-[1px] [&_input]:border-wm-pink [&_input]:p-1 [&_input]:rounded
     [&_select]:border-[1px] [&_select]:border-wm-pink [&_select]:p-1 [&_select]:rounded">
+
     <h2 class="text-wm-purple border-b-2 w-full">Edit your profile</h2>
 
     {% for field in form.visible_fields %}
@@ -40,7 +41,18 @@
     {% endfor %}
 
     <div class="grid grid-cols-2 gap-4 mt-4">
-        <button type="button" class="bg-slate-500 rounded p-2 hover:brightness-110 text-white font-bold" data-wm-close-dialog-cta>Cancel</button>
-        <button type="button" class="bg-wm-pink rounded p-2 hover:brightness-110 text-white font-bold" data-wm-edit-form-cta-save>Save</button>
+        <button
+            type="button"
+            class="bg-slate-500 rounded p-2 hover:brightness-110 text-white font-bold"
+            data-wm-close-dialog-cta>
+            Cancel
+        </button>
+
+        <button
+            type="button"
+            class="bg-wm-pink rounded p-2 hover:brightness-110 text-white font-bold"
+            data-wm-edit-form-submit>
+            Save
+        </button>
     </div>
 </form>
