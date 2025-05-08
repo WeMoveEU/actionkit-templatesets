@@ -111,6 +111,17 @@
       {% include "./partial-header_wemove.html" %}
     {% endif %}
 
+    <dialog data-wm-dialog>
+      <button class="closeDialogCta" type="button" data-wm-close-dialog-cta>
+        <span class="sr-only">
+          {% filter ak_text:"closePopup_button" %}Close popup{% endfilter %}
+        </span>
+        <span aria-hidden="true">x</span>
+      </button>
+
+      <div data-wm-dialog-content></div>
+    </dialog>
+
     <div class="modal popup" data-wm-modal-popup hidden>
       <div class="modal-backdrop"></div>
       <div class="modal-dialog">

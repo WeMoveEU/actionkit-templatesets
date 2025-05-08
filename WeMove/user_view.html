@@ -42,27 +42,18 @@ Your account | WeMove Europe
           edit
         </button>
 
-        <form
-            data-wm-edit-profile-form
-            data-wm-floating-labels-form
-            class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below {% if not isEmbbeded %}is-floating mx-auto max-w-[500px]{% endif %}
-              petition-form bg-wm-bg-form p-4 h-fit">
-          </form>
+        <div hidden data-wm-edit-profile-dialog>
+          <div>
+            <h2 class="text-wm-purple">Edit your profile</h2>
 
-        <dialog data-wm-edit-profile-dialog>
-          <button
-            type="button"
-            data-wm-close-dialog-cta>
-            <span class="sr-only">
-              {% filter ak_text:"closePopup_button" %}Close popup{% endfilter %}
-            </span>
-            <span aria-hidden="true">x</span>
-          </button>
-
-          <h2 class="text-wm-purple">Edit your profile</h2>
-
-
-        </dialog>
+            <form
+              data-wm-edit-profile-form
+              data-wm-floating-labels-form
+              class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below {% if not isEmbbeded %}is-floating mx-auto max-w-[500px]{% endif %}
+                petition-form bg-wm-bg-form p-4 h-fit">
+            </form>
+          </div>
+        </div>
       </div>
 
       <ul>

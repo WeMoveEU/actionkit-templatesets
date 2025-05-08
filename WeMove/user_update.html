@@ -1,27 +1,56 @@
-<form>
-    <div>cipa</div>
-    {% for field in form.visible_fields %}
-        <div class="ak-labels-before">
-            <label for="{{ field.id_for_label }}">
-                {{ field.label }}
-            </label>
+{% load switchcase %}
 
-            {% switch field.name %}
-                {% case 'country' %}
+<form>
+    {% for field in form.visible_fields %}
+        {% switch field.name %}
+            {% case 'prefix' %}
+            {% case 'middle_name' %}
+            {% case 'suffix' %}
+            {% case 'address1' %}
+            {% case 'address2' %}
+            {% case 'city' %}
+            {% case 'state' %}
+            {% case 'zip' %}
+            {% case 'plus4' %}
+            {% case 'region' %}
+            {% case 'lang' %}
+                <!-- no need for these fields -->
+            {% case 'country' %}
+                <div
+                    data-wm-form-field="{{ field.name }}"
+                    id="ak-fieldbox-{{ field.name }}"
+                    class="form-field
+                    {% if field.name|is_in:context.required %}required{% endif %}
+                    field-ak-type--{{ field.type }}
+                    field-type--{{ field.input }}">
+
+                    <label for="id_{{ field.name }}">
+                        {{ field.label }}:{% if field.name|is_in:context.required %}<span class="ak-required-flag">*</span>{% endif %}
+                    </label>
                     <select name="{{ input_name_prefix }}country" id="id_{{ input_name_prefix }}country" {% if onchange %}onchange="{{ onchange }}" onblur="{{ onchange }}"{% endif %}>
                         <option selected="{{ field.value }}">{{ field.value }}</option>
                         {% for std_name,name in templateset.lang.country_names_us_first %}
                             <option value="{{ std_name|escapeall }}">{{ name|escapeall }}</option>
                         {% endfor %}
                     </select>
-                {% else %}
+                </div>
+            {% else %}
+                <div
+                    data-wm-form-field="{{ field.name }}"
+                    id="ak-fieldbox-{{ field.name }}"
+                    class="form-field
+                    {% if field.name|is_in:context.required %}required{% endif %}
+                    field-ak-type--{{ field.type }}
+                    field-type--{{ field.input }}">
+                    <label for="id_{{ field.name }}">
+                        {{ field.label }}:{% if field.name|is_in:context.required %}<span class="ak-required-flag">*</span>{% endif %}
+                    </label>
                     {{ field }}
+                </div>
             {% endswitch %}
-
-            {{ field.errors }}
         </div>
     {% endfor %}
 
     <button type="button" data-wm-edit-form-cta-save>Save</button>
-    <button type="button" data-wm-edit-form-cta-cancel>Cancel</button>
+    <button type="button" data-wm-close-dialog-cta>Cancel</button>
 </form>
