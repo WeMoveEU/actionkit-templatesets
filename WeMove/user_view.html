@@ -37,22 +37,13 @@ Your account | WeMove Europe
 
         <button
           type="button"
-          data-wm-open-dialog-cta="data-wm-edit-profile-dialog"
+          data-wm-open-dialog-cta="data-wm-edit-profile-form"
           class="bg-wm-pink rounded block py-0 px-3 !text-white hover:brightness-110 transition-all">
           edit
         </button>
 
-        <div hidden data-wm-edit-profile-dialog>
-          <div>
-            <h2 class="text-wm-purple">Edit your profile</h2>
-
-            <form
-              data-wm-edit-profile-form
-              data-wm-floating-labels-form
-              class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below {% if not isEmbbeded %}is-floating mx-auto max-w-[500px]{% endif %}
-                petition-form bg-wm-bg-form p-4 h-fit">
-            </form>
-          </div>
+        <div hidden data-wm-edit-profile-form>
+          <div data-wm-edit-profile-form-content></div>
         </div>
       </div>
 
