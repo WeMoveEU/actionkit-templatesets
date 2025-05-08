@@ -26,7 +26,9 @@ Your account | WeMove Europe
   </menu>
 
   <section data-wm-tab-section="account" class="md:grid md:grid-cols-2 gap-4 xl:w-3/5 xl:mx-auto">
-    <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8">
+    <div
+      data-wm-profile-card
+      class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8">
       <div class="flex justify-between items-center mb-4">
         <div class="flex items-center gap-1">
           <span aria-hidden="true" class="w-5 h-5 mr-1 inline-block not-sr-only" title="Print">
@@ -49,9 +51,17 @@ Your account | WeMove Europe
       </div>
 
       <ul>
-        <li class="font-bold text-wm-purple mb-2">{{ actionkit_user.first_name }} {{ actionkit_user.last_name }}</li>
-        <li class="font-bold text-wm-purple mb-2">{{ actionkit_user.email }}</li>
-        <li class="mb-2">{{ actionkit_user.postal }} {{ actionkit_user.country }}</li>
+        <li class="font-bold text-wm-purple mb-2">
+          <span data-wm-profile-card-detail="first_name">{{ actionkit_user.first_name }}</span>
+          <span data-wm-profile-card-detail="last_name">{{ actionkit_user.last_name }}</span>
+        </li>
+        <li class="font-bold text-wm-purple mb-2">
+          <span data-wm-profile-card-detail="email">{{ actionkit_user.email }}</span>
+        </li>
+        <li class="mb-2">
+          <span data-wm-profile-card-detail="postal">{{ actionkit_user.postal }}</span>
+          <span data-wm-profile-card-detail="country">{{ actionkit_user.country }}</span>
+        </li>
         <li><a href="/logout">log out</a></li>
       </ul>
     </div>
