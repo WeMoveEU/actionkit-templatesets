@@ -67,7 +67,9 @@ Your account | WeMove Europe
       </ul>
     </div>
 
-    <div class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8">
+    <div
+      data-wm-user-subscription-card
+      class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8">
       <div class="flex justify-between items-center mb-4">
         <div class="flex items-center gap-1">
           <span aria-hidden="true" class="w-5 h-5 mr-1 inline-block not-sr-only" title="Print">
@@ -77,55 +79,61 @@ Your account | WeMove Europe
         </div>
       </div>
 
-      <ul class="text-wm-purple">
-        {% if actionkit_user.is_subscribed %}
-          <li class="mb-2">
-            <strong>Status:</strong> subscribed
-          </li>
-          <li>
-            <button
-              type="button"
-              data-wm-open-dialog-cta="data-wm-unsubscribe-user"
-              class="text-wm-pink hover:underline">
-              unsubscribe
-            </button>
+      <ul
+        data-wm-user-subscribed
+        {% if not actionkit_user.is_subscribed %}hidden{% endif %}
+        class="text-wm-purple">
+        <li class="mb-2">
+          <strong>Status:</strong> subscribed
+        </li>
+        <li>
+          <button
+            type="button"
+            data-wm-open-dialog-cta="data-wm-unsubscribe-user"
+            class="text-wm-pink hover:underline">
+            unsubscribe
+          </button>
 
-            <div
-              hidden
-              data-wm-unsubscribe-user>
-              <form>
-                <h2 class="text-wm-purple border-b-2 w-full">Opt out confirmation</h2>
-                <p class="mb-6">Are you sure you want to request to opt out from all mailing lists?</p>
-                <div class="grid grid-cols-2 gap-4 mt-4">
-                    <button
-                        type="button"
-                        class="bg-slate-500 rounded p-2 hover:brightness-110 text-white font-bold"
-                        data-wm-close-dialog-cta>
-                        Cancel
-                    </button>
+          <div
+            hidden
+            data-wm-unsubscribe-user>
+            <form>
+              <h2 class="text-wm-purple border-b-2 w-full">Opt out confirmation</h2>
+              <p class="mb-6">Are you sure you want to request to opt out from all mailing lists?</p>
+              <div class="grid grid-cols-2 gap-4 mt-4">
+                  <button
+                      type="button"
+                      class="bg-slate-500 rounded p-2 hover:brightness-110 text-white font-bold"
+                      data-wm-close-dialog-cta>
+                      Cancel
+                  </button>
 
-                    <button
-                        type="submit"
-                        class="rounded p-2 hover:brightness-110 text-white font-bold">
-                        Yes, unsubscribe me
-                    </button>
-                </div>
-              </form>
-            </div>
-          </li>
-        {% else %}
-          <li class="mb-2">
-            <strong>Status:</strong> unsubscribed
-          </li>
-          <li>
-            <button
-              type="button"
-              data-wm-open-dialog-cta="data-wm-edit-profile"
-              class="bg-wm-pink rounded block py-0 px-3 !text-white hover:brightness-110 transition-all">
-              subscribe
-            </button>
-          </li>
-        {% endif %}
+                  <button
+                      type="submit"
+                      class="rounded p-2 hover:brightness-110 text-white font-bold">
+                      Yes, unsubscribe me
+                  </button>
+              </div>
+            </form>
+          </div>
+        </li>
+      </ul>
+
+      <ul
+        data-wm-user-unsubscribed
+        {% if actionkit_user.is_subscribed %}hidden{% endif %}
+        class="text-wm-purple">
+        <li class="mb-2">
+          <strong>Status:</strong> unsubscribed
+        </li>
+        <li>
+          <button
+            type="button"
+            data-wm-subscribe-user
+            class="bg-wm-pink rounded block py-0 px-3 !text-white hover:brightness-110 transition-all">
+            subscribe
+          </button>
+        </li>
       </ul>
     </div>
   </section>
@@ -309,7 +317,8 @@ Your account | WeMove Europe
       window.wemove = {
         site: {},
         user: {
-          akid: "{{ actionkit_user.token }}"
+          akid: "{{ actionkit_user.token }}",
+          email: "{{ actionkit_user.email }}",
         },
         page: {
           name: "{{page.name}}",
