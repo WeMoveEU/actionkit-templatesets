@@ -5,6 +5,10 @@
 if (!window.wemove) {
   window.wemove = {
     site: {},
+    user: {
+      akid: "{{ actionkit_user.token }}",
+      email: "{{ actionkit_user.email }}",
+    },
     page: {
       name: "{{page.name}}",
     },

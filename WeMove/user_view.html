@@ -13,29 +13,7 @@ Your account | WeMove Europe
   {% include "./partial-account_profile.html" %}
   {% include "./partial-account_donations.html" %}
 
-  <script>
-    if (!window.wemove) {
-      window.wemove = {
-        site: {},
-        user: {
-          akid: "{{ actionkit_user.token }}",
-          email: "{{ actionkit_user.email }}",
-        },
-        page: {
-          name: "{{page.name}}",
-        },
-      };
-    }
-
-    window.wemove.page.language = {
-      name: "{{ page.lang_or_en }}",
-      iso: "{{page.lang.iso_code|default:'en'}}",
-    };
-    </script>
-
-  {% if request.GET.dev == "1" %}
-    <script src="//127.0.0.1:8081/js/wemove-main.bundle.min.js"></script>
-  {% else %}
-    <script src="//static.wemove.eu/action-kit/js/wemove-main.bundle.min.js?v=2.10.0"></script>
-  {% endif %}
+  {% include "./wemove-scripts.html" %}
 {% endblock %}
+
+
