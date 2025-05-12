@@ -1,0 +1,73 @@
+<div class="w-full">
+  <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink">Past transactions</h2>
+
+  {% if donations %}
+    <div data-wm-transactions-wrapper="{{ donations|length }}" {% if donations|length > 5 %}class="h-[280px] overflow-hidden transition-all duration-[.5s] relative"{% endif %}>
+      {% if donations|length > 5 %}
+        <div data-wm-transactions-overlay class="overlay absolute z-10 bottom-0 w-full h-[70px] bg-gradient-to-b from-transparent to-60% to-white"></div>
+      {% endif %}
+
+      {% for donation in donations reversed %}
+        <div class="relative mb-2">
+          <div class="py-2 px-4 rounded-xl border-[1px] border-wm-pink">
+            <div class="text-xl font-bold text-wm-purple flex items-center gap-4">
+              {{ donation.amt }}
+
+              <span class="text-sm font-bold text-wm-purple">
+                {% if donation.recurring %}
+                  recurring
+                  {% remember "recurring" as currentPaymentFrequency %}
+                {% else %}
+                  one off
+                  {% remember "one-off" as currentPaymentFrequency %}
+                {% endif %}
+
+                <span class="text-wm-pink">/</span>
+
+                {% if donation.account|lower == "wm-card" or donation.account|lower == "legacy-card" %}
+                  credit card
+                  {% remember "credit card" as currentPaymentMethod %}
+                {% elif donation.account|lower == "wm-stripe" or donation.account|lower == "legacy-stripe" %}
+                  stripe
+                  {% remember "stripe" as currentPaymentMethod %}
+                {% elif donation.account|lower == "wm-sepa" or donation.account|lower == "legacy-sepa" or donation.account|lower == "legacy-banktransfer" %}
+                  sepa
+                  {% remember "sepa" as currentPaymentMethod %}
+                {% elif donation.account|lower == "wm-paypal" or donation.account|lower == "legacy-paypal" %}
+                  paypal
+                  {% remember "paypal" as currentPaymentMethod %}
+                {% endif %}
+              </span>
+            </div>
+
+            <div class="text-xs text-wm-pink">{{ donation.created_at|date:"m/d/Y" }}</div>
+          </div>
+
+          <button
+            type="button"
+            class="absolute right-4 top-4 z-10"
+            data-wm-print-transaction="https://wemove.eu/print-receipt?language={{ link_iso }}&user_firstName={{ actionkit_user.first_name }}&user_lastName={{ actionkit_user.last_name }}&user_email={{ actionkit_user.email }}&payment_method={{ currentPaymentMethod }}&payment_date={{ donation.created_at|date:"m/d/Y" }}&payment_amount={{ donation.amt }}&payment_frequency={{ currentPaymentFrequency }}">
+            <span aria-hidden="true" class="w-6 h-6 inline-block not-sr-only" title="Print">
+              {% include "./icon-print.html" %}
+            </span>
+            <span class="text-gray-500 sr-only">print receipt</span>
+          </button>
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if donations|length > 5 %}
+      <button
+        type="button"
+        class="max-w-96 hover:underline m-auto font-gilroy text-center
+        active:outline-none text-wm-purple transition-all overflow-hidden block"
+        data-wm-expand-transactions-wrapper>
+        View older transactions &darr;
+      </button>
+    {% endif %}
+  {% else %}
+    <div class="text-gray-600 mb-4">
+      No transactions found.
+    </div>
+  {% endif %}
+</div>
