@@ -6,6 +6,8 @@
     [&_input]:border-[1px] [&_input]:border-wm-pink [&_input]:p-1 [&_input]:rounded
     [&_select]:border-[1px] [&_select]:border-wm-pink [&_select]:p-1 [&_select]:rounded">
 
+    {% include "./component-preloader.html" %}
+
     <h2 class="text-wm-purple border-b-2 w-full">Edit your profile</h2>
 
     {% for field in form.visible_fields %}
