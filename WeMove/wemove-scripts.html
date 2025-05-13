@@ -11,29 +11,24 @@ if (!window.wemove) {
     },
     page: {
       name: "{{page.name}}",
+      shouldDisableForm: {% if page.custom_fields.finished_alert %}true{% else %}false{% endif %},
+      preShareUrl: typeof weMovePreShareUrl !== "undefined" ? weMovePreShareUrl : null,
+      language: {
+        name: "{{ page.lang_or_en }}",
+        iso: "{{page.lang.iso_code|default:'en'}}",
+      },
     },
   };
 }
-
-if (typeof weMovePreShareUrl !== "undefined") {
-  window.wemove.page.preShareUrl = weMovePreShareUrl;
-}
-
-window.wemove.page.language = {
-  name: "{{ page.lang_or_en }}",
-  iso: "{{page.lang.iso_code|default:'en'}}",
-};
-
-{% if page.custom_fields.finished_alert %}
-window.wemove.page.shouldDisableForm = true;
-{% endif %}
 </script>
 
-{% store as wemove_custom_script %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "wemove_custom_script" as field_name %}{% endstore %}
-{% if wemove_custom_script %}
-  {% autoescape off %}
-    {{ wemove_custom_script }}
-  {% endautoescape %}
+{% if page.id and cache_key %}
+  {% store as wemove_custom_script %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "wemove_custom_script" as field_name %}{% endstore %}
+  {% if wemove_custom_script %}
+    {% autoescape off %}
+      {{ wemove_custom_script }}
+    {% endautoescape %}
+  {% endif %}
 {% endif %}
 
 {% if isEmbbeded %}
