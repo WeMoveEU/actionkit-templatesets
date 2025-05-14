@@ -10,6 +10,7 @@ if (!window.wemove) {
       email: "{{ actionkit_user.email }}",
     },
     page: {
+      shouldSkipAkReadyEvent: {% if page.id %}false{% else %}true{% endif %},
       name: "{{page.name}}",
       shouldDisableForm: {% if page.custom_fields.finished_alert %}true{% else %}false{% endif %},
       preShareUrl: typeof weMovePreShareUrl !== "undefined" ? weMovePreShareUrl : null,
