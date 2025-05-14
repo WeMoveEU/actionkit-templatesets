@@ -1,99 +1,61 @@
-{% extends "./wrapper.html" %}
 {% load switchcase %}
 
-{% block title %}Update Your Account{% endblock %}
+<form
+    data-wm-edit-profile-form
+    class="mx-auto min-w-96 max-w-[400px] mt-2
+    [&_input]:border-[1px] [&_input]:border-wm-pink [&_input]:p-1 [&_input]:rounded
+    [&_select]:border-[1px] [&_select]:border-wm-pink [&_select]:p-1 [&_select]:rounded">
 
-{% block content %}
-  
-{% if updated %}
-<div class="ak-grid-row">
-    <div class="ak-grid-col ak-grid-col-12-of-12">
-        <p>Thanks! We've updated your information.</p>
-    </div>
-</div>
-{% endif %}
+    {% include "./component-preloader.html" %}
 
-<div class="ak-grid-row">
-    <div class="ak-grid-col ak-grid-col-12-of-12">
-        <h2>Update Your Account</h2>
-        {% if user %}
-        <p>
-            {% filter ak_text:"logged_in_as" %}You are logged in as{% endfilter %} <a href="/me/">{{ user.name|escape }}</a>.
-            <a href="/logout">{% filter ak_text:"logout" %}Log out{% endfilter %}</a>
-        </p>
-        {% endif %}
-    </div>
-</div>
+    <h2 class="text-wm-purple border-b-2 w-full">Edit your profile</h2>
 
-<div class="ak-grid-row">
-    <div class="ak-grid-col ak-grid-col-9-of-12">
-        <form name="accountupdate" method="POST" class="ak-styled-fields ak-errs-below">
-    
-            {{ form.non_field_errors }}
-
-            {% for field in form.visible_fields %}
-                <div class="ak-labels-before">
-                    <label for="{{ field.id_for_label }}">
-                        {{ field.label }} 
+    {% for field in form.visible_fields %}
+        {% switch field.name %}
+            {% case 'prefix' %}
+            {% case 'middle_name' %}
+            {% case 'suffix' %}
+            {% case 'address1' %}
+            {% case 'address2' %}
+            {% case 'city' %}
+            {% case 'state' %}
+            {% case 'zip' %}
+            {% case 'plus4' %}
+            {% case 'region' %}
+            {% case 'lang' %}
+                <!-- no need for these fields -->
+            {% case 'country' %}
+                <div class="flex flex-col mb-3">
+                    <label for="id_{{ field.name }}" class="text-wm-purple font-bold">
+                        {{ field.label }}
                     </label>
 
-                    {% switch field.name %}
-                        {% case 'country' %}
-                               <select name="{{ input_name_prefix }}country" id="id_{{ input_name_prefix }}country" {% if onchange %}onchange="{{ onchange }}" onblur="{{ onchange }}"{% endif %}>
-                                <option selected="{{ field.value }}">{{ field.value }}</option>
-                                {% for std_name,name in templateset.lang.country_names_us_first %}
-                                    <option value="{{ std_name|escapeall }}">{{ name|escapeall }}</option>
-                                {% endfor %}
-                            </select>
-                        {% case 'state' %} 
-                                <script>
-                                    $(function() { //Make sure the current State value is selected
-                                        let selectedState = "{{ field.value }}";
-                                        $('#id_state > option[value=' + selectedState + ']').prop('selected', true);
-                                    })
-                                </script>
-			                    {% include "./state_select.html" %}
-
-                        {% else %}
-                                {{ field }}
-                    {% endswitch %}
-                    {{ field.errors }}
+                    {% include "./country_select.html" with country_selected=field.value %}
                 </div>
-            {% endfor %}
-            <div class="ak-skip-label-before">
-                {{ form.privacy.errors }}
-                {% include "./privacy.html" %}
-            </div>
+            {% else %}
+                <div class="flex flex-col mb-3">
+                    <label for="id_{{ field.name }}" class="text-wm-purple font-bold">
+                        {{ field.label }}
+                    </label>
 
- 
-    </div>
+                    {{ field }}
+                </div>
+            {% endswitch %}
+        </div>
+    {% endfor %}
 
-    <div class="ak-grid-col ak-grid-col-3-of-12">
-    </div>
-</div>
+    <div class="grid grid-cols-2 gap-4 mt-4">
+        <button
+            type="button"
+            class="bg-slate-500 rounded p-2 hover:brightness-110 text-white font-bold"
+            data-wm-close-dialog-cta>
+            Cancel
+        </button>
 
-<div class="ak-grid-row">
-    <div class="ak-grid-col ak-grid-col-12-of-12">
-            <button type="submit" class="ak-submit-button">Submit</button>
+        <button
+            type="submit"
+            class="rounded p-2 hover:brightness-110 text-white font-bold">
+            Save
+        </button>
     </div>
-</div>
 </form>
-
-<script>
-    $('ul.errorlist').each( function () {
-        $( this ).addClass('ak-errors').css('display', 'block').
-                parent().find('label, :input').addClass('ak-error').
-                closest('form').addClass('contains-errors');
-    } );
-    // Run just the country-switching stuff from action forms.
-    actionkit.forms.setForm('accountupdate');
-    actionkit.context = {{ js_context|json }};
-    $(actionkit.form.country).change(function() {
-        actionkit.forms.setForm('accountupdate');
-        actionkit.forms.reflectCountryChange();
-    });
-    actionkit.forms.reflectCountryChange();
-</script>
-
-{% endblock content %}
-

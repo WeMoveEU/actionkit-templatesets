@@ -1,0 +1,40 @@
+<div
+  data-wm-profile-card
+  class="p-6 rounded-xl border-[1px] border-wm-pink text-wm-purple mb-8">
+  <div class="flex justify-between items-center mb-4">
+    <div class="flex items-center gap-1">
+      <span aria-hidden="true" class="w-5 h-5 mr-1 inline-block not-sr-only" title="Print">
+        {% include "./icon-user.html" %}
+      </span>
+      <span class="font-bold text-wm-purple font-gilroy text-lg">Personal data</span>
+    </div>
+
+    <button
+      type="button"
+      data-wm-open-dialog-cta="data-wm-edit-profile"
+      class="bg-wm-pink rounded block py-0 px-3 !text-white hover:brightness-110 transition-all">
+      edit
+    </button>
+
+    <div
+      hidden
+      data-wm-edit-profile
+      data-wm-dialog-fetch="/me/update/">
+    </div>
+  </div>
+
+  <ul>
+    <li class="font-bold text-wm-purple mb-2">
+      <span data-wm-profile-card-detail="first_name">{{ actionkit_user.first_name }}</span>
+      <span data-wm-profile-card-detail="last_name">{{ actionkit_user.last_name }}</span>
+    </li>
+    <li class="font-bold text-wm-purple mb-2">
+      <span data-wm-profile-card-detail="email">{{ actionkit_user.email }}</span>
+    </li>
+    <li class="mb-2">
+      <span data-wm-profile-card-detail="postal">{{ actionkit_user.postal }}</span>
+      <span data-wm-profile-card-detail="country">{{ actionkit_user.country }}</span>
+    </li>
+    <li><a href="/logout">log out</a></li>
+  </ul>
+</div>

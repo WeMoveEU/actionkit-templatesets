@@ -1,6 +1,10 @@
 
 <select name="{{ input_name_prefix }}country" id="id_{{ input_name_prefix }}country" {% if onchange %}onchange="{{ onchange }}" onblur="{{ onchange }}"{% endif %}>
-    <option selected value=""></option>
+    {% if country_selected %}
+        <option selected="{{ country_selected }}">{{ country_selected }}</option>
+    {% else %}
+        <option selected value=""></option>
+    {% endif %}
     <option value="Albania">{% filter ak_text:"country_Albania" %}Albania{% endfilter %}</option>
     <option value="Austria">{% filter ak_text:"country_Austria" %}Austria{% endfilter %}</option>
     <option value="Belgium">{% filter ak_text:"country_Belgium" %}Belgium{% endfilter %}</option>

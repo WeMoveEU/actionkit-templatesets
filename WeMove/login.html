@@ -1,91 +1,55 @@
 {% extends "./wrapper.html" %}
 
-
-{% block content %}
-
-{% comment %}
-
-TODO:
-
- - update styles to login from peititon
-
-{% endcomment %}
-
-<div class="nav-md:grid grid-cols-petition">
-  <article>
-    <div class="relative">
-
-      <h1 class="nav-md:mb-8 nav-md:pr-40">
-          {% filter ak_text:"login_title" %}Oops, we need to verify who you are before showing you that page!{% endfilter %}
-      </h1>
-
-    </div>
-
-    {% comment %}{% include "./component-featured-image.html" with featured_image="https://wemove.eu/_next/image?url=%2Fuploads%2Fdeep_sea_c5eae5733c.jpg&w=2048&q=75"  %} {% endcomment %}
-
-    <div class="nav-md:mr-4">
-      <div class="text-wm-purple p-6 bg-wm-lightblue-box mt-4 mb-8 font-normal text-base font-libre-franklin">
-        {% filter ak_text:"magic_link_explanation" %}We'll send a magic link to your email to log you in.{% endfilter %}
-      </div>
-
-    <form
-      class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below is-floating
-      bg-wm-bg-form p-4 h-fit mx-auto max-w-[500px]"
-      name="login-form"
-      method="post"
-      action="/act/"
-      accept-charset="utf-8"
-      data-wm-form="sursignupvey"
-      data-wm-floating-labels-form>
-
-      <input type="hidden" name="page" value="magic-link-confirmation" />
-      <input type="hidden" name="action_redirect_to" value="{{ request.GET.next }}" />
-
-      {% if request.GET.akid %}
-
-      <input type="hidden" name="akid" value="{{ request.GET.akid }}" />
-
-      {% else %}
-
-
-      <div class="form-wrapper-container" style="min-height: auto;">
-        <div data-wm-form-field="email" id="ak-fieldbox-email" 
-             class="form-field required field-ak-type--user field-type--text ak-err-below">
-            <label for="id_email" class="ak-is-overlaid ak-error" style="cursor: text; pointer-events: none;">
-                Your email:
-            </label>
-            <input type="text" name="email" id="id_email" class="ak-userfield-input ak-has-overlay ak-error">
-            <ul class="ak-err"><li>Your email is required.</li></ul>
-        </div>
-      </div>
-
-      {% endif %}
-
-      <div class="mb-2">
-        <button type="submit" class="ak-submit-button">
-            {% filter ak_text:"button_send_email" %}Send Email{% endfilter %}
-        </button>
-      </div>
-
-    </div>
-  </article>
-
-</form>
-
-</div>
-
+{% block title %}
+Sign in | WeMove Europe
 {% endblock %}
 
-{% block below_form %}
+{% block content %}
+<section class="mx-auto max-w-[500px]">
+  <h1>{% filter ak_text:"login_title" %}Sign in{% endfilter %}</h1>
 
-<script>
-    // not sure we need or want context here
-    actionkit.forms.contextRoot = '/context/';
-    actionkit.forms.initPage();
-    actionkit.forms.initForm('login-form');
-    
-    const email = document.getElementById('id_email');
-    if (email) { email.focus(); }
-</script>
+  <p class="mb-8">
+    {% filter ak_text:"loginVerification_description" %}Oops, we need to verify who you are before showing you that page!{% endfilter %}
+  </p>
 
+  <form
+    class="ak-labels-overlaid ak-errs-below bg-wm-bg-form p-4 mx-auto max-w-[500px] rounded"
+    name="login-form"
+    method="post"
+    action="/act/"
+    accept-charset="utf-8"
+    data-wm-form="login"
+    data-wm-floating-labels-form>
+    <input type="hidden" name="page" value="magic-link-confirmation" />
+    <input type="hidden" name="action_redirect_to" value="{{ request.GET.next }}" />
+
+    {% if request.GET.akid %}
+      <input type="hidden" name="akid" value="{{ request.GET.akid }}" />
+    {% else %}
+      <div
+        data-wm-form-field="email"
+        id="ak-fieldbox-email"
+        class="form-field required field-ak-type--user field-type--email">
+        <label for="id_email" class="ak-is-overlaid ak-error">
+          Email:<span class="ak-required-flag">*</span>
+        </label>
+        <input
+          type="email"
+          name="email"
+          id="id_email"
+          class="ak-userfield-input ak-has-overlay"
+          required />
+        <ul class="compact" id="ak-errors"></ul>
+      </div>
+    {% endif %}
+
+    <button type="submit">
+      {% filter ak_text:"button_send_email" %}Sign in{% endfilter %}
+    </button>
+  </form>
+
+  <aside class="text-wm-purple p-6 bg-wm-lightblue-box my-8 rounded">
+    {% filter ak_text:"magic_link_explanation" %}We'll send a magic link to your email to log you in.{% endfilter %}
+  </aside>
+</section>
 {% endblock %}
