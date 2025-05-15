@@ -9,7 +9,7 @@
 {% if hasActiveRecurringDonations %}
   {% for donation in recurring_donations reversed %}
     {% if donation.is_active %}
-      <div class="rounded-xl p-4 border-[1px] border-wm-pink text-wm-purple w-full relative">
+      <div data-wm-recurring-donation-card class="rounded-xl p-4 border-[1px] border-wm-pink text-wm-purple w-full relative">
         <aside class="flex justify-between">
           <div class="flex items-center gap-1">
             <span aria-hidden="true" class="{% if donation.is_active %}bg-green-500{% else %}bg-gray-500{% endif %} rounded-full border-black inline-block h-3 w-3"></span>
@@ -96,15 +96,15 @@
       </div>
     {% endif %}
   {% endfor %}
-{% else %}
-  <div class="rounded-xl p-4 border-[1px] border-wm-pink text-wm-purple w-full">
-    <main class="text-center text-xl">
-      <p>You don't have recurring donations</p>
-      <a
-        class="hover:!no-underline w-auto m-auto uppercase py-2 px-6 text-center text-base font-bold font-gilroy bg-wm-pink min-h-8 inline-block !text-white rounded transition-all hover:brightness-110"
-        href="https://action.wemove.eu/donate/chip-in-wemove?selected_frequency=recurring">
-        Begin a recurring donation
-      </a>
-    </main>
-  </div>
 {% endif %}
+
+<div data-wm-no-recurring-donation-card {% if hasActiveRecurringDonations %}hidden{% endif %} class="rounded-xl p-4 border-[1px] border-wm-pink text-wm-purple w-full">
+  <main class="text-center text-xl">
+    <p>You don't have recurring donations</p>
+    <a
+      class="hover:!no-underline w-auto m-auto uppercase py-2 px-6 text-center text-base font-bold font-gilroy bg-wm-pink min-h-8 inline-block !text-white rounded transition-all hover:brightness-110"
+      href="https://action.wemove.eu/donate/chip-in-wemove?selected_frequency=recurring">
+      Begin a recurring donation
+    </a>
+  </main>
+</div>
