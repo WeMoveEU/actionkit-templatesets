@@ -1,23 +1,7 @@
 <div class="standard-share nav-md:grid gap-2 grid-cols-[60%_minmax(40%,_1fr)]">
   <section>
     <h1>
-      {% if tests %}
-        {% if page.custom_fields.share_step_ab_test_1_language_variations == "psychology" %}
-          {% filter ak_text:"share_psychologyVariant_title" %}Thousands are already sharing — join them{% endfilter %}
-        {% elif page.custom_fields.share_step_ab_test_1_language_variations == "emotion" %}
-          {% filter ak_text:"share_emotionVariant_title" %}Tell your friends to make a difference{% endfilter %}
-        {% elif page.custom_fields.share_step_ab_test_1_language_variations == "outcome" %}
-          {% filter ak_text:"share_outcomeVariant_title" %}Every share brings us closer to change{% endfilter %}
-        {% elif page.custom_fields.share_step_ab_test_1_language_variations == "urgency" %}
-          {% filter ak_text:"share_urgencyVariant_title" %}The more we are, the louder our voice{% endfilter %}
-        {% elif page.custom_fields.share_step_ab_test_1_language_variations == "community" %}
-          {% filter ak_text:"share_communityVariant_title" %}Share to show how you care{% endfilter %}
-        {% elif page.custom_fields.share_step_ab_test_1_language_variations == "default" %}
-          {% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}
-        {% endif %}
-      {% else %}
-        {% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}
-      {% endif %}
+      {% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}
     </h1>
 
     {% if page.type == "Signup" and not isEmbbeded %}
@@ -26,23 +10,7 @@
       </div>
     {% endif %}
 
-    {% if tests %}
-      {% if page.custom_fields.share_step_ab_test_1_language_variations == "psychology" %}
-        {% filter ak_text:"share_psychologyVariant_body" %}This campaign is spreading fast. Help it go even further.{% endfilter %}
-      {% elif page.custom_fields.share_step_ab_test_1_language_variations == "emotion" %}
-        {% filter ak_text:"share_emotionVariant_body" %}Think of a friend who’d care — send it to them now.{% endfilter %}
-      {% elif page.custom_fields.share_step_ab_test_1_language_variations == "outcome" %}
-        {% filter ak_text:"share_outcomeVariant_body" %}Your share could be the reason we win this. Help us get there.{% endfilter %}
-      {% elif page.custom_fields.share_step_ab_test_1_language_variations == "urgency" %}
-        {% filter ak_text:"share_urgencyVariant_body" %}It only takes 5 seconds. Even one share will make a difference.{% endfilter %}
-      {% elif page.custom_fields.share_step_ab_test_1_language_variations == "community" %}
-        {% filter ak_text:"share_communityVariant_body" %}Change happens when we act together.{% endfilter %}
-      {% elif page.custom_fields.share_step_ab_test_1_language_variations == "default" %}
-        {% include_tmpl form.thank_you_text %}
-      {% endif %}
-    {% else %}
-      {% include_tmpl form.thank_you_text %}
-    {% endif %}
+    {% include_tmpl form.thank_you_text %}
   </section>
 
   {% if page.custom_fields.daisy_chain_action %}
