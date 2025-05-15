@@ -48,134 +48,30 @@
     </div>
 
     <div class="mx-auto md:max-w-[500px]">
-      <div class="border-[1px] border-wm-black rounded p-2 mb-4">
-        <a
-          class="transition-all text-center bg-whatsapp !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          href="/thanks/{{ pageName }}?share=whatsapp&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}"
-          target="_blank"
-          data-wm-pixel-event-type="Share"
-          data-wm-pixel-track-type="trackCustom"
-          data-wm-pixel-content-name="WhatsApp"
-          data-wm-pixel-trigger-event="click">
-          <span aria-hidden="true" class="h-6 w-6">
-            {% include "./icon-whatsapp.html" %}
-          </span>
-          <span>{% filter ak_text:"thanks_shareWhatsApp_button" %}Share on WhatsApp{% endfilter %}</span>
-        </a>
-
-        {% if args.share == "whatsapp" %}
-          {% include "./component-share_from_mailings_script.html" %}
+      {% if tests %}
+        {% if page.custom_fields.share_step_ab_test_2_buttons == "fourButtons" %}
+          {% include "./component-share_button_whatsapp.html" %}
+          {% include "./component-share_button_facebook.html" %}
+          {% include "./component-share_button_taf.html" %}
+          {% include "./component-share_button_copy_url.html" %}
+        {% elif page.custom_fields.share_step_ab_test_2_buttons == "whatsapp" %}
+          {% include "./component-share_button_whatsapp.html" %}
+        {% elif page.custom_fields.share_step_ab_test_2_buttons == "default" %}
+          {% include "./component-share_button_whatsapp.html" %}
+          {% include "./component-share_button_facebook.html" %}
+          {% include "./component-share_button_bluesky.html" %}
+          {% include "./component-share_button_instagram.html" %}
+          {% include "./component-share_button_taf.html" %}
+          {% include "./component-share_button_copy_url.html" %}
         {% endif %}
-      </div>
-
-      <div class="border-[1px] border-wm-black rounded p-2 mb-4">
-        <a
-          class="transition-all text-center bg-facebook !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          href="/share/link?type=fb&page_name={{ pageName }}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}"
-          target="_blank"
-          data-wm-pixel-event-type="Share"
-          data-wm-pixel-track-type="trackCustom"
-          data-wm-pixel-content-name="Facebook"
-          data-wm-pixel-trigger-event="click">
-          <span aria-hidden="true" class="h-6 w-6">
-            {% include "./icon-facebook.html" %}
-          </span>
-          <span>{% filter ak_text:"thanks_shareFacebook_button" %}Share on Facebook{% endfilter %}</span>
-        </a>
-      </div>
-
-      <div class="border-[1px] border-wm-black rounded p-2 mb-4">
-        <script>
-          document.addEventListener('wm-scriptsLoaded', () => {
-            window.blueskyShareText = wemove.utilities.decodeHTML(`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
-          });
-        </script>
-
-        {% if args.share == "bluesky" %}
-          {% include "./component-share_from_mailings_script.html" %}
-        {% endif %}
-
-        <a
-          class="transition-all text-center w-full bg-bluesky !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          href="/share/link?type=bl{% if args.utm_medium == "email" %}&source=mailing{% endif %}{% if action %}&action_id={{ action.id }}{% else %}&page_name={{ pageName }}&akid={{ akid }}{% endif %}"
-          target="_blank"
-          data-wm-pixel-event-type="Share"
-          data-wm-pixel-track-type="trackCustom"
-          data-wm-pixel-content-name="Bluesky"
-          data-wm-pixel-trigger-event="click">
-          <span aria-hidden="true" class="h-4 w-4">
-            {% include "./icon-bluesky.html" %}
-          </span>
-          <span>{% filter ak_text:"thanks_shareBluesky_button" %}Share on Bluesky{% endfilter %}</span>
-        </a>
-      </div>
-
-      {% store as instagram_share_link %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "instagram_share_link" as field_name %}{% endstore %}
-      {% if instagram_share_link %}
-      <div class="border-[1px] border-wm-black rounded p-2 mb-4">
-        <a
-          class="transition-all text-center bg-instagram !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          href="{{instagram_share_link}}"
-          target="_blank"
-          data-wm-send-share-to-action-kit="/share/link?type=ot&page_name={{ pageName }}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}"
-          data-wm-pixel-event-type="Share"
-          data-wm-pixel-track-type="trackCustom"
-          data-wm-pixel-content-name="Instagram"
-          data-wm-pixel-trigger-event="click">
-          <span aria-hidden="true" class="h-4 w-4">
-            {% include "./icon-instagram.html" %}
-          </span>
-          <span>{% filter ak_text:"thanks_shareInstagram_button" %}Share Story on Instagram{% endfilter %}</span>
-        </a>
-      </div>
+      {% else %}
+        {% include "./component-share_button_whatsapp.html" %}
+        {% include "./component-share_button_facebook.html" %}
+        {% include "./component-share_button_bluesky.html" %}
+        {% include "./component-share_button_instagram.html" %}
+        {% include "./component-share_button_taf.html" %}
+        {% include "./component-share_button_copy_url.html" %}
       {% endif %}
-
-      {% if page.followup.send_taf %}
-      <div class="border-[1px] border-wm-black rounded p-2 mb-4">
-        <button
-          type="button"
-          class="transition-all w-full text-center bg-wm-orange !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
-          target="_blank"
-          data-wm-taf-button
-          data-wm-taf-button-mailto="mailto:?subject={{ page.followup.taf_subject|urlencode }}&body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"
-          data-wm-taf-track-url="/share/link?type=ot&source=taf{% if args.consent == "emailed" %}&page_name={{ pageName }}{% elif action %}&action_id={{ action.id }}{% else %}&page_name={{ pageName }}&akid={{ akid }}{% endif %}"
-          data-wm-pixel-event-type="Share"
-          data-wm-pixel-track-type="trackCustom"
-          data-wm-pixel-content-name="Taf"
-          data-wm-pixel-trigger-event="click">
-          <span aria-hidden="true" class="h-6 w-6">
-            {% include "./icon-mail.html" %}
-          </span>
-          <span>{% filter ak_text:"thanks_shareEmail_button" %}Share by e-mail{% endfilter %}</span>
-        </button>
-      </div>
-      {% endif %}
-
-      <div class="border-[1px] border-wm-black rounded p-2 mb-4">
-        <button
-          type="button"
-          class="transition-all text-center bg-copyurl !text-white font-bold uppercase p-3 block font-gilroy rounded hover:!no-underline hover:brightness-110
-          w-full"
-          data-wm-copy-to-clipboard="/share/link?type=ot&source=copypaste{% if args.consent == "emailed" %}&page_name={{ pageName }}{% elif action %}&action_id={{ action.id }}{% else %}&page_name={{ pageName }}&akid={{ akid }}{% endif %}"
-          data-wm-pixel-event-type="Share"
-          data-wm-pixel-track-type="trackCustom"
-          data-wm-pixel-content-name="CopyLink"
-          data-wm-pixel-trigger-event="click">
-          <span class="copy-text">
-            <span aria-hidden="true" class="h-6 w-6">
-              {% include "./icon-link.html" %}
-            </span>
-            <span>{% filter ak_text:"copyLink_button" %}Copy url{% endfilter %}</span>
-          </span>
-
-          <span class="copied-text">
-            <span aria-hidden="true" class="h-6 w-6">
-              {% include "./icon-check.html" %}
-            </span>
-            <span>{% filter ak_text:"linkCopied_alert" %}Link copied{% endfilter %}</span>
-          </span>
-        </button>
-      </div>
     </div>
   </aside>
 </div>
