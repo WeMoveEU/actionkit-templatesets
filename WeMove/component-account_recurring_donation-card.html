@@ -18,11 +18,35 @@
 
           {% if donation.is_active %}
             <button
-            type="button"
-            class="absolute right-4 top-4 z-10 bg-gray-700 text-sm rounded block py-1 px-2 text-white hover:bg-wm-purple transition-all"
-            data-wm-cancel-recurring-donation="{{ donation.recurring_id }}">
+              type="button"
+              data-wm-open-dialog-cta="data-wm-cancel-recurring"
+              class="absolute right-4 top-4 z-10 bg-gray-700 text-sm rounded block py-1 px-2 text-white hover:bg-wm-purple transition-all">
               cancel subscription
             </button>
+
+            <div
+              hidden
+              data-wm-cancel-recurring="{{ donation.recurring_id }}">
+              <form>
+                <h2 class="text-wm-purple border-b-2 w-full">Recurring donation</h2>
+                <p class="mb-6">Are you sure you want to cancel your recurring donation?</p>
+
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    <button
+                        type="button"
+                        class="bg-slate-500 rounded p-2 hover:brightness-110 text-white font-bold"
+                        data-wm-close-dialog-cta>
+                        No, keep it
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="rounded p-2 hover:brightness-110 text-white font-bold">
+                        Yes, cancel it
+                    </button>
+                </div>
+              </form>
+            </div>
           {% endif %}
         </aside>
 
