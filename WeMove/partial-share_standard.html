@@ -10,7 +10,16 @@
       </div>
     {% endif %}
 
-    {% include_tmpl form.thank_you_text %}
+    <div>
+      {% if page.lang.iso_code in "en,it" %}
+        {% include_tmpl form.thank_you_text %}
+      {% else %}
+        {% filter ak_text:"share_thanks_body" %}
+            Do you know anyone who would feel strongly about this campaign?
+            Send them an email or ask them on social media to sign the petition.
+        {% endfilter %}
+      {% endif %}
+    </div>
   </section>
 
   {% if page.custom_fields.daisy_chain_action %}
