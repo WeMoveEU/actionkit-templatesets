@@ -19,15 +19,17 @@
           {% if donation.is_active %}
             <button
               type="button"
-              data-wm-open-dialog-cta="data-wm-cancel-recurring"
+              data-wm-open-dialog-cta="data-wm-cancel-recurring-donation"
               class="absolute right-4 top-4 z-10 bg-gray-700 text-sm rounded block py-1 px-2 text-white hover:bg-wm-purple transition-all">
               cancel subscription
             </button>
 
             <div
               hidden
-              data-wm-cancel-recurring="{{ donation.recurring_id }}">
-              <form>
+              data-wm-cancel-recurring-donation>
+              <form data-wm-recurring-id="{{ donation.recurring_id }}">
+                {% include "./component-preloader.html" %}
+
                 <h2 class="text-wm-purple border-b-2 w-full">Recurring donation</h2>
                 <p class="mb-6">Are you sure you want to cancel your recurring donation?</p>
 
