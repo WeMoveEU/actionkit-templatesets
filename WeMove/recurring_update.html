@@ -36,12 +36,11 @@ There are a couple ways to update a recurring donation:
         </div>
     {% endif %}
     <div class="ak-grid-col {% if page.custom_fields.featured_image %} ak-grid-col-9-of-12 {% else %}ak-grid-col-12-of-12 {% endif %}">
-
         <div>
             <p>
-            {% filter ak_text:"knownUser_Hello" %}Hello{% endfilter %} {{ logged_in_user.name }}{% filter ak_text:"!" %}!{% endfilter %}
-            {% filter ak_text:"knownUser_notYou_button" %}Not you?{% endfilter %}
-            <a href="/logout/">{% filter ak_text:"clickHere_button" %}click here{% endfilter %}</a>
+                {% filter ak_text:"knownUser_Hello" %}Hello{% endfilter %} {{ logged_in_user.name }}{% filter ak_text:"!" %}!{% endfilter %}
+                {% filter ak_text:"knownUser_notYou_button" %}Not you?{% endfilter %}
+                <a href="/logout/">{% filter ak_text:"clickHere_button" %}click here{% endfilter %}</a>
             </p>
         </div>
 
@@ -57,18 +56,12 @@ There are a couple ways to update a recurring donation:
 
         {% with profile_details|load_json as profile %}
 
-
         {% if action %}
-
             <h3>Update saved!</h3>
-            <div>
-                {% include_tmpl form.thank_you_text %}
-            </div>
-
+            <div>{% include_tmpl form.thank_you_text %}</div>
         {% else %}
 
         <div class="recurring-update-about-text">
-
             {% store as currency_name %} {% if profile.currency == 'PLN' %} złoty {% elif profile.currency == 'GBP' %} pounds {% else %} euros {% endif %} {% endstore %}
             {% store as currency_sym %} {% if profile.currency == 'PLN' %} zł {% elif profile.currency == 'GBP' %} £ {% else %} € {% endif %} {% endstore %}
             {% store as increases %} {% if profile.currency == 'PLN' %}0,2,4,6,8{% else %}0,1,2,3,5{% endif %}{% endstore %}
@@ -87,9 +80,7 @@ There are a couple ways to update a recurring donation:
                 }
             </style>
 
-
             {% include_tmpl form.update_card_text %}
-
 
             <div style="display: none;">
                 <form id="actionkit-form" name="act" action="/act/" method="POST">
@@ -114,30 +105,28 @@ There are a couple ways to update a recurring donation:
             </div>
 
             <div id="confirm-amount-change">
+                {% remember args.clicked|add:profile.amount as starting_amount %}
+                {% remember args.clicked as initial_increase %}
 
-                    {% remember args.clicked|add:profile.amount as starting_amount %}
-                    {% remember args.clicked as initial_increase %}
+                {% for inc in increases|split:',' %}
 
-                    {% for inc in increases|split:',' %}
+                    {% remember starting_amount|add:inc as change_amount %}
+                    {% remember initial_increase|add:inc as increase %}
 
-                        {% remember starting_amount|add:inc as change_amount %}
-                        {% remember initial_increase|add:inc as increase %}
-
-                        <div style="padding: 1em;">
-                        <div
-                            data-wm-donate-widget
-                            class="donate-widget upscale-button{% if change_amount == starting_amount %} selected{% endif %}"
-                            data-ak_locale="en"
-                            data-akid="{{ logged_in_user.token }}"
-                            data-mode="change"
-                            data-recurring_id="{{ args.profile }}"
-                            data-change_button_text="{% include_tmpl page.custom_fields.custom_upscale_button_ask %}"
-                            data-change_amount="{{ change_amount }}"
-                            data-selected_currency="{{ args.currency }}"
-                            ></div>
-                        </div>
-                    {% endfor %}
-
+                    <div style="padding: 1em;">
+                    <div
+                        data-wm-donate-widget
+                        class="donate-widget upscale-button{% if change_amount == starting_amount %} selected{% endif %}"
+                        data-ak_locale="en"
+                        data-akid="{{ logged_in_user.token }}"
+                        data-mode="change"
+                        data-recurring_id="{{ args.profile }}"
+                        data-change_button_text="{% include_tmpl page.custom_fields.custom_upscale_button_ask %}"
+                        data-change_amount="{{ change_amount }}"
+                        data-selected_currency="{{ args.currency }}"
+                        ></div>
+                    </div>
+                {% endfor %}
             </div>
 
             <script>
@@ -159,18 +148,12 @@ There are a couple ways to update a recurring donation:
                     form.submit();
                 })
             </script>
-
-
         </div>
-
-
         {% endif %}
-
         {% endwith %}
-
-
     </div>
-
 </div>
+
 <script type="module" src="https://donate-ui.wemove.eu/donate-main.js"></script>
+
 {% endblock %}
