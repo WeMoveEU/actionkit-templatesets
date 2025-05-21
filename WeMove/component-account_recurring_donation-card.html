@@ -73,13 +73,13 @@
               <h5 class="mb-0">Payment method</h5>
               <span>
                 {% if donation.account|lower == "wm-card" or donation.account|lower == "legacy-card" %}
-                  credit card
+                  Credit card
                 {% elif donation.account|lower == "wm-stripe" or donation.account|lower == "legacy-stripe" %}
-                  stripe
+                  Stripe
                 {% elif donation.account|lower == "wm-sepa" or donation.account|lower == "legacy-sepa" or donation.account|lower == "legacy-banktransfer" %}
-                  sepa
+                  SEPA
                 {% elif donation.account|lower == "wm-paypal" or donation.account|lower == "legacy-paypal" %}
-                  paypal
+                  PayPal
                 {% endif %}
               </span>
             </div>
