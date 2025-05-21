@@ -9,7 +9,7 @@
 {% if hasActiveRecurringDonations %}
   {% for donation in recurring_donations reversed %}
     {% if donation.is_active %}
-      <div data-wm-recurring-donation-card class="rounded-xl p-4 border-[1px] border-wm-pink text-wm-purple w-full relative">
+      <div data-wm-recurring-donation-card="{{ forloop.counter }}" class="rounded-xl p-4 border-[1px] border-wm-pink text-wm-purple w-full relative">
         <aside class="flex justify-between">
           <div class="flex items-center gap-1">
             <span aria-hidden="true" class="{% if donation.is_active %}bg-green-500{% else %}bg-gray-500{% endif %} rounded-full border-black inline-block h-3 w-3"></span>
@@ -20,12 +20,13 @@
             <button
               type="button"
               data-wm-open-dialog-cta="data-wm-cancel-recurring-donation"
+              data-wm-dialog-id="{{ forloop.counter }}"
               class="absolute right-4 top-4 z-10 bg-gray-700 text-sm rounded block py-1 px-2 text-white hover:bg-wm-purple transition-all">
               cancel subscription
             </button>
 
             <div hidden data-wm-cancel-recurring-donation-error>
-              <h2 class="text-wm-purple">Error</h2>
+              <h2 class="text-wm-purple border-b-2 w-full">Error</h2>
               <p>
                 Something went wrong and we couldn’t stop your donation.
                 Please contact us at <a class="text-wm-pink hover:underline" href="mailto:donation@wemove.eu">donation@wemove.eu</a> and we’ll cancel your recurring contribution.
@@ -34,8 +35,8 @@
 
             <div
               hidden
-              data-wm-cancel-recurring-donation>
-              <form data-wm-recurring-id="{{ donation.recurring_id }}">
+              data-wm-cancel-recurring-donation="{{ forloop.counter }}">
+              <form data-wm-recurring-id="{{ donation.recurring_id }}" data-wm-cancel-recurring-donation-form-id="{{ forloop.counter }}">
                 {% include "./component-preloader.html" %}
 
                 <h2 class="text-wm-purple border-b-2 w-full">Recurring donation</h2>
