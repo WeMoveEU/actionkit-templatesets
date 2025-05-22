@@ -109,7 +109,10 @@
   {% endfor %}
 {% endif %}
 
-<div data-wm-no-recurring-donation-card {% if hasActiveRecurringDonations %}hidden{% endif %} class="rounded-xl p-4 border-[1px] border-wm-pink text-wm-purple w-full">
+<div
+  data-wm-no-recurring-donation-card
+  {% if hasActiveRecurringDonations %}hidden{% endif %}
+  class="rounded-xl p-4 border-[1px] border-wm-pink text-wm-purple w-full">
   <main class="text-center text-xl">
     <p>You don't have recurring donations</p>
     <a

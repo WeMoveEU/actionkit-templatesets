@@ -51,7 +51,7 @@
             title="Download pdf of receipt"
             class="absolute right-4 top-4 z-10"
             data-wm-download-receipt
-            data-wm-download-receipt-url="https://wemove.eu/donation-receipt/?language={{ link_iso }}&user_firstName={{ actionkit_user.first_name }}&user_lastName={{ actionkit_user.last_name }}&user_email={{ actionkit_user.email }}&payment_method={{ currentPaymentMethod }}&payment_date={{ donation.created_at|date:"m/d/Y" }}&payment_amount={{ donation.amt }}&payment_frequency={{ currentPaymentFrequency }}"
+            data-wm-download-receipt-url="https://wemove.eu/donation-receipt?language={{ link_iso }}&user_firstName={{ actionkit_user.first_name }}&user_lastName={{ actionkit_user.last_name }}&user_email={{ actionkit_user.email }}&payment_method={{ currentPaymentMethod }}&payment_date={{ donation.created_at|date:"m/d/Y" }}&payment_amount={{ donation.amt }}&payment_frequency={{ currentPaymentFrequency }}"
             data-wm-download-receipt-file-name="wemove-donation_receipt-{{ actionkit_user.last_name }}_{{ actionkit_user.first_name }}-{{ donation.created_at|date:"m-d-Y" }}.pdf">
             <span aria-hidden="true" class="w-6 h-6 inline-block not-sr-only">
               {% include "./icon-download.html" %}
