@@ -25,17 +25,20 @@
                 <span class="text-wm-pink">/</span>
 
                 {% if donation.account|lower == "wm-card" or donation.account|lower == "legacy-card" %}
-                  credit card
+                  Credit card
                   {% remember "credit card" as currentPaymentMethod %}
                 {% elif donation.account|lower == "wm-stripe" or donation.account|lower == "legacy-stripe" %}
-                  stripe
+                  Stripe
                   {% remember "stripe" as currentPaymentMethod %}
                 {% elif donation.account|lower == "wm-sepa" or donation.account|lower == "legacy-sepa" or donation.account|lower == "legacy-banktransfer" %}
-                  sepa
+                  SEPA
                   {% remember "sepa" as currentPaymentMethod %}
                 {% elif donation.account|lower == "wm-paypal" or donation.account|lower == "legacy-paypal" %}
-                  paypal
+                  PayPal
                   {% remember "paypal" as currentPaymentMethod %}
+                {% else %}
+                  {% remember donation.account as currentPaymentMethod %}
+                  {{ donation.account }}
                 {% endif %}
               </span>
             </div>
