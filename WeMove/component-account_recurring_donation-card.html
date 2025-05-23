@@ -36,8 +36,12 @@
             <div
               hidden
               data-wm-cancel-recurring-donation="{{ forloop.counter }}">
-              <form data-wm-recurring-id="{{ donation.recurring_id|custom_hash }}" data-wm-cancel-recurring-donation-form-id="{{ forloop.counter }}">
+              <form
+                data-wm-recurring-id="{{ donation.recurring_id }}"
+                data-wm-cancel-recurring-donation-form-id="{{ forloop.counter }}">
                 {% include "./component-preloader.html" %}
+
+                <input type="hidden" name="hash" value="{% filter custom_hash %}{{ akid }}.{{ donation.recurring_id }}{% endfilter %}" />
 
                 <h2 class="text-wm-purple border-b-2 w-full">Recurring donation</h2>
                 <p class="mb-6">Are you sure you want to cancel your recurring donation?</p>
