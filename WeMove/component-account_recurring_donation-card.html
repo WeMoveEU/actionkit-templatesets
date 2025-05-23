@@ -36,7 +36,7 @@
             <div
               hidden
               data-wm-cancel-recurring-donation="{{ forloop.counter }}">
-              <form data-wm-recurring-id="{{ donation.recurring_id }}" data-wm-cancel-recurring-donation-form-id="{{ forloop.counter }}">
+              <form data-wm-recurring-id="{{ donation.recurring_id|custom_hash }}" data-wm-cancel-recurring-donation-form-id="{{ forloop.counter }}">
                 {% include "./component-preloader.html" %}
 
                 <h2 class="text-wm-purple border-b-2 w-full">Recurring donation</h2>
