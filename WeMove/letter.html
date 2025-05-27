@@ -140,8 +140,9 @@
     {% if page.custom_fields.mailto_action == "1" %}
 
     <script async>
+      // we're going to make this optional...
       window.actionkitUserFormShown = () => {
-        // if we don't know who you are, back to the start. we probably need a better fallback here huh!?
+        // if we don't know who you are, back to the start. we probably need a better fallback here 
         window.location.pathname = '/sign/{{ page.custom_fields.daisy_chain_action }}/';
       }
 
