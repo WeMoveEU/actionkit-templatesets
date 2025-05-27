@@ -6,8 +6,7 @@
   <article>
     <h1>{{ page.title }}</h1>
 
-    <div
-      class="bg-wm-purple p-4 text-gray-200 mb-4
+    <div class="bg-wm-purple p-4 text-gray-200 mb-4
         [&_ul]:pl-4 [&_ul]:list-disc
         [&_li]:pb-4 [&_li]:mb-4 [&_li]:border-b-2
         [&_li:last-child]:border-0 [&_li:last-child]:mb-0 [&_li:last-child]:pb-0">
@@ -15,13 +14,13 @@
     </div>
 
     {% if form.statement_leadin %}
-      <div class="p-4 mb-4 bg-blue-200 [&_p]:m-0">
-        {% include_tmpl form.statement_leadin %}
+    <div class="p-4 mb-4 bg-blue-200 [&_p]:m-0">
+      {% include_tmpl form.statement_leadin %}
 
-        <div id="recipients-wrapper" class="space-y-4"></div>
-        <script type="text/ak-template" for="recipients-wrapper">
+      <div id="recipients-wrapper" class="space-y-4"></div>
+      <script type="text/ak-template" for="recipients-wrapper">
         [% if ( actionkit.context.recognized_user ) { %]
-          [% if ( actionkit.context.targets && actionkit.context.targets.targets ) { %]        
+          [% if ( actionkit.context.targets && actionkit.context.targets.targets ) { %]
             <ul class="list-disc pl-4">
               [% for ( var t of actionkit.context.targets.targets ) { %]
                 <li>[%= t.title_full %]</li>
@@ -35,49 +34,42 @@
   </article>
 
   <aside>
-    <form
-      data-wm-form="letter"
-      data-wm-floating-labels-form
+    <form data-wm-form="letter" data-wm-floating-labels-form
       class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below bg-wm-bg-form p-4 max-w-[500px] mx-auto"
-      name="act"
-      method="post"
-      action="/act/"
-      accept-charset="utf-8"
-      id="mailto-letter-form">
+      name="act" method="post" action="/act/" accept-charset="utf-8" id="mailto-letter-form">
       <input type="hidden" name="page" value="{{ page.name }}" />
 
       {% if page.custom_fields.mailto_action == "1" %}
-   
 
-        <div data-wm-form-field="subject" class="form-field required field-ak-type--subject field-type--text ak-err-below">
-          <label for="id_subject">
-            {% filter ak_text:"letterMailSubject_field" %}Subject{% endfilter %}:
-            <span class="ak-required-flag">*</span>
-          </label>
+      <div data-wm-form-field="subject"
+        class="form-field required field-ak-type--subject field-type--text ak-err-below">
+        <label for="id_subject">
+          {% filter ak_text:"letterMailSubject_field" %}Subject{% endfilter %}:
+          <span class="ak-required-flag">*</span>
+        </label>
 
-          <input
-            class="ak-userfield-input ak-has-overlay"
-            id="id_subject"
-            name="action_subject"
-            value="{% include_tmpl page.custom_fields.mailto_subject %}" />
+        <input class="ak-userfield-input ak-has-overlay" id="id_subject" name="action_subject"
+          value="{% include_tmpl page.custom_fields.mailto_subject %}" />
 
-          <input type="hidden" name="required" value="action_subject" />
-        </div>
+        <input type="hidden" name="required" value="action_subject" />
+      </div>
       {% endif %}
 
-      {% if not page.custom_fields.hide_comments_field == "1" %}  
-        <div data-wm-form-field="body" class="form-field{% if page.custom_fields.letter_body_required == "0" %}{% else %} required{% endif %} field-ak-type--body field-type--textarea  ak-err-below">
-          <label for="id_comment">
-            {% filter ak_text:"letterMailBody_field" %}Email message{% endfilter %}:
-            {% if page.custom_fields.letter_body_required == "0" %}{% else %}<span class="ak-required-flag">*</span>{% endif %}
-          </label>
+      {% if not page.custom_fields.hide_comments_field == "1" %}
+      <div data-wm-form-field="body" class="form-field{% if page.custom_fields.letter_body_required == " 0" %}{% else %}
+        required{% endif %} field-ak-type--body field-type--textarea ak-err-below">
+        <label for="id_comment">
+          {% filter ak_text:"letterMailBody_field" %}Email message{% endfilter %}:
+          {% if page.custom_fields.letter_body_required == "0" %}{% else %}<span class="ak-required-flag">*</span>{%
+          endif %}
+        </label>
 
-          <textarea id="id_comment" name="action_comment">{% include_tmpl form.letter_text escaped %}</textarea>
+        <textarea id="id_comment" name="action_comment">{% include_tmpl form.letter_text escaped %}</textarea>
 
-          {% if page.custom_fields.letter_body_required != "0" %}
-            <input type="hidden" name="required" value="action_comment" />
-          {% endif %}
-        </div>
+        {% if page.custom_fields.letter_body_required != "0" %}
+        <input type="hidden" name="required" value="action_comment" />
+        {% endif %}
+      </div>
       {% endif %}
 
       {% include "./user_form_wrapper.html" %}
@@ -85,36 +77,37 @@
 
     <div id="fallback" class="" style="display: none;">
 
-          <a id="next-step" href="/cms/thanks/{{ page.name }}?akid={{ args.akid }}" class="button-fill button-fill--orange
+      <a id="next-step" href="/cms/thanks/{{ page.name }}?akid={{ args.akid }}" class="button-fill button-fill--orange
   mb-4 flex w-full gap-2 justify-center p-3 font-bold rounded font-gilroy text-xl">
-          <span class="text-white ">{% filter ak_text:"nextStep_button" %}Go to the next step{% endfilter %}</span>
+        <span class="text-white ">{% filter ak_text:"nextStep_button" %}Go to the next step{% endfilter %}</span>
       </a>
 
-      <p>{{ page.custom_fields.mailto_failed_message|default:"Email didn't open? You can still send your message! Just open your inbox and copy and paste the information below into a new email draft:" }}</p>
+      <p>{{ page.custom_fields.mailto_failed_message|default:"Email didn't open? You can still send your message! Just
+        open your inbox and copy and paste the information below into a new email draft:" }}</p>
       <div>
-      
-        <div class="mb-2 font-bold">To: &nbsp;&nbsp; <a onclick="copyEmailsToClipboard(this)"
-          >[{% filter ak_text:"copyLink_button" %}Copy{% endfilter %}]</a> </div>
+
+        <div class="mb-2 font-bold">To: &nbsp;&nbsp; <a onclick="copyEmailsToClipboard(this)">[{% filter
+            ak_text:"copyLink_button" %}Copy{% endfilter %}]</a> </div>
         <div class="mb-2 px-2" id="fallback-to"> </div>
-        
-        <div class="mb-2 font-bold">Subject: &nbsp;&nbsp; <a onclick="copyText(this, 'fallback-subject')"
-          >[{% filter ak_text:"copyLink_button" %}Copy{% endfilter %}]</a></div>
+
+        <div class="mb-2 font-bold">Subject: &nbsp;&nbsp; <a onclick="copyText(this, 'fallback-subject')">[{% filter
+            ak_text:"copyLink_button" %}Copy{% endfilter %}]</a></div>
         <div class="mb-2 px-2" id="fallback-subject"> </div>
 
-        <div class="mb-2 font-bold">Message: &nbsp;&nbsp; <a onclick="copyText(this, 'fallback-message')"
-          >[{% filter ak_text:"copyLink_button" %}Copy{% endfilter %}]</a></div>
-        <div class="mb-2 px-2"  style="white-space: pre-wrap;" id="fallback-message"> </div>
-    
+        <div class="mb-2 font-bold">Message: &nbsp;&nbsp; <a onclick="copyText(this, 'fallback-message')">[{% filter
+            ak_text:"copyLink_button" %}Copy{% endfilter %}]</a></div>
+        <div class="mb-2 px-2" style="white-space: pre-wrap;" id="fallback-message"> </div>
+
       </div>
-    </div>     
-    
+    </div>
+
     {% comment %}
     This could probably be a classic javascript function... there's a hook
     onContextLoaded that we could use.
     {% endcomment %}
     <script type="text/ak-template" for="fallback-to">
-        [% if ( actionkit.context.targets && actionkit.context.targets.targets ) { 
-          
+        [% if ( actionkit.context.targets && actionkit.context.targets.targets ) {
+
            const targets = actionkit.context.targets.targets;
            const how_many = targets.length;
            const to_show = 4;
@@ -122,109 +115,114 @@
            for ( var t of targets ) {
         %]
                 <div class="mb-1">"[%= t.title_full %]" &lt;[%= t.email %]&gt;<span style='display:none;'>,</span></div>
-        [% 
+        [%
             }
             if (targets.length > to_show ) {
         %]
                 <div class="mb-1"> ... </div>
         [%
-          
-            }  
-          } 
+
+            }
+          }
         %]
     </script>
-     
-    </div>
 
-    {% comment %}I think this is pointless now and that all letter actions are mailto actions... {% endcomment %}
-    {% if page.custom_fields.mailto_action == "1" %}
+</div>
 
-    <script async>
-      window.actionkitUserFormShown = () => {
-        // if we don't know who you are, back to the start. we probably need a better fallback here huh!?
-        window.location.pathname = '/sign/{{ page.custom_fields.daisy_chain_action }}/';
+{% comment %}I think this is pointless now and that all letter actions are mailto actions... {% endcomment %}
+{% if page.custom_fields.mailto_action == "1" %}
+
+<script async>
+
+  {% if request.GET.nr == 1 %}
+  window.actionkitUserFormShown = () => {
+    // if we don't know who you are, back to the start. we probably need a better fallback here huh!?
+    window.location.pathname = '/sign/{{ page.custom_fields.daisy_chain_action }}/';
+  }
+  {% endif %}
+
+  window.actionkitBeforeSubmit = () => {
+    const form = document.forms.act;
+
+    const mailTo = 'mailto:{% for target in context.targets.targets %}{{ target.email }}{% if not forloop.last %},{% endif %}{% endfor %}?cc=mailto@wemove.eu&subject='
+      + encodeURIComponent(actionkit.form.elements.id_subject.value)
+      + '&body='
+      + encodeURIComponent(actionkit.form.elements.id_comment.value);
+
+    // new tab so that we can ask them to go to the next step
+    window.open(mailTo, "_blank");
+
+    const fd = new FormData(form);
+
+    var body = {};
+    fd.forEach(function (value, key) {
+      body[key] = value;
+    });
+
+    // actually submit the action
+    const request = fetch(
+      "/rest/v1/action/",
+      {
+        method: "POST",
+        body: JSON.stringify(body),
+        redirect: "manual",
+        headers: {
+          "Content-Type": "application/json",
+        }
       }
+    );
+    request.then((response) => {
+      const location = response.headers.get('location')
+      let action_id;
+      try {
+        action_id = location.match(/\/(\d+)\//)[1];
 
-      window.actionkitBeforeSubmit = () => {
-        const form = document.forms.act;
-
-        const mailTo = 'mailto:{% for target in context.targets.targets %}{{ target.email }}{% if not forloop.last %},{% endif %}{% endfor %}?cc=mailto@wemove.eu&subject='
-          + encodeURIComponent(actionkit.form.elements.id_subject.value)
-          + '&body='
-          + encodeURIComponent(actionkit.form.elements.id_comment.value);
-
-        // new tab so that we can ask them to go to the next step
-        window.open(mailTo, "_blank");
-
-        const fd = new FormData(form);
-
-        var body = {};
-        fd.forEach(function(value, key){
-            body[key] = value;
-        });
-
-        // actually submit the action
-        const request = fetch(
-          "/rest/v1/action/", 
-          { method: "POST", 
-            body: JSON.stringify(body),
-            redirect: "manual",   
-            headers: {
-              "Content-Type": "application/json",
-          }}
-        );
-        request.then((response) => {
-          const location = response.headers.get('location')
-          let action_id;
-          try {
-            action_id = location.match(/\/(\d+)\//)[1];
-
-            const ns =document.getElementById('next-step');
-            ns.href = ns.href + `&action_id=${action_id}`;
-          }
-          catch {
-            // no action_id, that's fine
-            console.log(`No action id from ${location}`)
-          }
-          // show everyone the "Didn't work? copy / paste this ... " message 
-          displayFallbackMessage(form);
-
-        })
-           
-        return false;
+        const ns = document.getElementById('next-step');
+        ns.href = ns.href + `&action_id=${action_id}`;
       }
-      
-      window.displayFallbackMessage = (form) => {
-        document.getElementById('mailto-letter-form').style.display = 'none';
-        document.getElementById('fallback-subject').textContent = form.action_subject.value;
-        document.getElementById('fallback-message').textContent = form.action_comment.value;
-        document.getElementById('fallback').style.display = '';
+      catch {
+        // no action_id, that's fine
+        console.log(`No action id from ${location}`)
       }
+      // show everyone the "Didn't work? copy / paste this ... " message
+      displayFallbackMessage(form);
 
-      window.copyText = (self, id) => {
-        const el = document.getElementById(id);
-        navigator.clipboard.writeText(el.innerText);
-        const restore = self.innerHTML;
-        self.innerText = '{% filter ak_text:"linkCopied_alert:" %}Copied!{% endfilter %}'
-        window.setTimeout(() => { self.innerHTML = restore}, 2000)
-      } 
+    })
 
-      window.copyEmailsToClipboard = (self) => {
-        let to = [];
+    return false;
+  }
 
-        for ( var t of actionkit.context.targets.targets ) { 
-          to.push(`"${t.title_full}" <${t.email}>`);
-        } 
-        to.push(`"WeMove Europe" <mailto@wemove.eu>`);
-        navigator.clipboard.writeText(to.join(', '));
+  window.displayFallbackMessage = (form) => {
+    document.getElementById('mailto-letter-form').style.display = 'none';
+    document.getElementById('fallback-subject').textContent = form.action_subject.value;
+    document.getElementById('fallback-message').textContent = form.action_comment.value;
+    document.getElementById('fallback').style.display = '';
+  }
 
-        const restore = self.innerHTML;
-        self.innerText = '{% filter ak_text:"Copied" %}Copied!{% endfilter %}'
-        window.setTimeout(() => { self.innerHTML = restore}, 2000)
-      }
+  window.copyText = (self, id) => {
+    const el = document.getElementById(id);
+    navigator.clipboard.writeText(el.innerText);
+    const restore = self.innerHTML;
+    self.innerText = '{% filter ak_text:"linkCopied_alert:" %}Copied!{% endfilter %}'
+    window.setTimeout(() => { self.innerHTML = restore }, 2000)
+  }
 
-    </script>
-    {% endif %}
+  window.copyEmailsToClipboard = (self) => {
+    let to = [];
+
+    for (var t of actionkit.context.targets.targets) {
+      to.push(`"${t.title_full}" <${t.email}>`);
+    }
+    to.push(`"WeMove Europe" <mailto@wemove.eu>`);
+    navigator.clipboard.writeText(to.join(', '));
+
+    const restore = self.innerHTML;
+    self.innerText = '{% filter ak_text:"Copied" %}Copied!{% endfilter %}'
+    window.setTimeout(() => { self.innerHTML = restore }, 2000)
+  }
+
+</script>
+{% endif %}
 
 </aside>
 </div>
