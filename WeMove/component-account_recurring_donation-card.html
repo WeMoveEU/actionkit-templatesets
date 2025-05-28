@@ -38,7 +38,7 @@
               data-wm-cancel-recurring-donation="{{ forloop.counter }}">
               <form
                 data-wm-cancel-recurring-donation-form-id="{{ forloop.counter }}"
-                data-wm-json='{% filter custom_hash %}{"id": "{{ donation.recurring_id }}", "akid": "{{ akid }}"}{% endfilter %}'>
+                data-wm-json='{% filter custom_hash %}{"subscription_id": "{{ donation.recurring_id }}", "akid": "{{ akid }}"}{% endfilter %}'>
                 {% include "./component-preloader.html" %}
 
                 <h2 class="text-wm-purple border-b-2 w-full">Recurring donation</h2>
