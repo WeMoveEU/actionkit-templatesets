@@ -1,25 +1,22 @@
-<div class="border-[1px] border-wm-black rounded p-2 mb-4">
-  <button
-    type="button"
-    class="transition-all text-center bg-copyurl !text-white font-bold uppercase p-3 block font-gilroy rounded hover:!no-underline hover:brightness-110
-    w-full"
-    data-wm-copy-to-clipboard="/share/link?type=ot&source=copypaste{% if args.consent == "emailed" %}&page_name={{ pageName }}{% elif action %}&action_id={{ action.id }}{% else %}&page_name={{ pageName }}&akid={{ akid }}{% endif %}"
-    data-wm-pixel-event-type="Share"
-    data-wm-pixel-track-type="trackCustom"
-    data-wm-pixel-content-name="CopyLink"
-    data-wm-pixel-trigger-event="click">
-    <span class="copy-text">
-      <span aria-hidden="true" class="h-6 w-6">
-        {% include "./icon-link.html" %}
-      </span>
-      <span>{% filter ak_text:"copyLink_button" %}Copy url{% endfilter %}</span>
+<button
+  type="button"
+  class="transition-all text-center font-gilroy flex flex-col gap-2 items-center !text-wm-purple hover:!no-underline hover:brightness-110"
+  data-wm-copy-to-clipboard="/share/link?type=ot&source=copypaste{% if args.consent == "emailed" %}&page_name={{ pageName }}{% elif action %}&action_id={{ action.id }}{% else %}&page_name={{ pageName }}&akid={{ akid }}{% endif %}"
+  data-wm-pixel-event-type="Share"
+  data-wm-pixel-track-type="trackCustom"
+  data-wm-pixel-content-name="CopyLink"
+  data-wm-pixel-trigger-event="click">
+  <span class="copy-text">
+    <span aria-hidden="true" class="h-12 w-12">
+      {% include "./icon-link.html" %}
     </span>
+    <span class="block w-full text-center">{% filter ak_text:"copyLink_button" %}Copy url{% endfilter %}</span>
+  </span>
 
-    <span class="copied-text">
-      <span aria-hidden="true" class="h-6 w-6">
-        {% include "./icon-check.html" %}
-      </span>
-      <span>{% filter ak_text:"linkCopied_alert" %}Link copied{% endfilter %}</span>
+  <span class="copied-text">
+    <span aria-hidden="true" class="h-12 w-12">
+      {% include "./icon-check.html" %}
     </span>
-  </button>
-</div>
+    <span class="block w-full text-center">{% filter ak_text:"linkCopied_alert" %}Link copied{% endfilter %}</span>
+  </span>
+</button>

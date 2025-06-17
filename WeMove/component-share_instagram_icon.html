@@ -1,8 +1,7 @@
 {% store as instagram_share_link %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "instagram_share_link" as field_name %}{% endstore %}
 {% if instagram_share_link %}
-<div class="border-[1px] border-wm-black rounded p-2 mb-4">
   <a
-    class="transition-all text-center bg-instagram !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
+    class="transition-all text-center font-gilroy flex flex-col gap-2 items-center !text-wm-purple hover:!no-underline hover:brightness-110"
     href="{{instagram_share_link}}"
     target="_blank"
     data-wm-send-share-to-action-kit="/share/link?type=ot&page_name={{ pageName }}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}"
@@ -10,10 +9,9 @@
     data-wm-pixel-track-type="trackCustom"
     data-wm-pixel-content-name="Instagram"
     data-wm-pixel-trigger-event="click">
-    <span aria-hidden="true" class="h-4 w-4">
+    <span aria-hidden="true" class="h-12 w-12 [&_svg]:fill-white bg-wm-pink rounded-full p-3">
       {% include "./icon-instagram.html" %}
     </span>
-    <span>{% filter ak_text:"thanks_shareInstagram_button" %}Share Story on Instagram{% endfilter %}</span>
+    <span class="block w-full text-center">Instagram</span>
   </a>
-</div>
 {% endif %}
