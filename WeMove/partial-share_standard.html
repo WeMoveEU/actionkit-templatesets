@@ -48,37 +48,12 @@
     </div>
 
     <div class="mx-auto md:max-w-[500px]">
-      {% if tests %}
-        {% if page.custom_fields.share_step_ab_test_2_buttons == "fourButtons" %}
-          {% include "./component-share_button_whatsapp.html" %}
-          {% include "./component-share_button_facebook.html" %}
-          {% include "./component-share_button_taf.html" %}
-          {% include "./component-share_button_copy_url.html" %}
-        {% elif page.custom_fields.share_step_ab_test_2_buttons == "whatsapp" %}
-          {% include "./component-share_button_whatsapp.html" %}
-        {% elif page.custom_fields.share_step_ab_test_2_buttons == "default" %}
-          {% include "./component-share_button_whatsapp.html" %}
-          {% include "./component-share_button_facebook.html" %}
-          {% include "./component-share_button_bluesky.html" %}
-          {% include "./component-share_button_instagram.html" %}
-          {% include "./component-share_button_taf.html" %}
-          {% include "./component-share_button_copy_url.html" %}
-        {% else %}
-          {% include "./component-share_button_whatsapp.html" %}
-          {% include "./component-share_button_facebook.html" %}
-          {% include "./component-share_button_bluesky.html" %}
-          {% include "./component-share_button_instagram.html" %}
-          {% include "./component-share_button_taf.html" %}
-          {% include "./component-share_button_copy_url.html" %}
-        {% endif %}
-      {% else %}
-        {% include "./component-share_button_whatsapp.html" %}
-        {% include "./component-share_button_facebook.html" %}
-        {% include "./component-share_button_bluesky.html" %}
-        {% include "./component-share_button_instagram.html" %}
-        {% include "./component-share_button_taf.html" %}
-        {% include "./component-share_button_copy_url.html" %}
-      {% endif %}
+      {% include "./component-share_button_whatsapp.html" %}
+      {% include "./component-share_button_facebook.html" %}
+      {% include "./component-share_button_bluesky.html" %}
+      {% include "./component-share_button_instagram.html" %}
+      {% include "./component-share_button_taf.html" %}
+      {% include "./component-share_button_copy_url.html" %}
     </div>
   </aside>
 </div>
