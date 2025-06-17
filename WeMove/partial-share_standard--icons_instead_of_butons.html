@@ -1,4 +1,4 @@
-<div class="standard-share nav-md:grid gap-2 grid-cols-[60%_minmax(40%,_1fr)]">
+<div class="standard-share nav-md:grid gap-2 grid-cols-1">
   <section>
     <h1>
       {% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}
@@ -28,25 +28,27 @@
     {% remember page.name as pageName %}
   {% endif %}
 
-  <aside data-wm-share-content>
-    <div class="mx-auto md:max-w-[500px] grid grid-cols-3 gap-4">
+  <aside
+    data-wm-share-content
+    class="mx-auto md:max-w-[500px] mt-16 grid grid-cols-3 gap-4">
       {% include "./component-share_whatsapp_icon.html" %}
       {% include "./component-share_facebook_icon.html" %}
       {% include "./component-share_bluesky_icon.html" %}
       {% include "./component-share_instagram_icon.html" %}
       {% include "./component-share_taf_icon.html" %}
       {% include "./component-share_copy_url_icon.html" %}
-    </div>
   </aside>
+
+  <div class="mx-auto w-full md:max-w-[500px] my-16 text-center">
+    <a
+      data-wm-skip-button
+      href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&{% endif %}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}"
+      class="p-4 border-[3px] w-full block font-bold border-wm-pink rounded-full uppercase !text-wm-pink text-xl font-gilroy hover:!no-underline hover:bg-wm-pink hover:!text-white transition-all">
+      {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
+    </a>
+  </div>
 </div>
 
-<div class="my-8 text-center">
-  <a
-    data-wm-skip-button
-    href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&{% endif %}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}"
-    class="p-4 border-2 inline-block font-bold !text-wm-yellow text-xl font-gilroy hover:!no-underline hover:border-wm-yellow hover:shadow transition-all">
-    {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
-  </a>
-</div>
+
 
 {% include "./component-related_campaigns.html" %}
