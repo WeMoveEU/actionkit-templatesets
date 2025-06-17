@@ -7,14 +7,14 @@
   data-wm-pixel-content-name="CopyLink"
   data-wm-pixel-trigger-event="click">
   <span class="copy-text">
-    <span aria-hidden="true" class="h-12 w-12">
-      {% include "./icon-link.html" %}
+    <span aria-hidden="true" class="h-12 w-12 p-2 bg-wm-pink rounded-full">
+      {% include "./icon-link_pink.html" %}
     </span>
     <span class="block w-full text-center">{% filter ak_text:"copyLink_button" %}Copy url{% endfilter %}</span>
   </span>
 
   <span class="copied-text">
-    <span aria-hidden="true" class="h-12 w-12">
+    <span aria-hidden="true" class="h-12 w-12 p-2 bg-wm-pink">
       {% include "./icon-check.html" %}
     </span>
     <span class="block w-full text-center">{% filter ak_text:"linkCopied_alert" %}Link copied{% endfilter %}</span>
