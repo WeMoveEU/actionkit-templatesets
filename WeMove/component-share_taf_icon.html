@@ -1,7 +1,7 @@
 {% if page.followup.send_taf %}
   <button
     type="button"
-    class="transition-all relative justify-center font-gilroy flex flex-wrap gap-1 !text-wm-purple hover:!no-underline hover:brightness-110"
+    class="transition-all items-end relative justify-center font-gilroy flex flex-wrap gap-1 !text-wm-purple hover:!no-underline hover:brightness-110"
     target="_blank"
     data-wm-taf-button
     data-wm-taf-button-mailto="mailto:?subject={{ page.followup.taf_subject|urlencode }}&body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"
