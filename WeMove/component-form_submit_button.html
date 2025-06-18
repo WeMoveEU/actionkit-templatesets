@@ -44,7 +44,7 @@
     {% if page.custom_fields.call_page_mode == 'tweet' %}disabled{% endif %}
     data-wm-{{ page.custom_fields.call_page_mode }}-submit>
 
-      <span aria-label="hidden">
+      <span aria-label="hidden" class="w-6 h-6">
         {% if page.custom_fields.call_page_mode == 'tweet' %}
           {% include "./icon-twitter.html" %}
         {% elif page.custom_fields.call_page_mode == 'facebook' %}
