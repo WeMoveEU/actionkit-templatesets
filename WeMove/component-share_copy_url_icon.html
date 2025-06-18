@@ -1,20 +1,20 @@
 <button
   type="button"
-  class="transition-all text-center font-gilroy flex flex-col gap-2 items-center !text-wm-purple hover:!no-underline hover:brightness-110"
+  class="pink-version transition-all text-center font-gilroy !text-wm-purple hover:!no-underline hover:brightness-110"
   data-wm-copy-to-clipboard="/share/link?type=ot&source=copypaste{% if args.consent == "emailed" %}&page_name={{ pageName }}{% elif action %}&action_id={{ action.id }}{% else %}&page_name={{ pageName }}&akid={{ akid }}{% endif %}"
   data-wm-pixel-event-type="Share"
   data-wm-pixel-track-type="trackCustom"
   data-wm-pixel-content-name="CopyLink"
   data-wm-pixel-trigger-event="click">
   <span class="copy-text">
-    <span aria-hidden="true" class="h-12 w-12 p-2 bg-wm-pink rounded-full">
+    <span aria-hidden="true" class="h-12 w-12 p-3 bg-wm-pink rounded-full">
       {% include "./icon-link_pink.html" %}
     </span>
     <span class="block w-full text-center">{% filter ak_text:"copyLink_button" %}Copy url{% endfilter %}</span>
   </span>
 
   <span class="copied-text">
-    <span aria-hidden="true" class="h-12 w-12 p-2 bg-wm-pink">
+    <span aria-hidden="true" class="h-12 w-12 p-2 bg-wm-pink rounded-full">
       {% include "./icon-check.html" %}
     </span>
     <span class="block w-full text-center">{% filter ak_text:"linkCopied_alert" %}Link copied{% endfilter %}</span>
