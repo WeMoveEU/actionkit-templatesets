@@ -1,6 +1,6 @@
 <h2 class="text-white">
   {% filter ak_text:"sendTweet_title" %}
-    Send a tweet
+  Send a tweet
   {% endfilter %}
 </h2>
 
@@ -8,13 +8,7 @@
   <label for="tweet_body">
     {% filter ak_text:"twitter_field" %}Tweet text{% endfilter %}
   </label>
-  <textarea
-    data-wm-tweet-message
-    name="tweet_text"
-    id="tweet_body"
-    rows="3"
-    required
-    class="form-control"></textarea>
+  <textarea data-wm-tweet-message name="tweet_text" id="tweet_body" rows="3" required class="form-control"></textarea>
 
   <div data-wm-tweet-char-count>280</div>
 </div>
@@ -25,9 +19,9 @@
   const queryTargets = [{% report "call_page_target_information" with page.id as page_id %}];
   queryTargets.shift();
 
-  const targetsTxt = {{ page.custom_fields.twitter_targets|json }};
-  const messagesTxt = {{ page.custom_fields.twitter_messages|json }};
-  const fallbackTxt = {{ page.custom_fields.twitter_fallback|json }};
+  const targetsTxt = {{ page.custom_fields.twitter_targets| json }};
+  const messagesTxt = {{ page.custom_fields.twitter_messages| json }};
+  const fallbackTxt = {{ page.custom_fields.twitter_fallback| json }};
 
   let pageTargets;
 
@@ -78,19 +72,19 @@
 
   const chooseTweet = () => {
     const targetLines = targetsTxt.split(/[\r\n]+/);
-    const targetData = targetLines.map( (s) => s.split(/\s+/) ).map((s) => [s.shift(), s.join(' ')]);
+    const targetData = targetLines.map((s) => s.split(/\s+/)).map((s) => [s.shift(), s.join(' ')]);
     const pageTargetData = pageTargets.length ? pageTargets.map(
       (t) => [t.twitter, t.title_informal_full]
     ) : queryTargets.map(
       (t) => [t[6], t[3]]
     );
     const combinedTargets = targetData.concat(pageTargetData).map(
-      (t) => [ ( ! t[0] ) ? t[0] : ( t[0].substring(0, 1) == '@' ? '' : '@' ) + t[0], t[1] ]
+      (t) => [(!t[0]) ? t[0] : (t[0].substring(0, 1) == '@' ? '' : '@') + t[0], t[1]]
     );
     const tweetTargets = combinedTargets.filter(
       (t) => t[0]
     );
-    const randomTargets = tweetTargets.sort(()=>Math.random()-0.5);
+    const randomTargets = tweetTargets.sort(() => Math.random() - 0.5);
     const firstTarget = tweetTargets[0] || [];
     const randomTarget = randomTargets[0] || [];
 
@@ -98,6 +92,7 @@
       handle: firstTarget[0],
       name: firstTarget[1],
       handles: tweetTargets.map((t) => t[0]).join(', '),
+      mentions: tweetTargets.map((t) => t[0]).join(' '),
       targets: tweetTargets,
       rhandle: randomTarget[0],
       rname: randomTarget[1],
@@ -107,9 +102,9 @@
 
     const messages = messagesTxt.split(/[\r\n]+/);
     const fallback = fallbackTxt.split(/[\r\n]+/);
-    const randomized = messages.sort(() => Math.random()-0.5)
-                      .concat(fallback)
-                      .filter( (s) => s && s.match(/\S/));
+    const randomized = messages.sort(() => Math.random() - 0.5)
+      .concat(fallback)
+      .filter((s) => s && s.match(/\S/));
 
     if (variables['handles'].match(/\S/)) {
       randomized.push("An important message for [%= handles %]: ");
