@@ -5,7 +5,7 @@
     </h1>
 
     {% if page.type == "Signup" and not isEmbbeded %}
-      <div class="mb-4">
+      <div class="mb-4 featured-media">
         {% include "./component-featured_media.html" %}
       </div>
     {% endif %}
@@ -29,7 +29,7 @@
   {% endif %}
 
   <aside data-wm-share-content>
-    <div class="p-8 bg-wm-orangy-box text-wm-purple mb-4">
+    <div class="p-8 bg-wm-orangy-box text-wm-purple mb-4 share-image-and-description">
       <h3>{{ page.followup.share_title_value }}</h3>
 
       <div class="xl:flex gap-2">
