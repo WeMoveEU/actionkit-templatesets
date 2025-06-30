@@ -1,7 +1,7 @@
 <ul class="compact" id="ak-errors"></ul>
 
 {% if page.type == "Petition" %}
-  {% include "./component-form_skeleton-preloader.html" %}
+{% include "./component-form_skeleton-preloader.html" %}
 {% endif %}
 
 {% include "./component-form_known_user.html" %}
@@ -19,18 +19,20 @@
 {% include "./component-form_privacy_statement.html" %}
 
 {% if args.utm_source %}
-  <input type="hidden" name="action_utm_source" value="{{ args.utm_source }}" />
+<input type="hidden" name="action_utm_source" value="{{ args.utm_source }}" />
 {% endif %}
 {% if args.utm_medium %}
-  <input type="hidden" name="action_utm_medium" value="{{ args.utm_medium }}" />
+<input type="hidden" name="action_utm_medium" value="{{ args.utm_medium }}" />
 {% endif %}
 {% if args.utm_campaign %}
-  <input type="hidden" name="action_utm_campaign" value="{{ args.utm_campaign }}" />
+<input type="hidden" name="action_utm_campaign" value="{{ args.utm_campaign }}" />
 {% endif %}
 {% if args.utm_content %}
-  <input type="hidden" name="action_utm_content" value="{{ args.utm_content }}" />
+<input type="hidden" name="action_utm_content" value="{{ args.utm_content }}" />
 {% endif %}
 
 {% if isEmbbeded %}
-  <input type="hidden" name="redirect" value="{{ page.followup.url }}?embed={{ args.embed }}{% if args.css == "1" %}&css=1{% endif %}" />
+<input type="hidden" name="redirect"
+  value="{{ page.followup.url }}{% if '?' in page.followup.url %}&{% else %}?{% endif %}embed={{ args.embed }}{% if args.css == "
+  1" %}&css=1{% endif %}" />
 {% endif %}
