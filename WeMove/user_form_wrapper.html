@@ -33,6 +33,5 @@
 
 {% if isEmbbeded %}
 <input type="hidden" name="redirect"
-  value="{{ page.followup.url }}{% if '?' in page.followup.url %}&{% else %}?{% endif %}embed={{ args.embed }}{% if args.css == "
-  1" %}&css=1{% endif %}" />
+  value="{{ page.followup.url }}{% if '?' in page.followup.url %}&{% else %}?{% endif %}embed={{ args.embed }}{% if args.css == '1' %}&css=1{% endif %}&twiddle=bit" />
 {% endif %}
