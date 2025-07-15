@@ -102,7 +102,7 @@
   function poll_for_status ( status_callback ) {
     $.ajax({
       "method": "GET",
-      "url": 'https://act.wemove.support/twilio/rcall_recipient/' + current_call_recipient + '/status',
+      "url": `https://act.wemove.support/twilio/rcall_recipient/${current_call_recipient}/status`,
       "success": function (response) {
         console.log('Status', response);
         status_callback( response.call_status );
