@@ -1,15 +1,15 @@
 {% extends "./wrapper.html" %}
 
 {% block css_additions %}
-  {% if fundraiser_staging or args.staging == "1" %}
-    {% load_css %}
-    //donate-ui.wemove.support/donate-main.css
-    {% end %}
-  {% else %}
-    {% load_css %}
-    //donate-ui.wemove.eu/donate-main.css
-    {% end %}
-  {% endif %}
+{% if fundraiser_staging or args.staging == "1" %}
+{% load_css %}
+//donate-ui.wemove.support/donate-main.css
+{% end %}
+{% else %}
+{% load_css %}
+//donate-ui.wemove.eu/donate-main.css
+{% end %}
+{% endif %}
 {% endblock %}
 
 {% block content %}
