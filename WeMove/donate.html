@@ -3,7 +3,7 @@
 {% block css_additions %}
 {% if fundraiser_staging or args.staging == "1" %}
 {% load_css %}
-//donate-ui.not-a2.eu/donate-main.css
+//donate-ui.wemove.support/donate-main.css
 {% end %}
 {% else %}
 {% load_css %}
@@ -108,7 +108,7 @@
   </script>
 
   {% if fundraiser_staging or args.staging == "1" %}
-    <script type="module" src="//donate-ui.not-a2.eu/donate-main.js"></script>
+    <script type="module" src="//donate-ui.wemove.support/donate-main.js"></script>
   {% else %}
     <script type="module" src="//donate-ui.wemove.eu/donate-main.js"></script>
   {% endif %}
