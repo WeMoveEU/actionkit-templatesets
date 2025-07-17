@@ -4,7 +4,7 @@
       {% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}
     </h1>
 
-    {% if page.type == "Signup" and not isEmbbeded %}
+    {% if not isEmbbeded %}
       <div class="mb-4 featured-media">
         {% include "./component-featured_media.html" %}
       </div>
