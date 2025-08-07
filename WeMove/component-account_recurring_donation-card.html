@@ -74,6 +74,7 @@
             <div class="mb-2">
               <h5 class="mb-0">Payment method</h5>
               <span>
+                {{donation.payment_method}}
                 {% if donation.account|lower == "wm-card" or donation.account|lower == "legacy-card" %}
                   Credit card
                 {% elif donation.account|lower == "wm-stripe" or donation.account|lower == "legacy-stripe" %}
