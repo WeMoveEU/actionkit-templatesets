@@ -47,7 +47,7 @@
             alt="Download pdf of receipt"
             class="absolute right-4 top-4 z-10"
             target="_parent"
-            href="https://wemove.eu/api/receipt?action=download&t={{ donation.transaction_id }}&payment_frequency={{ currentPaymentFrequency }}">
+            href="https://wemove.eu/api/receipt?t={{ donation.transaction_id }}&payment_frequency={{ currentPaymentFrequency }}">
             <span aria-hidden="true" class="w-6 h-6 inline-block not-sr-only">
               {% include "./icon-download.html" %}
             </span>
