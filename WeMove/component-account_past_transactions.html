@@ -15,14 +15,14 @@
 
               <span class="text-sm font-bold text-wm-purple">
                 {% if donation.recurring %}
-                  recurring
+                  Recurring donation
                   {% remember "recurring" as currentPaymentFrequency %}
                 {% else %}
-                  one off
+                  One-off
                   {% remember "one-off" as currentPaymentFrequency %}
                 {% endif %}
 
-                <span class="text-wm-pink">/</span>
+                <span class="text-wm-pink {% if donation.account|lower == "wm-stripe" or donation.account|lower == "legacy-stripe" %}hidden{% endif %}">/</span>
 
                 {% if donation.account|lower == "wm-card" or donation.account|lower == "legacy-card" %}
                   Credit card
