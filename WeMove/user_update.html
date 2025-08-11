@@ -2,9 +2,9 @@
 
 <script>
 const urlParams = new URLSearchParams(window.location.search);
-const isEditingUser = urlParams.get('#edit-profile');
+const isEditingUser = urlParams.get('type');
 
-if (!isEditingUser) {
+if (isEditingUser !== 'edit-profile') {
   window.location.replace('https://action.wemove.eu/me/');
 }
 </script>
