@@ -76,10 +76,6 @@
               <span>
                 {% if donation.account|lower == "wm-card" or donation.account|lower == "legacy-card" %}
                   Credit card
-                {% elif donation.account|lower == "wm-applepay" %}
-                  Apple Pay
-                {% elif donation.account|lower == "wm-googlepay" %}
-                  Google Pay
                 {% elif donation.account|lower == "wm-sepa" or donation.account|lower == "legacy-sepa" or donation.account|lower == "legacy-banktransfer" %}
                   SEPA
                 {% elif donation.account|lower == "wm-paypal" or donation.account|lower == "legacy-paypal" %}
