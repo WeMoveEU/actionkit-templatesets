@@ -1,7 +1,12 @@
 {% load switchcase %}
 
 <script>
-window.location.replace('https://action.wemove.eu/me/');
+const urlParams = new URLSearchParams(window.location.search);
+const isEditingUser = urlParams.get('#edit-profile');
+
+if (!isEditingUser) {
+    window.location.replace('https://action.wemove.eu/me/');
+}
 </script>
 
 <form hidden
