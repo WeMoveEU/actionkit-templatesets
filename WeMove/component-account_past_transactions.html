@@ -51,7 +51,7 @@
             {% if donation.account|lower == "wm-stripe" or donation.account|lower == "legacy-stripe" %}
               href="https://wemove.eu/api/receipt?t={{ donation.transaction_id }}&payment_frequency={{ currentPaymentFrequency }}"
             {% else %}
-              href="https://wemove.eu/api/receipt?locale={{ link_iso }}&user_firstName={{ actionkit_user.first_name }}&user_lastName={{ actionkit_user.last_name }}&user_email={{ actionkit_user.email }}&payment_method={{ currentPaymentMethod }}&payment_date={{ donation.created_at|date:"m/d/Y" }}&payment_amount={{ donation.amt }}&payment_frequency={{ currentPaymentFrequency }}"
+              href="https://wemove.eu/api/receipt?locale={{ link_iso }}&user_fullname={{ actionkit_user.first_name }}%20{{ actionkit_user.last_name }}&user_email={{ actionkit_user.email }}&payment_method={{ currentPaymentMethod }}&payment_date={{ donation.created_at|date:"m/d/Y" }}&payment_amount={{ donation.amt }}&payment_frequency={{ currentPaymentFrequency }}"
             {% endif %}
             >
             <span aria-hidden="true" class="w-6 h-6 inline-block not-sr-only">
