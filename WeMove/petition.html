@@ -123,6 +123,11 @@
 
       <div class="form-wrapper-container">
         {% include "./user_form_wrapper.html" %}
+
+        {# https://action.wemove.eu/sign/developers-testing-campaign-petition-EN/?variation=129 #}
+        {% if tests and page.custom_fields.share_ab_test_4_popup == "popup_yes" %}
+          {% include "./partial-share_popup-inside-petition.html" %}
+        {% endif %}
       </div>
     </form>
 
