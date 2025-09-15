@@ -73,23 +73,7 @@
       {% if user and user.subscription_status == 'never' and is_germanic and not args.germanic %}
         {% include "./partial-share_germanic.html" %}
       {% else %}
-        {% if tests %}
-          {% if page.custom_fields.share_step_ab_test_3_ui_variations == "original" %}
-            {% include "./partial-share_standard.html" %}
-          {% elif page.custom_fields.share_step_ab_test_3_ui_variations == "justImage_noDescription" %}
-            {% include "./partial-share_standard--justImage_noDescription.html" %}
-          {% elif page.custom_fields.share_step_ab_test_3_ui_variations == "noBox" %}
-            {% include "./partial-share_standard--noBox.html" %}
-          {% elif page.custom_fields.share_step_ab_test_3_ui_variations == "tinyText_withButton" %}
-            {% include "./partial-share_standard--tinyText_withButton.html" %}
-          {% elif page.custom_fields.share_step_ab_test_3_ui_variations == "icons_instead_of_butons" %}
-            {% include "./partial-share_standard--icons_instead_of_butons.html" %}
-          {% else %}
-            {% include "./partial-share_standard.html" %}
-          {% endif %}
-        {% else %}
-          {% include "./partial-share_standard.html" %}
-        {% endif %}
+        {% include "./partial-share_standard.html" %}
       {% endif %}
     {% endif %}
   </form>
