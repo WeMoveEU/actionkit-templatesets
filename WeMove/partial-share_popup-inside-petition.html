@@ -11,12 +11,6 @@
     document.removeEventListener("wm-scriptsLoaded", loadPopupScript);
   };
 
-  const renderPopup = () =>{
-    wemove.triggerEvent("wm-openDialog", {
-      querySelector: "data-wm-share-popup",
-    });
-  };
-
   const updateShareLinks = () => {
     const akParams = `akid=${akid}&amp;action_id=${actionId}`;
     const dialog = document.querySelector("[data-wm-dialog-content]");
@@ -36,19 +30,19 @@
     const form = document.getElementById("petition-form");
     const payload = new URLSearchParams(new FormData(form));
 
-    await fetch("/actdsds/", {
+    await fetch("/act/", {
       method: "POST",
       body: payload,
     }).then((response) => {
       actionId = response.url.split("action_id=")[1].split("&")[0];
       akid = response.url.split("akid=")[1].split("&")[0];
       sharePageUrl = response.url;
-      renderPopup(actionId, akid);
+
+      wemove.triggerEvent("wm-hidePreloader");
+      wemove.triggerEvent("wm-openDialog", { querySelector: "data-wm-share-popup"});
     }).catch((error) => {
       form.submit();
     });
-
-    wemove.triggerEvent("wm-hidePreloader");
   };
 
   // INIT POPUP JS
