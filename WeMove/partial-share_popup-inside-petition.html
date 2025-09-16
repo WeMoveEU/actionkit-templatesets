@@ -52,7 +52,8 @@
 
   let wasAKSubmitInjected = false;
   window.actionkitBeforeSubmit = () => {
-    debugger
+    // we need this flag because ActionKit calls this function twice.
+    // the duplication comes from pixel-loader trying to validate
     if (wasAKSubmitInjected) {
       return false;
     }
