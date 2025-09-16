@@ -1,7 +1,14 @@
-<script>
+{% if page.custom_fields.daisy_chain_action %}
+    {% remember page.custom_fields.daisy_chain_action as pageName %}
+  {% else %}
+    {% remember page.name as pageName %}
+  {% endif %}
+
+  <script async>
+  let sharePageUrl, akid, actionId;
+
   const loadPopupScript = () => {
     document.removeEventListener("wm-scriptsLoaded", loadPopupScript);
-
   };
 
   const renderPopup = () =>{
@@ -10,13 +17,59 @@
     });
   };
 
-  const redirectToSharePage = () =>{};
+  const updateShareLinks = () => {
+    const akParams = `akid=${akid}&amp;action_id=${actionId}`;
+    const dialog = document.querySelector("[data-wm-dialog-content]");
+    const currentHTML = dialog.innerHTML.replaceAll("akid=None", akParams);
+    dialog.innerHTML = currentHTML;
 
+    wemove.triggerEvent("wm-initShare");
+  };
+
+  const redirectToSharePage = () => {
+    window.location.href = sharePageUrl;
+  };
+
+  const signPetition = async () => {
+    wemove.triggerEvent("wm-showPreloader");
+
+    const form = document.getElementById("petition-form");
+    const payload = new URLSearchParams(new FormData(form));
+
+    await fetch("/act/", {
+      method: "POST",
+      body: payload,
+    }).then((response) => {
+      actionId = response.url.split("action_id=")[1].split("&")[0];
+      akid = response.url.split("akid=")[1].split("&")[0];
+      sharePageUrl = response.url;
+      renderPopup(actionId, akid);
+    }).catch((error) => {
+      console.error(`Error: ${error}`);
+    });
+
+    wemove.triggerEvent("wm-hidePreloader");
+  };
+
+  // INIT POPUP JS
   document.addEventListener("wm-scriptsLoaded", loadPopupScript);
-  document.addEventListener("wm-closeDialog", redirectToSharePage);
+  document.addEventListener("wm-dialogClosed", redirectToSharePage);
+  document.addEventListener("wm-dialogOpened::data-wm-share-popup", updateShareLinks);
+
+  let wasAKSubmitInjected = false;
+  window.actionkitBeforeSubmit = () => {
+    if (wasAKSubmitInjected) {
+      return false;
+    }
+
+    signPetition();
+    wasAKSubmitInjected = true;
+
+    return false;
+  };
 </script>
 
-<div data-wm-share-content data-wm-share-popup hidden>
+<div data-wm-share-popup hidden>
   <div class="mx-auto md:max-w-[500px] text-wm-purple">
     <h3 class="text-3xl mb-2">
       {% filter ak_text:"sharePopup_title" %}Share this petition{% endfilter %}
@@ -31,7 +84,7 @@
           src="{{ page.custom_fields.featured_image|default:page.followup.share_image_value }}" />
     {% endif %}
 
-    <div class="[&_div]:border-0 [&_div]:mb-3 [&_div]:p-0">
+    <div class="[&_div]:border-0 [&_div]:mb-3 [&_div]:p-0 [&_div:last-child]:mb-0 ">
       {% include "./component-share_button_whatsapp.html" %}
       {% include "./component-share_button_facebook.html" %}
       {% include "./component-share_button_bluesky.html" %}
