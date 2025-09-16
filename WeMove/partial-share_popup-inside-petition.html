@@ -36,7 +36,7 @@
     const form = document.getElementById("petition-form");
     const payload = new URLSearchParams(new FormData(form));
 
-    await fetch("/act/", {
+    await fetch("/actdsds/", {
       method: "POST",
       body: payload,
     }).then((response) => {
@@ -45,7 +45,7 @@
       sharePageUrl = response.url;
       renderPopup(actionId, akid);
     }).catch((error) => {
-      console.error(`Error: ${error}`);
+      form.submit();
     });
 
     wemove.triggerEvent("wm-hidePreloader");
