@@ -14,8 +14,8 @@
   const updateShareLinks = () => {
     const akParams = `akid=${akid}&amp;action_id=${actionId}`;
     const dialog = document.querySelector("[data-wm-dialog-content]");
-    const currentHTML = dialog.innerHTML.replaceAll("akid=None", akParams);
-    dialog.innerHTML = currentHTML;
+    const updatedHTML = dialog.innerHTML.replaceAll("akid=None", akParams);
+    dialog.innerHTML = updatedHTML;
 
     wemove.triggerEvent("wm-initShare");
   };
@@ -52,6 +52,7 @@
 
   let wasAKSubmitInjected = false;
   window.actionkitBeforeSubmit = () => {
+    debugger
     if (wasAKSubmitInjected) {
       return false;
     }
