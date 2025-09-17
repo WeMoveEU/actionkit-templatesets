@@ -19,7 +19,9 @@
 
     <a href="{{ target }}">Please continue to the next step.</a>
     <script>
-      window.location = '{{ target }}';
+        if (window.location != '{{ target }}') {
+            window.location = '{{ target }}';
+        }
     </script>
   {% else %}
     {% remember "1" as share_mode %}
