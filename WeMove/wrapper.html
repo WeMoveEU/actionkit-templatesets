@@ -75,7 +75,7 @@
     </style>
     {% endif %}
 
-    <script>window.startTime = new Date();</script>
+    <script justification="For ui">window.startTime = new Date();</script>
     {% load_js %}
         //ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js
         /resources/actionkit.js
@@ -83,7 +83,7 @@
     {% block script_additions %}{% endblock %}
 
     {% if not isEmbbeded %}
-    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="162c81a4-03c4-483c-891c-188b89eaf09c" data-culture="{{page.lang.iso_code}}" async></script>
+    <script justification="Cookiebot script" id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="162c81a4-03c4-483c-891c-188b89eaf09c" data-culture="{{page.lang.iso_code}}" async></script>
     {% endif %}
 
     {% load_ak_context context %}
@@ -99,7 +99,7 @@
     {% if page.lang.is_rtl %}ak-rtl{% endif %}
     {% block body_extra_classes %}{% endblock %}">
 
-    <script>actionkit.forms.initPage();</script>
+    <script justification="AK js">actionkit.forms.initPage();</script>
 
   {% if not isEmbbeded %}
     {% include "./component-a11y_skip_buttons.html" %}
@@ -138,7 +138,7 @@
 
             <div data-wm-external-content class="is-loading"></div>
           </div>
-          <script>
+          <script justification="Url for later use">
             const weMovePreShareUrl = "/thanks/{{ share_page }}?share=1&akid={{ akid }}&action={{ action.id }}";
           </script>
         {% endif %}
@@ -167,7 +167,7 @@
   {% endif %}
 
 {% block below_form %}
-<script>
+<script justification="AK js">
 actionkit.forms.contextRoot = '/context/';
 actionkit.forms.initForm('act');
 </script>

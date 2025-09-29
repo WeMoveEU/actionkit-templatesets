@@ -1,7 +1,7 @@
 {% if not have_included_scripts %}
 {% remember 1 as have_included_scripts %}
 
-<script>
+<script justification="Custom UI object">
 if (!window.wemove) {
   window.wemove = {
     site: {},
@@ -41,7 +41,7 @@ if (!window.wemove) {
   {% endif %}
 {% else %}
 
-  <script>
+  <script justification="Matomo's ids">
     {% if campaign_type == "youmove" %}
     window.matomoSiteId = "4";
     {% else %}
@@ -53,7 +53,7 @@ if (!window.wemove) {
   <script data-cookieconsent="ignore" src="https://static.wemove.eu/shared-scripts/pixel-loader.js?v=1.2.0" justification="Pixel tracking js"></script>
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=273754435565660&ev=PageView&noscript=1"  alt="miscelaneous"/></noscript>
   <!-- End Meta Pixel Code -->
-  <script type="text/plain" data-cookieconsent="marketing" src="https://static.wemove.eu/shared-scripts/matomo-loader.js?v=1.1.2" async  justification="Tracking and analytics"></script>
+  <script type="text/plain" data-cookieconsent="marketing" src="https://static.wemove.eu/shared-scripts/matomo-loader.js?v=1.1.2" async justification="Tracking and analytics"></script>
 {% endif %}
 
 {% if request.GET.dev == "1" %}
