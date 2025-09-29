@@ -50,16 +50,16 @@ if (!window.wemove) {
   </script>
 
   <!-- Meta Pixel Code -->
-  <script data-cookieconsent="ignore" src="https://static.wemove.eu/shared-scripts/pixel-loader.js?v=1.2.0"></script>
+  <script data-cookieconsent="ignore" src="https://static.wemove.eu/shared-scripts/pixel-loader.js?v=1.2.0" justification="Pixel tracking js"></script>
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=273754435565660&ev=PageView&noscript=1"  alt="miscelaneous"/></noscript>
   <!-- End Meta Pixel Code -->
-  <script type="text/plain" data-cookieconsent="marketing" src="https://static.wemove.eu/shared-scripts/matomo-loader.js?v=1.1.2" async></script>
+  <script type="text/plain" data-cookieconsent="marketing" src="https://static.wemove.eu/shared-scripts/matomo-loader.js?v=1.1.2" async  justification="Tracking and analytics"></script>
 {% endif %}
 
 {% if request.GET.dev == "1" %}
-<script src="//127.0.0.1:8081/js/wemove-main.bundle.min.js"></script>
+<script src="//127.0.0.1:8081/js/wemove-main.bundle.min.js" justification="Custom UI"></script>
 {% else %}
-<script src="https://static.wemove.eu/action-kit/js/wemove-main.bundle.min.js?v=2.13.1"></script>
+<script src="https://static.wemove.eu/action-kit/js/wemove-main.bundle.min.js?v=2.13.1" justification="Custom UI"></script>
 {% endif %}
 
 {% endif %}

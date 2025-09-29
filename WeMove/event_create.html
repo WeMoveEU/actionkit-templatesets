@@ -310,8 +310,8 @@
 
 {% include "includes/jquery_ui.html" %}
 {% if campaign.timezone %}
-	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.14/moment-timezone-with-data.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.js" justification="Legacy code"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.14/moment-timezone-with-data.min.js" justification="Legacy code"></script>
 	<script>
 		$(function() {
 			actionkit.forms.update_event_time("{{campaign.starts_at}}", "{{campaign.timezone}}");

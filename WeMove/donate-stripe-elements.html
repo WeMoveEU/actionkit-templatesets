@@ -612,7 +612,7 @@ block.super }}{% endblock %}
 
 {% block script_additions %}
 
-<script src="https://www.paypal.com/sdk/js?client-id=sb&disable-funding=credit,card&currency=USD"
+<script src="https://www.paypal.com/sdk/js?client-id=sb&disable-funding=credit,card&currency=USD" justification="paypal js"
     data-sdk-integration-source="button-factory"></script>
 <script>
     function initPayPalButton() {
@@ -1400,7 +1400,7 @@ block.super }}{% endblock %}
 
 {% with page.payment_processor_information as pp %}
 {% if pp.use_accept %}
-<script src="/resources/ak_authnet_accept.js"></script>
+<script src="/resources/ak_authnet_accept.js" justification="legacy code"></script>
 {% authnet_js_libs %}
 <script>
     $(function () {
