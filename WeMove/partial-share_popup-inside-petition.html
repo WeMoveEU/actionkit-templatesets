@@ -9,6 +9,10 @@
 
   const loadPopupScript = () => {
     document.removeEventListener("wm-scriptsLoaded", loadPopupScript);
+
+    {% if args.test %}
+    wemove.triggerEvent("wm-openDialog", { querySelector: "data-wm-share-popup"});
+    {% endif %}
   };
 
   const updateShareLinks = () => {
