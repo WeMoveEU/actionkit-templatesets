@@ -9,10 +9,6 @@
 
   const loadPopupScript = () => {
     document.removeEventListener("wm-scriptsLoaded", loadPopupScript);
-
-    {% if args.test %}
-    wemove.triggerEvent("wm-openDialog", { querySelector: "data-wm-share-popup"});
-    {% endif %}
   };
 
   const updateShareLinks = () => {
@@ -84,7 +80,7 @@
           src="{{ page.custom_fields.featured_image|default:page.followup.share_image_value }}" />
     {% endif %}
 
-    <div {% if args.test %}{% else %}class="[&_div]:border-white [&_div]:mb-3 [&_div]:p-0 [&_div:last-child]:mb-0"{% endif %}>
+    <div class="[&_div]:border-white [&_div]:mb-3 [&_div]:p-0 [&_div:last-child]:mb-0">
       {% include "./component-share_button_whatsapp.html" %}
       {% include "./component-share_button_facebook.html" %}
       {% include "./component-share_button_bluesky.html" %}
