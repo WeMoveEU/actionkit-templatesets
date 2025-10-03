@@ -84,7 +84,7 @@
           src="{{ page.custom_fields.featured_image|default:page.followup.share_image_value }}" />
     {% endif %}
 
-    <div class="[&_div]:border-0 [&_div]:mb-3 [&_div]:p-0 [&_div:last-child]:mb-0 ">
+    <div {% if args.test %}{% else %}class="[&_div]:border-white [&_div]:mb-3 [&_div]:p-0 [&_div:last-child]:mb-0"{% endif %}>
       {% include "./component-share_button_whatsapp.html" %}
       {% include "./component-share_button_facebook.html" %}
       {% include "./component-share_button_bluesky.html" %}
