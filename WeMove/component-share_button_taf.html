@@ -2,7 +2,7 @@
   <div class="border-[1px] border-wm-black rounded p-2 mb-4">
     <button
       type="button"
-      class="transition-all w-full text-center bg-wm-orange !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:brightness-110"
+      class="transition-all w-full text-center bg-wm-orange !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:bg-taf-hv"
       target="_blank"
       data-wm-taf-button
       data-wm-taf-button-mailto="mailto:?subject={{ page.followup.taf_subject|urlencode }}&body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"

@@ -1,8 +1,7 @@
 <div class="border-[1px] border-wm-black rounded p-2 mb-4">
   <button
     type="button"
-    class="transition-all text-center bg-copyurl !text-white font-bold uppercase p-3 block font-gilroy rounded hover:!no-underline hover:brightness-110
-    w-full"
+    class="transition-all text-center bg-copyurl !text-white font-bold uppercase p-3 block font-gilroy rounded hover:!no-underline hover:bg-copyurl-hv w-full"
     data-wm-copy-to-clipboard="/share/link?type=ot&source=copypaste{% if args.consent == "emailed" %}&page_name={{ pageName }}{% elif action %}&action_id={{ action.id }}{% else %}&page_name={{ pageName }}&akid={{ akid }}{% endif %}"
     data-wm-pixel-event-type="Share"
     data-wm-pixel-track-type="trackCustom"
