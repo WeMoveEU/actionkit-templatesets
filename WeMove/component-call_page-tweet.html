@@ -16,13 +16,6 @@
 {% include "./user_form_wrapper.html" %}
 
 <script>
-  const handleUnrecognizedUser = () => {
-    const daisyChainAction = {{ page.custom_fields.daisy_chain_action|json }};
-    const recognizedUser = actionkit.context?.recognized_user;
-    if (!recognizedUser && daisyChainAction) {
-      window.location.replace(`/sign/${daisyChainAction}/`);
-    }
-  };
 
   const queryTargets = [{% report "call_page_target_information" with page.id as page_id %}];
   queryTargets.shift();
@@ -64,7 +57,12 @@
   }
 
   const prepareTweet = () => {
-    if (handleUnrecognizedUser()) {
+    // Redirect unrecognised users to the first step of daisy chain
+    const daisyChainAction = {{ page.custom_fields.daisy_chain_action|json }}
+    const recognizedUser = actionkit.context?.recognized_user;
+    if (!recognizedUser && daisyChainAction) {
+      const urlParams = window.location.search || '';
+      window.location.replace(`/sign/${daisyChainAction}${urlParams}`);
       return;
     }
 
