@@ -54,6 +54,8 @@ There are a couple ways to update a recurring donation:
         {% report "recurring_profile" with args.profile as recurring_id logged_in_user.id as user_id %}
         {% endstore %}
 
+        {% store as akid %}{% if args.akid %}{{args.akid}}{% else %}{{logged_in_user.token}}{% endif %}{% endstore %}
+
         {% with profile_details|load_json as profile %}
 
         {% if action %}
@@ -85,7 +87,7 @@ There are a couple ways to update a recurring donation:
             <div style="display: none;">
                 <form id="actionkit-form" name="act" action="/act/" method="POST">
                     <input type="hidden" name="page" value="tracking-upscaled-donations-{{ page.lang.iso_code }}" />
-                    <input type="hidden" name="akid" value="{{ logged_in_user.token }}" />
+                    <input type="hidden" name="akid" value="{{ akid }}" />
                     <input type="hidden" name="action_upscale_page" value="{{ page.name }}" />
                     <input type="hidden" name="action_profile" value="{{ profile.id }}" />
                     <input type="hidden" name="action_recurring_id" value="{{ profile.recurring_id }}" />
@@ -118,7 +120,7 @@ There are a couple ways to update a recurring donation:
                         data-wm-donate-widget
                         class="donate-widget upscale-button{% if change_amount == starting_amount %} selected{% endif %}"
                         data-ak_locale="en"
-                        data-akid="{{ logged_in_user.token }}"
+                        data-akid="{{ akid }}"
                         data-mode="change"
                         data-recurring_id="{{ args.profile }}"
                         data-change_button_text="{% include_tmpl page.custom_fields.custom_upscale_button_ask %}"
