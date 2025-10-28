@@ -11,7 +11,7 @@
 
   <a
     class="transition-all text-center w-full bg-bluesky !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:bg-bluesky-hv"
-    href="/share/link?type=bl{% if args.utm_medium == "email" %}&source=mailing{% endif %}{% if action %}&action_id={{ action.id }}{% else %}&page_name={{ pageName }}&akid={{ akid }}{% endif %}"
+    href="/share/link?type=bl&page_name={{ pageName }}{% if args.utm_medium == "email" %}&source=mailing{% endif %}{% if action %}&action_id={{ action.id }}{% else %}&akid={{ akid }}{% endif %}"
     target="_blank"
     data-wm-pixel-event-type="Share"
     data-wm-pixel-track-type="trackCustom"
