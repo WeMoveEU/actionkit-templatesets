@@ -71,7 +71,7 @@
 
     {% if page.custom_fields.custom_css %}
     <style>
-      {{ page.custom_fields.custom_css }}
+      {{ page.custom_fields.custom_css|safe }}
     </style>
     {% endif %}
 
