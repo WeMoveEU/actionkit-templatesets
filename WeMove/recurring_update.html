@@ -156,6 +156,10 @@ There are a couple ways to update a recurring donation:
     </div>
 </div>
 
-<script type="module" src="https://donate-ui.wemove.eu/donate-main.js" justification="Donation form"></script>
+{% if fundraiser_staging or args.staging == "1" %}
+    <script type="module" src="//donate-ui.wemove.support/donate-main.js?v=1.0.0" justification="Custom donation form"></script>
+{% else %}
+    <script type="module" src="//donate-ui.wemove.eu/donate-main.js?v=1.0.0" justification="Custom donation form"></script>
+{% endif %}
 
 {% endblock %}
