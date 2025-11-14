@@ -1,0 +1,17 @@
+{% store as shares %}{% report "all_shares_campaign_page_id" with page.id as page_id %}{% endstore %}
+<div class="my-6 text-wm-purple text-lg">
+  <p
+    class="[&_span]:font-bold invisible"
+    data-wm-placeholders-keys='["shares"]'
+    data-wm-placeholders-values='["{{ shares|add:"0" }}"]'>
+    {% if shares|add:"0" < 250 %}
+      {% filter ak_text:"peopleAlreadyShare_few" %}
+        <span>People across Europe have already shared this petition!</span> Help us keep the momentum going!
+      {% endfilter %}
+    {% else %}
+      {% filter ak_text:"peopleAlreadyShare_many" %}
+        <span>[% shares %] people have already shared this petition!</span> Help us keep the momentum going!
+      {% endfilter %}
+    {% endif %}
+  </p>
+</div>
