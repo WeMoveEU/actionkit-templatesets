@@ -51,7 +51,7 @@ There are a couple ways to update a recurring donation:
 
 
         {% store as profile_details %}
-        {% report "recurring_profile" with args.profile as recurring_id logged_in_user.id as user_id %}
+        {% report "recurring_profile" with cache_key as key args.profile as recurring_id logged_in_user.id as user_id %}
         {% endstore %}
 
         {% store as akid %}{% if args.akid %}{{args.akid}}{% else %}{{logged_in_user.token}}{% endif %}{% endstore %}
