@@ -35,18 +35,22 @@
         field-ak-type--{{ field.type }}
         field-type--{{ field.input }}">
 
-        <label for="id_{{ field.field_name }}">
+        {% if field.type == "html" %}
+          {{ field.input_html }}
+        {% else %}
+          <label for="id_{{ field.field_name }}">
             {{ field.label_text }}:{% if field.field_name|is_in:context.required %}<span class="ak-required-flag">*</span>{% endif %}
-        </label>
+          </label>
 
-        {% switch field.field_name %}
+          {% switch field.field_name %}
             {% case 'country' %}
-                {% include "./country_select.html" %}
+              {% include "./country_select.html" %}
             {% case 'state' %}
-                {% include "./state_select.html" %}
+              {% include "./state_select.html" %}
             {% else %}
-                {{ field.input_html }}
-        {% endswitch %}
+              {{ field.input_html }}
+          {% endswitch %}
+        {% endif %}
     </div>
 {% endfor %}
 
