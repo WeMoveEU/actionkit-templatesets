@@ -44,7 +44,7 @@
   <form name="taf" method="POST" action="/update_action/" accept-charset="utf-8" class="ak-thanks ak-styled-fields">
     <input type="hidden" name="page" value="{{ page.name }}" />
 
-    {% if page.SUPPRESS_SHARING %}
+    {% if page.SUPPRESS_SHARING or args.share == "0" %}
 
 	    {# --- VIEW MODE "AFTER-ACTION, NO SHARING" #}
       <div class="flex gap-4 items-center mb-4">
