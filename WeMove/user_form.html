@@ -39,7 +39,7 @@
           {{ field.input_html }}
         {% else %}
           <label for="id_{{ field.field_name }}">
-            {{ field.label_text }}:{% if field.field_name|is_in:context.required %}<span class="ak-required-flag">*</span>{% endif %}
+            {{ field.label_text }}{% if field.field_name|is_in:context.required %}<span class="ak-required-flag">*</span>{% endif %}
           </label>
 
           {% switch field.field_name %}
