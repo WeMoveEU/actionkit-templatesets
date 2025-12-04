@@ -1,7 +1,19 @@
 {% if page.type == 'Petition' %}
 
   <div class="form-field mb-4">
-    <button type="submit" class="ak-submit-button">
+    {% if page.custom_fields.ak_recaptcha_enabled == "1" %}
+      <script src="https://www.google.com/recaptcha/api.js" defer justification="Google's recaptcha"></script>
+      <script defer justification="Share popup: event trigger">
+        function captchaCallback () {
+          wemove.triggerEvent("wm-submittingPetitionAfterRecaptcha");
+        };
+        window.isRecaptchaEnabled = true;
+      </script>
+      <button type="submit" class="ak-submit-button g-recaptcha" data-sitekey="6LetQiEUAAAAAC5mkK_YsHGJjLE7vxjMTIaNn3MA" data-callback="captchaCallback">
+    {% else %}
+      <button type="submit" class="ak-submit-button">
+    {% endif %}
+
       {% if page.custom_fields.sign_petition_button %}
         {{ page.custom_fields.sign_petition_button }}
       {% else %}
