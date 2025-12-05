@@ -122,6 +122,16 @@
       </div>
 
       <div class="form-wrapper-container">
+        {% if request.GET.dev == "1" %}
+          <button
+            data-wm-magical-autofill
+            type="button"
+            class="rounded-full bg-wm-orange p-2 absolute top-4 right-4 z-10 shadow-md shadow-black/20 transition-all hover:bg-wm-orange-alert active:bg-wm-pink active:rotate-180">
+            {% include "./icon-magic_wand.html" %}
+            <span class="sr-only">Magical autofill</span>
+          </button>
+        {% endif %}
+
         {% include "./user_form_wrapper.html" %}
 
         {% if not isEmbbeded %}
