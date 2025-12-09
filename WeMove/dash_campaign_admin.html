@@ -284,8 +284,12 @@
       <button id="add_step" class="button-small-alternate">
         Add A Step
       </button>
+      <button id="translate_pages" class="button-small-alternate">
+        Translate
+      </button>
     </div>
-  </div>
+
+
 </section>
 
 <form>
@@ -335,6 +339,34 @@
     </div>
   </fieldset>
 </form>
+
+<div id="translation-form-section" style="display: none">
+      <h2>Translate Pages</h2>
+      <div id="translation-form" class="fieldset-contents">
+        <div class="form-row">
+          <div class="form-label col span_1_of_4"><label>Translate from:</label></div>
+          <div class="form-control col span_3_of_4">
+            <select id="translate-from" name="source_language">
+              <option value="">Select source language</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row form-row-CheckboxInput" id="target-languages-row" style="display: none;">
+          <div class="form-label col span_1_of_4"><label>Translate into:</label></div>
+          <div class="form-control col span_3_of_4" id="target-languages-checkboxes">
+          </div>
+        </div>
+        <div class="form-row form-row-CheckboxInput" id="pages-to-translate-row" style="display: none;">
+          <div class="form-label col span_1_of_4"><label>Select pages to translate:</label></div>
+          <div class="form-control col span_3_of_4" id="pages-to-translate-checkboxes">
+          </div>
+        </div>
+        <div class="button-row" id="translate-button-row" style="display: none;">
+          <button id="start_translation" class="button-main">Start Translation</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <section id="mailings_output" class="is-loading">
 	<h2>Mailings</h2>
@@ -827,6 +859,13 @@
 				$('#add_step').hide();
 				$('#page_form').show();
 			});
+			$('#translate_pages').on('click', function () {
+				$('#translate_pages').hide();
+				$('#translation-form-section').show();
+			});
+			$('#start_translation').on('click', startTranslation);
+
+			populateTranslationForm(campaign);
 		});
 	}
 
@@ -922,6 +961,149 @@
 		var name_txt = page.name || `page ${page.id}`;
 		var edit_href = page.edit_href || `/admin/core/page/${page.id}/change/`;
 		return ( view_href ? `<a title="View ${title_txt}" href="${view_href}">${action_label}</a>` : action_label ) + ` <a class="dash-icon-btn" title="Edit ${name_txt}" href="${edit_href}">✎</a>`;
+	}
+
+	////////////////////////////////////////////////////////////////////
+	// Translation Form
+
+	function populateTranslationForm(campaign) {
+		// Get languages that have pages in this campaign
+		const availableLanguages = Object.keys(window.journeys).map(uri => ({
+			uri: uri,
+			name: window.languages[uri].name,
+			code: window.languages[uri].iso_code
+		}));
+
+		// Populate source language dropdown (only languages with pages)
+		$('#translate-from').empty().append('<option value="">Select source language</option>');
+		availableLanguages.forEach(lang => {
+			$('#translate-from').append(`<option value="${lang.code}">${lang.name}</option>`);
+		});
+
+		// Set default source language (first available)
+		if (availableLanguages.length > 0) {
+			$('#translate-from').val(availableLanguages[0].code);
+			updateTranslationForm(availableLanguages[0].code);
+		}
+
+		// Handle source language change
+		$('#translate-from').off('change').on('change', function() {
+			const sourceCode = $(this).val();
+			updateTranslationForm(sourceCode);
+		});
+	}
+
+	function updateTranslationForm(sourceCode) {
+		if (!sourceCode) {
+			$('#target-languages-row').hide();
+			$('#pages-to-translate-row').hide();
+			$('#translate-button-row').hide();
+			return;
+		}
+
+		// Build list of all 7 core languages from window.languages
+		const allCoreLanguages = Object.keys(window.languages)
+			.map(uri => ({
+				uri: uri,
+				name: window.languages[uri].name,
+				code: window.languages[uri].iso_code
+			}))
+			.filter(lang => coreLanguages.includes(lang.name));
+
+		// Filter to exclude source language
+		const targetLanguages = allCoreLanguages.filter(lang => lang.code !== sourceCode);
+
+		// Populate target languages checkboxes
+		$('#target-languages-checkboxes').empty();
+		targetLanguages.forEach(lang => {
+			$('#target-languages-checkboxes').append(
+				`<label><input type="checkbox" name="target_language" value="${lang.code}"> ${lang.name}</label> `
+			);
+		});
+
+		// Find the URI for the source language to get pages
+		const sourceLangURI = Object.keys(window.languages).find(uri =>
+			window.languages[uri].iso_code === sourceCode
+		);
+
+		// Populate pages to translate
+		const sourcePages = window.journeys[sourceLangURI] || [];
+		$('#pages-to-translate-checkboxes').empty();
+
+		if (sourcePages.length === 0) {
+			$('#pages-to-translate-checkboxes').append('<p>No pages available in this language</p>');
+		} else {
+			sourcePages.forEach(journey => {
+				journey.forEach(page => {
+					if (page.id && page.name && page.title) {
+						// Use call_page_mode for call pages (tweet/facebook/call), otherwise use type
+						const pageType = (page.fields && page.fields.call_page_mode) || page.type || 'page';
+						$('#pages-to-translate-checkboxes').append(
+							`<label><input type="checkbox" name="page_to_translate" value="${page.name}"> ${pageType}</label><br>`
+						);
+					}
+				});
+			});
+		}
+
+		// Show the form sections
+		$('#target-languages-row').show();
+		$('#pages-to-translate-row').show();
+		$('#translate-button-row').show();
+	}
+
+	function startTranslation() {
+		// Get form values
+		const sourceLanguage = $('#translate-from').val();
+		const targetLanguages = $('input[name="target_language"]:checked').map(function() {
+			return $(this).val();
+		}).get();
+		const pageNames = $('input[name="page_to_translate"]:checked').map(function() {
+			return $(this).val();
+		}).get();
+
+		// Validate
+		if (!sourceLanguage) {
+			alert('Please select a source language');
+			return;
+		}
+		if (targetLanguages.length === 0) {
+			alert('Please select at least one target language');
+			return;
+		}
+		if (pageNames.length === 0) {
+			alert('Please select at least one page to translate');
+			return;
+		}
+
+		// Build URL with parameters
+		const params = new URLSearchParams();
+		params.set('source', sourceLanguage);
+		params.set('targets', targetLanguages.join(','));
+		params.set('pages', pageNames.join(','));
+		params.set('autostart', 'true');
+
+		const url = `https://translate.wemove.eu/?${params.toString()}`;
+
+		// Open in new window
+		const translationWindow = window.open(url, 'webabel-translation');
+
+		// Listen for completion message
+		window.addEventListener('message', function(event) {
+			const allowedOrigins = ['https://translate.wemove.eu'];
+			if (!allowedOrigins.includes(event.origin)) {
+				return;
+			}
+
+			if (event.data.type === 'translation_complete') {
+				api_log('Translations complete:', event.data);
+	
+				const campaign = $('#page_form').data('campaign');
+                if (campaign && event.data.successful > 0) {
+		            displayPages(campaign);
+				}
+			}
+		});
 	}
 
   const getSortedMailingsFromAPI = async (campaignId)=> {
