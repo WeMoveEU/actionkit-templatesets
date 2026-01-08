@@ -1,9 +1,63 @@
 {% extends "./wrapper.html" %}
 
+{% block css_additions %}
+{{ block.super }}
+{% if page.custom_fields.call_page_mode == "call" %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.2/build/css/intlTelInput.css">
+<style>
+label[for=id_mobile_phone] {
+  margin-left: 30px;
+  z-index: 2;
+}
+.iti {
+  display: block;
+}
+</style>
+{% endif %}
+{% endblock %}
+
+{% block wemove_scripts %}
+{{ block.super }}
+{% if page.custom_fields.call_page_mode == "call" %}
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.2/build/js/intlTelInput.min.js"></script>
+<script>
+  const input = document.querySelector("#id_mobile_phone");
+  if (input) {
+    window.intlTelInput(input, {
+      loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.2/build/js/utils.js"),
+    });
+  }
+
+/**
+ ** @@TODO this is shamelessly ripped from floating-labels.js, would be great to just incorporate instead
+ ** the problem is that floating-labels.js uses `const container = $(element).parent()[0]`
+ ** which assumes that the input is an immediate child of its containing .form-field
+ ** but with this custom phone input that's no longer the case, so we need .closest instead
+ **/
+
+  const updatePhoneFloatingClass = (event, input) => {
+    const element = event ? event.target : input;
+    const container = $(element).closest(".form-field")[0];
+
+    container.classList.remove("is-floating");
+
+    if (element.value !== "" || event?.type === "focus") {
+      container.classList.add("is-floating");
+    }
+  };
+  $("#id_mobile_phone").on("focus blur change", updatePhoneFloatingClass);
+</script>
+{% endif %}
+{% endblock %}
+
 {% block content %}
 
-<div class="nav-md:grid grid-cols-petition mb-8">
-  <article>
+{% if page.custom_fields.call_page_mode == "call" and action and action.page.id == page.id %}
+{% remember 1 as MAKING_CALLS %}
+{% endif %}
+
+<div class="{% if not MAKING_CALLS %}nav-md:grid grid-cols-petition{% endif %} mb-8">
+  <article {% if MAKING_CALLS %}class="hidden"{% endif %}>
     <h1 class="nav-md:mr-4">{{ page.title }}</h1>
 
     {% include "./component-featured_media.html" %}
@@ -15,7 +69,7 @@
 
   <aside>
     <form
-      class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below bg-wm-bg-form p-4 max-w-[500px] mx-auto"
+      class="ak-form ak-styled-fields ak-labels-overlaid ak-errs-below p-4 mx-auto {% if not MAKING_CALLS %}bg-wm-bg-form max-w-[500px]{% endif %}"
       name="act"
       method="post"
       action="/act/"
@@ -29,8 +83,10 @@
         {% include "./component-call_page-tweet.html" %}
       {% elif page.custom_fields.call_page_mode == 'facebook' %}
         {% include "./component-call_page-facebook.html" %}
-      {% elif page.custom_fields.call_page_mode == 'call' %}
+      {% elif page.custom_fields.call_page_mode == 'call' and not MAKING_CALLS %}
         {% include "./component-call_page-call.html" %}
+      {% elif page.custom_fields.call_page_mode == 'call' and MAKING_CALLS %}
+        {% include "./component-call_page-call-progress.html" %}
       {% endif %}
     </form>
   </aside>
