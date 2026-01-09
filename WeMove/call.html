@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.2/build/css/intlTelInput.css">
 <style>
 label[for=id_mobile_phone] {
-  margin-left: 30px;
+  margin-left: 36px;
   z-index: 2;
 }
 .iti {
@@ -19,34 +19,102 @@ label[for=id_mobile_phone] {
 {% block wemove_scripts %}
 {{ block.super }}
 {% if page.custom_fields.call_page_mode == "call" %}
-<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.2/build/js/intlTelInput.min.js"></script>
-<script>
-  const input = document.querySelector("#id_mobile_phone");
-  if (input) {
-    window.intlTelInput(input, {
-      loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.2/build/js/utils.js"),
-    });
+<script type="module">
+  const telephoneInput = document.getElementById("id_mobile_phone");
+
+  if (!telephoneInput) {
+    throw new Error("Intl-tel init aborted (no telephone input found)");
   }
 
-/**
- ** @@TODO this is shamelessly ripped from floating-labels.js, would be great to just incorporate instead
- ** the problem is that floating-labels.js uses `const container = $(element).parent()[0]`
- ** which assumes that the input is an immediate child of its containing .form-field
- ** but with this custom phone input that's no longer the case, so we need .closest instead
- **/
+  telephoneInput.type = "tel";
 
-  const updatePhoneFloatingClass = (event, input) => {
-    const element = event ? event.target : input;
-    const container = $(element).closest(".form-field")[0];
+  // Dynamically load the intlTelInput library
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.2/build/js/intlTelInput.min.js';
+  document.head.appendChild(script);
 
-    container.classList.remove("is-floating");
+  await new Promise((resolve, reject) => {
+    script.onload = resolve;
+    script.onerror = reject;
+  });
 
-    if (element.value !== "" || event?.type === "focus") {
-      container.classList.add("is-floating");
+  const loadUtils = () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.2/build/js/utils.js");
+  const countryTranslations = () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.2/build/js/i18n/{{page.lang.iso_code|default:'en'}}/countries.js");
+
+  const getInitialCountryIso = () => {
+    // These are the supported countries in our country select inside petition forms.
+    // This means that if we get a country code or name from AK it will be only one of these.
+    // It should always be a country name in english, but just in case we also check for ISO codes.
+    const supportedCountries = {
+      "en": "gb",
+      "united states": "us",
+      "united kingdom": "gb",
+      "bulgaria": "bg",
+      "czech republic": "cz",
+      "denmark": "dk",
+      "germany": "de",
+      "estonia": "ee",
+      "ireland": "ie",
+      "greece": "gr",
+      "spain": "es",
+      "france": "fr",
+      "croatia": "hr",
+      "italy": "it",
+      "cyprus": "cy",
+      "latvia": "lv",
+      "lithuania": "lt",
+      "luxembourg": "lu",
+      "hungary": "hu",
+      "malta": "mt",
+      "netherlands": "nl",
+      "austria": "at",
+      "poland": "pl",
+      "portugal": "pt",
+      "romania": "ro",
+      "slovenia": "si",
+      "slovakia": "sk",
+      "finland": "fi",
+      "sweden": "se",
+    };
+
+    const isSupportedEUCountry = (isoCode) => {
+      return Object.values(supportedCountries).includes(isoCode);
+    };
+
+    const userCountry = "{{ user.country|lower }}";
+    let supportedCountry = null;
+
+    // helper to check if the given country is supported
+    if (userCountry) {
+      // is it an ISO code or a country name?
+      if (userCountry.length === 2 && isSupportedCountry(userCountry)) {
+        supportedCountry = userCountry;
+      } else {
+        supportedCountry = supportedCountries[userCountry];
+      }
     }
+
+    // fallback to page language country if user country is not supported
+    // that's why in the country list above we have en as a country name
+    return supportedCountry
+      ? supportedCountry
+      : supportedCountries[wemove.page.language.iso];
   };
-  $("#id_mobile_phone").on("focus blur change", updatePhoneFloatingClass);
+
+  window.intlTelInput(telephoneInput, {
+    loadUtils: loadUtils,
+    hiddenInput: (telInputName) => ({ phone: "phone_full" }),
+    strictMode: true,
+    validationNumberTypes: null,
+    initialCountry: getInitialCountryIso(),
+    countryOrder: ["fr", "de", "it", "nl", "pl", "es", "gb", "at", "be", "bg", "hr", "cy", "cz", "dk", "ee", "fi",  "gr", "hu", "ie",  "lv", "lt", "lu", "mt",  "pt", "ro", "sk", "si",  "se"],
+    countrySearch: false,
+    autoPlaceholder: "off",
+    separateDialCode: false,
+    i18n: countryTranslations,
+  });
 </script>
+
 {% endif %}
 {% endblock %}
 
@@ -57,7 +125,7 @@ label[for=id_mobile_phone] {
 {% endif %}
 
 <div class="{% if not MAKING_CALLS %}nav-md:grid grid-cols-petition{% endif %} mb-8">
-  <article {% if MAKING_CALLS %}class="hidden"{% endif %}>
+  <article {% if MAKING_CALLS %}hidden{% endif %}>
     <h1 class="nav-md:mr-4">{{ page.title }}</h1>
 
     {% include "./component-featured_media.html" %}
