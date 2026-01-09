@@ -12,6 +12,79 @@ label[for=id_mobile_phone] {
 .iti {
   display: block;
 }
+
+.iti__dropdown-content {
+  background-color: white;
+  border: none;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 0 !important;
+}
+
+.iti__country-list {
+  margin: 0;
+  padding: 0;
+}
+
+.iti__country {
+  padding: 6px 16px 6px 8px;
+  font-size: 16px;
+  line-height: 1.3;
+  transition: background-color 0.2s ease;
+}
+
+.iti__country:hover {
+  background-color: #f5f3ff;
+}
+
+.iti__country.iti__highlight {
+  background-color: #8b5cf6;
+  color: white;
+}
+
+.iti__country.iti__active {
+  background-color: #ede9fe;
+  font-weight: 500;
+}
+
+.iti__flag-box {
+  margin-right: 10px;
+}
+
+.iti__country-name {
+  color: #1f2937;
+  font-weight: 500;
+}
+
+.iti__dial-code {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.iti__country.iti__highlight .iti__country-name,
+.iti__country.iti__highlight .iti__dial-code {
+  color: white;
+}
+
+.iti__selected-flag {
+  padding: 0 8px 0 12px;
+  border-radius: 8px 0 0 8px;
+  transition: background-color 0.2s ease;
+}
+
+.iti__selected-flag:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.iti__arrow {
+  border-top-color: #6b7280;
+}
+
+.iti__selected-flag[aria-expanded="true"] .iti__arrow {
+  border-bottom-color: #6b7280;
+}
 </style>
 {% endif %}
 {% endblock %}
