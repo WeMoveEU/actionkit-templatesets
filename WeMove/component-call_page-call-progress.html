@@ -15,39 +15,56 @@ step-sequence {
     }
 }
 
-.what_to_say--target .per-call-field--type-radio > div > label,
-.what_to_say--target .per-call-field--type-checkbox > div > label,
-.what_to_say--target .per-call-field--type-select > div > label {
-    position: unset;
-    padding-inline-start: .25rem;
-    margin-bottom: -.25rem;
-}
-.what_to_say--target .form-field select {
-    padding-block: .5em;
-}
-.what_to_say--target span.ak-userfield-radio-set,
-.what_to_say--target span.ak-userfield-checkbox-set {
-    display: block;
-}
-.what_to_say--target span.ak-userfield-radio-set label,
-.what_to_say--target span.ak-userfield-checkbox-set label  {
-    position: relative;
-    display: flex;
-    top: unset;
-    pointer-events: auto;
-    cursor: pointer;
-}
-.what_to_say--target span.ak-userfield-radio-set input[type=radio],
-.what_to_say--target span.ak-userfield-checkbox-set input[type=checkbox] {
-    height: auto;
-    position: unset;
-    width: unset;
-    margin-inline-end: 5px;
+.what_to_say--target {
+    .form-fields-wrapper {
+        max-width: 800px;
+    }
+
+    .form-field {
+        margin-bottom: 1rem;
+
+        label[for] {
+            position: static;
+            margin-bottom: 0;
+            padding: 0;
+            font-family: Libre Franklin, sans-serif;
+            font-weight: bold;
+            color: #21194f;
+            font-size: 1.15rem;
+            pointer-events: all;
+        }
+
+        .ak-userfield-checkbox-choice,
+        .ak-userfield-radio-choice {
+            position: static;
+            display: flex;
+            gap: .75rem;
+            justify-content: start;
+            align-items: center;
+            padding: 0;
+            margin-bottom: .25rem;
+        }
+
+        input[type=radio],
+        input[type=checkbox] {
+            display: inline-block;
+            position: static;
+            height: 1rem;
+            width: 1rem;
+        }
+
+        input,
+        select {
+            border: 2px solid #21194f;
+            background-color: #f1f5f9;
+            color: #21194f;
+        }
+    }
 }
 </style>
 
 {% if context.targets.targets|length %}
-    <div class="what_to_say--prep mb-4">
+    <div class="what_to_say--prep mb-8">
         {% if page.custom_fields.call_page_prep_info_preparing_call %}
             {% include_tmpl page.custom_fields.call_page_prep_info_preparing_call %}
         {% else %}
@@ -95,36 +112,39 @@ step-sequence {
             </div>
 
             <div class="ak-labels-overlaid">
-                {% if form.survey_question_text %}
-                    <div class="ak-labels-overlaid form-field my-4">
-                        <label class="font-bold !static !text-wm-purple [&_p]:!mb-0 !p-0 !text-2xl font-gilroy" for="id_action_survey_{{ target.id }}">
-                            {% include_tmpl form.survey_question_text %}
-                        </label>
-
-                        <textarea
-                            id="id_action_survey_{{ target.id }}"
-                            name="action_survey_{{ target.id }}"
-                            class="!border-2 !border-wm-purple !bg-slate-100"></textarea>
-                    </div>
-                {% endif %}
-
-                {% field_order name email prefix first_name middle_name last_name suffix country address1 address2 city state zip region postal phone %}
-                {% hide_by_default prefix first_name middle_name last_name suffix country phone address1 address2 city state region postal %}
-
-                {% for field in user_fields %}
-                    {% if field.field_name|startswith:"action_per_call" %}
-                        <div
-                            id="ak-fieldbox-{{ field.field_name }}"
-                            class="ak-field form-field mb-2 per-call-field per-call-field--type-{{ field.input_type }}">
-                            <label for="id_{{ field.field_nvame }}">
-                                {% include_tmpl field.label_text %}
+                <div class="form-fields-wrapper">
+                    {% if form.survey_question_text %}
+                        <div class="ak-labels-overlaid form-field my-4">
+                            <label class="font-bold !static !text-wm-purple [&_p]:!mb-0 !p-0 !text-2xl font-gilroy" for="id_action_survey_{{ target.id }}">
+                                {% include_tmpl form.survey_question_text %}
                             </label>
-                            {{ field.input_html }}
+
+                            <textarea
+                                id="id_action_survey_{{ target.id }}"
+                                name="action_survey_{{ target.id }}"
+                                class="!border-2 !border-wm-purple !bg-slate-100"></textarea>
                         </div>
                     {% endif %}
-                {% endfor %}
 
-                <div class="ak-labels-overlaid form-field flex justify-center">
+                    {% field_order name email prefix first_name middle_name last_name suffix country address1 address2 city state zip region postal phone %}
+                    {% hide_by_default prefix first_name middle_name last_name suffix country phone address1 address2 city state region postal %}
+
+                    {% for field in user_fields %}
+                        {% if field.field_name|startswith:"action_per_call" %}
+                            <div
+                                id="ak-fieldbox-{{ field.field_name }}"
+                                class="form-field mb-4 per-call-field per-call-field--type-{{ field.input_type }}">
+                                <label for="id_{{ field.field_name }}" class="!text-wm-purple font-bold">
+                                    {% include_tmpl field.label_text %}
+                                </label>
+
+                                {{ field.input_html }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="mt-8 ak-labels-overlaid form-field flex justify-center">
                     <button
                         data-target="{{ target.id }}"
                         role="button"
@@ -145,8 +165,8 @@ step-sequence {
         data-all-targets="true"
         role="button"
         type="submit"
-        class="ak-userfield-submit ak-has-overlay !py-5 !mx-auto md:!w-auto md:!px-36 w-full !flex items-center gap-2 !bg-wm-purple hover:!bg-wm-pink transition-all">
-            <span aria-hidden="true" class="w-6 h-6 inline-block">
+        class="ak-userfield-submit ak-has-overlay !py-5 !mx-auto md:!w-auto md:!px-36 w-full !flex justify-center items-center gap-2 !bg-wm-purple hover:!bg-wm-pink transition-all">
+            <span aria-hidden="true" class="w-6 h-6 block">
               {% include "./icon-report.html" %}
             </span>
             Send all reports
