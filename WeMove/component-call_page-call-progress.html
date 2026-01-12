@@ -75,7 +75,7 @@ step-sequence {
                 data-target="{{ target.id }}"
                 role="button"
                 type="button"
-                class="button--primary call-button make-call-button !flex gap-2 justify-center md:!w-auto items-center">
+                class="button--primary call-button make-call-button !flex gap-2 justify-center md:!w-auto items-center hover:!bg-wm-pink transition-all">
                 Call &amp; Connect Me
             </button>
         </div>
@@ -129,25 +129,26 @@ step-sequence {
                         data-target="{{ target.id }}"
                         role="button"
                         type="submit"
-                        class="ak-call-survey-submit ak-userfield-submit ak-has-overlay !mx-auto md:!w-auto md:!px-32 w-full">
+                        class="ak-call-survey-submit ak-userfield-submit ak-has-overlay !mx-auto md:!w-auto md:!px-32 w-full hover:!bg-wm-pink transition-all">
                             Save report
                     </button>
                 </div>
             </div>
 
-            {% if not forloop.last %}
-                <hr class="w-52 h-1 mx-auto bg-slate-500 border-0 rounded-sm my-12">
-            {% endif %}
+            <hr class="w-52 h-1 mx-auto bg-slate-500 border-0 rounded-sm my-12">
         </div>
     </section>
 {% endfor %}
 
-<div class="my-4 max-w-4xl mx-auto save-all-reports">
+<div class="mb-4 mt-16 save-all-reports">
     <button
         data-all-targets="true"
         role="button"
         type="submit"
-        class="ak-userfield-submit ak-has-overlay !mx-auto md:!w-auto md:!px-32 w-full">
+        class="ak-userfield-submit ak-has-overlay !py-5 !mx-auto md:!w-auto md:!px-36 w-full !flex items-center gap-2 !bg-wm-purple hover:!bg-wm-pink transition-all">
+            <span aria-hidden="true" class="w-6 h-6 inline-block">
+              {% include "./icon-report.html" %}
+            </span>
             Send all reports
     </button>
 </div>
