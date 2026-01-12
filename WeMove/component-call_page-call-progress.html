@@ -1,11 +1,18 @@
 <style>
 step-sequence {
-  --step-container-margin: auto;
+    display: none;
+    --step-container-margin: 0;
     --color-primary: linear-gradient(to right, #c552df00, #c552df 50%);
     --color-primary-contrast: white;
     --clip-path: polygon(0% 0%, 85% 0%, 100% 50%, 85% 100%, 0% 100%);
     --clip-path-first: polygon(0% 0%, 85% 0%, 100% 50%, 85% 100%, 0% 100%);
     --color-completed: linear-gradient(to right, rgb(239 239 239 / 0), rgb(239 239 239) 60%);
+}
+
+@media (min-width: 1024px) {
+    step-sequence {
+        display: block;
+    }
 }
 
 .what_to_say--target .per-call-field--type-radio > div > label,
@@ -40,67 +47,110 @@ step-sequence {
 </style>
 
 {% if context.targets.targets|length %}
-                <div class="what_to_say--prep mb-4 max-w-4xl mx-auto" style="max-width: 56rem">
-                  {% if page.custom_fields.call_page_prep_info_preparing_call %}
-                  {% include_tmpl page.custom_fields.call_page_prep_info_preparing_call %}
-                  {% else %}
-                  <p>Before you get started, please read over the talking points below.
-                  <p>We will call you directly to connect you to your elected officials. When you make your call, a staff member will answer – it is their job to take calls from constituents like you! They won’t be quizzing you on the nitty gritty, so don’t be nervous.
-                  <p>We have prepared suggested scripts for each office, but you can make it personal and share why this is important to you!
-                  {% endif %}
+    <div class="what_to_say--prep mb-4">
+        {% if page.custom_fields.call_page_prep_info_preparing_call %}
+            {% include_tmpl page.custom_fields.call_page_prep_info_preparing_call %}
+        {% else %}
+            <p>Before you get started, please read over the talking points below.
+            <p>We will call you directly to connect you to your elected officials. When you make your call, a staff member will answer – it is their job to take calls from constituents like you! They won’t be quizzing you on the nitty gritty, so don’t be nervous.
+            <p>We have prepared suggested scripts for each office, but you can make it personal and share why this is important to you!
+        {% endif %}
+    </div>
+{% endif %}
+
+{% for target in context.targets.targets %}
+    <section
+        class="what_to_say--target"
+        data-target-id="{{ target.id }}"
+        id="call-step-{{ target.id }}">
+
+        <div class="md:flex justify-between items-center mb-4 md:mb-2">
+            <h2 class="text-wm-purple mb-2" data-number="{{ forloop.counter }}">
+                <span class="text-wm-pink">{{ forloop.counter }}.</span>
+                Call
+                <span class="call-hero-list-title">{{ target.first }} {{ target.last }}</span>
+            </h2>
+
+            <button
+                data-target="{{ target.id }}"
+                role="button"
+                type="button"
+                class="button--primary call-button make-call-button !flex gap-2 justify-center md:!w-auto items-center">
+                Call &amp; Connect Me
+            </button>
+        </div>
+
+        <div class="call-ak__call-message">
+            <div class="ak-field-box">
+                <div class="script-text">
+                    <h5
+                        class="text-wm-purple mb-2 text-2xl">
+                        Your Message:
+                    </h5>
+
+                    <div class="bg-gray-200 text-wm-purple font-gilroy p-4 rounded [&_li]:mb-4 [&_li:last-child]:mb-0">
+                        {% include_tmpl form.script_text %}
+                    </div>
                 </div>
+            </div>
+
+            <div class="ak-labels-overlaid">
+                {% if form.survey_question_text %}
+                    <div class="ak-labels-overlaid form-field my-4">
+                        <label class="font-bold !static !text-wm-purple [&_p]:!mb-0 !p-0 !text-2xl font-gilroy" for="id_action_survey_{{ target.id }}">
+                            {% include_tmpl form.survey_question_text %}
+                        </label>
+
+                        <textarea
+                            id="id_action_survey_{{ target.id }}"
+                            name="action_survey_{{ target.id }}"
+                            class="!border-2 !border-wm-purple !bg-slate-100"></textarea>
+                    </div>
                 {% endif %}
 
-                {% for target in context.targets.targets %}
-                  <div class="bg-gray-100 p-6 mb-4 max-w-4xl mx-auto what_to_say--target" data-target-id="{{ target.id }}" id="call-step-{{ target.id }}" style="max-width: 56rem">
-                    <h2 class="call-hero-list-title" data-number="{{ forloop.counter }}">
-                            Call {{ target.first }} {{ target.last }}
-                    </h2>
+                {% field_order name email prefix first_name middle_name last_name suffix country address1 address2 city state zip region postal phone %}
+                {% hide_by_default prefix first_name middle_name last_name suffix country phone address1 address2 city state region postal %}
 
-                    <div class="call-ak__call-message">
-                      <button data-target="{{ target.id }}" role="button" type="button" class="button--primary call-button make-call-button">Call &amp; Connect Me</button>
-
-                      <div class="ak-field-box ak-field-box-borderless">
-                        <h5 onclick="$(this).closest('.ak-field-box').find('.script-text').slideToggle()" class="mt-4 mb-1 text-sm" style="cursor:pointer">Your Message:</h5>
-                        <div class="script-text">{% include_tmpl form.script_text %}</div>
-                      </div>
-
-                    {% if form.survey_question_text %}
-                      <div class="ak-labels-overlaid ak-margin-top-1 form-field mb-2">
-                        <label style="font-weight: bold" for="id_action_survey_{{ target.id }}">{% include_tmpl form.survey_question_text %}</label>
-                        <textarea id="id_action_survey" name="action_survey_{{ target.id }}" class="ak-large-message"></textarea>
-                      </div>
+                {% for field in user_fields %}
+                    {% if field.field_name|startswith:"action_per_call" %}
+                        <div
+                            id="ak-fieldbox-{{ field.field_name }}"
+                            class="ak-field form-field mb-2 per-call-field per-call-field--type-{{ field.input_type }}">
+                            <label for="id_{{ field.field_nvame }}">
+                                {% include_tmpl field.label_text %}
+                            </label>
+                            {{ field.input_html }}
+                        </div>
                     {% endif %}
-
-
-{% field_order name email prefix first_name middle_name last_name suffix country address1 address2 city state zip region postal phone %}
-{% hide_by_default prefix first_name middle_name last_name suffix country phone address1 address2 city state region postal %}
-
-                    {% for field in user_fields %}
-                      {% if field.field_name|startswith:"action_per_call" %}
-    <div id="ak-fieldbox-{{ field.field_name }}" class="ak-field form-field mb-2 per-call-field per-call-field--type-{{ field.input_type }}">
-        <div>
-            <label for="id_{{ field.field_name }}">
-                {% include_tmpl field.label_text %}
-            </label>
-              {{ field.input_html }}
-        </div>
-    </div>
-
-                      {% endif %}
-                    {% endfor %}
-
-                      <div class="ak-labels-overlaid ak-margin-top-1 form-field mb-2">
-                        <button data-target="{{ target.id }}" role="button" type="submit" class="ak-call-survey-submit ak-userfield-submit ak-has-overlay mr-0 ml-auto mt-4 max-w-xs" style="max-width: 256px; margin-right: 0; margin-left: auto;">Save report</button>
-                      </div>
-
-                    </div>
-                  </div>
                 {% endfor %}
 
-                <div class="mb-4 max-w-4xl mx-auto save-all-reports " style="max-width: 56rem">
-                  <button data-all-targets="true" role="button" type="submit" class="ak-userfield-submit ak-has-overlay">Save all reports</button>
+                <div class="ak-labels-overlaid form-field flex justify-center">
+                    <button
+                        data-target="{{ target.id }}"
+                        role="button"
+                        type="submit"
+                        class="ak-call-survey-submit ak-userfield-submit ak-has-overlay !mx-auto md:!w-auto md:!px-32 w-full">
+                            Save report
+                    </button>
                 </div>
+            </div>
+
+            {% if not forloop.last %}
+                <hr class="w-52 h-1 mx-auto bg-slate-500 border-0 rounded-sm my-12">
+            {% endif %}
+        </div>
+    </section>
+{% endfor %}
+
+<div class="my-4 max-w-4xl mx-auto save-all-reports">
+    <button
+        data-all-targets="true"
+        role="button"
+        type="submit"
+        class="ak-userfield-submit ak-has-overlay !mx-auto md:!w-auto md:!px-32 w-full">
+            Send all reports
+    </button>
+</div>
 
 {% block script_additions %}
 <script src="https://actionkit-call-page-js.vercel.app/step-sequence.js"></script>
