@@ -43,6 +43,8 @@ step-sequence {
             align-items: center;
             padding: 0;
             margin-bottom: .25rem;
+            pointer-events: all;
+            cursor: pointer;
         }
 
         input[type=radio],
@@ -51,6 +53,7 @@ step-sequence {
             position: static;
             height: 1rem;
             width: 1rem;
+            pointer-events: all;
         }
 
         input,
@@ -58,6 +61,7 @@ step-sequence {
             border: 2px solid #21194f;
             background-color: #f1f5f9;
             color: #21194f;
+            padding: .5rem;
         }
     }
 }
@@ -133,7 +137,8 @@ step-sequence {
                         {% if field.field_name|startswith:"action_per_call" %}
                             <div
                                 id="ak-fieldbox-{{ field.field_name }}"
-                                class="form-field mb-4 per-call-field per-call-field--type-{{ field.input_type }}">
+                                class="form-field mb-4 per-call-field per-call-field--type-{{ field.input_type }}"
+                                data-wm-avoid-floating-label>
                                 <label for="id_{{ field.field_name }}" class="!text-wm-purple font-bold">
                                     {% include_tmpl field.label_text %}
                                 </label>
