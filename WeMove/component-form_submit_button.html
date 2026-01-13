@@ -61,6 +61,8 @@
           {% include "./icon-twitter.html" %}
         {% elif page.custom_fields.call_page_mode == 'facebook' %}
           {% include "./icon-facebook.html" %}
+        {% elif page.custom_fields.call_page_mode == 'call' %}
+          {% include "./icon-phonecall.html" %}
         {% endif %}
       </span>
 
@@ -71,6 +73,8 @@
           {% filter ak_text:"sendTweet_button" %}Tweet{% endfilter %}
         {% elif page.custom_fields.call_page_mode == 'facebook' %}
           {% filter ak_text:"sendFacebook_button" %}Open Facebook{% endfilter %}
+        {% elif page.custom_fields.call_page_mode == 'call' %}
+          {% filter ak_text:"sendCall_button" %}Start Calling{% endfilter %}
         {% endif %}
       {% endif %}
   </button>
