@@ -38,11 +38,6 @@
       </div>
     </div>
 
-    {# https://action.wemove.eu/sign/developers-testing-campaign-petition-EN/?variation=132 #}
-    {% if tests and page.custom_fields.share_ab_test_5_social_proof == "social_proof" %}
-      {% include "./component-social_proof_message.html" %}
-    {% endif %}
-
     <div class="mx-auto md:max-w-[500px]">
       {% include "./component-share_button_whatsapp.html" %}
       {% include "./component-share_button_facebook.html" %}
