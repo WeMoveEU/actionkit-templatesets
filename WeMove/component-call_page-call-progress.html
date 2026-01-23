@@ -179,24 +179,7 @@ step-sequence {
 </div>
 
 {% block script_additions %}
-<script>
-window.callProgressLabels = {
-    initiating: "{% filter ak_text:"call_aboutToCallYou" %}About to call you!{% endfilter %}",
-    yourInfo: "{% filter ak_text:"call_youInfo" %}Your info{% endfilter %}",
-    thankYou: "{% filter ak_text:"call_thankYou" %}Thank you!{% endfilter %}",
-    thankYou: "{% filter ak_text:"call_thankYou" %}Thank you!{% endfilter %}",
-    idle: "{% filter ak_text:"call_idle" %}Call &amp; connect me{% endfilter %}",
-    callingUser: "{% filter ak_text:"call_callingUser" %}Calling you from {phone}, Please pick up!{% endfilter %}",
-    userConfirmed: "{% filter ak_text:"call_userConfirmed" %}Connected! Dialing representative&hellip;{% endfilter %}",
-    callingRep: "{% filter ak_text:"call_callingRep" %}Connecting&hellip;{% endfilter %}",
-    completed: "{% filter ak_text:"call_callCompleted" %}Call complete{% endfilter %}",
-    failed: "{% filter ak_text:"call_callFailed" %}Call failed &mdash; Try again{% endfilter %}",
-    terminated: "{% filter ak_text:"call_callTerminated" %}Call &amp; Connect me{% endfilter %}",
-    error: "{% filter ak_text:"call_callError" %}Error &mdash; Try again{% endfilter %}",
-    disconnected: "{% filter ak_text:"call_callDisconnected" %}Disconnected &mdash; Try again{% endfilter %}",
-    discdefaultonnected: "{% filter ak_text:"call_default" %}Call in progress{% endfilter %}",
-};
-</script>
+
 
 <!-- <script src="https://static.wemove.eu/action-kit/js/call-scripts/step-sequence.js"></script> -->
 <script src="https://static.wemove.eu/action-kit/js/call-scripts/call-tracker.js"></script>
