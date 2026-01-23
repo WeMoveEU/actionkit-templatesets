@@ -1,6 +1,6 @@
 <style>
 step-sequence {
-    display: none !important;
+    display: none;
     --step-container-margin: 0;
     --color-primary: linear-gradient(to right, #c552df00, #c552df 50%);
     --color-primary-contrast: white;
@@ -11,7 +11,7 @@ step-sequence {
 
 @media (min-width: 1024px) {
     step-sequence {
-        // display: block;
+        display: block;
     }
 }
 
@@ -198,9 +198,10 @@ window.callProgressLabels = {
 };
 </script>
 
-<script src="https://static.wemove.eu/action-kit/js/call-scripts/step-sequence.js"></script>
+<!-- <script src="https://static.wemove.eu/action-kit/js/call-scripts/step-sequence.js"></script> -->
 <script src="https://static.wemove.eu/action-kit/js/call-scripts/call-tracker.js"></script>
 <script src="https://static.wemove.eu/action-kit/js/call-scripts/actionkit-call-page.js"></script>
+
 <script>
 window.actionkitFormReady = function() {
   ActionKitCallPage.initialize({
