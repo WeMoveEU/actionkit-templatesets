@@ -3,6 +3,7 @@
   href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
   class="button-fill button-fill--white
   mb-2 flex w-full gap-2 justify-center p-3 font-bold rounded font-gilroy text-xl">
+
   {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
 </a>
 {% endif %}
