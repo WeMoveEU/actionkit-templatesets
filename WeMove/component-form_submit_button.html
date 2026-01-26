@@ -80,7 +80,7 @@
       {% endif %}
   </button>
 
-  {% if age.custom_fields.call_page_mode == 'call' and page.custom_fields.next_step %}
+  {% if page.custom_fields.call_page_mode == 'call' and page.custom_fields.next_step %}
     {% include "./component-skip_button.html" %}
   {% endif %}
 
