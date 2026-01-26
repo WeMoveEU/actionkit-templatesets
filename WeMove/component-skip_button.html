@@ -1,3 +1,4 @@
+{% if page.custom_fields.next_step %}
 <a
   href="{{ page.followup.url }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}"
   class="button-fill button-fill--white
@@ -5,3 +6,4 @@
 
   {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
 </a>
+{% endif %}
