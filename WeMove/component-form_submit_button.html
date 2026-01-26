@@ -80,7 +80,9 @@
       {% endif %}
   </button>
 
-  {% include "./component-skip_button.html" %}
+  {% if page.custom_fields.next_step %}
+    {% include "./component-skip_button.html" %}
+  {% endif %}
 
 {% elif page.type == 'Letter' %}
 
