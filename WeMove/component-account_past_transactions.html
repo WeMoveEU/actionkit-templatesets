@@ -51,9 +51,9 @@
             class="absolute right-4 top-4 z-10"
             target="_parent"
             {% if donation.account|lower == "wm-stripe" or donation.account|lower == "legacy-stripe" %}
-              href="https://wemove.eu/api/receipt?locale={{ link_iso }}&akid={{ actionkit_user.token }}&tx={% filter custom_hash %}{{ donation.transaction_id }}{% endfilter %}&user_fullname={{ actionkit_user.first_name }}%20{{ actionkit_user.last_name }}&user_email={{ actionkit_user.email }}&payment_date={{ donation.created_at|date:"m/d/Y" }}&payment_amount={{ donation.amt }}&payment_frequency={{ currentPaymentFrequency }}"
+              href="https://wemove.eu/api/receipt?locale={{page.lang.iso_code|default:'en'}}&akid={{ actionkit_user.token }}&tx={% filter custom_hash %}{{ donation.transaction_id }}{% endfilter %}&user_fullname={{ actionkit_user.first_name }}%20{{ actionkit_user.last_name }}&user_email={{ actionkit_user.email }}&payment_date={{ donation.created_at|date:"m/d/Y" }}&payment_amount={{ donation.amt }}&payment_frequency={{ currentPaymentFrequency }}"
             {% else %}
-              href="https://wemove.eu/api/receipt?locale={{ link_iso }}&user_fullname={{ actionkit_user.first_name }}%20{{ actionkit_user.last_name }}&user_email={{ actionkit_user.email }}&payment_method={{ currentPaymentMethod }}&payment_date={{ donation.created_at|date:"m/d/Y" }}&payment_amount={{ donation.amt }}&payment_frequency={{ currentPaymentFrequency }}"
+              href="https://wemove.eu/api/receipt?locale={{page.lang.iso_code|default:'en'}}&user_fullname={{ actionkit_user.first_name }}%20{{ actionkit_user.last_name }}&user_email={{ actionkit_user.email }}&payment_method={{ currentPaymentMethod }}&payment_date={{ donation.created_at|date:"m/d/Y" }}&payment_amount={{ donation.amt }}&payment_frequency={{ currentPaymentFrequency }}"
             {% endif %}
             >
             <span aria-hidden="true" class="w-6 h-6 inline-block not-sr-only">
