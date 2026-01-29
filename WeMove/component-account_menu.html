@@ -4,13 +4,13 @@
       type="button"
       data-wm-tab-button="donations"
       class="text-gray-600 border-b-2 [&.active]:border-wm-pink [&.active]:text-wm-purple p-2 active">
-        Donations
+        {% filter ak_text:"user_mainMenu_donationsOption_button" %}Donations{% endfilter %}
     </button>
     <button
       type="button"
       data-wm-tab-button="account"
       class="text-gray-600 border-b-2 [&.active]:border-wm-pink [&.active]:text-wm-purple p-2">
-        Profile
+        {% filter ak_text:"user_mainMenu_profileOption_button" %}Profile{% endfilter %}
     </button>
   </div>
 </menu>

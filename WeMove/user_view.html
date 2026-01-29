@@ -1,7 +1,7 @@
 {% extends "./wrapper.html" %}
 
 {% block title %}
-Your account | WeMove Europe
+  {% filter ak_text:"user_mainPage_title" %}Your account | WeMove Europe{% endfilter %}
 {% endblock %}
 
 {% block content %}

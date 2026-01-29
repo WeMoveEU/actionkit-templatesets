@@ -17,7 +17,9 @@ if (isEditingUser !== 'edit-profile') {
 
     {% include "./component-preloader.html" %}
 
-    <h2 class="text-wm-purple border-b-2 w-full">Edit your profile</h2>
+    <h2 class="text-wm-purple border-b-2 w-full">
+        {% filter ak_text:"user_editProfile_title" %}Edit your profile{% endfilter %}
+    </h2>
 
     {% for field in form.visible_fields %}
         {% switch field.name %}
@@ -58,13 +60,13 @@ if (isEditingUser !== 'edit-profile') {
             type="button"
             class="bg-slate-500 rounded p-2 hover:brightness-110 text-white font-bold"
             data-wm-close-dialog-cta>
-            Cancel
+            {% filter ak_text:"user_cancelEditProfile_cta" %}Cancel{% endfilter %}
         </button>
 
         <button
             type="submit"
             class="rounded p-2 hover:brightness-110 text-white font-bold">
-            Save
+            {% filter ak_text:"user_saveEditProfile_cta" %}Save{% endfilter %}
         </button>
     </div>
 </form>

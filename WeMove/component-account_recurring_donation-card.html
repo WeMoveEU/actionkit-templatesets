@@ -4,16 +4,22 @@
   {% endif %}
 {% endfor %}
 
-<h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink w-full">Recurring donations</h2>
+<h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink w-full">
+  {% filter ak_text:"user_recurringDonations_title" %}Recurring donations{% endfilter %}
+</h2>
 
 {% if hasActiveRecurringDonations %}
   {% for donation in recurring_donations reversed %}
     {% if donation.is_active %}
       <div hidden data-wm-cancel-recurring-donation-error>
-        <h2 class="text-wm-purple border-b-2 w-full">Error</h2>
+        <h2 class="text-wm-purple border-b-2 w-full">
+          {% filter ak_text:"error_genericError_title" %}Error{% endfilter %}
+        </h2>
         <p>
+          {% filter ak_text:"error_stopingDonationError_message" %}
           Something went wrong and we couldn’t stop your donation.
           Please contact us at <a class="text-wm-pink hover:underline" href="mailto:donate@wemove.eu">donate@wemove.eu</a> and we’ll cancel your recurring contribution.
+          {% endfilter %}
         </p>
       </div>
 
@@ -21,7 +27,13 @@
         <aside class="flex justify-between">
           <div class="flex items-center gap-1">
             <span aria-hidden="true" class="{% if donation.is_active %}bg-green-500{% else %}bg-gray-500{% endif %} rounded-full border-black inline-block h-3 w-3"></span>
-            <span>{% if donation.is_active %}active{% else %}inactive{% endif %}</span>
+            <span>
+              {% if donation.is_active %}
+                {% filter ak_text:"user_donationActive_info" %}active{% endfilter %}
+              {% else %}
+                {% filter ak_text:"user_donationInactive_info" %}inactive{% endfilter %}
+              {% endif %}
+            </span>
           </div>
 
           {% if donation.is_active %}
@@ -30,7 +42,7 @@
               data-wm-open-dialog-cta="data-wm-cancel-recurring-donation"
               data-wm-dialog-id="{{ forloop.counter }}"
               class="absolute right-4 top-4 z-10 bg-gray-700 text-sm rounded block py-1 px-2 text-white hover:bg-wm-purple transition-all">
-              cancel subscription
+              {% filter ak_text:"user_cancelSubscription_button" %}cancel subscription{% endfilter %}
             </button>
 
             <div
@@ -41,21 +53,26 @@
                 data-wm-json='{% filter custom_hash %}{"subscription_id": "{{ donation.recurring_id }}", "akid": "{{ akid }}"}{% endfilter %}'>
                 {% include "./component-preloader.html" %}
 
-                <h2 class="text-wm-purple border-b-2 w-full">Recurring donation</h2>
-                <p class="mb-6">Are you sure you want to cancel your recurring donation?</p>
+                <h2 class="text-wm-purple border-b-2 w-full">
+                  {% filter ak_text:"user_cancelRecurringDonation_title" %}Recurring donation{% endfilter %}
+                </h2>
+
+                <p class="mb-6">
+                  {% filter ak_text:"user_cancelRecurringDonation_message" %}Are you sure you want to cancel your recurring donation?{% endfilter %}
+                </p>
 
                 <div class="grid grid-cols-2 gap-4 mt-4">
                     <button
                         type="button"
                         class="bg-slate-500 rounded p-2 hover:brightness-110 text-white font-bold"
                         data-wm-close-dialog-cta>
-                        No, keep it
+                        {% filter ak_text:"user_cancelRecurringDonationNo_button" %}No, keep it{% endfilter %}
                     </button>
 
                     <button
                         type="submit"
                         class="rounded p-2 hover:brightness-110 text-white font-bold">
-                        Yes, cancel it
+                        {% filter ak_text:"user_cancelRecurringDonationYes_button" %}Yes, cancel it{% endfilter %}
                     </button>
                 </div>
               </form>
@@ -88,18 +105,24 @@
             </div>
 
             <div>
-              <h5 class="mb-0">First payment</h5>
+              <h5 class="mb-0">
+                {% filter ak_text:"user_firstPayment_title" %}First payment{% endfilter %}
+              </h5>
               <span>{{ donation.first_payment_date|date }}</span>
             </div>
 
             {% if donation.is_active %}
               <div>
-                <h5 class="mb-0">Next payment</h5>
+                <h5 class="mb-0">
+                  {% filter ak_text:"user_nextPayment_title" %}Next payment{% endfilter %}
+                </h5>
                 <span>{{ donation.next_payment_date|date }}</span>
               </div>
             {% else %}
               <div>
-                <h5 class="mb-0">Last payment</h5>
+                <h5 class="mb-0">
+                  {% filter ak_text:"user_lastPayment_title" %}Last payment{% endfilter %}
+                </h5>
                 <span>{{ donation.last_payment_date|date }}</span>
               </div>
             {% endif %}
@@ -115,12 +138,19 @@
   {% if hasActiveRecurringDonations %}hidden{% endif %}
   class="rounded-xl p-4 border-[1px] border-wm-pink text-wm-purple w-full">
   <main class="text-center text-xl">
-    <p>You don't have recurring donations</p>
+    <p>
+      {% filter ak_text:"user_noRecurringDonations_info" %}
+        You don't have recurring donations
+      {% endfilter %}
+    </p>
+
     <a
       target="_blank"
       class="hover:!no-underline w-auto m-auto uppercase py-2 px-6 text-center text-base font-bold font-gilroy bg-wm-pink min-h-8 inline-block !text-white rounded transition-all hover:brightness-110"
       href="https://action.wemove.eu/donate/chip-in-wemove?selected_frequency=recurring">
-      Start a recurring donation
+        {% filter ak_text:"user_startRecurringDonation_cta" %}
+          Start a recurring donation
+        {% endfilter %}
     </a>
   </main>
 </div>

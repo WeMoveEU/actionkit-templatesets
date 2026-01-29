@@ -2,7 +2,9 @@
   <div class="z-20 fixed opacity-70 bg-black h-screen w-screen top-0 left-0"></div>
   <div class="z-50 fixed bg-white p-8 rounded-2xl shadow top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" role="status">
     <div class="flex flex-row gap-2">
-      <span class="sr-only">Loading...</span>
+      <span class="sr-only">
+        {% filter ak_text:"preloader_loading_info" %}Loading...{% endfilter %}
+      </span>
       <div class="w-4 h-4 rounded-full bg-wm-pink animate-bounce [animation-delay:.2s]"></div>
       <div class="w-4 h-4 rounded-full bg-wm-pink animate-bounce [animation-delay:.1s]"></div>
       <div class="w-4 h-4 rounded-full bg-wm-pink animate-bounce [animation-delay:.2s]"></div>

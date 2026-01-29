@@ -6,14 +6,16 @@
       <span aria-hidden="true" class="w-5 h-5 mr-1 inline-block not-sr-only" title="Print">
         {% include "./icon-user.html" %}
       </span>
-      <span class="font-bold text-wm-purple font-gilroy text-lg">Personal information</span>
+      <span class="font-bold text-wm-purple font-gilroy text-lg">
+        {% filter ak_text:"user_personalInformation_title" %}Personal information{% endfilter %}
+      </span>
     </div>
 
     <button
       type="button"
       data-wm-open-dialog-cta="data-wm-edit-profile"
       class="bg-wm-pink rounded block py-0 px-3 !text-white hover:brightness-110 transition-all">
-      edit
+      {% filter ak_text:"user_editPersonalInformation_button" %}edit{% endfilter %}
     </button>
 
     <div
@@ -35,6 +37,10 @@
       <span data-wm-profile-card-detail="postal">{{ actionkit_user.postal }}</span>
       <span data-wm-profile-card-detail="country">{{ actionkit_user.country }}</span>
     </li>
-    <li><a href="/logout">log out</a></li>
+    <li>
+      <a href="/logout">
+        {% filter ak_text:"user_logout_button" %}log out{% endfilter %}
+      </a>
+    </li>
   </ul>
 </div>

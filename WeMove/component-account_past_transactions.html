@@ -1,5 +1,7 @@
 <div class="w-full">
-  <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink">Previous donations</h2>
+  <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink">
+    {% filter ak_text:"user_previousDonations_title" %}Previous donations{% endfilter %}
+  </h2>
 
   {% if donations %}
     <div data-wm-transactions-wrapper="{{ donations|length }}" {% if donations|length > 5 %}class="h-[280px] overflow-hidden transition-all duration-[.5s] relative"{% endif %}>
@@ -15,10 +17,10 @@
 
               <span class="text-sm font-bold text-wm-purple">
                 {% if donation.recurring %}
-                  Recurring donation
+                  {% filter ak_text:"user_recurringDonation_info" %}Recurring donation{% endfilter %}
                   {% remember "recurring" as currentPaymentFrequency %}
                 {% else %}
-                  One-off
+                  {% filter ak_text:"user_oneoffDonation_info" %}One-off{% endfilter %}
                   {% remember "one-off" as currentPaymentFrequency %}
                 {% endif %}
 
@@ -49,7 +51,7 @@
             class="absolute right-4 top-4 z-10"
             target="_parent"
             {% if donation.account|lower == "wm-stripe" or donation.account|lower == "legacy-stripe" %}
-              href="https://wemove.eu/api/receipt?akid={{ actionkit_user.token }}&tx={% filter custom_hash %}{{ donation.transaction_id }}{% endfilter %}&locale={{ link_iso }}&user_fullname={{ actionkit_user.first_name }}%20{{ actionkit_user.last_name }}&user_email={{ actionkit_user.email }}&payment_date={{ donation.created_at|date:"m/d/Y" }}&payment_amount={{ donation.amt }}&payment_frequency={{ currentPaymentFrequency }}"
+              href="https://wemove.eu/api/receipt?locale={{ link_iso }}&akid={{ actionkit_user.token }}&tx={% filter custom_hash %}{{ donation.transaction_id }}{% endfilter %}&user_fullname={{ actionkit_user.first_name }}%20{{ actionkit_user.last_name }}&user_email={{ actionkit_user.email }}&payment_date={{ donation.created_at|date:"m/d/Y" }}&payment_amount={{ donation.amt }}&payment_frequency={{ currentPaymentFrequency }}"
             {% else %}
               href="https://wemove.eu/api/receipt?locale={{ link_iso }}&user_fullname={{ actionkit_user.first_name }}%20{{ actionkit_user.last_name }}&user_email={{ actionkit_user.email }}&payment_method={{ currentPaymentMethod }}&payment_date={{ donation.created_at|date:"m/d/Y" }}&payment_amount={{ donation.amt }}&payment_frequency={{ currentPaymentFrequency }}"
             {% endif %}
@@ -57,7 +59,9 @@
             <span aria-hidden="true" class="w-6 h-6 inline-block not-sr-only">
               {% include "./icon-download.html" %}
             </span>
-            <span class="text-gray-500 sr-only">Download pdf of receipt</span>
+            <span class="text-gray-500 sr-only">
+              {% filter ak_text:"user_downloadReceipt_cta" %}Download pdf of receipt{% endfilter %}
+            </span>
           </a>
         </div>
       {% endfor %}
@@ -69,12 +73,13 @@
         class="max-w-96 hover:underline m-auto font-gilroy text-center
         active:outline-none text-wm-purple transition-all overflow-hidden block"
         data-wm-expand-transactions-wrapper>
-        View older transactions &darr;
+        {% filter ak_text:"user_viewOlderTransactions_cta" %}View older transactions{% endfilter %}
+        <span aria-hidden="true">&darr;</span>
       </button>
     {% endif %}
   {% else %}
     <div class="text-gray-600 mb-4">
-      No transactions found.
+      {% filter ak_text:"user_noTransactionsFound_info" %}No transactions found.{% endfilter %}
     </div>
   {% endif %}
 </div>
