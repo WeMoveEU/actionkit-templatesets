@@ -1,7 +1,7 @@
 {% extends "./wrapper.html" %}
 
 {% block title %}
-Sign in | WeMove Europe
+{% filter ak_text:"login_title" %}Sign in{% endfilter %} | WeMove Europe
 {% endblock %}
 
 {% block content %}
@@ -31,7 +31,7 @@ Sign in | WeMove Europe
         id="ak-fieldbox-email"
         class="form-field required field-ak-type--user field-type--email">
         <label for="id_email" class="ak-is-overlaid ak-error">
-          Email:<span class="ak-required-flag">*</span>
+          {% filter ak_text:"email_field" %}Email{% endfilter %}<span class="ak-required-flag">*</span>
         </label>
         <input
           type="email"
@@ -45,12 +45,12 @@ Sign in | WeMove Europe
     {% endif %}
 
     <button type="submit">
-      {% filter ak_text:"button_send_email" %}Sign in{% endfilter %}
+      {% filter ak_text:"login_button" %}Sign in{% endfilter %}
     </button>
   </form>
 
   <aside class="text-wm-purple p-6 bg-wm-lightblue-box my-8 rounded">
-    {% filter ak_text:"magic_link_explanation" %}We'll send a magic link to your email to log you in.{% endfilter %}
+    {% filter ak_text:"magicLink_desc" %}We'll send a magic link to your email to log you in.{% endfilter %}
   </aside>
 </section>
 {% endblock %}
