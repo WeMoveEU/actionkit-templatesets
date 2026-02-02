@@ -1,9 +1,25 @@
 {% extends "./wrapper.html" %}
 
+{% block title %}
+{% filter ak_text:"logout_title" %}Logged out{% endfilter %} | WeMove Europe
+{% endblock %}
+
 {% block content %}
 
-<h1>Logged out</h1>
-<p>You have been signed out!</p>
-<p><a href="/login/">Sign in again</a></p>
+<h1>
+  {% filter ak_text:"logout_title" %}Logged out{% endfilter %}
+</h1>
+
+<p>
+  {% filter ak_text:"logout_desc" %}
+  You have been signed out!
+  {% endfilter %}
+</p>
+
+<p>
+  <a href="/login/">
+    {% filter ak_text:"loginAgain_cta" %}Sign in again{% endfilter %}
+  </a>
+</p>
 
 {% endblock %}
