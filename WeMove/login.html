@@ -20,7 +20,8 @@
     accept-charset="utf-8"
     data-wm-form="login"
     data-wm-floating-labels-form>
-    <input type="hidden" name="page" value="magic-link-confirmation" />
+    <input type="hidden" name="page" value="magic-link-confirmation-{{ request.GET.lang|default:'en' }}" />
+
     <input type="hidden" name="action_redirect_to" value="{{ request.GET.next }}" />
 
     {% if request.GET.akid %}
@@ -53,4 +54,20 @@
     {% filter ak_text:"magicLink_desc" %}We'll send a magic link to your email to log you in.{% endfilter %}
   </aside>
 </section>
+{% endblock %}
+
+
+{% block wemove_scripts %}
+{{ block.super }}
+
+<script justification="Login redirect">
+  const url = new URL(window.location.href);
+  const userLanguage = localStorage.getItem('userLanguage');
+  const forcedLanguage = url.searchParams.has('lang');
+
+  if (!forcedLanguage && forcedLanguage !== userLanguage) {
+    url.searchParams.set('lang', userLanguage);
+    window.location.href = url.toString();
+  }
+</script>
 {% endblock %}

@@ -91,6 +91,8 @@
 <body
   {% if isEmbbeded == "true" %}data-wm-is-embbeded{% endif %}
   data-wm-page-id="{{ page.id }}"
+  data-wm-page-type="{{ filename|split:'.'|nth:0 }}"
+  data-wm-page-lang="{{page.lang.iso_code|default:"unknown"}}"
   class="
     {% if campaign_type == 'youmove' %}youmove-page{% else %}wemove-page{% endif %}
     {% if isEmbbeded == "true" %}is-embbeded{% endif %}

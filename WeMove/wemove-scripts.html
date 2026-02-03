@@ -8,6 +8,10 @@ if (!window.wemove) {
     user: {
       akid: "{{ actionkit_user.token }}",
       email: "{{ actionkit_user.email }}",
+      language: {
+        name: "{{ actionkit_user.lang|default:'en'}}",
+        iso: "{{actionkit_user.lang.iso_code|default:'en'}}",
+      },
     },
     page: {
       shouldSkipAkReadyEvent: {% if page.id %}false{% else %}true{% endif %},
