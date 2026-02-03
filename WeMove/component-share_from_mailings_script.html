@@ -11,7 +11,7 @@
 
     const title = decodeHTML(`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
 
-    const AKSharePageURL = "/share/link?type=ot&page_name={{pageName}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}";
+    const AKSharePageURL = "/share/link?type=ot&source={{ socialType }}&page_name={{pageName}}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}";
 
     const URLToShare = await fetch(AKSharePageURL)
       .then(async (result) => {
