@@ -21,7 +21,6 @@
     data-wm-form="login"
     data-wm-floating-labels-form>
     <input type="hidden" name="page" value="magic-link-confirmation-{{ request.GET.lang|default:'en' }}" />
-
     <input type="hidden" name="action_redirect_to" value="{{ request.GET.next }}" />
 
     {% if request.GET.akid %}
