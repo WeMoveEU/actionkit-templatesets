@@ -9,8 +9,8 @@ if (!window.wemove) {
       akid: "{{ actionkit_user.token }}",
       email: "{{ actionkit_user.email }}",
       language: {
-        name: "{{ actionkit_user.lang|default:'en'}}",
-        iso: "{{actionkit_user.lang.iso_code|default:'en'}}",
+        name: "{{ actionkit_user.lang}}",
+        iso: "{{actionkit_user.lang.iso_code}}",
       },
     },
     page: {
@@ -20,7 +20,7 @@ if (!window.wemove) {
       preShareUrl: typeof weMovePreShareUrl !== "undefined" ? weMovePreShareUrl : null,
       language: {
         name: "{{ page.lang_or_en }}",
-        iso: "{{page.lang.iso_code|default:'en'}}",
+        iso: "{{page.lang.iso_code}}",
       },
     },
   };

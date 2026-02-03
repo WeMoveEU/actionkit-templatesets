@@ -13,26 +13,32 @@
   </p>
 
   <form
-    class="ak-labels-overlaid ak-errs-below bg-wm-bg-form p-4 mx-auto max-w-[500px] rounded"
-    name="login-form"
+    class="ak-form ak-labels-overlaid ak-errs-below bg-wm-bg-form p-4 mx-auto max-w-[500px] rounded"
+    name="act"
+    id="login-form"
     method="post"
     action="/act/"
     accept-charset="utf-8"
-    data-wm-form="login"
+    data-wm-login-form
     data-wm-floating-labels-form>
+
     <input type="hidden" name="page" value="magic-link-confirmation-{{ request.GET.lang|default:'en' }}" />
     <input type="hidden" name="action_redirect_to" value="{{ request.GET.next }}" />
 
     {% if request.GET.akid %}
       <input type="hidden" name="akid" value="{{ request.GET.akid }}" />
     {% else %}
+
       <div
         data-wm-form-field="email"
         id="ak-fieldbox-email"
         class="form-field required field-ak-type--user field-type--email">
+
         <label for="id_email" class="ak-is-overlaid ak-error">
-          {% filter ak_text:"email_field" %}Email{% endfilter %}<span class="ak-required-flag">*</span>
+          {% filter ak_text:"email_field" %}Email{% endfilter %}
+          <span class="ak-required-flag">*</span>
         </label>
+
         <input
           type="email"
           name="email"
@@ -40,13 +46,28 @@
           class="ak-userfield-input ak-has-overlay"
           required
           autocomplete="email" />
+
         <ul class="compact" id="ak-errors"></ul>
       </div>
     {% endif %}
 
-    <button type="submit">
+    <script src="https://www.google.com/recaptcha/api.js" defer justification="Google's recaptcha"></script>
+    <script defer justification="Login form submit after recaptcha">
+      function captchaCallback () {
+        wemove.triggerEvent("wm-submittingFormAfterRecaptcha");
+      };
+      window.isRecaptchaEnabled = true;
+    </script>
+
+    <button
+      type="submit"
+      class="ak-submit-button g-recaptcha"
+      data-sitekey="6LetQiEUAAAAAC5mkK_YsHGJjLE7vxjMTIaNn3MA"
+      data-callback="captchaCallback">
       {% filter ak_text:"login_button" %}Sign in{% endfilter %}
     </button>
+
+    <div hidden data-wm-login-result-popup></div>
   </form>
 
   <aside class="text-wm-purple p-6 bg-wm-lightblue-box my-8 rounded">
@@ -60,13 +81,41 @@
 {{ block.super }}
 
 <script justification="Login redirect">
-  const url = new URL(window.location.href);
-  const userLanguage = localStorage.getItem('userLanguage');
-  const forcedLanguage = url.searchParams.has('lang');
+(() => {
+  // Necessary flag, since AK doesn't tell the proper language in this page
+  // Otherwise we enter in an infinite loop.
+  const loginPageLanguage = localStorage.getItem('loginPageLanguage');
 
-  if (!forcedLanguage && forcedLanguage !== userLanguage) {
-    url.searchParams.set('lang', userLanguage);
-    window.location.href = url.toString();
+  // Lang param will be the most important one.
+  // Overrides user's language set in localStorage
+  const url = new URL(window.location.href);
+  const forcedLanguage = url.searchParams.get('lang');
+  const hasForcedLanguage = url.searchParams.has('lang');
+
+  if (forcedLanguage) {
+    if (forcedLanguage !== loginPageLanguage) {
+      localStorage.setItem('loginPageLanguage', forcedLanguage);
+      url.searchParams.set('lang', forcedLanguage);
+      window.location.href = url.toString();
+    }
+
+    return;
   }
+
+  // User language gets set by wemove-main (user-data).
+  // If there's an akid means we know the user language
+  // only in that scenario we will set the language
+  const userLanguage = localStorage.getItem('userLanguage');
+
+  if (userLanguage) {
+    if (userLanguage !== loginPageLanguage) {
+      localStorage.setItem('loginPageLanguage', userLanguage);
+      url.searchParams.set('lang', userLanguage);
+      window.location.href = url.toString();
+    }
+
+    return;
+  }
+})();
 </script>
 {% endblock %}

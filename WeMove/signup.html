@@ -17,7 +17,9 @@
       {% remember link as target %}
     {% endif %}
 
-    <a href="{{ target }}">Please continue to the next step.</a>
+    <a href="{{ target }}">
+      {% filter ak_text:"signup_continueToNextStep_link" %}Please continue to the next step.{% endfilter %}
+    </a>
     <script>
         if (window.location != '{{ target }}') {
             window.location = '{{ target }}';
