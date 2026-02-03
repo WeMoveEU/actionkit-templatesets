@@ -5,7 +5,7 @@
     class="transition-all text-center bg-instagram !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:bg-instagram-hv"
     href="{{instagram_share_link}}"
     target="_blank"
-    data-wm-send-share-to-action-kit="/share/link?type=ot&page_name={{ pageName }}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.utm_medium == "email" %}&source=mailing{% endif %}"
+    data-wm-send-share-to-action-kit="/share/link?type=ot&source=instagram&page_name={{ pageName }}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}"
     data-wm-pixel-event-type="Share"
     data-wm-pixel-track-type="trackCustom"
     data-wm-pixel-content-name="Instagram"
