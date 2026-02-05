@@ -5,16 +5,8 @@
 {% endblock %}
 
 {% block content %}
-<section class="mx-auto max-w-[500px] lg:mt-24">
+<section class="mx-auto max-w-[500px] lg:mt-44">
   {% include "./component-preloader-without-modal.html" %}
-  <div data-wm-login-page-skeleton  hidden class="animate-pulse w-full">
-    <div class="opacity-90 flex flex-wrap">
-      <div class="h-[46px] w-full bg-slate-200 rounded mb-4"></div>
-      <div class="h-[48px] w-full bg-slate-200 rounded mb-8"></div>
-      <div class="h-[138px] w-full bg-slate-200 rounded mb-4"></div>
-      <div class="h-[96px] w-full bg-slate-200 rounded my-4"></div>
-    </div>
-  </div>
 
   <div data-wm-login-page-content hidden>
     <h1>{% filter ak_text:"login_title" %}Sign in{% endfilter %}</h1>
@@ -112,8 +104,8 @@
   }
 
   // We are good so we render the form
-  // document.querySelector('[data-wm-login-page-skeleton]').hidden = true;
-  // document.querySelector('[data-wm-login-page-content]').hidden = false;
+  document.querySelector('[data-wm-preloader-without-modal]').hidden = true;
+  document.querySelector('[data-wm-login-page-content]').hidden = false;
 })();
 </script>
 {% endblock %}
