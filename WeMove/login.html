@@ -5,74 +5,86 @@
 {% endblock %}
 
 {% block content %}
-<section class="mx-auto max-w-[500px]">
-  <h1>{% filter ak_text:"login_title" %}Sign in{% endfilter %}</h1>
+<section class="mx-auto max-w-[500px] lg:mt-24">
+  {% include "./component-preloader-without-modal.html" %}
+  <div data-wm-login-page-skeleton  hidden class="animate-pulse w-full">
+    <div class="opacity-90 flex flex-wrap">
+      <div class="h-[46px] w-full bg-slate-200 rounded mb-4"></div>
+      <div class="h-[48px] w-full bg-slate-200 rounded mb-8"></div>
+      <div class="h-[138px] w-full bg-slate-200 rounded mb-4"></div>
+      <div class="h-[96px] w-full bg-slate-200 rounded my-4"></div>
+    </div>
+  </div>
 
-  <p class="mb-8">
-    {% filter ak_text:"loginVerification_description" %}Oops, we need to verify who you are before showing you that page!{% endfilter %}
-  </p>
+  <div data-wm-login-page-content hidden>
+    <h1>{% filter ak_text:"login_title" %}Sign in{% endfilter %}</h1>
 
-  <form
-    class="ak-form ak-labels-overlaid ak-errs-below bg-wm-bg-form p-4 mx-auto max-w-[500px] rounded"
-    name="act"
-    id="login-form"
-    method="post"
-    action="/act/"
-    accept-charset="utf-8"
-    data-wm-login-form
-    data-wm-floating-labels-form>
+    <p class="mb-8">
+      {% filter ak_text:"loginVerification_description" %}Oops, we need to verify who you are before showing you that page!{% endfilter %}
+    </p>
 
-    <input type="hidden" name="page" value="magic-link-confirmation-{{ request.GET.lang|default:'en' }}" />
-    <input type="hidden" name="action_redirect_to" value="{{ request.GET.next }}" />
+    <form
+      class="ak-form ak-labels-overlaid ak-errs-below bg-wm-bg-form p-4 mx-auto max-w-[500px] rounded"
+      name="act"
+      id="login-form"
+      method="post"
+      action="/act/"
+      accept-charset="utf-8"
+      data-wm-login-form
+      data-wm-floating-labels-form>
 
-    {% if request.GET.akid %}
-      <input type="hidden" name="akid" value="{{ request.GET.akid }}" />
-    {% else %}
+      <input type="hidden" name="page" value="magic-link-confirmation-{{ request.GET.lang|default:'en' }}" />
+      <input type="hidden" name="action_redirect_to" value="{{ request.GET.next }}" />
 
-      <div
-        data-wm-form-field="email"
-        id="ak-fieldbox-email"
-        class="form-field required field-ak-type--user field-type--email">
+      {% if request.GET.akid %}
+        <input type="hidden" name="akid" value="{{ request.GET.akid }}" />
+      {% else %}
 
-        <label for="id_email" class="ak-is-overlaid ak-error">
-          {% filter ak_text:"email_field" %}Email{% endfilter %}
-          <span class="ak-required-flag">*</span>
-        </label>
+        <div
+          data-wm-form-field="email"
+          id="ak-fieldbox-email"
+          class="form-field required field-ak-type--user field-type--email">
 
-        <input
-          type="email"
-          name="email"
-          id="id_email"
-          class="ak-userfield-input ak-has-overlay"
-          required
-          autocomplete="email" />
+          <label for="id_email" class="ak-is-overlaid ak-error">
+            {% filter ak_text:"email_field" %}Email{% endfilter %}
+            <span class="ak-required-flag">*</span>
+          </label>
 
-        <ul class="compact" id="ak-errors"></ul>
-      </div>
-    {% endif %}
+          <input
+            type="email"
+            name="email"
+            id="id_email"
+            class="ak-userfield-input ak-has-overlay"
+            required
+            autocomplete="email" />
 
-    <script src="https://www.google.com/recaptcha/api.js" defer justification="Google's recaptcha"></script>
-    <script defer justification="Login form submit after recaptcha">
-      function captchaCallback () {
-        wemove.triggerEvent("wm-submittingFormAfterRecaptcha");
-      };
-      window.isRecaptchaEnabled = true;
-    </script>
+          <ul class="compact" id="ak-errors"></ul>
+        </div>
+      {% endif %}
 
-    <button
-      type="submit"
-      class="ak-submit-button g-recaptcha"
-      data-sitekey="6LetQiEUAAAAAC5mkK_YsHGJjLE7vxjMTIaNn3MA"
-      data-callback="captchaCallback">
-      {% filter ak_text:"login_button" %}Sign in{% endfilter %}
-    </button>
+      <script src="https://www.google.com/recaptcha/api.js" defer justification="Google's recaptcha"></script>
+      <script defer justification="Login form submit after recaptcha">
+        function captchaCallback () {
+          wemove.triggerEvent("wm-submittingFormAfterRecaptcha");
+        };
+        window.isRecaptchaEnabled = true;
+      </script>
 
-    <div hidden data-wm-login-result-popup></div>
-  </form>
+      <button
+        type="submit"
+        class="ak-submit-button g-recaptcha"
+        data-sitekey="6LetQiEUAAAAAC5mkK_YsHGJjLE7vxjMTIaNn3MA"
+        data-callback="captchaCallback">
+        {% filter ak_text:"login_button" %}Sign in{% endfilter %}
+      </button>
 
-  <aside class="text-wm-purple p-6 bg-wm-lightblue-box my-8 rounded">
-    {% filter ak_text:"magicLink_desc" %}We'll send a magic link to your email to log you in.{% endfilter %}
-  </aside>
+      <div hidden data-wm-login-result-popup></div>
+    </form>
+
+    <aside class="text-wm-purple p-6 bg-wm-lightblue-box my-8 rounded">
+      {% filter ak_text:"magicLink_desc" %}We'll send a magic link to your email to log you in.{% endfilter %}
+    </aside>
+  </div>
 </section>
 {% endblock %}
 
@@ -88,19 +100,20 @@
   const url = new URL(window.location.href);
   const hasForcedLanguage = url.searchParams.has('lang');
 
-  if (hasForcedLanguage) {
-    return;
-  }
-
   // User language gets set by wemove-main (user-data).
   // If there's an akid means we know the user language
   // only in that scenario we will set the language
   const userLanguage = localStorage.getItem('userLanguage');
 
-  if (userLanguage && userLanguage !== "en") {
+  if (!hasForcedLanguage && userLanguage !== "en") {
       url.searchParams.set('lang', userLanguage);
       window.location.href = url.toString();
+      return;
   }
+
+  // We are good so we render the form
+  // document.querySelector('[data-wm-login-page-skeleton]').hidden = true;
+  // document.querySelector('[data-wm-login-page-content]').hidden = false;
 })();
 </script>
 {% endblock %}
