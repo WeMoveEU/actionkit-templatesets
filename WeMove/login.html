@@ -82,23 +82,13 @@
 
 <script justification="Login redirect">
 (() => {
-  // Necessary flag, since AK doesn't tell the proper language in this page
-  // Otherwise we enter in an infinite loop.
-  const loginPageLanguage = localStorage.getItem('loginPageLanguage');
-
   // Lang param will be the most important one.
   // Overrides user's language set in localStorage
+  // No need for redirects, AK handles already the language for us
   const url = new URL(window.location.href);
-  const forcedLanguage = url.searchParams.get('lang');
   const hasForcedLanguage = url.searchParams.has('lang');
 
-  if (forcedLanguage) {
-    if (forcedLanguage !== loginPageLanguage) {
-      localStorage.setItem('loginPageLanguage', forcedLanguage);
-      url.searchParams.set('lang', forcedLanguage);
-      window.location.href = url.toString();
-    }
-
+  if (hasForcedLanguage) {
     return;
   }
 
@@ -107,14 +97,9 @@
   // only in that scenario we will set the language
   const userLanguage = localStorage.getItem('userLanguage');
 
-  if (userLanguage) {
-    if (userLanguage !== loginPageLanguage) {
-      localStorage.setItem('loginPageLanguage', userLanguage);
+  if (userLanguage && userLanguage !== "en") {
       url.searchParams.set('lang', userLanguage);
       window.location.href = url.toString();
-    }
-
-    return;
   }
 })();
 </script>
