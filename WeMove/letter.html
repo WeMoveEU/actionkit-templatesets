@@ -21,7 +21,7 @@
         <div id="recipients-wrapper" class="space-y-4"></div>
         <script type="text/ak-template" for="recipients-wrapper">
         [% if ( actionkit.context.recognized_user ) { %]
-          [% if ( actionkit.context.targets && actionkit.context.targets.targets ) { %]        
+          [% if ( actionkit.context.targets && actionkit.context.targets.targets ) { %]
             <ul class="list-disc pl-4">
               [% for ( var t of actionkit.context.targets.targets ) { %]
                 <li>[%= t.title_full %]</li>
@@ -47,7 +47,7 @@
       <input type="hidden" name="page" value="{{ page.name }}" />
 
       {% if page.custom_fields.mailto_action == "1" %}
-   
+
 
         <div data-wm-form-field="subject" class="form-field required field-ak-type--subject field-type--text ak-err-below">
           <label for="id_subject">
@@ -65,7 +65,7 @@
         </div>
       {% endif %}
 
-      {% if not page.custom_fields.hide_comments_field == "1" %}  
+      {% if not page.custom_fields.hide_comments_field == "1" %}
         <div data-wm-form-field="body" class="form-field{% if page.custom_fields.letter_body_required == "0" %}{% else %} required{% endif %} field-ak-type--body field-type--textarea  ak-err-below">
           <label for="id_comment">
             {% filter ak_text:"letterMailBody_field" %}Email message{% endfilter %}:
@@ -92,11 +92,11 @@
 
       <p>{{ page.custom_fields.mailto_failed_message|default:"Email didn't open? You can still send your message! Just open your inbox and copy and paste the information below into a new email draft:" }}</p>
       <div>
-      
+
         <div class="mb-2 font-bold">To: &nbsp;&nbsp; <a onclick="copyEmailsToClipboard(this)"
           >[{% filter ak_text:"copyLink_button" %}Copy{% endfilter %}]</a> </div>
         <div class="mb-2 px-2" id="fallback-to"> </div>
-        
+
         <div class="mb-2 font-bold">Subject: &nbsp;&nbsp; <a onclick="copyText(this, 'fallback-subject')"
           >[{% filter ak_text:"copyLink_button" %}Copy{% endfilter %}]</a></div>
         <div class="mb-2 px-2" id="fallback-subject"> </div>
@@ -104,17 +104,17 @@
         <div class="mb-2 font-bold">Message: &nbsp;&nbsp; <a onclick="copyText(this, 'fallback-message')"
           >[{% filter ak_text:"copyLink_button" %}Copy{% endfilter %}]</a></div>
         <div class="mb-2 px-2"  style="white-space: pre-wrap;" id="fallback-message"> </div>
-    
+
       </div>
-    </div>     
-    
+    </div>
+
     {% comment %}
     This could probably be a classic javascript function... there's a hook
     onContextLoaded that we could use.
     {% endcomment %}
     <script type="text/ak-template" for="fallback-to">
-        [% if ( actionkit.context.targets && actionkit.context.targets.targets ) { 
-          
+        [% if ( actionkit.context.targets && actionkit.context.targets.targets ) {
+
            const targets = actionkit.context.targets.targets;
            const how_many = targets.length;
            const to_show = 4;
@@ -122,18 +122,18 @@
            for ( var t of targets ) {
         %]
                 <div class="mb-1">"[%= t.title_full %]" &lt;[%= t.email %]&gt;<span style='display:none;'>,</span></div>
-        [% 
+        [%
             }
             if (targets.length > to_show ) {
         %]
                 <div class="mb-1"> ... </div>
         [%
-          
-            }  
-          } 
+
+            }
+          }
         %]
     </script>
-     
+
     </div>
 
     {% comment %}I think this is pointless now and that all letter actions are mailto actions... {% endcomment %}
@@ -142,7 +142,7 @@
     <script async>
       {% if not args.nr %}
       window.actionkitUserFormShown = () => {
-        // if we don't know who you are, back to the start. we probably need a better fallback here 
+        // if we don't know who you are, back to the start. we probably need a better fallback here
         window.location.pathname = '/sign/{{ page.custom_fields.daisy_chain_action }}/';
       }
       {% endif %}
@@ -150,7 +150,7 @@
       window.actionkitBeforeSubmit = () => {
         const form = document.forms.act;
 
-        const mailTo = 'mailto:{% for target in context.targets.targets %}{{ target.email }}{% if not forloop.last %},{% endif %}{% endfor %}?cc=mailto@wemove.eu&subject='
+        const mailTo = 'mailto:{% for target in context.targets.targets %}{{ target.email }}{% if not forloop.last %};{% endif %}{% endfor %}?cc=mailto@wemove.eu&subject='
           + encodeURIComponent(actionkit.form.elements.id_subject.value)
           + '&body='
           + encodeURIComponent(actionkit.form.elements.id_comment.value);
@@ -167,10 +167,10 @@
 
         // actually submit the action
         const request = fetch(
-          "/rest/v1/action/", 
-          { method: "POST", 
+          "/rest/v1/action/",
+          { method: "POST",
             body: JSON.stringify(body),
-            redirect: "manual",   
+            redirect: "manual",
             headers: {
               "Content-Type": "application/json",
           }}
@@ -188,14 +188,13 @@
             // no action_id, that's fine
             console.log(`No action id from ${location}`)
           }
-          // show everyone the "Didn't work? copy / paste this ... " message 
+          // show everyone the "Didn't work? copy / paste this ... " message
           displayFallbackMessage(form);
+        });
 
-        })
-           
         return false;
       }
-      
+
       window.displayFallbackMessage = (form) => {
         document.getElementById('mailto-letter-form').style.display = 'none';
         document.getElementById('fallback-subject').textContent = form.action_subject.value;
@@ -209,14 +208,14 @@
         const restore = self.innerHTML;
         self.innerText = '{% filter ak_text:"linkCopied_alert:" %}Copied!{% endfilter %}'
         window.setTimeout(() => { self.innerHTML = restore}, 2000)
-      } 
+      }
 
       window.copyEmailsToClipboard = (self) => {
         let to = [];
 
-        for ( var t of actionkit.context.targets.targets ) { 
+        for ( var t of actionkit.context.targets.targets ) {
           to.push(`"${t.title_full}" <${t.email}>`);
-        } 
+        }
         to.push(`"WeMove Europe" <mailto@wemove.eu>`);
         navigator.clipboard.writeText(to.join(', '));
 
