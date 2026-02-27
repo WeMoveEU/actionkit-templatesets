@@ -213,17 +213,17 @@
       window.copyEmailsToClipboard = (self) => {
         let to = [];
 
-        for ( var t of actionkit.context.targets.targets ) {
+        for (let t of actionkit.context.targets.targets) {
           to.push(`"${t.title_full}" <${t.email}>`);
         }
+
         to.push(`"WeMove Europe" <mailto@wemove.eu>`);
-        navigator.clipboard.writeText(to.join(', '));
+        navigator.clipboard.writeText(to.join('; '));
 
         const restore = self.innerHTML;
-        self.innerText = '{% filter ak_text:"Copied" %}Copied!{% endfilter %}'
-        window.setTimeout(() => { self.innerHTML = restore}, 2000)
-      }
-
+        self.innerText = '{% filter ak_text:"Copied" %}Copied!{% endfilter %}';
+        window.setTimeout(() => { self.innerHTML = restore}, 2000);
+      };
     </script>
     {% endif %}
 
