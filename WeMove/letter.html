@@ -150,7 +150,7 @@
       window.actionkitBeforeSubmit = () => {
         const form = document.forms.act;
 
-        const mailTo = 'mailto:{% for target in context.targets.targets %}{{ target.email }}{% if not forloop.last %};{% endif %}{% endfor %}?cc=mailto@wemove.eu&subject='
+        const mailTo = 'mailto:{% for target in context.targets.targets %}{{ target.email }}{% if not forloop.last %}; {% endif %}{% endfor %}?cc=mailto@wemove.eu&subject='
           + encodeURIComponent(actionkit.form.elements.id_subject.value)
           + '&body='
           + encodeURIComponent(actionkit.form.elements.id_comment.value);
