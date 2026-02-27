@@ -147,13 +147,10 @@
       }
       {% endif %}
 
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      const emailSeparator = isIOS ? ',' : ';';
-
       window.actionkitBeforeSubmit = () => {
         const form = document.forms.act;
         const recipients = [{% for target in context.targets.targets %}'{{ target.email }}'{% if not forloop.last %}, {% endif %}{% endfor %}];
-        const mailTo = 'mailto:' + recipients.join(emailSeparator) + '?cc=mailto@wemove.eu&subject='
+        const mailTo = 'mailto:' + recipients.join(',') + '?cc=mailto@wemove.eu&subject='
           + encodeURIComponent(actionkit.form.elements.id_subject.value)
           + '&body='
           + encodeURIComponent(actionkit.form.elements.id_comment.value);
@@ -221,7 +218,7 @@
         }
 
         to.push(`"WeMove Europe" <mailto@wemove.eu>`);
-        navigator.clipboard.writeText(to.join(`${emailSeparator}; `));
+        navigator.clipboard.writeText(to.join(','));
 
         const restore = self.innerHTML;
         self.innerText = '{% filter ak_text:"Copied" %}Copied!{% endfilter %}';
