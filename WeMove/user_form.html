@@ -27,6 +27,7 @@
 {% hide_by_default prefix first_name middle_name last_name suffix country phone address1 address2 city state region postal %}
 
 {% for field in user_fields %}
+{% if not field.field_name|startswith:"action_per_call" %}
     <div
       data-wm-form-field="{{ field.field_name }}"
       id="ak-fieldbox-{{ field.field_name }}"
@@ -52,6 +53,7 @@
           {% endswitch %}
         {% endif %}
     </div>
+{% endif %}
 {% endfor %}
 
 {% if 'country'|is_in:fields %}
