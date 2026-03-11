@@ -502,6 +502,24 @@
 	}
 
 	////////////////////////////////////////////////////////////////////
+	// Paginated API helper
+
+	async function fetchAllPages(path, params = {}) {
+		const API_LIMIT = 100;
+		let offset = 0;
+		let allObjects = [];
+		while (true) {
+			const result = await api('GET', path, {
+				...params, _limit: API_LIMIT, _offset: offset
+			});
+			allObjects = [...allObjects, ...result.objects];
+			if (result.objects.length < API_LIMIT) break;
+			offset += API_LIMIT;
+		}
+		return allObjects;
+	}
+
+	////////////////////////////////////////////////////////////////////
 	// Read Global State
 
 	function fetchCampaigns() {
@@ -517,17 +535,16 @@
 		} );
 	}
 
-	function readLanguages() {
-		api('GET', "language/", { _limit: 100 } ).done(function(result) {
-			result.objects.forEach(function(lang) {
-				window.languages[lang.resource_uri] = lang;
-				if (coreLanguages.includes(lang.name)) {
-					var checked_attr = ( 1 || lang.iso_code == 'en' || lang.iso_code == 'fr' ) ? 'checked="checked"' : '';
-					$('.language-picker .form-control').append(
-						` <label><input type="checkbox" value="${lang.resource_uri}" data-iso_code="${lang.iso_code.toUpperCase()}" ${checked_attr}> ${lang.name}</label>`
-					);
-				}
-			});
+	async function readLanguages() {
+		const languages_list = await fetchAllPages("language/");
+		languages_list.forEach(function(lang) {
+			window.languages[lang.resource_uri] = lang;
+			if (coreLanguages.includes(lang.name)) {
+				var checked_attr = ( 1 || lang.iso_code == 'en' || lang.iso_code == 'fr' ) ? 'checked="checked"' : '';
+				$('.language-picker .form-control').append(
+					` <label><input type="checkbox" value="${lang.resource_uri}" data-iso_code="${lang.iso_code.toUpperCase()}" ${checked_attr}> ${lang.name}</label>`
+				);
+			}
 		});
 	}
 
@@ -547,57 +564,55 @@
 		});
 	}
 
-	function readPageModels() {
+	async function readPageModels() {
 		var prefix = window.models.campaign_name + ":";
-		$.when(
-			api('GET', "multilingualcampaign/", { name__startswith: prefix }),
-			api('GET', "page/", { field__name: 'campaign', field__value: window.models.campaign.id, _limit: 1000 })
-		).done(function(mcamps, pages) {
-			var mcamp_types = {};
-			mcamps[0].objects.forEach(function(mcamp) {
-				const action_type = mcamp.name.slice(prefix.length);
-				mcamp_types[mcamp.resource_uri] = action_type;
-			});
-			pages[0].objects.forEach(function(page) {
-				const action_type = mcamp_types[page.multilingual_campaign];
-				if (action_type) {
-					if ( page.status != 'model' ) {
-						console.log(`Page ${page.id} associated with model campaign but is not a model`)
-					} else {
-						if (!window.models[action_type]) {
-							window.models[action_type] = {};
-						}
-						window.models[action_type][page.language] = page.id;
+		const [mcamps, pages] = await Promise.all([
+			fetchAllPages("multilingualcampaign/", { name__startswith: prefix }),
+			fetchAllPages("page/", { field__name: 'campaign', field__value: window.models.campaign.id })
+		]);
+		var mcamp_types = {};
+		mcamps.forEach(function(mcamp) {
+			const action_type = mcamp.name.slice(prefix.length);
+			mcamp_types[mcamp.resource_uri] = action_type;
+		});
+		pages.forEach(function(page) {
+			const action_type = mcamp_types[page.multilingual_campaign];
+			if (action_type) {
+				if ( page.status != 'model' ) {
+					console.log(`Page ${page.id} associated with model campaign but is not a model`)
+				} else {
+					if (!window.models[action_type]) {
+						window.models[action_type] = {};
 					}
+					window.models[action_type][page.language] = page.id;
 				}
-			});
+			}
 		});
 	}
 
 	var mailing_models = {};
-	function readMailingModels() {
-		api('GET', "mailer/", { status: 'model' }).done( function(result) {
-			result.objects.forEach( function ( mailmodel ) {
-				const model_id = mailmodel.id;
-				const subject = mailmodel.subjects[0];
-				const match = subject.match(/^(.*?) *[-] *(\w\w)$/);
-				if ( match ) {
-					const lang_code = match[2];
-					const mailtype = match[1];
-					if ( ! mailing_models[ mailtype ] ) {
-						mailing_models[ mailtype ] = {};
-					}
-					mailing_models[ mailtype ][ lang_code ] = model_id;
+	async function readMailingModels() {
+		const mailmodels = await fetchAllPages("mailer/", { status: 'model' });
+		mailmodels.forEach( function ( mailmodel ) {
+			const model_id = mailmodel.id;
+			const subject = mailmodel.subjects[0];
+			const match = subject.match(/^(.*?) *[-] *(\w\w)$/);
+			if ( match ) {
+				const lang_code = match[2];
+				const mailtype = match[1];
+				if ( ! mailing_models[ mailtype ] ) {
+					mailing_models[ mailtype ] = {};
 				}
-			} );
-			const new_select = $('<select name="mailmodel"> <option value="">Blank Mailing</option>');
-			Object.keys(mailing_models).forEach(function(model_name) {
-				new_select.append(
-					` <option value="${model_name}">${model_name}</option>`
-				);
-			});
-			$('#mailing_form .mailmodel-picker .form-control').append( new_select );
+				mailing_models[ mailtype ][ lang_code ] = model_id;
+			}
 		} );
+		const new_select = $('<select name="mailmodel"> <option value="">Blank Mailing</option>');
+		Object.keys(mailing_models).forEach(function(model_name) {
+			new_select.append(
+				` <option value="${model_name}">${model_name}</option>`
+			);
+		});
+		$('#mailing_form .mailmodel-picker .form-control').append( new_select );
 	}
 
 	function readFieldValues(field_name, entity, default_value) {
@@ -624,16 +639,15 @@
 		});
 	}
 
-	function readMultilingualCampaigns(prefix) {
-		return api('GET', "multilingualcampaign/", { name__startswith: prefix, _limit: 100 } ).done(function(camps) {
-			const step_picker = $('.step-picker .form-control select');
-			step_picker.find('option:not(:first-child)').remove();
-			camps.objects.forEach(function(camp) {
-				multilingual_campaigns[camp.resource_uri] = camp.name;
-				step_picker.append(
-					` <option value="${camp.resource_uri}">After ${camp.name}</option>`
-				);
-			});
+	async function readMultilingualCampaigns(prefix) {
+		const camps = await fetchAllPages("multilingualcampaign/", { name__startswith: prefix });
+		const step_picker = $('.step-picker .form-control select');
+		step_picker.find('option:not(:first-child)').remove();
+		camps.forEach(function(camp) {
+			multilingual_campaigns[camp.resource_uri] = camp.name;
+			step_picker.append(
+				` <option value="${camp.resource_uri}">After ${camp.name}</option>`
+			);
 		});
 	}
 
@@ -777,11 +791,11 @@
 		});
 	}
 
-	function displayPages(campaign) {
-		api('GET', "page/", { field__name: 'campaign', field__value: campaign.id, _limit: 100 })
-		.done(function(result) {
+	async function displayPages(campaign) {
+		const allPages = await fetchAllPages("page/", { field__name: 'campaign', field__value: campaign.id });
+		{
 			var lang_journeys = {};
-			result.objects.forEach(function(page) {
+			allPages.forEach(function(page) {
 				if (page.id != campaign.id) {
 					const language = page.language || "/rest/v1/language/100/";
 					if (!lang_journeys[language]) {
@@ -826,7 +840,7 @@
 				$('#add_step').hide();
 				$('#page_form').show();
 			});
-		});
+		}
 	}
 
 	function sortJourney(pages) {
@@ -923,34 +937,12 @@
 		return ( view_href ? `<a title="View ${title_txt}" href="${view_href}">${action_label}</a>` : action_label ) + ` <a class="dash-icon-btn" title="Edit ${name_txt}" href="${edit_href}">✎</a>`;
 	}
 
-  const getSortedMailingsFromAPI = async (campaignId)=> {
-    const API_LIMIT = 100;
-    let offset = 0;
-    let mailings = [];
-
-    while (true) {
-      const tempMailings = await api(
-        'GET',
-        "mailer/",
-        {
-          field__name: 'campaign',
-          field__value: campaignId,
-          order_by: '-id',
-          _limit: API_LIMIT,
-          _offset: offset,
-        });
-
-      mailings = [...mailings, ...tempMailings.objects];
-
-      if (tempMailings.objects.length < API_LIMIT) {
-        break;
-      }
-
-      offset = offset + API_LIMIT;
-    };
-
-    // return mailings.sort((m1,m2) => m1.notes.localeCompare(m2.notes));
-		return mailings;
+  const getSortedMailingsFromAPI = async (campaignId) => {
+		return fetchAllPages("mailer/", {
+			field__name: 'campaign',
+			field__value: campaignId,
+			order_by: '-id',
+		});
   };
 
 	const displayMailings = async (campaign) => {
