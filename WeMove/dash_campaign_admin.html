@@ -1,3 +1,96 @@
+<!--
+================================================================================
+CAMPAIGN ADMIN DASHBOARD — Object Model & Naming Conventions
+================================================================================
+
+## Campaign (ActionKit "Signup Page" repurposed)
+
+- Not a first-class AK object — a campaign is a signup page (signuppage/) whose
+  ID is stored as a custom field value in the "campaign" allowed field.
+- allowedpagefield/campaign and allowedmailingfield/campaign store a
+  newline-delimited string of id=name pairs (field_choices), a shared registry.
+- Campaign metadata lives as page-level custom fields on this signup page:
+  topic, lead_campaigner, campaign_type.
+
+## Multilingual Campaign
+
+- Groups pages of the same action type across languages.
+- Naming: {campaign_name}: {action_type}
+  e.g. "2025-03-save-bees: petition", "2025-03-save-bees: donation"
+- Each page references its multilingual campaign via page.multilingual_campaign
+  (a resource URI).
+
+## Pages (Action Pages)
+
+- Naming: {campaign_name}-{action_type}-{LANG_CODE}
+  e.g. "2025-03-save-bees-petition-EN", "2025-03-save-bees-donation-FR"
+  The prefix is set via the "Internal Name" field; -LANG_CODE appended per language.
+- Linked to campaign via fields.campaign = campaign.id
+- Linked to multilingual campaign via multilingual_campaign field.
+- Action type → AK page type mapping:
+    petition   → petitionpage/
+    donation   → donationpage/
+    letter     → letterpage/
+    call       → callpage/
+    tweet      → callpage/  (fields.call_page_mode = 'tweet')
+    facebook   → callpage/  (fields.call_page_mode = 'facebook')
+    sharing    → signuppage/
+
+## Journey (Daisy Chain)
+
+Pages are linked into ordered sequences per language via custom fields:
+- fields.next_step          — page name of next page (forward link)
+- fields.daisy_chain_action — page name for thanks/share redirect target
+- followup.url              — AK's after-action redirect; /thanks/ → share or thanks step
+- fields.redir              — external redirect (terminates journey offsite)
+- fields.sharing_step       — marks a page as a sharing-type step
+- fields.disable_sharing    — skips share step, goes straight to thanks
+
+sortJourney() reconstructs linked lists by:
+  1. Following next_step → matching page name in same language
+  2. Falling back to followup.url → extracting page name from URL path
+  3. Synthesizing virtual "thanks" and "share" nodes for terminal pages
+  4. Detecting circular references
+
+Inserting a step mid-journey:
+  - New page inherits the previous page's next_step and daisy_chain_action.
+  - Previous page's next_step updated to point to the new page.
+Inserting as first step:
+  - New page's next_step set to current first page.
+  - All existing pages' daisy_chain_action updated to the new page name.
+
+## Page Models (Templates)
+
+- Model pages have page.status = 'model'.
+- Stored in window.models[action_type][language_uri] = page_id.
+- Belong to multilingual campaigns named {models_campaign_name}: {action_type}.
+- New pages created by copying a model:
+    GET /admin/core/{page_type}page/copy/?id={model_id}
+  then PATCHing the copy with real name/fields.
+
+## Mailing Models
+
+- Mailings with status: 'model'.
+- Naming (via subject line): {model_name} - {lang_code}
+  e.g. "Standard Petition Ask - EN"
+  Parsed by regex: /^(.*?) *[-] *(\w\w)$/
+- New mailings created by POST mailer/{model_id}/copy/, then PATCHed.
+
+## Mailings
+
+- Naming: {campaign_name}-{moment}-{LANG_CODE}
+  The moment radio sets the prefix; -LANG_CODE appended per language.
+- Linked to campaign via fields.campaign = campaign.id
+- Additional fields: moment, ask_type, ask_details, target.
+
+## Languages
+
+- Core: Dutch, English, French, German, Italian, Polish, Spanish.
+- Referenced by resource URI (/rest/v1/language/{id}/).
+- ISO codes used uppercase in page name suffixes (-EN, -FR).
+
+================================================================================
+-->
 <script justification="Custom collapse widget" src="/static/admin/js/collapse.js"></script>
 
 <style>
