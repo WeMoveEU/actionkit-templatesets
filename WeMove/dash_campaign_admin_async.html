@@ -878,7 +878,7 @@ Inserting as first step:
 				return false;
 			});
 		});
-		readMultilingualCampaigns(camp.name).done(function() {
+		readMultilingualCampaigns(camp.name).then(function() {
 			displayPages(camp);
 			displayMailings(camp);
 		});
@@ -1187,7 +1187,7 @@ Inserting as first step:
 						if ( second_time ) {
 							reject(rerror)
 						} else {
-							return readMultilingualCampaigns(campaign_name).done( function() {
+							return readMultilingualCampaigns(campaign_name).then( function() {
 								resolve( multilingualCampaignFor(campaign_name, action_type, 1) )
 							} )
 						}
