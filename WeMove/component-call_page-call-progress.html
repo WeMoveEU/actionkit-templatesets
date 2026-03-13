@@ -122,7 +122,9 @@ step-sequence {
                 <div class="form-fields-wrapper">
                     {% if form.survey_question_text %}
                         <div class="ak-labels-overlaid form-field my-4">
-                            <label class="font-bold !static !text-wm-purple [&_p]:!mb-0 !p-0 !text-2xl font-gilroy" for="id_action_survey_{{ target.id }}">
+                            <label
+                                class="font-bold !static !text-wm-purple [&_p]:!mb-0 !p-0 !text-2xl font-gilroy whitespace-normal"
+                                for="id_action_survey_{{ target.id }}">
                                 {% include_tmpl form.survey_question_text %}
                             </label>
 
