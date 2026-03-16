@@ -85,34 +85,27 @@
 {{ block.super }}
 
 <script justification="Login redirect">
-(() => {
-  // Lang param will be the most important one.
-  // Overrides user's language set in localStorage
-  // No need for redirects, AK handles already the language for us
-  const loginUrl = new URL(window.location.href);
-  const hasForcedLanguage = loginUrl.searchParams.has('lang');
+const loginRedirectByLanguage = () => {debugger
+  const userLanguague = wemove.utilities.getUserLanguage();
 
-  // User language gets set by wemove-main (user-data).
-  // If there's an akid means we know the user language
-  // only in that scenario we will set the language
-  const userLanguage = localStorage.getItem('userLanguage');
+  // If lang different than default (en) which is already loaded
+  // we redirect to the proper one
+  // The logic and where the language gets set is on wemove-main/utilities.js
+  if (userLanguague !== "en") {
+    const loginUrl = new URL(window.location.href);
 
-  if (!hasForcedLanguage && (userLanguage && userLanguage !== "en")) {
-      loginUrl.searchParams.set('lang', userLanguage);
-      window.location.href = loginUrl.toString();
+    loginUrl.searchParams.set('lang', userLanguage);
+    window.location.href = loginUrl.toString();
 
-      return;
+    return;
   }
 
-  if (hasForcedLanguage) {
-    localStorage.setItem('userLanguage', loginUrl.searchParams.get('lang'));
-  } else if (!userLanguage) {
-    localStorage.setItem('userLanguage', 'en');
-  }
-
-  // We are good so we render the form
+  // We are in the proper language so we render the form
   document.querySelector('[data-wm-preloader-without-modal]').hidden = true;
   document.querySelector('[data-wm-login-page-content]').hidden = false;
-})();
+}
+
+// Wait for the main library to loaded so we can consume wemove.utilities.getUserLanguage
+document.addEventListener('wm-scriptsLoaded', loginRedirectByLanguage);
 </script>
 {% endblock %}
