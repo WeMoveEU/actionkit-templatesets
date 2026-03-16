@@ -106,6 +106,8 @@
 
   if (hasForcedLanguage) {
     localStorage.setItem('userLanguage', loginUrl.searchParams.get('lang'));
+  } else if (!userLanguage) {
+    localStorage.setItem('userLanguage', 'en');
   }
 
   // We are good so we render the form
