@@ -106,17 +106,15 @@ const redirectToProperLanguage = () => {
   // The logic and where the language gets set is on wemove-main/utilities.js
   const userLanguage = wemove.utilities.getUserLanguage();
 
-  if (userLanguage === "en") {
+  if (!userLanguage || userLanguage === "en") {
     showPage();
-    return;
-  }
-
-
+  } else {
   // If no lang query string overriding
   // and not english set for the user
   // we must redirect to user's language in localStorage
   loginUrl.searchParams.set('lang', userLanguage);
   window.location.href = loginUrl.toString();
+  }
 }
 
 // Wait for the main library to loaded
