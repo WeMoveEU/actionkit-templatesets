@@ -102,8 +102,10 @@
       window.location.href = loginUrl.toString();
 
       return;
-  } else if (!userLanguage) {
-    localStorage.setItem('userLanguage', "en");
+  }
+
+  if (hasForcedLanguage) {
+    localStorage.setItem('userLanguage', loginUrl.searchParams.get('lang'));
   }
 
   // We are good so we render the form
