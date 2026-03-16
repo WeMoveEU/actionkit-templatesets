@@ -85,31 +85,42 @@
 {{ block.super }}
 
 <script justification="Login redirect">
-const loginRedirectByLanguage = () => {
-  const userLanguage = wemove.utilities.getUserLanguage();
+const redirectToProperLanguage = () => {
+  const showPage = () => {
+    document.querySelector('[data-wm-preloader-without-modal]').hidden = true;
+    document.querySelector('[data-wm-login-page-content]').hidden = false;
+  };
+
+  // Lang param will be the most important one.
+  // Overrides user's language set in localStorage
   const loginUrl = new URL(window.location.href);
   const hasForcedLanguage = loginUrl.searchParams.has("lang");
 
-
-  // If lang different than default (en) which is already loaded
-  // we redirect to the proper one
-  // The logic and where the language gets set is on wemove-main/utilities.js
-  if (!hasForcedLanguage && userLanguage !== "en") {
-    const loginUrl = new URL(window.location.href);
-
-    loginUrl.searchParams.set('lang', userLanguage);
-    window.location.href = loginUrl.toString();
-
+  if (hasForcedLanguage) {
+    showPage();
     return;
   }
 
-  // We are in the proper language so we render the form
-  document.querySelector('[data-wm-preloader-without-modal]').hidden = true;
-  document.querySelector('[data-wm-login-page-content]').hidden = false;
+  // If user language is default (en)
+  // we are done
+  // The logic and where the language gets set is on wemove-main/utilities.js
+  const userLanguage = wemove.utilities.getUserLanguage();
+
+  if (userLanguage === "en") {
+    showPage();
+    return;
+  }
+
+
+  // If no lang query string overriding
+  // and not english set for the user
+  // we must redirect to user's language in localStorage
+  loginUrl.searchParams.set('lang', userLanguage);
+  window.location.href = loginUrl.toString();
 }
 
 // Wait for the main library to loaded
 // so we can consume wemove.utilities.getUserLanguage (uses local storage)
-document.addEventListener('wm-scriptsLoaded', loginRedirectByLanguage);
+document.addEventListener('wm-scriptsLoaded', redirectToProperLanguage);
 </script>
 {% endblock %}
