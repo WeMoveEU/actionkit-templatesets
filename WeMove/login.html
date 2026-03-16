@@ -87,11 +87,14 @@
 <script justification="Login redirect">
 const loginRedirectByLanguage = () => {
   const userLanguage = wemove.utilities.getUserLanguage();
+  const loginUrl = new URL(window.location.href);
+  const hasForcedLanguage = loginUrl.searchParams.has("lang");
+
 
   // If lang different than default (en) which is already loaded
   // we redirect to the proper one
   // The logic and where the language gets set is on wemove-main/utilities.js
-  if (userLanguage !== "en") {
+  if (!hasForcedLanguage && userLanguage !== "en") {
     const loginUrl = new URL(window.location.href);
 
     loginUrl.searchParams.set('lang', userLanguage);
@@ -105,7 +108,8 @@ const loginRedirectByLanguage = () => {
   document.querySelector('[data-wm-login-page-content]').hidden = false;
 }
 
-// Wait for the main library to loaded so we can consume wemove.utilities.getUserLanguage
+// Wait for the main library to loaded
+// so we can consume wemove.utilities.getUserLanguage (uses local storage)
 document.addEventListener('wm-scriptsLoaded', loginRedirectByLanguage);
 </script>
 {% endblock %}
