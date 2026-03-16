@@ -91,7 +91,7 @@ const loginRedirectByLanguage = () => {
   // If lang different than default (en) which is already loaded
   // we redirect to the proper one
   // The logic and where the language gets set is on wemove-main/utilities.js
-  if (userLanguague !== "en") {
+  if (userLanguage !== "en") {
     const loginUrl = new URL(window.location.href);
 
     loginUrl.searchParams.set('lang', userLanguage);
