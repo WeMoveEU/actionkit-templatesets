@@ -97,10 +97,13 @@
   // only in that scenario we will set the language
   const userLanguage = localStorage.getItem('userLanguage');
 
-  if (!hasForcedLanguage && userLanguage !== "en") {
+  if (!hasForcedLanguage && (userLanguage && userLanguage !== "en")) {
       loginUrl.searchParams.set('lang', userLanguage);
       window.location.href = loginUrl.toString();
+
       return;
+  } else if (!userLanguage) {
+    localStorage.setItem('userLanguage', "en");
   }
 
   // We are good so we render the form
