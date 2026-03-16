@@ -89,8 +89,8 @@
   // Lang param will be the most important one.
   // Overrides user's language set in localStorage
   // No need for redirects, AK handles already the language for us
-  const url = new URL(window.location.href);
-  const hasForcedLanguage = url.searchParams.has('lang');
+  const loginUrl = new URL(window.location.href);
+  const hasForcedLanguage = loginUrl.searchParams.has('lang');
 
   // User language gets set by wemove-main (user-data).
   // If there's an akid means we know the user language
@@ -98,8 +98,8 @@
   const userLanguage = localStorage.getItem('userLanguage');
 
   if (!hasForcedLanguage && userLanguage !== "en") {
-      url.searchParams.set('lang', userLanguage);
-      window.location.href = url.toString();
+      loginUrl.searchParams.set('lang', userLanguage);
+      window.location.href = loginUrl.toString();
       return;
   }
 
