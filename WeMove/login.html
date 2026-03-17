@@ -91,11 +91,6 @@ const redirectToProperLanguage = () => {
     document.querySelector('[data-wm-login-page-content]').hidden = false;
   };
 
-  const userLanguageIsSupportedLanguage = (userLanguage) => {
-    const supportedLanguages = ['en', 'it', 'es', 'de', 'fr', 'nl', 'pl'];
-    return supportedLanguages.includes(userLanguage);
-  };
-
   // Lang param will be the most important one.
   // Overrides user's language set in localStorage
   const loginUrl = new URL(window.location.href);
@@ -107,13 +102,13 @@ const redirectToProperLanguage = () => {
   }
 
   // If user language is default (en)
-  // we are done
+  // we are done!
   // The logic and where the language gets set is on wemove-main/utilities.js
   const userLanguage = wemove.utilities.getUserLanguage();
 
   if (!userLanguage || userLanguage === "en") {
     showPage();
-  } else if (userLanguageIsSupportedLanguage(userLanguage)) {
+  } else if (wemove.utilities.supportedLanguages.includes(userLanguage)) {
   // If no lang query string overriding
   // and not english set for the user
   // we must redirect to user's language in localStorage
