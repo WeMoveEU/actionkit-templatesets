@@ -1,12 +1,5 @@
 {% extends "./wrapper.html" %}
 
-{% block css_additions %}
-{{ block.super }}
-{% if page.custom_fields.call_page_mode == "call" %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.2/build/css/intlTelInput.css">
-{% endif %}
-{% endblock %}
-
 {% block content %}
 
 {% if page.custom_fields.call_page_mode == "call" and action and action.page.id == page.id %}
