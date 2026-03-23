@@ -8,6 +8,7 @@ if (!window.wemove) {
     user: {
       akid: "{{ actionkit_user.token }}",
       email: "{{ actionkit_user.email }}",
+      country: "{{ user.country|lower }}",
       language: {
         name: "{{ actionkit_user.lang}}",
         iso: "{{actionkit_user.lang.iso_code}}",
