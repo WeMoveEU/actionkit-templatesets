@@ -84,7 +84,19 @@
           <div class="flex items-center justify-center text-4xl my-4 lowercase">
             {{ donation.amt }}
             <span class="mx-2"> / </span>
-            {{ donation.get_period_display }}
+
+            {% if donation.get_period_display|lower == "weekly" %}
+              {% filter ak_text:"user_recurringPeriod_weekly" %}weekly{% endfilter %}
+            {% elif donation.get_period_display|lower == "monthly" %}
+              {% filter ak_text:"user_recurringPeriod_monthly" %}monthly{% endfilter %}
+            {% elif donation.get_period_display|lower == "quarterly" %}
+              {% filter ak_text:"user_recurringPeriod_quarterly" %}quarterly{% endfilter %}
+            {% elif donation.get_period_display|lower == "yearly" %}
+              {% filter ak_text:"user_recurringPeriod_yearly" %}yearly{% endfilter %}
+            {% else %}
+              {{ donation.get_period_display }}
+            {% endif %}
+
           </div>
 
           <div class="text-center">
