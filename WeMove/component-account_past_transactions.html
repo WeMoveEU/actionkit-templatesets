@@ -24,21 +24,20 @@
                   {% remember "one-off" as currentPaymentFrequency %}
                 {% endif %}
 
-                <span class="text-wm-pink {% if donation.account|lower == "wm-stripe" or donation.account|lower == "legacy-stripe" %}hidden{% endif %}">/</span>
-
                 {% if donation.account|lower == "wm-card" or donation.account|lower == "legacy-card" %}
+                  <span class="text-wm-pink">/</span>
                   {% filter ak_text:"paymentType_creditCard" %}Card{% endfilter %}
                   {% remember "credit card" as currentPaymentMethod %}
                 {% elif donation.account|lower == "wm-sepa" or donation.account|lower == "legacy-sepa" or donation.account|lower == "legacy-banktransfer" %}
+                  <span class="text-wm-pink">/</span>
                   SEPA
                   {% remember "sepa" as currentPaymentMethod %}
                 {% elif donation.account|lower == "wm-paypal" or donation.account|lower == "legacy-paypal" %}
+                  <span class="text-wm-pink">/</span>
                   PayPal
                   {% remember "paypal" as currentPaymentMethod %}
-                {% elif donation.account|lower == "wm-stripe" or donation.account|lower == "legacy-stripe" %}
                 {% else %}
-                  {{ donation.account }}
-                   {% remember donation.account as currentPaymentMethod %}
+                  {% remember "none" as currentPaymentMethod %}
                 {% endif %}
               </span>
             </div>
