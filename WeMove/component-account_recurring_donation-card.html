@@ -108,10 +108,20 @@
               <span>
                 {% if donation.account|lower == "wm-card" or donation.account|lower == "legacy-card" %}
                   {% filter ak_text:"paymentType_creditCard" %}Card{% endfilter %}
-                {% elif donation.account|lower == "wm-sepa" or donation.account|lower == "legacy-sepa" or donation.account|lower == "legacy-banktransfer" %}
+                {% elif donation.account|lower == "wm-sepa" or donation.account|lower == "legacy-sepa" %}
                   SEPA
+                {% elif donation.account|lower == "legacy-banktransfer" or donation.account|lower == "ggmbh bank transfer" %}
+                  {% filter ak_text:"paymentType_bankTransfer" %}Bank transfer{% endfilter %}
                 {% elif donation.account|lower == "wm-paypal" or donation.account|lower == "legacy-paypal" %}
                   PayPal
+                {% elif donation.account|lower == "wm-checks" %}
+                  {% filter ak_text:"paymentType_check" %}Cheque{% endfilter %}
+                {% elif donation.account|lower == "wm-googlepay" %}
+                  Google Pay
+                {% elif donation.account|lower == "wm-applepay" %}
+                  Apple Pay
+                {% elif donation.account|lower == "wm-ideal" %}
+                  Ideal
                 {% else %}
                   --
                 {% endif %}

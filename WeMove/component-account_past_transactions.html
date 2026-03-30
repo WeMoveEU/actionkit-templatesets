@@ -24,18 +24,48 @@
                   {% remember "one-off" as currentPaymentFrequency %}
                 {% endif %}
 
+
+
                 {% if donation.account|lower == "wm-card" or donation.account|lower == "legacy-card" %}
                   <span class="text-wm-pink">/</span>
                   {% filter ak_text:"paymentType_creditCard" %}Card{% endfilter %}
-                  {% remember "credit card" as currentPaymentMethod %}
-                {% elif donation.account|lower == "wm-sepa" or donation.account|lower == "legacy-sepa" or donation.account|lower == "legacy-banktransfer" %}
+                  {% remember "card" as currentPaymentMethod %}
+
+                {% elif donation.account|lower == "wm-sepa" or donation.account|lower == "legacy-sepa" %}
                   <span class="text-wm-pink">/</span>
                   SEPA
                   {% remember "sepa" as currentPaymentMethod %}
+
+                {% elif donation.account|lower == "legacy-banktransfer" or donation.account|lower == "ggmbh bank transfer" %}
+                  <span class="text-wm-pink">/</span>
+                  {% filter ak_text:"paymentType_bankTransfer" %}Bank transfer{% endfilter %}
+                  {% remember "bank_transfer" as currentPaymentMethod %}
+
                 {% elif donation.account|lower == "wm-paypal" or donation.account|lower == "legacy-paypal" %}
                   <span class="text-wm-pink">/</span>
                   PayPal
                   {% remember "paypal" as currentPaymentMethod %}
+
+                {% elif donation.account|lower == "wm-checks" %}
+                  <span class="text-wm-pink">/</span>
+                  {% filter ak_text:"paymentType_check" %}Cheque{% endfilter %}
+                  {% remember donation.account|lower as currentPaymentMethod %}
+
+                {% elif donation.account|lower == "wm-googlepay" %}
+                  <span class="text-wm-pink">/</span>
+                  Google Pay
+                  {% remember "google pay" as currentPaymentMethod %}
+
+                {% elif donation.account|lower == "wm-applepay" %}
+                  <span class="text-wm-pink">/</span>
+                  Apple Pay
+                  {% remember "apple pay" as currentPaymentMethod %}
+
+                {% elif donation.account|lower == "wm-ideal" %}
+                  <span class="text-wm-pink">/</span>
+                  Ideal
+                  {% remember "ideal" as currentPaymentMethod %}
+
                 {% else %}
                   {% remember "none" as currentPaymentMethod %}
                 {% endif %}
