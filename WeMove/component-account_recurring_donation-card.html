@@ -123,7 +123,9 @@
               <h5 class="mb-0">
                 {% filter ak_text:"user_firstPayment_title" %}First payment{% endfilter %}
               </h5>
-              <span>{{ donation.first_payment_date|date }}</span>
+              <span data-wm-translate-date="{{ donation.first_payment_date|date:"Y-m-d" }}">
+                {% comment %}{{ donation.first_payment_date|date }}{% endcomment %} --
+              </span>
             </div>
 
             {% if donation.is_active %}
@@ -131,14 +133,18 @@
                 <h5 class="mb-0">
                   {% filter ak_text:"user_nextPayment_title" %}Next payment{% endfilter %}
                 </h5>
-                <span>{{ donation.next_payment_date|date }}</span>
+                <span data-wm-translate-date="{{ donation.next_payment_date|date:"Y-m-d" }}">
+                  {% comment %}{{ donation.next_payment_date|date }}{% endcomment %} --
+                </span>
               </div>
             {% else %}
               <div>
                 <h5 class="mb-0">
                   {% filter ak_text:"user_lastPayment_title" %}Last payment{% endfilter %}
                 </h5>
-                <span>{{ donation.last_payment_date|date }}</span>
+                <span data-wm-translate-date="{{ donation.last_payment_date|date:"Y-m-d" }}">
+                  {% comment %}{{ donation.last_payment_date|date }}{% endcomment %} --
+                </span>
               </div>
             {% endif %}
           </div>
@@ -169,3 +175,34 @@
     </a>
   </main>
 </div>
+
+<script>
+  const translateLongDates = () => {
+    const dates = document.querySelectorAll('[data-wm-translate-date]');
+
+    if (dates.length === 0) {
+      return
+    }
+
+    const lang = wemove.utilities.getPageLanguage();
+
+    dates.forEach((el) => {
+      const raw = el.getAttribute('data-wm-translate-date');
+
+      if (!raw) {
+        return;
+      }
+
+      const [year, month, day] = raw.split('-');
+      const date = new Date(year, month - 1, day);
+
+      if (isNaN(date)) {
+        return;
+      }
+
+      el.textContent = date.toLocaleDateString(lang, { day: 'numeric', month: 'long', year: 'numeric' });
+    });
+  };
+
+  document.addEventListener('wm-scriptsLoaded', translateLongDates);
+</script>
