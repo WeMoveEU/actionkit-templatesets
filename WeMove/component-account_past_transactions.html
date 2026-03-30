@@ -63,8 +63,8 @@
 
                 {% elif donation.account|lower == "wm-ideal" %}
                   <span class="text-wm-pink">/</span>
-                  Ideal
-                  {% remember "ideal" as currentPaymentMethod %}
+                  iDEAL
+                  {% remember "iDEAL" as currentPaymentMethod %}
 
                 {% else %}
                   {% remember "none" as currentPaymentMethod %}
