@@ -28,8 +28,8 @@
 
                 {% if donation.account|lower == "wm-card" or donation.account|lower == "legacy-card" %}
                   <span class="text-wm-pink">/</span>
-                  {% filter ak_text:"paymentType_creditCard" %}Card{% endfilter %}
-                  {% remember "card" as currentPaymentMethod %}
+                  {% remember "Card"|ak_text:"paymentType_creditCard" as currentPaymentMethod %}
+                  {{ currentPaymentMethod }}
 
                 {% elif donation.account|lower == "wm-sepa" or donation.account|lower == "legacy-sepa" %}
                   <span class="text-wm-pink">/</span>
@@ -48,8 +48,8 @@
 
                 {% elif donation.account|lower == "wm-checks" %}
                   <span class="text-wm-pink">/</span>
-                  {% filter ak_text:"paymentType_check" %}Cheque{% endfilter %}
-                  {% remember donation.account|lower as currentPaymentMethod %}
+                  {% remember "Cheque"|ak_text:"paymentType_check" as currentPaymentMethod %}
+                  {{ currentPaymentMethod }}
 
                 {% elif donation.account|lower == "wm-googlepay" %}
                   <span class="text-wm-pink">/</span>
