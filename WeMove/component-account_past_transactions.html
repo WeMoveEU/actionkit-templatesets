@@ -27,7 +27,7 @@
                 <span class="text-wm-pink {% if donation.account|lower == "wm-stripe" or donation.account|lower == "legacy-stripe" %}hidden{% endif %}">/</span>
 
                 {% if donation.account|lower == "wm-card" or donation.account|lower == "legacy-card" %}
-                  Credit card
+                  {% filter ak_text:"paymentType_creditCard" %}Card{% endfilter %}
                   {% remember "credit card" as currentPaymentMethod %}
                 {% elif donation.account|lower == "wm-sepa" or donation.account|lower == "legacy-sepa" or donation.account|lower == "legacy-banktransfer" %}
                   SEPA
