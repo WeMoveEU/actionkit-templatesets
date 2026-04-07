@@ -4,11 +4,13 @@
   {% endif %}
 {% endfor %}
 
-{% if args.lang and args.lang != "" %}
+{% if request.GET.lang %}
   {% remember request.GET.lang as pageLanguage %}
 {% else %}
   {% remember actionkit_user.lang.iso_code|default:"en" as pageLanguage %}
 {% endif %}
+
+{% load i18n %}
 
 <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink w-full">
   {% filter ak_text:"user_recurringDonations_title" %}Recurring donations{% endfilter %}
@@ -139,7 +141,6 @@
                 {% filter ak_text:"user_firstPayment_title" %}First payment{% endfilter %}
               </h5>
 
-              {% load i18n %}
               {% language pageLanguage %}
                 {{ donation.first_payment_date|date:"j F Y" }}
               {% endlanguage %}
@@ -151,7 +152,6 @@
                   {% filter ak_text:"user_nextPayment_title" %}Next payment{% endfilter %}
                 </h5>
 
-                {% load i18n %}
                 {% language pageLanguage %}
                   {{ donation.next_payment_date|date:"j F Y" }}
                 {% endlanguage %}
@@ -162,7 +162,6 @@
                   {% filter ak_text:"user_lastPayment_title" %}Last payment{% endfilter %}
                 </h5>
 
-                {% load i18n %}
                 {% language pageLanguage %}
                   {{ donation.last_payment_date|date:"j F Y" }}
                 {% endlanguage %}
