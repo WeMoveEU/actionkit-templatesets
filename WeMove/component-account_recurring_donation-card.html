@@ -4,6 +4,12 @@
   {% endif %}
 {% endfor %}
 
+{% if args.lang and args.lang != "" %}
+  {% remember request.GET.lang as pageLanguage %}
+{% else %}
+  {% remember actionkit_user.lang.iso_code|default:"en" as pageLanguage %}
+{% endif %}
+
 <h2 class="text-wm-purple border-b-2 mb-4 border-b-wm-pink w-full">
   {% filter ak_text:"user_recurringDonations_title" %}Recurring donations{% endfilter %}
 </h2>
@@ -132,9 +138,11 @@
               <h5 class="mb-0">
                 {% filter ak_text:"user_firstPayment_title" %}First payment{% endfilter %}
               </h5>
-              <span data-wm-translate-date="{{ donation.first_payment_date|date:"Y-m-d" }}">
-                {% comment %}{{ donation.first_payment_date|date }}{% endcomment %} --
-              </span>
+
+              {% load i18n %}
+              {% language pageLanguage %}
+                {{ donation.first_payment_date|date:"j F Y" }}
+              {% endlanguage %}
             </div>
 
             {% if donation.is_active %}
@@ -142,18 +150,22 @@
                 <h5 class="mb-0">
                   {% filter ak_text:"user_nextPayment_title" %}Next payment{% endfilter %}
                 </h5>
-                <span data-wm-translate-date="{{ donation.next_payment_date|date:"Y-m-d" }}">
-                  {% comment %}{{ donation.next_payment_date|date }}{% endcomment %} --
-                </span>
+
+                {% load i18n %}
+                {% language pageLanguage %}
+                  {{ donation.next_payment_date|date:"j F Y" }}
+                {% endlanguage %}
               </div>
             {% else %}
               <div>
                 <h5 class="mb-0">
                   {% filter ak_text:"user_lastPayment_title" %}Last payment{% endfilter %}
                 </h5>
-                <span data-wm-translate-date="{{ donation.last_payment_date|date:"Y-m-d" }}">
-                  {% comment %}{{ donation.last_payment_date|date }}{% endcomment %} --
-                </span>
+
+                {% load i18n %}
+                {% language pageLanguage %}
+                  {{ donation.last_payment_date|date:"j F Y" }}
+                {% endlanguage %}
               </div>
             {% endif %}
           </div>
@@ -184,34 +196,3 @@
     </a>
   </main>
 </div>
-
-<script>
-  const translateLongDates = () => {
-    const dates = document.querySelectorAll('[data-wm-translate-date]');
-
-    if (dates.length === 0) {
-      return
-    }
-
-    const lang = wemove.utilities.getPageLanguage();
-
-    dates.forEach((el) => {
-      const raw = el.getAttribute('data-wm-translate-date');
-
-      if (!raw) {
-        return;
-      }
-
-      const [year, month, day] = raw.split('-');
-      const date = new Date(year, month - 1, day);
-
-      if (isNaN(date)) {
-        return;
-      }
-
-      el.textContent = date.toLocaleDateString(lang, { day: 'numeric', month: 'long', year: 'numeric' });
-    });
-  };
-
-  document.addEventListener('wm-scriptsLoaded', translateLongDates);
-</script>
