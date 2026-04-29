@@ -1125,7 +1125,8 @@ Inserting as first step:
 		var campaign_name = $('#name').val();
 		api('POST', 'signuppage/', {
 			name: campaign_name,
-			title: $('#title').val()
+			title: $('#title').val(),
+ 			real_actions: false
 		}).done(function () {
 			var campaign_name = $('#name').val();
 			api('GET', "signuppage/", {
