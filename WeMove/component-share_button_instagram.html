@@ -4,11 +4,7 @@
   class="mb-4 transition-all text-center bg-instagram !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:bg-instagram-hv"
   href="{{instagram_share_link}}"
   target="_blank"
-  data-wm-send-share-to-action-kit="/share/link?type=ot&source=instagram&page_name={{ pageName }}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}"
-  data-wm-pixel-event-type="Share"
-  data-wm-pixel-track-type="trackCustom"
-  data-wm-pixel-content-name="Instagram"
-  data-wm-pixel-trigger-event="click">
+  data-wm-send-share-to-action-kit="/share/link?type=ot&source=instagram&page_name={{ pageName }}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}">
   <span aria-hidden="true" class="h-4 w-4">
     {% include "./icon-instagram.html" %}
   </span>

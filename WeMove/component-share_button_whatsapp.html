@@ -1,11 +1,7 @@
 <a
   class="mb-4 transition-all text-center bg-whatsapp !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:bg-whatsapp-hv"
   href="/thanks/{{ pageName }}?share=whatsapp&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}"
-  target="_blank"
-  data-wm-pixel-event-type="Share"
-  data-wm-pixel-track-type="trackCustom"
-  data-wm-pixel-content-name="WhatsApp"
-  data-wm-pixel-trigger-event="click">
+  target="_blank">
   <span aria-hidden="true" class="h-6 w-6">
     {% include "./icon-whatsapp.html" %}
   </span>
