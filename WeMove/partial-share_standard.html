@@ -3,9 +3,16 @@
       {% filter ak_text:"thanks_spreadTheWord_title" %}Can you spread the word?{% endfilter %}
     </h1>
 
-    <div class="mb-4">
+    <div class="mb-4 [&_strong]:font-normal [&_b]:font-normal">
       {% include_tmpl form.thank_you_text %}
     </div>
+
+    {% store as featured_video %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "featured_video" as field_name %}{% endstore %}
+    {% if featured_video %}
+      <div class="mb-4">
+        {% include "./component-featured-video.html" with featured_video=featured_video %}
+      </div>
+    {% endif %}
 
   {% if page.custom_fields.daisy_chain_action %}
     {% remember page.custom_fields.daisy_chain_action as pageName %}
