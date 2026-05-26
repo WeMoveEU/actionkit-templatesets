@@ -28,7 +28,8 @@
 
     {% block share_metatags %}
       {% if form.id %}
-        <meta name="description" property="og:description" content="{% block description %}{{ page.followup.share_description_value }}{% endblock %}" />
+        <meta name="description" content="{% block description %}{{ page.followup.share_description_value }}{% endblock %}" />
+        <meta property="og:description" content="{% block description %}{{ page.followup.share_description_value }}{% endblock %}" />
       {% endif %}
 
       <meta property="og:site_name" content="{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}" />
