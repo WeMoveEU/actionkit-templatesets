@@ -1,9 +1,119 @@
+@ -1,115 +1,9 @@
 {% extends "./wrapper.html" %}
 
+{% block css_additions %}
+{% if fundraiser_staging or args.staging == "1" %}
+{% load_css %}
+//donate-ui.wemove.support/donate-main.css
+{% end %}
+{% else %}
+{% load_css %}
+//donate-ui.wemove.eu/donate-main.css
+{% end %}
+{% endif %}
+{% endblock %}
+
 {% block content %}
+
+  <article class="nav-md:grid grid-cols-donate mb-8">
+    {% if form.ask_text %}
+    <div class="mr-16">
+      {% include_tmpl form.ask_text %}
+    </div>
+    {% endif %}
+
+    <div
+      data-wm-donate-widget
+      id="donate-widget"
+      class="donate-widget"
+      data-config_override="{{ page.custom_fields.config_override }}"
+      data-oneoff_amounts="{{ page.custom_fields.oneoff_amounts }}"
+      data-recurring_amounts="{{ page.custom_fields.recurring_amounts }}"
+      data-recurring_type="{{ page.custom_fields.recurring_type }}"
+      data-selected_currency="{{ page.custom_fields.selected_currency }}"
+      data-selected_frequency="{{ page.custom_fields.selected_frequency }}"
+      data-selected_amount="{{ page.custom_fields.selected_amount }}"
+      data-ak_page_name="{{ page.name }}"
+      data-ak_parent_page_name="{{ page.custom_fields.campaign }}"
+      data-ak_locale="{{ link_iso }}"
+      data-akid="{{ user.token|default_if_none:'' }}"
+      data-show_payment_fees="{{ page.custom_fields.show_payment_fees|default:'true' }}"
+      data-payment_fees_percentage="{{ page.custom_fields.payment_fees_percentage }}">
+    </div>
+  </article>
+
+  {% if page.custom_fields.hide_skip_step_button != "1" %}
+      {% store as next_step %}
+      {% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}&amp;action={{ args.action }}{% elif page.custom_fields.daisy_chain_action %}/thanks/{{ page.custom_fields.daisy_chain_action }}?share=1&amp;akid={{ akid }}&amp;action={{ args.action }}{% endif %}{% endstore %}
+
+      {% if next_step %}
+        <div class="text-center mb-16">
+          <a
+            href="{{ next_step }}"
+            class="button-fill button-fill--white border-gray-200 border-2 w-auto
+            mx-auto p-3 font-bold rounded font-gilroy text-xl">
+            {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
+          </a>
+        </div>
+      {% endif %}
+    {% endif %}
+
+  <section class="mb-16 lg:grid grid-cols-2 gap-32">
+    <div>
+      <h2 class="text-wm-purple">
+        {% filter ak_text:"otherWaysOfGiving_title" %}
+          Other ways of giving
+        {% endfilter %}
+      </h2>
+
+      <p class="italic">
+        {% filter ak_text:"otherWaysOfGiving_desc" %}
+          You can transfer your donation to our bank account.
+          <br/>
+          Please include your email address as payment reference
+        {% endfilter %}
+      </p>
+      <p>
+        WeMove Europe SCE mbH<br>
+        IBAN: DE98 4306 0967 1177 7069 00<br>
+        BIC: GENODEM1GLS, GLS Bank<br>
+        {% filter ak_text:"bankLocation_info" %}Berlin, Germany{% endfilter %}
+      </p>
+    </div>
+
+    <div>
+      <p>
+        {% filter ak_text:"otherWaysOfGivingMoreInfo_desc" %}
+          We want to be transparent and accountable about how we spend your donations - for more information please see our
+        {% endfilter %}
+      </p>
+      <p>
+        {% filter ak_text:"donationPrivacyPolicy_desc" %}
+          Your personal information will be kept private and held securely. By submitting information you are
+          agreeing to WeMove Europe keeping you informed about campaigns and agree to the use of cookies in
+          accordance with our
+        {% endfilter %}
+      </p>
+    </div>
+  </section>
+
+{% endblock %}
+
+{% block below_form %}
+  {% comment %}A/B Test need a call to initForm() and a form, so give them one.{% endcomment %}
+  <form style="display:none;" name="act">
+  <input type="hidden" name="page" value="{{ page.name }}" />
+  </form>
+  <script justification="A/B testing needs a call to initForm() and a form">
+  actionkit.forms.initForm('act');
+  </script>
+
+  {% if fundraiser_staging or args.staging == "1" %}
+    <script type="module" src="//donate-ui.wemove.support/donate-main.js?v=1.1.0" justification="Custom donation form"></script>
   {% if page.custom_fields.donation_version == "form" %}
     {% include "./partial-donation_form.html" %}
   {% else %}
+    <script type="module" src="//donate-ui.wemove.eu/donate-main.js?v=1.1.0" justification="Custom donation form"></script>
     {% include "./partial-donation_widget.html" %}
   {% endif %}
 {% endblock %}
