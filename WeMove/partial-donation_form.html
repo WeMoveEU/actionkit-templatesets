@@ -7,7 +7,12 @@
     {% endif %}
 
     <div class="min-w-[380px]" data-wm-donation-form data-locale="{{ link_iso }}"></div>
-    <script async src="https://stage.donations.wemove.eu/embed.js"></script>
+    {% if "roboticdogs" in request.get_host %}
+      <script async src="https://stage.donations.wemove.eu/embed.js"></script>
+    {% else %}
+      <script async src="https://donations.wemove.eu/embed.js"></script>
+    {% endif %}
+
   </article>
 
   {% if page.custom_fields.hide_skip_step_button != "1" %}
