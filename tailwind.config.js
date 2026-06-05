@@ -44,6 +44,7 @@ module.exports = {
       gridTemplateColumns: {
         petition: "66% minmax(34%, 1fr)",
         donate: "1fr max-content",
+        "donate-new": "2fr max-content",
       },
       fontFamily: {
         "libre-franklin": ["Libre Franklin", "serif"],

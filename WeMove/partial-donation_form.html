@@ -1,1 +1,66 @@
-form
+{% block content %}
+  <article class="nav-md:grid grid-cols-donate-new mb-8">
+    {% if form.ask_text %}
+    <div class="nav-md:mr-32">
+      {% include_tmpl form.ask_text %}
+    </div>
+    {% endif %}
+
+    <div class="min-w-[380px]" data-wm-donation-form data-locale="{{ link_iso }}"></div>
+    <script async src="https://stage.donations.wemove.eu/embed.js"></script>
+  </article>
+
+  {% if page.custom_fields.hide_skip_step_button != "1" %}
+      {% store as next_step %}
+      {% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% if '?' in page.followup.url %}&amp;{% else %}?{% endif %}akid={{ akid }}&amp;action={{ args.action }}{% elif page.custom_fields.daisy_chain_action %}/thanks/{{ page.custom_fields.daisy_chain_action }}?share=1&amp;akid={{ akid }}&amp;action={{ args.action }}{% endif %}{% endstore %}
+
+      {% if next_step %}
+        <div class="text-center mb-16">
+          <a
+            href="{{ next_step }}"
+            class="py-3 px-6 border-2 rounded-2xl inline-block !text-wm-yellow text-base font-gilroy uppercase font-bold bg-gray-50 hover:!no-underline hover:border-wm-yellow hover:shadow transition-all">
+            {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
+          </a>
+        </div>
+      {% endif %}
+    {% endif %}
+
+  <section class="mb-16 lg:grid grid-cols-2 gap-32">
+    <div>
+      <h2 class="text-wm-purple">
+        {% filter ak_text:"otherWaysOfGiving_title" %}
+          Other ways of giving
+        {% endfilter %}
+      </h2>
+
+      <p class="italic">
+        {% filter ak_text:"otherWaysOfGiving_desc" %}
+          You can transfer your donation to our bank account.
+          <br/>
+          Please include your email address as payment reference
+        {% endfilter %}
+      </p>
+      <p>
+        WeMove Europe SCE mbH<br>
+        IBAN: DE98 4306 0967 1177 7069 00<br>
+        BIC: GENODEM1GLS, GLS Bank<br>
+        {% filter ak_text:"bankLocation_info" %}Berlin, Germany{% endfilter %}
+      </p>
+    </div>
+
+    <div>
+      <p>
+        {% filter ak_text:"otherWaysOfGivingMoreInfo_desc" %}
+          We want to be transparent and accountable about how we spend your donations - for more information please see our
+        {% endfilter %}
+      </p>
+      <p>
+        {% filter ak_text:"donationPrivacyPolicy_desc" %}
+          Your personal information will be kept private and held securely. By submitting information you are
+          agreeing to WeMove Europe keeping you informed about campaigns and agree to the use of cookies in
+          accordance with our
+        {% endfilter %}
+      </p>
+    </div>
+  </section>
+{% endblock %}
