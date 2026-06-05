@@ -6,18 +6,20 @@
     </div>
     {% endif %}
 
-    <div
-      data-wm-donation-form
-      class="w-[384px]"
-      data-locale="{{ link_iso }}"
-      data-config="{{ request.GET.config }}"
-      data-page="{{ page.name }}"
-      ></div>
-    {% if "roboticdogs" in request.get_host %}
-      <script async src="https://stage.donations.wemove.eu/embed.js"></script>
-    {% else %}
-      <script async src="https://donations.wemove.eu/embed.js"></script>
-    {% endif %}
+    <section>
+      <div
+        data-wm-donation-form
+        class="w-[384px]"
+        data-locale="{{ link_iso }}"
+        data-config="{{ request.GET.config }}"
+        data-page="{{ page.name }}"
+        ></div>
+      {% if "roboticdogs" in request.get_host %}
+        <script async src="https://stage.donations.wemove.eu/embed.js"></script>
+      {% else %}
+        <script async src="https://donations.wemove.eu/embed.js"></script>
+      {% endif %}
+    </section>
 
   </article>
 
