@@ -6,7 +6,13 @@
     </div>
     {% endif %}
 
-    <div class="min-w-[380px]" data-wm-donation-form data-locale="{{ link_iso }}"></div>
+    <div
+      data-wm-donation-form
+      class="min-w-[380px]"
+      data-locale="{{ link_iso }}"
+      data-config="{{ request.GET.config }}"
+      data-page="{{ page.name }}"
+      ></div>
     {% if "roboticdogs" in request.get_host %}
       <script async src="https://stage.donations.wemove.eu/embed.js"></script>
     {% else %}
