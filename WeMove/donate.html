@@ -1,5 +1,19 @@
 {% extends "./wrapper.html" %}
 
+{% block css_additions %}
+  {% if page.custom_fields.donation_version != "form" %}
+    {% if fundraiser_staging or args.staging == "1" %}
+      {% load_css %}
+      //donate-ui.wemove.support/donate-main.css
+      {% end %}
+    {% else %}
+      {% load_css %}
+      //donate-ui.wemove.eu/donate-main.css
+      {% end %}
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
 {% block content %}
   {% if page.custom_fields.donation_version == "form" %}
     {% include "./partial-donation_form.html" %}
