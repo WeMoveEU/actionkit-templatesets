@@ -1,57 +1,6 @@
 <section class="standard-share mx-auto max-w-96">
-    {% if tests and page.custom_fields.share_step_abtest_f3 == "A" %}
-      {# https://action.wemove.eu/thanks/2024-01-ban-forever-chemicals-EN_copy/?share=1&variation=134 #}
-      <div class="text-wm-purple text-center relative">
-        <div class="w-full text-right mr-4 mb-4 mt-0">
-          <span class="inline-flex font-libre-franklin items-center gap-1 rounded-xl bg-green-100 text-base px-2 py-1 font-bold text-green-700 border-[1px] border-green-600">
-            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.5 7.6a1 1 0 0 1-1.42.006l-3.5-3.5a1 1 0 1 1 1.414-1.414l2.79 2.79 6.793-6.89a1 1 0 0 1 1.417-.006Z" clip-rule="evenodd"/>
-            </svg>
-            {% filter ak_text:"abtest_share_f3_youSignedBadge" %}You signed!{% endfilter %}
-          </span>
-        </div>
-
-        <p class="mb-2">
-          {% filter ak_text:"abtest_share_f3_A_text" %}Share the petition with <strong>3 people</strong> to triple the impact today.{% endfilter %}
-        </p>
-
-        <p class="mb-4 font-bold flex justify-center items-center">
-          <span class="inline-block w-2 h-2 border-r-2 border-b-2 border-wm-purple rotate-45 mb-1"></span>
-          <span class="mx-2">{% filter ak_text:"abtest_share_f3_A_clickHere" %}Click here{% endfilter %}</span>
-          <span class="inline-block w-2 h-2 border-r-2 border-b-2 border-wm-purple rotate-45 mb-1"></span>
-        </p>
-      </div>
-
-    {% elif tests and page.custom_fields.share_step_abtest_f3 == "B" %}
-      {# https://action.wemove.eu/thanks/2024-01-ban-forever-chemicals-EN_copy/?share=1&variation=135 #}
-      <div class="text-wm-purple text-center">
-        <div class="w-full text-right mr-4 mb-4 mt-0">
-          <span class="inline-flex font-libre-franklin items-center gap-1 rounded-xl bg-green-100 text-base px-2 py-1 font-bold text-green-700 border-[1px] border-green-600">
-            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.5 7.6a1 1 0 0 1-1.42.006l-3.5-3.5a1 1 0 1 1 1.414-1.414l2.79 2.79 6.793-6.89a1 1 0 0 1 1.417-.006Z" clip-rule="evenodd"/>
-            </svg>
-            {% filter ak_text:"abtest_share_f3_youSignedBadge" %}You signed!{% endfilter %}
-          </span>
-        </div>
-
-        <h1 class="mb-2">
-          {% filter ak_text:"abtest_share_f3_B_title" %}Almost there!{% endfilter %}
-        </h1>
-
-        {% include "./component-share_progress_meter.html" %}
-
-        <p class="mb-4">
-          {% filter ak_text:"abtest_share_f3_B_text" %}<strong>Share now:</strong> Help us reach our goal{% endfilter %}
-        </p>
-
-        <p class="mb-4 font-bold flex justify-center items-center">
-          <span class="inline-block w-2 h-2 border-r-2 border-b-2 border-wm-purple rotate-45 mb-1"></span>
-          <span class="mx-4">{% filter ak_text:"abtest_share_f3_B_clickHere" %}click here to share{% endfilter %}</span>
-          <span class="inline-block w-2 h-2 border-r-2 border-b-2 border-wm-purple rotate-45 mb-1"></span>
-        </p>
-      </div>
-
-    {% elif tests and page.custom_fields.share_step_abtest_f3 == "C" %}
+    {# A and B were disabled due to bad performance (variations: 134 and 135 #}
+    {% if tests and page.custom_fields.share_step_abtest_f3 == "C" %}
       {# https://action.wemove.eu/thanks/2024-01-ban-forever-chemicals-EN_copy/?share=1&variation=136 #}
       <div class="text-wm-purple text-center">
         <div class="w-full text-right mr-4 mb-4 mt-0">
