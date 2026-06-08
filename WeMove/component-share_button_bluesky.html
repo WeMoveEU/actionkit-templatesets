@@ -1,6 +1,18 @@
 <script>
   document.addEventListener('wm-scriptsLoaded', () => {
-    window.blueskyShareText = wemove.utilities.decodeHTML(`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
+    {% if tests and tests.37 %}
+      {% if page.custom_fields.share_step_abtest_s2 == "action" %}
+        window.blueskyShareText = wemove.utilities.decodeHTML((`{% filter ak_text:"share_step_abtest_s2_action" %}TODO: Action text{% endfilter %}|escapeall }}`);
+      {% if page.custom_fields.share_step_abtest_s2 == "concern" %}
+        window.blueskyShareText = wemove.utilities.decodeHTML((`{% filter ak_text:"share_step_abtest_s2_concern" %}TODO: Concern text{% endfilter %}|escapeall }}`);
+      {% if page.custom_fields.share_step_abtest_s2 == "question" %}
+        window.blueskyShareText = wemove.utilities.decodeHTML((`{% filter ak_text:"share_step_abtest_s2_question" %}TODO: Question text{% endfilter %}|escapeall }}`);
+      {% else %}
+        window.blueskyShareText = wemove.utilities.decodeHTML((`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
+      {% endif %}
+    {% else %}
+    window.blueskyShareText = wemove.utilities.decodeHTML((`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
+    {% endif %}
   });
 </script>
 
