@@ -1,6 +1,6 @@
 <a
   class="mb-4 transition-all text-center bg-whatsapp !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:bg-whatsapp-hv"
-  href="/thanks/{{ pageName }}?share=whatsapp&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}"
+  href="/thanks/{{ pageName }}?share=whatsapp&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.variation %}&variation={{ args.variation }}{% endif %}"
   target="_blank">
   <span aria-hidden="true" class="h-6 w-6">
     {% include "./icon-whatsapp.html" %}

@@ -1,6 +1,6 @@
 <a
   class="mb-4 transition-all text-center bg-facebook !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:bg-facebook-hv"
-  href="/share/link?type=fb&page_name={{ pageName }}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}"
+  href="/share/link?type=fb&page_name={{ pageName }}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.variation %}&variation={{ args.variation }}{% endif %}"
   target="_blank">
   <span aria-hidden="true" class="h-6 w-6">
     {% include "./icon-facebook.html" %}
