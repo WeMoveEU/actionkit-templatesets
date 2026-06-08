@@ -1,17 +1,22 @@
 <script>
   document.addEventListener('wm-scriptsLoaded', () => {
+    {# Share step AB test S2 #}
+    {# Description: Only for whatsapp, based on a custom field we load an specific share text and image for wa #}
+    {# AB test page: https://action.wemove.eu/admin/lab/dash/37 #}
+    {# Example: https://action.wemove.eu/thanks/2026-06-dont-send-our-data-to-the-US-petition-EN_copy/?variation=141&share=1 #}
+    {# Variations: 141, 142 and 143 #}
     {% if tests and tests.37 %}
       {% if page.custom_fields.share_step_abtest_s2 == "action" %}
-        window.blueskyShareText = wemove.utilities.decodeHTML((`{% filter ak_text:"share_step_abtest_s2_action" %}TODO: Action text{% endfilter %}|escapeall }}`);
-      {% if page.custom_fields.share_step_abtest_s2 == "concern" %}
-        window.blueskyShareText = wemove.utilities.decodeHTML((`{% filter ak_text:"share_step_abtest_s2_concern" %}TODO: Concern text{% endfilter %}|escapeall }}`);
-      {% if page.custom_fields.share_step_abtest_s2 == "question" %}
-        window.blueskyShareText = wemove.utilities.decodeHTML((`{% filter ak_text:"share_step_abtest_s2_question" %}TODO: Question text{% endfilter %}|escapeall }}`);
+        window.blueskyShareText = wemove.utilities.decodeHTML((`{% filter ak_text:"share_step_abtest_s2_action"|escapeall %}TODO: Action text{% endfilter %}`);
+      {% elif page.custom_fields.share_step_abtest_s2 == "concern" %}
+        window.blueskyShareText = wemove.utilities.decodeHTML((`{% filter ak_text:"share_step_abtest_s2_concern"|escapeall %}TODO: Concern text{% endfilter %}`);
+      {% elif page.custom_fields.share_step_abtest_s2 == "question" %}
+        window.blueskyShareText = wemove.utilities.decodeHTML((`{% filter ak_text:"share_step_abtest_s2_question"|escapeall %}TODO: Question text{% endfilter %}`);
       {% else %}
         window.blueskyShareText = wemove.utilities.decodeHTML((`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
       {% endif %}
     {% else %}
-    window.blueskyShareText = wemove.utilities.decodeHTML((`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
+      window.blueskyShareText = wemove.utilities.decodeHTML((`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
     {% endif %}
   });
 </script>
