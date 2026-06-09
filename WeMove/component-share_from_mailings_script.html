@@ -17,11 +17,11 @@
 
     {% if tests and tests.37 %}
       {% if page.custom_fields.share_step_abtest_s2 == "action" %}
-        const title = decodeHTML(`{% filter ak_text:"share_step_abtest_s2_action"|escapeall %}TODO: Action text{% endfilter %}`);
+        const title = decodeHTML(`{% filter ak_text:"share_step_abtest_s2_action"|escapeall %}I just signed a petition to stop the EU handing our fingerprints and facial images to the US. Under a new deal, European police databases would be opened up to Trump's government, in exchange for keeping visa-free travel. Join me to stop this now:{% endfilter %}`);
       {% elif page.custom_fields.share_step_abtest_s2 == "concern" %}
-        const title = decodeHTML(`{% filter ak_text:"share_step_abtest_s2_concern"|escapeall %}TODO: Concern text{% endfilter %}`);
+        const title = decodeHTML(`{% filter ak_text:"share_step_abtest_s2_concern"|escapeall %}I recently saw that the EU is quietly making a deal with the US that could see our fingerprints and facial images end up in Trump's hands. This worried me a lot and hardly anyone's talking about it. But the pressure is growing on our leaders to stand up to US blackmail. I just signed, will you?{% endfilter %}`);
       {% elif page.custom_fields.share_step_abtest_s2 == "question" %}
-        const title = decodeHTML(`{% filter ak_text:"share_step_abtest_s2_question"|escapeall %}TODO: Question text{% endfilter %}`);
+        const title = decodeHTML(`{% filter ak_text:"share_step_abtest_s2_question"|escapeall %}Did you know the EU is about to hand our fingerprints and facial images to Trump. It's hard to believe but the EU is quietly making a deal with the US that could do exactly that, and almost no one knows. The pressure's growing on our leaders to stand up to US blackmail. Sign and share, that's how we make this deal impossible to ignore:{% endfilter %}`);
       {% else %}
         const title = decodeHTML(`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
       {% endif %}
