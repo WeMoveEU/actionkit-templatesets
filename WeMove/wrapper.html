@@ -28,9 +28,9 @@
 
     {% block share_metatags %}
       {% if form.id %}
-        {% store as share_desc %}{% block description %}{{ page.followup.share_description_value }}{% endblock %}{% endstore %}
-        {% store as ogdesc_hack %}{% filter ak_text:"metaOg_desc" %}Share the petition and you'll help multiply the impact of this campaign:{% endfilter %} {{ page.title }}{% endstore %}
-        <meta name="description" content="{{ share_desc }}" />
+        {% store as followup_share_desc %}{% block description %}{{ page.followup.share_description_value }}{% endblock %}{% endstore %}
+        {% store as share_desc %}{% filter ak_text:"metaOg_desc" %}Share the petition and you'll help multiply the impact of this campaign:{% endfilter %} {{ page.title }}{% endstore %}
+        <meta name="description" content="{{ followup_share_desc }}" />
         <meta property="og:description" content="{{ share_desc }}" />
       {% endif %}
 
