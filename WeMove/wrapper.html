@@ -30,7 +30,7 @@
       {% if form.id %}
         {% store as share_desc %}{% block description %}{{ page.followup.share_description_value }}{% endblock %}{% endstore %}
         <meta name="description" content="{{ share_desc }}" />
-        <meta property="og:description" content="{{ share_desc }}" />
+        <meta property="og:description" content="{% filter ak_text:"metaOg_desc" %}Share the petition and you'll help multiply the impact of this campaign:{% endfilter %} {{ page.title }}" />
       {% endif %}
 
       <meta property="og:site_name" content="{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}" />
