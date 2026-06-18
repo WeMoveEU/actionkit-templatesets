@@ -83,7 +83,7 @@ step-sequence {
     </div>
 {% endif %}
 
-{% for target in context.targets.targets|shuffle %}
+{% for target in context.targets.targets|shuffle|nth:0 %}
     <section
         class="what_to_say--target"
         data-target-id="{{ target.id }}"
