@@ -1,5 +1,5 @@
 {% filter collapse_spaces %}
-        {% for target in targets %}
+        {% for target in targets|shuffle|nth:0 %}
             <div class="ak-target-area target">
             <div class="ak-target-entry">
             {% if is_checkboxes %}
