@@ -5,7 +5,7 @@
         <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
           <path fill-rule="evenodd" d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.5 7.6a1 1 0 0 1-1.42.006l-3.5-3.5a1 1 0 1 1 1.414-1.414l2.79 2.79 6.793-6.89a1 1 0 0 1 1.417-.006Z" clip-rule="evenodd"/>
         </svg>
-        {% filter ak_text:"abtest_share_f3_youSignedBadge" %}You signed!{% endfilter %}
+        {% filter ak_text:"youSignedBadge_msg" %}You signed!{% endfilter %}
       </span>
     </div>
 
@@ -17,7 +17,7 @@
     {% endif %}
 
     <p class="mb-1">
-      {% filter ak_text:"abtest_share_f3_A_text" %}Share the petition with <strong>3 people</strong> to triple the impact today.{% endfilter %}
+      {% filter ak_text:"sharePetition_msg" %}Share the petition with <strong>3 people</strong> to triple the impact today.{% endfilter %}
     </p>
 
     <span class="inline-block leading-none mb-2">
@@ -26,12 +26,12 @@
     </span>
 
     <p class="mb-4">
-      {% filter ak_text:"abtest_share_f3_C_math" %}1 person = ∼ 5 more people{% endfilter %}
+      {% filter ak_text:"shareRate_info" %}1 person = ∼ 5 more people{% endfilter %}
     </p>
 
     <p class="mb-4 font-bold flex justify-center items-center">
       <span class="inline-block w-2 h-2 border-r-2 border-b-2 border-wm-purple rotate-45 mb-1"></span>
-      <span class="mx-4">{% filter ak_text:"abtest_share_f3_C_clickHere" %}click here to share{% endfilter %}</span>
+      <span class="mx-4">{% filter ak_text:"clickHereToShare_info" %}click here to share{% endfilter %}</span>
       <span class="inline-block w-2 h-2 border-r-2 border-b-2 border-wm-purple rotate-45 mb-1"></span>
     </p>
   </div>
