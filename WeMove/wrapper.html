@@ -36,9 +36,21 @@
       <meta property="og:site_name" content="{% filter ak_text:"org_name" %}{% client_name %}{% endfilter %}" />
       <meta property="og:type" content="article" />
 
+      {# Share step AB test S3 #}
+      {# Description: Only for whatsapp, image vs video #}
+      {# AB test page: https://action.wemove.eu/admin/lab/dash/38 #}
+      {# Variations: 144 and 145 #}
+      {# TEST IN DEVELOPMENT!!! #}
+
+      {% if tests and tests.38 and page.custom_fields.share_step_ab_test_s3 == "video" %}
+        <meta property="og:video" content="{{ page.custom_fields.instagram_share_link }}" />
+        <meta property="og:video:secure_url" content="{{ page.custom_fields.instagram_share_link }}" />
+      {% else %}
+        {{ page.followup.share_image_tag }}
+      {% endif %}
+
       <meta name="twitter:card" content="summary_large_image" />
       {{ page.followup.share_title_tag }}
-      {{ page.followup.share_image_tag }}
       {{ page.followup.share_url_tag }}
     {% endblock %}
 
