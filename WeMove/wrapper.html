@@ -42,7 +42,7 @@
       {# Variations: 144 and 145 #}
       {# TEST IN DEVELOPMENT!!! #}
 
-      {% if tests and tests.38 and page.custom_fields.share_step_ab_test_s3 == "video" %}
+      {% if page.custom_fields.share_step_ab_test_s3 == "video" %}
         <meta property="og:video" content="{{ page.custom_fields.instagram_share_link }}" />
         <meta property="og:video:secure_url" content="{{ page.custom_fields.instagram_share_link }}" />
       {% else %}
