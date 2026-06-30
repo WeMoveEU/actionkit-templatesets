@@ -21,9 +21,7 @@
 {% if args.done %}
   {# --- VIEW MODE "DONE" #}
   <div class="font-bold">
-    {% if page.custom_fields.final_message %}
-      {% include_tmpl page.custom_fields.final_message %}
-    {% elif form.thank_you_text %}
+    {% if form.thank_you_text %}
       {% include_tmpl form.thank_you_text %}
     {% else %}
       {% filter ak_text:"final_message" %}
