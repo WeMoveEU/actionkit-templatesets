@@ -44,10 +44,12 @@
       {% if tests and tests.38 and page.custom_fields.share_step_ab_test_s3 == "video" %}
         <meta property="og:video" content="{{ page.custom_fields.instagram_share_link }}" />
         <meta property="og:video:secure_url" content="{{ page.custom_fields.instagram_share_link }}" />
+        <meta property="og:image" content="{{ page.custom_fields.feature_image }}" />
+      {% else %}
+        {{ page.followup.share_image_tag }}
       {% endif %}
 
       <meta name="twitter:card" content="summary_large_image" />
-      {{ page.followup.share_image_tag }}
       {{ page.followup.share_title_tag }}
       {{ page.followup.share_url_tag }}
     {% endblock %}
