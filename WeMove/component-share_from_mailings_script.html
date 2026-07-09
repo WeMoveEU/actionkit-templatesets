@@ -19,9 +19,9 @@
       {% if page.custom_fields.share_step_abtest_s2 == "action" %}
         const title = decodeHTML(`{% filter ak_text:"share_step_abtest_s2_action"|escapeall %}I just signed a petition to protect workers from extreme heat. Right now, millions of workers across Europe have zero legal protection, and this won't be the last heatwave. Join me to keep workers safe: {% endfilter %}`);
       {% elif page.custom_fields.share_step_abtest_s2 == "concern" %}
-        const title = decodeHTML(`{% filter ak_text:"share_step_abtest_s2_concern"|escapeall %}I just learned that Volkswagen is reportedly negotiating a deal to produce military equipment for Israel. It worries me deeply, and hardly anyone is talking about it. But pressure on VW is growing and the deal isn't signed yet. I've added my name to this appeal, will you join me?{% endfilter %}`);
+        const title = decodeHTML(`{% filter ak_text:"share_step_abtest_s2_concern"|escapeall %}I just learned there's no law saying when it's too hot to work. Every time a heatwave hits, millions of us risk injury, illness or even death. This worried me a lot and hardly anyone's talking about it. But pressure is growing, some countries are already introducing maximum work temperatures. I just signed, will you?{% endfilter %}`);
       {% elif page.custom_fields.share_step_abtest_s2 == "question" %}
-        const title = decodeHTML(`{% filter ak_text:"share_step_abtest_s2_question"|escapeall %}Did you know Volkswagen may be about to produce military equipment for Israel? It's hard to believe, but VW is reportedly negotiating a deal that could do exactly that. The deal isn't signed yet, and pressure to keep VW out of the war is building. Sign and share now so this can't be ignored{% endfilter %}`);
+        const title = decodeHTML(`{% filter ak_text:"share_step_abtest_s2_question"|escapeall %}Did you know there's no law saying when it's too hot to work? It's hard to believe, but millions of workers across Europe have zero legal protection from extreme heat, and heatwaves are only getting worse. The EU could change this with an upcoming law, but nothing is set in stone yet. Sign and share, that's how we make this impossible to ignore: {% endfilter %}`);
       {% else %}
         const title = decodeHTML(`{{ page.followup.twitter_message|default:page.title|escapeall }}`);
       {% endif %}
