@@ -8,7 +8,7 @@
     {# TEST IN DEVELOPMENT!!! #}
     {% if tests and tests.39  and page.custom_fields.share_step_abtest_f4 == "video" %}
       <div>
-        <h1 class="text-3xl">{% filter ak_text:"shareVideoToSpreadTheWord_title" %}Share this video to spread the word?{% endfilter %}</h1>
+        <h1 class="text-3xl">{% filter ak_text:"sharePetitionToSpreadTheWord_title" %}Share this petition to spread the word?{% endfilter %}</h1>
 
         {% store as share_video_url %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "share_video_url" as field_name %}{% endstore %}
         {% if share_video_url %}
@@ -32,7 +32,7 @@
         </div>
 
         <p class="mb-1">
-          {% filter ak_text:"shareVideo_msg" %}Share the video with <strong>3 people</strong> to triple the impact today.{% endfilter %}
+          {% filter ak_text:"sharePetition_msg" %}Share the petition with <strong>3 people</strong> to triple the impact today.{% endfilter %}
         </p>
 
         <span class="inline-block leading-none mb-2">
