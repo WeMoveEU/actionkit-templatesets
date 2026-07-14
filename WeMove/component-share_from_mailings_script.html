@@ -31,7 +31,16 @@
       return "https://bsky.app/intent/compose";
     };
 
-    const shareTextWithURL = encodeURIComponent(`${title} ${URLToShare}&source=${socialType}`)
+    {# Share step AB test S3 #}
+    {# Description: Only for whatsapp, image vs video #}
+    {# AB test page: https://action.wemove.eu/admin/lab/dash/38 #}
+    {# Variations: 144 and 145 #}
+    {# TEST IN DEVELOPMENT!!! #}
+    {% if tests and tests.38 and page.custom_fields.share_step_ab_test_s3 == "video" %}
+      const shareTextWithURL = encodeURIComponent(`{{ page.custom_fields.share_video_url }} ${title} ${URLToShare}&source=${socialType}`);
+    {% else %}
+      const shareTextWithURL = encodeURIComponent(`${title} ${URLToShare}&source=${socialType}`);
+    {% endif %}
 
     window.location.href = `${socialURL()}?text=${shareTextWithURL}`;
   })();
