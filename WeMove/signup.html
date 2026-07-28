@@ -5,7 +5,7 @@
 {% if page.custom_fields.consent_version %}
   {% include "./consent.html" %}
 {% elif page.custom_fields.sharing_step %}
-  {% if args.akid and args.akid|first = 's' %}
+  {% if args.akid and args.akid|first == 's' %}
     {% if "//" in page.custom_fields.sharing_step %}
       {% store as link %}{{ page.custom_fields.sharing_step }}{% endstore %}
       {% remember link as target %}
