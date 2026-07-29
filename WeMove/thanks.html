@@ -39,42 +39,9 @@
   </div>
 
 {% elif args.share or share_mode %}
-  <form name="taf" method="POST" action="/update_action/" accept-charset="utf-8" class="ak-thanks ak-styled-fields">
-    <input type="hidden" name="page" value="{{ page.name }}" />
-
-    {% if page.SUPPRESS_SHARING or args.share == "0" %}
-
-	    {# --- VIEW MODE "AFTER-ACTION, NO SHARING" #}
-      <div class="flex gap-4 items-center mb-4">
-        <img src="/media/modern/stance-supportive.svg" height="34" width="34" alt="Miscelanous" aria-hidden="true" />
-
-        <h2 class="text-wm-purple m-0">
-          {% filter ak_text:"noshare_thanks_banner" %}Thanks!{% endfilter %}
-        </h2>
-      </div>
-
-      {% include_tmpl form.thank_you_text %}
-
-      {% if not page.type == 'Unsubscribe' %}
-        <a href="{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default">
-          {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
-        </a>
-      {% endif %}
-
-    {% else %}
-
-      {# --- VIEW MODE "SHARING" #}
-      {% if user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
-        {% remember 1 as is_germanic %}
-      {% endif %}
-
-      {% if user and user.subscription_status == 'never' and is_germanic and not args.germanic %}
-        {% include "./partial-share_germanic.html" %}
-      {% else %}
-        {% include "./partial-share_standard.html" %}
-      {% endif %}
-    {% endif %}
-  </form>
+  {# --- VIEW MODE "AFTER-ACTION" reached explicitly, e.g. ?share=whatsapp, #}
+  {#     signup.html's share_mode, or coming back from the consent page.     #}
+  {% include "./partial-thanks_after_action.html" %}
 {% else %}
 
   <!--
@@ -84,19 +51,36 @@
       /share/link?type=tw
   -->
 
-	{# --- VIEW UNCERTAIN; DETERMINE NEXT STEP #}
+	{# --- VIEW UNCERTAIN; SHOW THE SHARE STEP, OR DETERMINE NEXT STEP #}
+
+	{% comment %}
+		The supporter has just acted and we want them to see the thank-you and share
+		buttons rather than being bounced onward, so this branch renders
+		partial-thanks_after_action.html in place. The next step is offered as a link
+		(component-next_step_link.html, which reads page.custom_fields.next_step
+		itself) instead of a redirect.
+
+		Two cases still redirect, and neither is about sharing:
+		  - consent is due, which is a separate page we have to send them to;
+		  - the campaigner opted out of the share step via disable_sharing, or an
+		    explicit action.custom_fields.continue URL was set.
+
+		So `destination` below is only consumed by those two cases and by
+		consent_link — for the ordinary sharing case it is where the consent page
+		should return the supporter to, which is this page's own share view.
+	{% endcomment %}
 
 	{% store as destination %}{% filter strip %}
 		{% if action.custom_fields.continue %}
-			{{ action.custom_fields.continue|safe }}{% if "?" not in action.custom_fields.redirect %}?{% else %}&{% endif %}
-		{% elif page.custom_fields.next_step %}
+			{{ action.custom_fields.continue|safe }}{% if "?" not in action.custom_fields.continue %}?{% else %}&{% endif %}
+		{% elif page.custom_fields.disable_sharing and page.custom_fields.next_step %}
 			{% if "//" in page.custom_fields.next_step %}
 				{% if "{" in page.custom_fields.next_step %}{% include_tmpl page.custom_fields.next_step %}{% else %}{{ page.custom_fields.next_step }}{% endif %}{% if "?" not in page.custom_fields.next_step %}?{% else %}&{% endif %}
 			{% else %}
 				/act/{{ page.custom_fields.next_step }}?
 			{% endif %}
 		{% else %}
-			/thanks/{{ page.custom_fields.daisy_chain_action|default:page.name }}?{% if page.custom_fields.disable_sharing %}done=1{% else %}share=1{% endif %}&
+			/thanks/{{ page.name }}?{% if page.custom_fields.disable_sharing %}done=1{% else %}share=1{% endif %}&
 		{% endif %}
 	{% endfilter %}{% endstore %}
 
@@ -176,14 +160,22 @@
   {% endif %}
 
   {% if not skip_consent %}
+    {# Consent is due, and that lives on its own page. It comes back to `next_step`. #}
     <script>
       window.location = '{{ consent_link }}';
     </script>
-  {% else %}
-    <a href="{{ next_step }}">Please continue to the next step.</a>
+  {% elif action.custom_fields.continue or page.custom_fields.disable_sharing %}
+    {# No share step to show: an explicit continue URL, or the campaigner turned #}
+    {# sharing off. Go straight on, as before.                                   #}
+    <a href="{{ next_step }}">
+      {% filter ak_text:"signup_continueToNextStep_link" %}Please continue to the next step.{% endfilter %}
+    </a>
     <script>
       window.location = '{{ next_step }}&consent={{ skip_consent }}';
     </script>
+  {% else %}
+    {# The ordinary case: thank them and let them share, with the next step as a link. #}
+    {% include "./partial-thanks_after_action.html" %}
   {% endif %}
 
 {% endif %}

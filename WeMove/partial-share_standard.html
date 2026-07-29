@@ -116,15 +116,8 @@
     {% include "./component-share_button_taf.html" %}
     {% include "./component-share_button_copy_url.html" %}
   </div>
-</div>
 
-<div class="my-8 text-center">
-  <a
-    data-wm-skip-button
-    href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&{% endif %}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}"
-    class="py-3 px-6 border-2 rounded-2xl inline-block !text-wm-yellow text-base font-gilroy uppercase font-bold bg-gray-50 hover:!no-underline hover:border-wm-yellow hover:shadow transition-all">
-    {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
-  </a>
+  {% include "./component-next_step_link.html" %}
 </section>
 
 {% include "./component-related_campaigns.html" %}
