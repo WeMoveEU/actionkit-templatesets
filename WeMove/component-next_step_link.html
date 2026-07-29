@@ -1,0 +1,23 @@
+{% comment %}
+  The supporter's way out of the current step.
+
+  Since the share step is now rendered in place rather than redirected past
+  (see thanks.html), this link is the only thing carrying a supporter forward
+  through a multi-step chain — so it is deliberately NOT gated on
+  hide_skip_step_button.
+
+  Next step resolution, in priority order:
+    1. page.custom_fields.next_step — a page short name, or an absolute URL
+       (which may already carry its own query string)
+    2. args.next_step — same two shapes; kept for signup.html's sharing_step
+       path (signup.html:34-40) and the consent hop
+    3. neither — end of the chain, so the "done" thank-you view
+{% endcomment %}
+<div class="my-8 text-center">
+  <a
+    data-wm-skip-button
+    href="{% if page.custom_fields.next_step %}{% if '//' in page.custom_fields.next_step %}{{ page.custom_fields.next_step }}{% if '?' not in page.custom_fields.next_step %}?{% else %}&amp;{% endif %}{% else %}/act/{{ page.custom_fields.next_step }}?{% endif %}{% elif args.next_step %}{% if '//' in args.next_step %}{{ args.next_step }}{% if '?' not in args.next_step %}?{% else %}&amp;{% endif %}{% else %}/act/{{ args.next_step }}?{% endif %}{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}{% if args.embed %}&amp;embed={{ args.embed }}{% endif %}{% if args.css %}&amp;css={{ args.css }}{% endif %}"
+    class="py-3 px-6 border-2 rounded-2xl inline-block !text-wm-yellow text-base font-gilroy uppercase font-bold bg-gray-50 hover:!no-underline hover:border-wm-yellow hover:shadow transition-all">
+    {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
+  </a>
+</div>
