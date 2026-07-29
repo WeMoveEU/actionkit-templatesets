@@ -84,4 +84,8 @@
     {% endif %}
 {% endif %}
 
+<div data-wm-phone-error-invalid hidden>
+  {% filter ak_text:"error_phone:invalid" %}Please enter a valid phone number, including your country code (starting with +).{% endfilter %}
+</div>
+
 {% endfilter %}
