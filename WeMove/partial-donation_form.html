@@ -7,19 +7,13 @@
     {% endif %}
 
     <section class="flex justify-center nav-md:justify-end">
+      {% store as donation_form_config %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "donation_form_config" as field_name %}{% endstore %}
       <div
         data-wm-donation-form
         class="w-[384px]"
         data-locale="{{ link_iso }}"
-
-        {% if request.GET.config != "" %}
-          data-config="{{ request.GET.config }}"
-        {% else %}
-          {% store as donation_form_config %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "donation_form_config" as field_name %}{% endstore %}
-          data-config="{{ donation_form_config }}"
-        {% endif %}
-
         data-page="{{ page.name }}"
+        data-config="{{ request.GET.config|default:donation_form_config }}"
         ></div>
       {% if "roboticdogs" in request.get_host %}
         <script async src="https://stage.donations.wemove.eu/embed.js"></script>
