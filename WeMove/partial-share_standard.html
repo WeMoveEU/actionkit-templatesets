@@ -5,7 +5,7 @@
     {# Description: Standard text vs Embedded video vs Both together #}
     {# AB test page: https://action.wemove.eu/admin/lab/dash/39 #}
     {# Variations: 146, 147 and 148 #}
-    {# TEST IN DEVELOPMENT!!! #}
+    {# TEST IN DEVELOPMENT??? #}
     {% if tests and tests.39  and page.custom_fields.share_step_abtest_f4 == "video" %}
       <div>
         <h1 class="text-3xl">{% filter ak_text:"sharePetitionToSpreadTheWord_title" %}Share this petition to spread the word?{% endfilter %}</h1>
@@ -18,47 +18,7 @@
         {% endif %}
       </div>
 
-    {% elif tests and tests.39  and page.custom_fields.share_step_abtest_f4 == "both" %}
-
-      <div>
-        <div class="w-full text-right mr-4 mb-4 mt-0">
-          <span class="inline-flex font-libre-franklin items-center gap-1 rounded-xl bg-green-100 text-base px-2 py-1 font-bold text-green-700 border-[1px] border-green-600">
-            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.5 7.6a1 1 0 0 1-1.42.006l-3.5-3.5a1 1 0 1 1 1.414-1.414l2.79 2.79 6.793-6.89a1 1 0 0 1 1.417-.006Z" clip-rule="evenodd"/>
-            </svg>
-
-            {% filter ak_text:"youSignedBadge_msg" %}You signed!{% endfilter %}
-          </span>
-        </div>
-
-        <p class="mb-1">
-          {% filter ak_text:"sharePetition_msg" %}Share the petition with <strong>3 people</strong> to triple the impact today.{% endfilter %}
-        </p>
-
-        <span class="inline-block leading-none mb-2">
-          <span class="block w-2.5 h-2.5 border-r-2 border-b-2 border-wm-purple rotate-45 -mb-1"></span>
-          <span class="block w-2.5 h-2.5 border-r-2 border-b-2 border-wm-purple rotate-45"></span>
-        </span>
-
-        <p class="mb-4">
-          {% filter ak_text:"shareRate_info" %}1 share = ∼ 20 more people{% endfilter %}
-        </p>
-
-        <p class="mb-4 font-bold flex justify-center items-center">
-          <span class="inline-block w-2 h-2 border-r-2 border-b-2 border-wm-purple rotate-45 mb-1"></span>
-          <span class="mx-4">{% filter ak_text:"clickHereToShare_info" %}click here to share{% endfilter %}</span>
-          <span class="inline-block w-2 h-2 border-r-2 border-b-2 border-wm-purple rotate-45 mb-1"></span>
-        </p>
-
-        {% store as share_video_url %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "share_video_url" as field_name %}{% endstore %}
-        {% if share_video_url %}
-          <div class="mb-4">
-            {% include "./component-featured-video.html" with featured_video=share_video_url %}
-          </div>
-        {% endif %}
-      </div>
-
-    {% else %}
+    {% elif tests and tests.39  and page.custom_fields.share_step_abtest_f4 == "standard" %}
 
       <div>
         <div class="w-full text-right mr-4 mb-4 mt-0">
@@ -97,6 +57,46 @@
           <span class="inline-block w-2 h-2 border-r-2 border-b-2 border-wm-purple rotate-45 mb-1"></span>
         </p>
     </div>
+
+    {% else %}
+
+      <div>
+        <div class="w-full text-right mr-4 mb-4 mt-0">
+          <span class="inline-flex font-libre-franklin items-center gap-1 rounded-xl bg-green-100 text-base px-2 py-1 font-bold text-green-700 border-[1px] border-green-600">
+            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.5 7.6a1 1 0 0 1-1.42.006l-3.5-3.5a1 1 0 1 1 1.414-1.414l2.79 2.79 6.793-6.89a1 1 0 0 1 1.417-.006Z" clip-rule="evenodd"/>
+            </svg>
+
+            {% filter ak_text:"youSignedBadge_msg" %}You signed!{% endfilter %}
+          </span>
+        </div>
+
+        <p class="mb-1">
+          {% filter ak_text:"sharePetition_msg" %}Share the petition with <strong>3 people</strong> to triple the impact today.{% endfilter %}
+        </p>
+
+        <span class="inline-block leading-none mb-2">
+          <span class="block w-2.5 h-2.5 border-r-2 border-b-2 border-wm-purple rotate-45 -mb-1"></span>
+          <span class="block w-2.5 h-2.5 border-r-2 border-b-2 border-wm-purple rotate-45"></span>
+        </span>
+
+        <p class="mb-4">
+          {% filter ak_text:"shareRate_info" %}1 share = ∼ 20 more people{% endfilter %}
+        </p>
+
+        <p class="mb-4 font-bold flex justify-center items-center">
+          <span class="inline-block w-2 h-2 border-r-2 border-b-2 border-wm-purple rotate-45 mb-1"></span>
+          <span class="mx-4">{% filter ak_text:"clickHereToShare_info" %}click here to share{% endfilter %}</span>
+          <span class="inline-block w-2 h-2 border-r-2 border-b-2 border-wm-purple rotate-45 mb-1"></span>
+        </p>
+
+        {% store as share_video_url %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "share_video_url" as field_name %}{% endstore %}
+        {% if share_video_url %}
+          <div class="mb-4">
+            {% include "./component-featured-video.html" with featured_video=share_video_url %}
+          </div>
+        {% endif %}
+      </div>
 
     {% endif %}
 
