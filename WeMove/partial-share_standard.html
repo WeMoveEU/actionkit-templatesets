@@ -58,6 +58,10 @@
         </p>
     </div>
 
+    {% elif page.custom_fields.share_step_custom_ask %}
+
+      {% include_tmpl page.custom_fields.share_step_custom_ask %}
+
     {% else %}
 
       <div>
@@ -118,6 +122,7 @@
   </div>
 </div>
 
+{% if not page.custom_fields.hide_skip_step_button %}
 <div class="my-8 text-center">
   <a
     data-wm-skip-button
@@ -125,6 +130,8 @@
     class="py-3 px-6 border-2 rounded-2xl inline-block !text-wm-yellow text-base font-gilroy uppercase font-bold bg-gray-50 hover:!no-underline hover:border-wm-yellow hover:shadow transition-all">
     {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
   </a>
+</div>
+{% endif %}
 </section>
 
 {% include "./component-related_campaigns.html" %}
