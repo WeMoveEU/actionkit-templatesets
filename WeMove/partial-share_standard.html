@@ -126,7 +126,7 @@
 <div class="my-8 text-center">
   <a
     data-wm-skip-button
-    href="{% if args.next_step %}/act/{{ args.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&{% endif %}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}"
+    href="{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}?{% else %}/thanks/{{ page.name }}?done=1&{% endif %}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}"
     class="py-3 px-6 border-2 rounded-2xl inline-block !text-wm-yellow text-base font-gilroy uppercase font-bold bg-gray-50 hover:!no-underline hover:border-wm-yellow hover:shadow transition-all">
     {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
   </a>
