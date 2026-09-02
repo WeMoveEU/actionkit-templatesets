@@ -108,6 +108,14 @@
     {% if page.lang.is_rtl %}ak-rtl{% endif %}
     {% block body_extra_classes %}{% endblock %}">
 
+    {% if page.custom_fields.campaign == "24414" %}
+    <iframe
+      title="Google EU revenue counter, People vs Big Tech"
+      class="w-full lg:h-[116px] md:h-[90px] h-[190px]"
+      scrolling="no"
+      src="https://static.wemove.eu/action-kit/html/google-counter.html"></iframe>
+    {% endif %}
+
     <script justification="AK js">actionkit.forms.initPage();</script>
 
   {% if not isEmbbeded %}
