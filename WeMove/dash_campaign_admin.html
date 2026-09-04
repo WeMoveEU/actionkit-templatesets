@@ -162,9 +162,24 @@ Inserting as first step:
   }
 
 	a.share-toggle {
-    border-color: #ccc;
-    color: #666;
-    font-size: 90%;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0 5px;
+  }
+
+	a.share-toggle.is-on {
+    background: #27BBDD;
+    color: #fff;
+  }
+
+	a.share-toggle.is-off {
+    border-color: #bbb;
+    color: #bbb;
+  }
+
+	a.share-toggle.is-busy {
+    opacity: 0.4;
+    pointer-events: none;
   }
 
 	.form-row-CheckboxInput .form-control label {
@@ -896,69 +911,85 @@ Inserting as first step:
 
 	async function displayPages(campaign) {
 		const allPages = await fetchAllPages("page/", { field__name: 'campaign', field__value: campaign.id });
-		{
-			var lang_journeys = {};
-			allPages.forEach(function(page) {
-				if (page.id != campaign.id) {
-					const language = page.language || "/rest/v1/language/100/";
-					if (!lang_journeys[language]) {
-						lang_journeys[language] = [];
-					}
-					lang_journeys[language].push(page);
-				}
-			});
-			var langs = Object.keys(lang_journeys);
-			if (! langs.length) {
-				$('#pages_output table').html('<tr><td>No action pages yet</td></tr>');
-			} else {
-				sortJourney(lang_journeys);
-				$('#pages_output table tr').remove();
-				langs.forEach(function(lang) {
-					var table_row = $(
-						`<tr><th scope="row">${languages[lang].name}</th>`
-						+ "<td><ul></ul></td>"
-						+ "</tr>"
-					);
-					var lang_journey_list = table_row.find('td');
-					lang_journeys[lang].forEach(function(journey) {
-						lang_journey_list.append(
-							'<li class="journey">' +
-							journey.map(
-								(p) => `<span>${pageLink(p)}</span>`
-							).join(' <span class="next-arrow">➡</span> ')
-							+ '</li>'
-						)
-					});
-					$('#pages_output table').append( table_row );
-				});
+		renderJourneys(campaign, allPages);
+		$('#page_form').data('campaign', campaign);
+		$('#pages_output').removeClass('is-loading');
+		$('#page_form input[name=action_type]').on('click', function() {
+			$('#page_form input[name=notes]').val(campaign.name + "-" + this.value);
+		});
+		$('#pages_output table').on('click', 'a.share-toggle', function(evt) {
+			evt.preventDefault();
+			var toggle = this;
+			if ( toggle.dataset.busy ) {
+				return;
 			}
-			window.journeys = lang_journeys;
-			$('#page_form').data('campaign', campaign);
-			$('#pages_output').removeClass('is-loading');
-			$('#page_form input[name=action_type]').on('click', function() {
-				$('#page_form input[name=notes]').val(campaign.name + "-" + this.value);
-			});
-			$('#pages_output table').on('click', 'a.share-toggle', function(evt) {
-				evt.preventDefault();
-				var toggle = this;
-				if ( toggle.dataset.busy ) {
-					return;
+			toggle.dataset.busy = 1;
+			toggle.classList.add('is-busy');
+			var disable_sharing = toggle.dataset.disableSharing;
+			api('PATCH', `${toggle.dataset.pageType}page/${toggle.dataset.pageId}`, {
+				fields: { disable_sharing: disable_sharing }
+			}).done(function() {
+				var page = allPages.find((p) => p.id == toggle.dataset.pageId);
+				if ( page ) {
+					page.fields.disable_sharing = disable_sharing;
 				}
-				toggle.dataset.busy = 1;
-				api('PATCH', `${toggle.dataset.pageType}page/${toggle.dataset.pageId}`, {
-					fields: { disable_sharing: toggle.dataset.disableSharing }
-				}).done(
-					() => reload_dashboard(campaign.name)
-				).fail(
-					() => delete toggle.dataset.busy
-				);
+				// The share step appears and disappears from the journey with the field,
+				// so redraw the rows rather than just restyling the button.
+				renderJourneys(campaign, allPages);
+			}).fail(function() {
+				delete toggle.dataset.busy;
+				toggle.classList.remove('is-busy');
 			});
-			$('#create_pages').on('click', createPages);
-			$('#add_step').on('click', function () {
-				$('#add_step').hide();
-				$('#page_form').show();
+		});
+		$('#create_pages').on('click', createPages);
+		$('#add_step').on('click', function () {
+			$('#add_step').hide();
+			$('#page_form').show();
+		});
+	}
+
+	// Draws the journey rows. Re-runnable: sortJourney links the page objects to one
+	// another, so last run's links have to come off before it runs again.
+	function renderJourneys(campaign, allPages) {
+		var lang_journeys = {};
+		allPages.forEach(function(page) {
+			delete page.next_step;
+			delete page.previous_step;
+			delete page.share_toggle;
+			if (page.id != campaign.id) {
+				const language = page.language || "/rest/v1/language/100/";
+				if (!lang_journeys[language]) {
+					lang_journeys[language] = [];
+				}
+				lang_journeys[language].push(page);
+			}
+		});
+		var langs = Object.keys(lang_journeys);
+		if (! langs.length) {
+			$('#pages_output table').html('<tr><td>No action pages yet</td></tr>');
+		} else {
+			sortJourney(lang_journeys);
+			$('#pages_output table tr').remove();
+			langs.forEach(function(lang) {
+				var table_row = $(
+					`<tr><th scope="row">${languages[lang].name}</th>`
+					+ "<td><ul></ul></td>"
+					+ "</tr>"
+				);
+				var lang_journey_list = table_row.find('td');
+				lang_journeys[lang].forEach(function(journey) {
+					lang_journey_list.append(
+						'<li class="journey">' +
+						journey.map(
+							(p) => `<span>${pageLink(p)}</span>`
+						).join(' <span class="next-arrow">➡</span> ')
+						+ '</li>'
+					)
+				});
+				$('#pages_output table').append( table_row );
 			});
 		}
+		window.journeys = lang_journeys;
 	}
 
 	function sortJourney(pages) {
@@ -1098,9 +1129,9 @@ Inserting as first step:
 		}
 		var off = ( page.share_toggle == 'off' );
 		var title = ( off ? 'Turn on' : 'Turn off' ) + ` the share step after ${page.name}`;
-		return ` <a class="dash-icon-btn share-toggle" href="#" title="${title}"`
+		return ` <a class="dash-icon-btn share-toggle ${off ? 'is-off' : 'is-on'}" href="#" title="${title}"`
 			+ ` data-page-id="${page.id}" data-page-type="${page_type_for_action_type(page.type)}"`
-			+ ` data-disable-sharing="${off ? '' : 'Y'}">${off ? '☐' : '☑'} share</a>`;
+			+ ` data-disable-sharing="${off ? '' : 'Y'}">⤴</a>`;
 	}
 
   const getSortedMailingsFromAPI = async (campaignId) => {
