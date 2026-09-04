@@ -1100,7 +1100,7 @@ Inserting as first step:
 		var title = ( off ? 'Turn on' : 'Turn off' ) + ` the share step after ${page.name}`;
 		return ` <a class="dash-icon-btn share-toggle" href="#" title="${title}"`
 			+ ` data-page-id="${page.id}" data-page-type="${page_type_for_action_type(page.type)}"`
-			+ ` data-disable-sharing="${off ? '' : '1'}">${off ? '☐' : '☑'} share</a>`;
+			+ ` data-disable-sharing="${off ? '' : 'Y'}">${off ? '☐' : '☑'} share</a>`;
 	}
 
   const getSortedMailingsFromAPI = async (campaignId) => {
