@@ -44,7 +44,8 @@ Pages are linked into ordered sequences per language via custom fields:
 - followup.url              — AK's after-action redirect; /thanks/ → share or thanks step
 - fields.redir              — external redirect (terminates journey offsite)
 - fields.sharing_step       — marks a page as a sharing-type step
-- fields.disable_sharing    — skips share step, goes straight to thanks
+- fields.disable_sharing    — no share step: thanks.html sends the supporter
+                              straight on to next_step (toggled from the journey row)
 
 sortJourney() reconstructs linked lists by:
   1. Following followup.url → a /thanks/ redirect becomes a virtual "share"
@@ -158,6 +159,12 @@ Inserting as first step:
     border: 1px solid #27BBDD;
     border-radius: 99px;
     padding: 0 4px;
+  }
+
+	a.share-toggle {
+    border-color: #ccc;
+    color: #666;
+    font-size: 90%;
   }
 
 	.form-row-CheckboxInput .form-control label {
@@ -931,6 +938,21 @@ Inserting as first step:
 			$('#page_form input[name=action_type]').on('click', function() {
 				$('#page_form input[name=notes]').val(campaign.name + "-" + this.value);
 			});
+			$('#pages_output table').on('click', 'a.share-toggle', function(evt) {
+				evt.preventDefault();
+				var toggle = this;
+				if ( toggle.dataset.busy ) {
+					return;
+				}
+				toggle.dataset.busy = 1;
+				api('PATCH', `${toggle.dataset.pageType}page/${toggle.dataset.pageId}`, {
+					fields: { disable_sharing: toggle.dataset.disableSharing }
+				}).done(
+					() => reload_dashboard(campaign.name)
+				).fail(
+					() => delete toggle.dataset.busy
+				);
+			});
 			$('#create_pages').on('click', createPages);
 			$('#add_step').on('click', function () {
 				$('#add_step').hide();
@@ -956,12 +978,18 @@ Inserting as first step:
 
 					var after_action = page.followup ? page.followup.url : '';
 					var match = after_action.match(/thanks/);
-					if ( match && match[0] ) {
+					// A sharing step is the share ask, so it doesn't get one of its own.
+					if ( match && match[0] && ! sharing_step ) {
 						// Acting on this page lands the supporter on its thanks page, which is
 						// where the share ask lives. That is a step of its own, and it comes
 						// before whatever the page chains on to: the supporter only reaches
 						// next_step from the link on the share view.
-						var action_type = ( after_action.endsWith("?done=1") || page.fields.disable_sharing ) ? "thanks" : "share";
+						// The share step is switched off per page with the disable_sharing custom
+						// field. A followup that already points at ?done=1 is off for a reason the
+						// dashboard toggle can't change, so don't offer the toggle there.
+						const sharing_off_by_url = after_action.endsWith("?done=1");
+						var action_type = ( sharing_off_by_url || page.fields.disable_sharing ) ? "thanks" : "share";
+						page.share_toggle = sharing_off_by_url ? null : ( page.fields.disable_sharing ? 'off' : 'on' );
 						const daisy_action = page.fields.daisy_chain_action;
 						const daisy_page = daisy_action ? pages[lang].find( (p) => p.name == daisy_action ) : null;
 						const daisy_thanks = daisy_page ? daisy_page.name : page.name;
@@ -969,17 +997,21 @@ Inserting as first step:
 						// The thanks page rendered is the daisy chain page's, so its after-action
 						// tab is what a campaigner edits to change the share text.
 						const followup_href = `/admin/core/pagefollowup/add_or_change/?page=${daisy_id}`;
-						// A donation is the end of the road: there is nothing left to ask for, so
-						// the final done=1 view isn't worth a step of its own after one.
-						const skip_trailing_thanks = isDonation(page) && !linked_page;
-						if (action_type != "thanks" || !skip_trailing_thanks) {
+						// A thanks page the supporter is sent straight through -- sharing off, or
+						// a donation, where there is nothing left to ask for -- isn't worth a step
+						// of its own; it only earns one when the journey ends there.
+						const show_thanks_step = !linked_page && !isDonation(page);
+						if (action_type == "share" || show_thanks_step) {
 							page.next_step = { id: daisy_id, visit_key: `${page.id}-${action_type}`, type: page.type, name: page.name, action_label: action_type, view_href: `/thanks/${daisy_thanks}/?${action_type == "thanks" ? "done=1" : "share=1"}`, edit_href: followup_href, previous_step: page };
 							if (linked_page) {
 								page.next_step.next_step = linked_page;
 								linked_page.previous_step = page.next_step;
-							} else if (action_type == "share" && !skip_trailing_thanks) {
+							} else if (action_type == "share" && show_thanks_step) {
 								page.next_step.next_step = { id: daisy_id, visit_key: `${page.id}-thanks`, type: page.type, name: page.name, action_label: "thanks", view_href: `/thanks/${daisy_thanks}/?done=1`, edit_href: followup_href, previous_step: page.next_step };
 							}
+						} else if (linked_page) {
+							page.next_step = linked_page;
+							linked_page.previous_step = page;
 						}
 					} else if (linked_page) {
 						page.next_step = linked_page;
@@ -1054,7 +1086,21 @@ Inserting as first step:
 		var title_txt = page.title || `${action_label} page`;
 		var name_txt = page.name || `page ${page.id}`;
 		var edit_href = page.edit_href || `/admin/core/page/${page.id}/change/`;
-		return ( view_href ? `<a title="View ${title_txt}" href="${view_href}">${action_label}</a>` : action_label ) + ` <a class="dash-icon-btn" title="Edit ${name_txt}" href="${edit_href}">✎</a>`;
+		return ( view_href ? `<a title="View ${title_txt}" href="${view_href}">${action_label}</a>` : action_label ) + ` <a class="dash-icon-btn" title="Edit ${name_txt}" href="${edit_href}">✎</a>` + shareToggle(page);
+	}
+
+	// Switches the share step after an action page on and off by writing the page's
+	// disable_sharing custom field, which thanks.html reads to decide whether to show
+	// the share ask or send the supporter straight on to the next step.
+	function shareToggle(page) {
+		if ( ! page.share_toggle ) {
+			return '';
+		}
+		var off = ( page.share_toggle == 'off' );
+		var title = ( off ? 'Turn on' : 'Turn off' ) + ` the share step after ${page.name}`;
+		return ` <a class="dash-icon-btn share-toggle" href="#" title="${title}"`
+			+ ` data-page-id="${page.id}" data-page-type="${page_type_for_action_type(page.type)}"`
+			+ ` data-disable-sharing="${off ? '' : '1'}">${off ? '☐' : '☑'} share</a>`;
 	}
 
   const getSortedMailingsFromAPI = async (campaignId) => {

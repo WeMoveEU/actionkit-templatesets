@@ -67,7 +67,9 @@
     {% if own_action and action.custom_fields.continue %}
       {{ action.custom_fields.continue|safe }}{% if "?" not in action.custom_fields.continue %}?{% else %}&{% endif %}
     {% else %}
-      /thanks/{{ page.custom_fields.daisy_chain_action|default:page.name }}?{% if page.custom_fields.disable_sharing %}done=1{% else %}share=1{% endif %}&
+      {# share=1 even when sharing is off: this is where the consent page returns the
+         supporter to, and the disable_sharing escape below sends them onward from there. #}
+      /thanks/{{ page.custom_fields.daisy_chain_action|default:page.name }}?share=1&
     {% endif %}
   {% endfilter %}{% endstore %}
 
@@ -150,10 +152,38 @@
 
     {% endif %}
 
+    {% comment %}
+      sharing_off: the campaigner turned the share ask off for this page. Only for a
+      supporter who has just acted (or come back from consent) though -- the share
+      buttons link back to this page as ?share=whatsapp and friends, which is how
+      another page's share step shares this one, and those must always render.
+    {% endcomment %}
+    {% if page.custom_fields.disable_sharing and not args.share %}
+      {% remember 1 as sharing_off %}
+    {% endif %}
+    {% if page.custom_fields.disable_sharing and args.share == "1" %}
+      {% remember 1 as sharing_off %}
+    {% endif %}
+
     {% if not skip_consent %}
 
       <script>
         window.location = '{{ consent_link }}';
+      </script>
+
+    {% elif sharing_off and page.custom_fields.next_step %}
+
+      {# --- ESCAPE: the campaigner turned the share ask off for this page, so there is
+         nothing to show here. The consent ask above has had its chance first, which is
+         why this is not simply a redirect on the action page's after-action URL. --- #}
+      {% store as forward_link %}{% filter strip %}
+        /act/{{ page.custom_fields.next_step }}?akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}
+      {% endfilter %}{% endstore %}
+      <a href="{{ forward_link }}">
+        {% filter ak_text:"signup_continueToNextStep_link" %}Please continue to the next step.{% endfilter %}
+      </a>
+      <script>
+        window.location = '{{ forward_link }}';
       </script>
 
     {% else %}
@@ -162,7 +192,7 @@
       <form name="taf" method="POST" action="/update_action/" accept-charset="utf-8" class="ak-thanks ak-styled-fields">
         <input type="hidden" name="page" value="{{ page.name }}" />
 
-        {% if page.SUPPRESS_SHARING or args.share == "0" %}
+        {% if page.SUPPRESS_SHARING or sharing_off or args.share == "0" %}
 
           {# --- VIEW MODE "AFTER-ACTION, NO SHARING" #}
           <div class="flex gap-4 items-center mb-4">
