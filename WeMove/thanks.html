@@ -53,9 +53,19 @@
 
   {# --- WHERE THIS ACTION SENDS YOU NEXT (consent-return url, and the direct escape below when this action already declares its own destination) #}
 
+  {% comment %}
+    own_action: the action named by action_id belongs to THIS page, so its custom
+    fields describe this step. On the return leg from the consent flow, action is
+    the signup page's consent action instead -- its `continue` is that page's
+    already-spent destination, not ours to act on.
+  {% endcomment %}
+  {% if action and action.page.id == page.id %}
+    {% remember 1 as own_action %}
+  {% endif %}
+
   {% store as destination %}{% filter strip %}
-    {% if action.custom_fields.continue %}
-      {{ action.custom_fields.continue|safe }}{% if "?" not in action.custom_fields.redirect %}?{% else %}&{% endif %}
+    {% if own_action and action.custom_fields.continue %}
+      {{ action.custom_fields.continue|safe }}{% if "?" not in action.custom_fields.continue %}?{% else %}&{% endif %}
     {% else %}
       /thanks/{{ page.custom_fields.daisy_chain_action|default:page.name }}?{% if page.custom_fields.disable_sharing %}done=1{% else %}share=1{% endif %}&
     {% endif %}
@@ -67,9 +77,10 @@
   <!-- Daisy Chain: {{ page.custom_fields.daisy_chain_action }} -->
   <!-- Next Step: {{ next_step }} -->
 
-  {% if action.custom_fields.continue %}
+  {% if own_action and action.custom_fields.continue %}
 
-    {# --- ESCAPE: this action already declares its own destination (e.g. returning from a double opt-in confirmation email) --- #}
+    {# --- ESCAPE: this action already declares its own destination (e.g. the consent
+       page's own after-action render, sending you on after a double opt-in confirmation) --- #}
     <a href="{{ next_step }}">Please continue to the next step.</a>
     <script>
       window.location = '{{ next_step }}';
