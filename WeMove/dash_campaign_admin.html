@@ -1240,14 +1240,6 @@ Inserting as first step:
 	// Create Pages / Mailings
 
 	async function multilingualCampaignFor(campaign_name, action_type, second_time) {
-		if (action_type == 'share' && window.journeys.length) {
-			// This assumes that the share step is defined in the first step of the journey (for any language)
-			var first_language = Object.keys(journey.pages)[0];
-			var mcamp_uri = journey.pages[first_language][0].multilingual_campaign ;
-			return $.Deferred().resolve(mcamp_uri);
-		}
-		//If the action type is share but there is no page yet in the journey, this will create a multilingual campaign for it
-		//TODO Maybe not what we want?
 		var mcamp_name = campaign_name + ': ' + action_type;
 		var mcamp = Object.keys(multilingual_campaigns).find((uri) => multilingual_campaigns[uri].toLowerCase() == mcamp_name.toLowerCase());
 		if (mcamp) {
@@ -1306,6 +1298,13 @@ Inserting as first step:
 		var after_step = $form.find('select[name=after_step]').val();
 		var campaign = $form.data('campaign');
 
+		// A share step is not a page of its own any more: it is the thanks page of the
+		// step it follows, so "adding" one just turns that step's share ask back on.
+		if ( action_type == 'sharing' ) {
+			enableShareStep($form, campaign, after_step, buttonWrapper);
+			return;
+		}
+
 		// if there are pages with this name and language, don't create new ones
 		var matches = [];
 		const checkboxes = $form.find('.language-picker input:checked');
@@ -1358,16 +1357,42 @@ Inserting as first step:
 						}
 					}
 
-					if (action_type != 'share') {
-						calls.push(
-							createPage(action_type, page_name, this.value, mcamp_uri, fields)
-						);
-					}
+					calls.push(
+						createPage(action_type, page_name, this.value, mcamp_uri, fields)
+					);
 			});
 			$.when(...calls).done(
 				() => reload_dashboard(campaign.name)
 			);
 		});
+	}
+
+	// Turns the share ask back on for the step the share step was asked to follow,
+	// in each language picked. See shareToggle() for the same switch on a journey row.
+	function enableShareStep($form, campaign, after_step, buttonWrapper) {
+		if ( ! after_step ) {
+			alert("A share step is the thank-you page of an action, so choose the step it should come after.");
+			buttonWrapper.querySelector('button').disabled = false;
+			buttonWrapper.querySelector('[data-wm-spinner]').hidden = true;
+			return;
+		}
+		var calls = [];
+		$form.find('.language-picker input:checked').each(function() {
+			var journeys = window.journeys[this.value] || [];
+			var pages = [];
+			for ( const journey of journeys ) {
+				pages.push( ...journey );
+			}
+			var page = pages.find((p) => p.multilingual_campaign == after_step);
+			if ( page ) {
+				calls.push(api('PATCH', `${page_type_for_action_type(page.type)}page/${page.id}`, {
+					fields: { disable_sharing: '' }
+				}));
+			}
+		});
+		$.when(...calls).done(
+			() => reload_dashboard(campaign.name)
+		);
 	}
 
 	async function createPage(action_type, page_name, language, mcamp, fields) {
