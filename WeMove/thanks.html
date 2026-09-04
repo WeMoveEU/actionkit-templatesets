@@ -67,8 +67,10 @@
     {% if own_action and action.custom_fields.continue %}
       {{ action.custom_fields.continue|safe }}{% if "?" not in action.custom_fields.continue %}?{% else %}&{% endif %}
     {% else %}
-      {# share=1 even when sharing is off: this is where the consent page returns the
-         supporter to, and the disable_sharing escape below sends them onward from there. #}
+      {% comment %}
+        share=1 even when sharing is off: this is where the consent page returns the
+        supporter to, and the disable_sharing escape below sends them onward from there.
+      {% endcomment %}
       /thanks/{{ page.custom_fields.daisy_chain_action|default:page.name }}?share=1&
     {% endif %}
   {% endfilter %}{% endstore %}
@@ -81,8 +83,10 @@
 
   {% if own_action and action.custom_fields.continue %}
 
-    {# --- ESCAPE: this action already declares its own destination (e.g. the consent
-       page's own after-action render, sending you on after a double opt-in confirmation) --- #}
+    {% comment %}
+      ESCAPE: this action already declares its own destination (e.g. the consent
+      page's own after-action render, sending you on after a double opt-in confirmation).
+    {% endcomment %}
     <a href="{{ next_step }}">Please continue to the next step.</a>
     <script>
       window.location = '{{ next_step }}';
@@ -173,9 +177,11 @@
 
     {% elif sharing_off and page.custom_fields.next_step %}
 
-      {# --- ESCAPE: the campaigner turned the share ask off for this page, so there is
-         nothing to show here. The consent ask above has had its chance first, which is
-         why this is not simply a redirect on the action page's after-action URL. --- #}
+      {% comment %}
+        ESCAPE: the campaigner turned the share ask off for this page, so there is
+        nothing to show here. The consent ask above has had its chance first, which is
+        why this is not simply a redirect on the action page's after-action URL.
+      {% endcomment %}
       {% store as forward_link %}{% filter strip %}
         /act/{{ page.custom_fields.next_step }}?akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}
       {% endfilter %}{% endstore %}
