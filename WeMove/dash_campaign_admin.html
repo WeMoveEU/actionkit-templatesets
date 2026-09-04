@@ -47,9 +47,10 @@ Pages are linked into ordered sequences per language via custom fields:
 - fields.disable_sharing    — skips share step, goes straight to thanks
 
 sortJourney() reconstructs linked lists by:
-  1. Following next_step → matching page name in same language
-  2. Falling back to followup.url → extracting page name from URL path
-  3. Synthesizing virtual "thanks" and "share" nodes for terminal pages
+  1. Following followup.url → a /thanks/ redirect becomes a virtual "share"
+     (or "thanks") step, shown before the page's own next_step
+  2. Following next_step → matching page name in same language
+  3. Falling back to followup.url → extracting page name from URL path
   4. Detecting circular references
 
 Inserting a step mid-journey:
@@ -952,35 +953,49 @@ Inserting as first step:
 
 					var next_step = page.fields ? page.fields.next_step : null;
 					var linked_page = next_step ? pages[lang].find( (p) => ( p.name == next_step || p.name == next_step.match("/" + p.name + "/?($|\\?)") ) ) : null;
-					if (linked_page) {
+
+					var after_action = page.followup ? page.followup.url : '';
+					var match = after_action.match(/thanks/);
+					if ( match && match[0] ) {
+						// Acting on this page lands the supporter on its thanks page, which is
+						// where the share ask lives. That is a step of its own, and it comes
+						// before whatever the page chains on to: the supporter only reaches
+						// next_step from the link on the share view.
+						var action_type = ( after_action.endsWith("?done=1") || page.fields.disable_sharing ) ? "thanks" : "share";
+						const daisy_action = page.fields.daisy_chain_action;
+						const daisy_page = daisy_action ? pages[lang].find( (p) => p.name == daisy_action ) : null;
+						const daisy_thanks = daisy_page ? daisy_page.name : page.name;
+						const daisy_id = daisy_page ? daisy_page.id : page.id;
+						// The thanks page rendered is the daisy chain page's, so its after-action
+						// tab is what a campaigner edits to change the share text.
+						const followup_href = `/admin/core/pagefollowup/add_or_change/?page=${daisy_id}`;
+						// A donation is the end of the road: there is nothing left to ask for, so
+						// the final done=1 view isn't worth a step of its own after one.
+						const skip_trailing_thanks = isDonation(page) && !linked_page;
+						if (action_type != "thanks" || !skip_trailing_thanks) {
+							page.next_step = { id: daisy_id, visit_key: `${page.id}-${action_type}`, type: page.type, name: page.name, action_label: action_type, view_href: `/thanks/${daisy_thanks}/?${action_type == "thanks" ? "done=1" : "share=1"}`, edit_href: followup_href, previous_step: page };
+							if (linked_page) {
+								page.next_step.next_step = linked_page;
+								linked_page.previous_step = page.next_step;
+							} else if (action_type == "share" && !skip_trailing_thanks) {
+								page.next_step.next_step = { id: daisy_id, visit_key: `${page.id}-thanks`, type: page.type, name: page.name, action_label: "thanks", view_href: `/thanks/${daisy_thanks}/?done=1`, edit_href: followup_href, previous_step: page.next_step };
+							}
+						}
+					} else if (linked_page) {
 						page.next_step = linked_page;
 						linked_page.previous_step = page;
 					} else {
-						var after_action = page.followup ? page.followup.url : '';
-						var match = after_action.match(/thanks/);
-						if ( match && match[0] ) {
-							var action_type = ( after_action.endsWith("?done=1") || page.fields.disable_sharing ) ? "thanks" : "share";
-							const daisy_action = page.fields.daisy_chain_action;
-							const daisy_page = daisy_action ? pages[lang].find( (p) => p.name == daisy_action ) : null;
-							const daisy_thanks = daisy_page ? daisy_page.name : page.name;
-							const daisy_id = daisy_page ? daisy_page.id : page.id;
-							page.next_step = { id: daisy_id, type: page.type, name: page.name, action_label: action_type, view_href: `/thanks/${daisy_thanks}/?share=1`, edit_href: `/admin/core/pagefollowup/add_or_change/?page=${daisy_id}`, previous_step: page };
-							if (action_type == "share") {
-								page.next_step.next_step = { id: daisy_id, type: page.type, name: page.name, action_label: "thanks", view_href: `/thanks/${daisy_thanks}/?done=1`, previous_step: page.next_step };
+						match = after_action.match(/^\/\w+\/([^\/\?]+)/);
+						if ( match && match[1] ) {
+							var followup_page = pages[lang].find( (p) => ( p.name == match[1] ) );
+							if (followup_page) {
+								page.next_step = followup_page;
+								followup_page.previous_step = page;
 							}
-						} else {
-							match = after_action.match(/^\/\w+\/([^\/\?]+)/);
-							if ( match && match[1] ) {
-								var linked_page = pages[lang].find( (p) => ( p.name == match[1] ) );
-								if (linked_page) {
-									page.next_step = linked_page;
-									linked_page.previous_step = page;
-								}
-							} else if ( after_action ) {
-								match = after_action.match(/\/\/(.*?)\//);
-								var label = ( match && match[1] ) ? match[1] : 'external';
-								page.next_step = { id: null, type: 'redirect', action_label: label, view_href: after_action, previous_step: page };
-							}
+						} else if ( after_action ) {
+							match = after_action.match(/\/\/(.*?)\//);
+							var label = ( match && match[1] ) ? match[1] : 'external';
+							page.next_step = { id: null, type: 'redirect', action_label: label, view_href: after_action, previous_step: page };
 						}
 					}
 				}
@@ -993,7 +1008,7 @@ Inserting as first step:
 				var journey = [];
 				var cur_page = first_page;
 				while (cur_page) {
-					const visit_index = cur_page.id + ( cur_page.action_label || '' )
+					const visit_index = cur_page.visit_key || ( cur_page.id + ( cur_page.action_label || '' ) )
 					if ( pages_seen[visit_index] ) {
 						console.log(`Loop detected in language ${lang} daisy chain starting with ${first_page.id} at ${cur_page.id}`);
 						journey.push({ id: cur_page.id, type: 'loop', action_label: 'Circular Journey', name: cur_page.name, title: cur_page.title });
@@ -1015,12 +1030,22 @@ Inserting as first step:
 		'donation-import': 1,
 	};
 
-	function pageLink(page) {
-		var action_type = page.action_type;
-		if (!action_type) {
-			var mcamp = multilingual_campaigns[page.multilingual_campaign];
-			action_type = mcamp ? mcamp.split(':')[1].trim() : page.type;
+	// The multilingual campaign label ("{campaign}: donation") names the action;
+	// pages outside one fall back to AK's own page type ("Donation").
+	function actionType(page) {
+		if (page.action_type) {
+			return page.action_type;
 		}
+		var mcamp = multilingual_campaigns[page.multilingual_campaign];
+		return mcamp ? mcamp.split(':')[1].trim() : page.type;
+	}
+
+	function isDonation(page) {
+		return String( actionType(page) || '' ).toLowerCase() == 'donation';
+	}
+
+	function pageLink(page) {
+		var action_type = actionType(page);
 		var action_label = page.action_label || action_type;
 		var view_href = page.view_href || ( non_viewable_action_types[ action_type ] ? '' : `/cms/view_by_page_id/${page.id}/` );
 		if ( page.type == 'redirect' ) {
