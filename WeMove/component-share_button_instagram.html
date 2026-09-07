@@ -1,13 +1,36 @@
 {% store as instagram_share_link %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "instagram_share_link" as field_name %}{% endstore %}
 {% if instagram_share_link %}
+{% comment %}
+  When this share step shares another page (pageName is that page, via
+  daisy_chain_action), the Instagram link and its tracking belong to that page, and only
+  that page can read its own instagram_share_link -- so hand off to its share step
+  instead of offering this page's link under the other page's name.
+
+  The gate above still reads this page's value as a proxy for the shared page having a
+  link at all: custom_field_from_page_or_campaign falls back to the campaign, so a
+  chained petition and letter in one campaign resolve the same value. If the two
+  disagree, the worst case is landing on the shared page's share step with no Instagram
+  button on it -- the other share buttons are still there.
+{% endcomment %}
+{% store as instagram_href %}{% filter strip %}
+  {% if pageName != page.name %}
+    /thanks/{{ pageName }}?share=instagram&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.variation %}&variation={{ args.variation }}{% endif %}
+  {% else %}
+    {{ instagram_share_link }}
+  {% endif %}
+{% endfilter %}{% endstore %}
 <a
   class="mb-4 transition-all text-center bg-instagram !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:bg-instagram-hv"
-  href="{{instagram_share_link}}"
+  href="{{ instagram_href }}"
   target="_blank"
-  data-wm-send-share-to-action-kit="/share/link?type=ot&source=instagram&page_name={{ pageName }}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}">
+  {% if args.share == "instagram" %}data-wm-share-autofire{% endif %}
+  {% if pageName == page.name %}data-wm-send-share-to-action-kit="/share/link?type=ot&source=instagram&page_name={{ pageName }}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}"{% endif %}>
   <span aria-hidden="true" class="h-4 w-4">
     {% include "./icon-instagram.html" %}
   </span>
   <span>{% filter ak_text:"thanks_shareInstagram_button" %}Share Story on Instagram{% endfilter %}</span>
 </a>
+{% if args.share == "instagram" %}
+  {% include "./component-share_autofire.html" %}
+{% endif %}
 {% endif %}

@@ -40,16 +40,19 @@ CAMPAIGN ADMIN DASHBOARD — Object Model & Naming Conventions
 
 Pages are linked into ordered sequences per language via custom fields:
 - fields.next_step          — page name of next page (forward link)
-- fields.daisy_chain_action — page name for thanks/share redirect target
+- fields.daisy_chain_action — page whose content the share step shares; its
+                              after-action tab is what the share ✎ icon opens
 - followup.url              — AK's after-action redirect; /thanks/ → share or thanks step
 - fields.redir              — external redirect (terminates journey offsite)
 - fields.sharing_step       — marks a page as a sharing-type step
-- fields.disable_sharing    — skips share step, goes straight to thanks
+- fields.disable_sharing    — no share step: thanks.html sends the supporter
+                              straight on to next_step (toggled from the journey row)
 
 sortJourney() reconstructs linked lists by:
-  1. Following next_step → matching page name in same language
-  2. Falling back to followup.url → extracting page name from URL path
-  3. Synthesizing virtual "thanks" and "share" nodes for terminal pages
+  1. Following followup.url → a /thanks/ redirect becomes a virtual "share"
+     (or "thanks") step, shown before the page's own next_step
+  2. Following next_step → matching page name in same language
+  3. Falling back to followup.url → extracting page name from URL path
   4. Detecting circular references
 
 Inserting a step mid-journey:
@@ -157,6 +160,27 @@ Inserting as first step:
     border: 1px solid #27BBDD;
     border-radius: 99px;
     padding: 0 4px;
+  }
+
+	a.share-toggle {
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0 5px;
+  }
+
+	a.share-toggle.is-on {
+    background: #27BBDD;
+    color: #fff;
+  }
+
+	a.share-toggle.is-off {
+    border-color: #bbb;
+    color: #bbb;
+  }
+
+	a.share-toggle.is-busy {
+    opacity: 0.4;
+    pointer-events: none;
   }
 
 	.form-row-CheckboxInput .form-control label {
@@ -888,54 +912,85 @@ Inserting as first step:
 
 	async function displayPages(campaign) {
 		const allPages = await fetchAllPages("page/", { field__name: 'campaign', field__value: campaign.id });
-		{
-			var lang_journeys = {};
-			allPages.forEach(function(page) {
-				if (page.id != campaign.id) {
-					const language = page.language || "/rest/v1/language/100/";
-					if (!lang_journeys[language]) {
-						lang_journeys[language] = [];
-					}
-					lang_journeys[language].push(page);
-				}
-			});
-			var langs = Object.keys(lang_journeys);
-			if (! langs.length) {
-				$('#pages_output table').html('<tr><td>No action pages yet</td></tr>');
-			} else {
-				sortJourney(lang_journeys);
-				$('#pages_output table tr').remove();
-				langs.forEach(function(lang) {
-					var table_row = $(
-						`<tr><th scope="row">${languages[lang].name}</th>`
-						+ "<td><ul></ul></td>"
-						+ "</tr>"
-					);
-					var lang_journey_list = table_row.find('td');
-					lang_journeys[lang].forEach(function(journey) {
-						lang_journey_list.append(
-							'<li class="journey">' +
-							journey.map(
-								(p) => `<span>${pageLink(p)}</span>`
-							).join(' <span class="next-arrow">➡</span> ')
-							+ '</li>'
-						)
-					});
-					$('#pages_output table').append( table_row );
-				});
+		renderJourneys(campaign, allPages);
+		$('#page_form').data('campaign', campaign);
+		$('#pages_output').removeClass('is-loading');
+		$('#page_form input[name=action_type]').on('click', function() {
+			$('#page_form input[name=notes]').val(campaign.name + "-" + this.value);
+		});
+		$('#pages_output table').on('click', 'a.share-toggle', function(evt) {
+			evt.preventDefault();
+			var toggle = this;
+			if ( toggle.dataset.busy ) {
+				return;
 			}
-			window.journeys = lang_journeys;
-			$('#page_form').data('campaign', campaign);
-			$('#pages_output').removeClass('is-loading');
-			$('#page_form input[name=action_type]').on('click', function() {
-				$('#page_form input[name=notes]').val(campaign.name + "-" + this.value);
+			toggle.dataset.busy = 1;
+			toggle.classList.add('is-busy');
+			var disable_sharing = toggle.dataset.disableSharing;
+			api('PATCH', `${toggle.dataset.pageType}page/${toggle.dataset.pageId}`, {
+				fields: { disable_sharing: disable_sharing }
+			}).done(function() {
+				var page = allPages.find((p) => p.id == toggle.dataset.pageId);
+				if ( page ) {
+					page.fields.disable_sharing = disable_sharing;
+				}
+				// The share step appears and disappears from the journey with the field,
+				// so redraw the rows rather than just restyling the button.
+				renderJourneys(campaign, allPages);
+			}).fail(function() {
+				delete toggle.dataset.busy;
+				toggle.classList.remove('is-busy');
 			});
-			$('#create_pages').on('click', createPages);
-			$('#add_step').on('click', function () {
-				$('#add_step').hide();
-				$('#page_form').show();
+		});
+		$('#create_pages').on('click', createPages);
+		$('#add_step').on('click', function () {
+			$('#add_step').hide();
+			$('#page_form').show();
+		});
+	}
+
+	// Draws the journey rows. Re-runnable: sortJourney links the page objects to one
+	// another, so last run's links have to come off before it runs again.
+	function renderJourneys(campaign, allPages) {
+		var lang_journeys = {};
+		allPages.forEach(function(page) {
+			delete page.next_step;
+			delete page.previous_step;
+			delete page.share_toggle;
+			if (page.id != campaign.id) {
+				const language = page.language || "/rest/v1/language/100/";
+				if (!lang_journeys[language]) {
+					lang_journeys[language] = [];
+				}
+				lang_journeys[language].push(page);
+			}
+		});
+		var langs = Object.keys(lang_journeys);
+		if (! langs.length) {
+			$('#pages_output table').html('<tr><td>No action pages yet</td></tr>');
+		} else {
+			sortJourney(lang_journeys);
+			$('#pages_output table tr').remove();
+			langs.forEach(function(lang) {
+				var table_row = $(
+					`<tr><th scope="row">${languages[lang].name}</th>`
+					+ "<td><ul></ul></td>"
+					+ "</tr>"
+				);
+				var lang_journey_list = table_row.find('td');
+				lang_journeys[lang].forEach(function(journey) {
+					lang_journey_list.append(
+						'<li class="journey">' +
+						journey.map(
+							(p) => `<span>${pageLink(p)}</span>`
+						).join(' <span class="next-arrow">➡</span> ')
+						+ '</li>'
+					)
+				});
+				$('#pages_output table').append( table_row );
 			});
 		}
+		window.journeys = lang_journeys;
 	}
 
 	function sortJourney(pages) {
@@ -952,35 +1007,61 @@ Inserting as first step:
 
 					var next_step = page.fields ? page.fields.next_step : null;
 					var linked_page = next_step ? pages[lang].find( (p) => ( p.name == next_step || p.name == next_step.match("/" + p.name + "/?($|\\?)") ) ) : null;
-					if (linked_page) {
+
+					var after_action = page.followup ? page.followup.url : '';
+					var match = after_action.match(/thanks/);
+					// A sharing step is the share ask, so it doesn't get one of its own.
+					if ( match && match[0] && ! sharing_step ) {
+						// Acting on this page lands the supporter on its thanks page, which is
+						// where the share ask lives. That is a step of its own, and it comes
+						// before whatever the page chains on to: the supporter only reaches
+						// next_step from the link on the share view.
+						// The share step is switched off per page with the disable_sharing custom
+						// field. A followup that already points at ?done=1 is off for a reason the
+						// dashboard toggle can't change, so don't offer the toggle there.
+						const sharing_off_by_url = after_action.endsWith("?done=1");
+						var action_type = ( sharing_off_by_url || page.fields.disable_sharing ) ? "thanks" : "share";
+						page.share_toggle = sharing_off_by_url ? null : ( page.fields.disable_sharing ? 'off' : 'on' );
+						const daisy_action = page.fields.daisy_chain_action;
+						const daisy_page = daisy_action ? pages[lang].find( (p) => p.name == daisy_action ) : null;
+						const daisy_id = daisy_page ? daisy_page.id : page.id;
+						// The share view is rendered by this page's own thanks page, so that is what
+						// the "share" link opens. The content it shares, though, is the daisy chain
+						// page's -- partial-share_standard.html points every share button at
+						// daisy_chain_action -- so the after-action tab a campaigner edits to change
+						// the share text is that page's, not this one's.
+						const followup_href = `/admin/core/pagefollowup/add_or_change/?page=${daisy_id}`;
+						// A thanks page the supporter is sent straight through -- sharing off, or
+						// a donation, where there is nothing left to ask for -- isn't worth a step
+						// of its own; it only earns one when the journey ends there.
+						const show_thanks_step = !linked_page && !isDonation(page);
+						if (action_type == "share" || show_thanks_step) {
+							page.next_step = { id: daisy_id, visit_key: `${page.id}-${action_type}`, type: page.type, name: page.name, action_label: action_type, view_href: `/thanks/${page.name}/?${action_type == "thanks" ? "done=1" : "share=1"}`, edit_href: followup_href, previous_step: page };
+							if (linked_page) {
+								page.next_step.next_step = linked_page;
+								linked_page.previous_step = page.next_step;
+							} else if (action_type == "share" && show_thanks_step) {
+								page.next_step.next_step = { id: daisy_id, visit_key: `${page.id}-thanks`, type: page.type, name: page.name, action_label: "thanks", view_href: `/thanks/${page.name}/?done=1`, edit_href: followup_href, previous_step: page.next_step };
+							}
+						} else if (linked_page) {
+							page.next_step = linked_page;
+							linked_page.previous_step = page;
+						}
+					} else if (linked_page) {
 						page.next_step = linked_page;
 						linked_page.previous_step = page;
 					} else {
-						var after_action = page.followup ? page.followup.url : '';
-						var match = after_action.match(/thanks/);
-						if ( match && match[0] ) {
-							var action_type = ( after_action.endsWith("?done=1") || page.fields.disable_sharing ) ? "thanks" : "share";
-							const daisy_action = page.fields.daisy_chain_action;
-							const daisy_page = daisy_action ? pages[lang].find( (p) => p.name == daisy_action ) : null;
-							const daisy_thanks = daisy_page ? daisy_page.name : page.name;
-							const daisy_id = daisy_page ? daisy_page.id : page.id;
-							page.next_step = { id: daisy_id, type: page.type, name: page.name, action_label: action_type, view_href: `/thanks/${daisy_thanks}/?share=1`, edit_href: `/admin/core/pagefollowup/add_or_change/?page=${daisy_id}`, previous_step: page };
-							if (action_type == "share") {
-								page.next_step.next_step = { id: daisy_id, type: page.type, name: page.name, action_label: "thanks", view_href: `/thanks/${daisy_thanks}/?done=1`, previous_step: page.next_step };
+						match = after_action.match(/^\/\w+\/([^\/\?]+)/);
+						if ( match && match[1] ) {
+							var followup_page = pages[lang].find( (p) => ( p.name == match[1] ) );
+							if (followup_page) {
+								page.next_step = followup_page;
+								followup_page.previous_step = page;
 							}
-						} else {
-							match = after_action.match(/^\/\w+\/([^\/\?]+)/);
-							if ( match && match[1] ) {
-								var linked_page = pages[lang].find( (p) => ( p.name == match[1] ) );
-								if (linked_page) {
-									page.next_step = linked_page;
-									linked_page.previous_step = page;
-								}
-							} else if ( after_action ) {
-								match = after_action.match(/\/\/(.*?)\//);
-								var label = ( match && match[1] ) ? match[1] : 'external';
-								page.next_step = { id: null, type: 'redirect', action_label: label, view_href: after_action, previous_step: page };
-							}
+						} else if ( after_action ) {
+							match = after_action.match(/\/\/(.*?)\//);
+							var label = ( match && match[1] ) ? match[1] : 'external';
+							page.next_step = { id: null, type: 'redirect', action_label: label, view_href: after_action, previous_step: page };
 						}
 					}
 				}
@@ -993,7 +1074,7 @@ Inserting as first step:
 				var journey = [];
 				var cur_page = first_page;
 				while (cur_page) {
-					const visit_index = cur_page.id + ( cur_page.action_label || '' )
+					const visit_index = cur_page.visit_key || ( cur_page.id + ( cur_page.action_label || '' ) )
 					if ( pages_seen[visit_index] ) {
 						console.log(`Loop detected in language ${lang} daisy chain starting with ${first_page.id} at ${cur_page.id}`);
 						journey.push({ id: cur_page.id, type: 'loop', action_label: 'Circular Journey', name: cur_page.name, title: cur_page.title });
@@ -1015,12 +1096,22 @@ Inserting as first step:
 		'donation-import': 1,
 	};
 
-	function pageLink(page) {
-		var action_type = page.action_type;
-		if (!action_type) {
-			var mcamp = multilingual_campaigns[page.multilingual_campaign];
-			action_type = mcamp ? mcamp.split(':')[1].trim() : page.type;
+	// The multilingual campaign label ("{campaign}: donation") names the action;
+	// pages outside one fall back to AK's own page type ("Donation").
+	function actionType(page) {
+		if (page.action_type) {
+			return page.action_type;
 		}
+		var mcamp = multilingual_campaigns[page.multilingual_campaign];
+		return mcamp ? mcamp.split(':')[1].trim() : page.type;
+	}
+
+	function isDonation(page) {
+		return String( actionType(page) || '' ).toLowerCase() == 'donation';
+	}
+
+	function pageLink(page) {
+		var action_type = actionType(page);
 		var action_label = page.action_label || action_type;
 		var view_href = page.view_href || ( non_viewable_action_types[ action_type ] ? '' : `/cms/view_by_page_id/${page.id}/` );
 		if ( page.type == 'redirect' ) {
@@ -1029,7 +1120,21 @@ Inserting as first step:
 		var title_txt = page.title || `${action_label} page`;
 		var name_txt = page.name || `page ${page.id}`;
 		var edit_href = page.edit_href || `/admin/core/page/${page.id}/change/`;
-		return ( view_href ? `<a title="View ${title_txt}" href="${view_href}">${action_label}</a>` : action_label ) + ` <a class="dash-icon-btn" title="Edit ${name_txt}" href="${edit_href}">✎</a>`;
+		return ( view_href ? `<a title="View ${title_txt}" href="${view_href}">${action_label}</a>` : action_label ) + ` <a class="dash-icon-btn" title="Edit ${name_txt}" href="${edit_href}">✎</a>` + shareToggle(page);
+	}
+
+	// Switches the share step after an action page on and off by writing the page's
+	// disable_sharing custom field, which thanks.html reads to decide whether to show
+	// the share ask or send the supporter straight on to the next step.
+	function shareToggle(page) {
+		if ( ! page.share_toggle ) {
+			return '';
+		}
+		var off = ( page.share_toggle == 'off' );
+		var title = ( off ? 'Turn on' : 'Turn off' ) + ` the share step after ${page.name}`;
+		return ` <a class="dash-icon-btn share-toggle ${off ? 'is-off' : 'is-on'}" href="#" title="${title}"`
+			+ ` data-page-id="${page.id}" data-page-type="${page_type_for_action_type(page.type)}"`
+			+ ` data-disable-sharing="${off ? '' : 'Y'}">⤴</a>`;
 	}
 
   const getSortedMailingsFromAPI = async (campaignId) => {
@@ -1169,14 +1274,6 @@ Inserting as first step:
 	// Create Pages / Mailings
 
 	async function multilingualCampaignFor(campaign_name, action_type, second_time) {
-		if (action_type == 'share' && window.journeys.length) {
-			// This assumes that the share step is defined in the first step of the journey (for any language)
-			var first_language = Object.keys(journey.pages)[0];
-			var mcamp_uri = journey.pages[first_language][0].multilingual_campaign ;
-			return $.Deferred().resolve(mcamp_uri);
-		}
-		//If the action type is share but there is no page yet in the journey, this will create a multilingual campaign for it
-		//TODO Maybe not what we want?
 		var mcamp_name = campaign_name + ': ' + action_type;
 		var mcamp = Object.keys(multilingual_campaigns).find((uri) => multilingual_campaigns[uri].toLowerCase() == mcamp_name.toLowerCase());
 		if (mcamp) {
@@ -1235,6 +1332,13 @@ Inserting as first step:
 		var after_step = $form.find('select[name=after_step]').val();
 		var campaign = $form.data('campaign');
 
+		// A share step is not a page of its own any more: it is the thanks page of the
+		// step it follows, so "adding" one just turns that step's share ask back on.
+		if ( action_type == 'sharing' ) {
+			enableShareStep($form, campaign, after_step, buttonWrapper);
+			return;
+		}
+
 		// if there are pages with this name and language, don't create new ones
 		var matches = [];
 		const checkboxes = $form.find('.language-picker input:checked');
@@ -1287,16 +1391,42 @@ Inserting as first step:
 						}
 					}
 
-					if (action_type != 'share') {
-						calls.push(
-							createPage(action_type, page_name, this.value, mcamp_uri, fields)
-						);
-					}
+					calls.push(
+						createPage(action_type, page_name, this.value, mcamp_uri, fields)
+					);
 			});
 			$.when(...calls).done(
 				() => reload_dashboard(campaign.name)
 			);
 		});
+	}
+
+	// Turns the share ask back on for the step the share step was asked to follow,
+	// in each language picked. See shareToggle() for the same switch on a journey row.
+	function enableShareStep($form, campaign, after_step, buttonWrapper) {
+		if ( ! after_step ) {
+			alert("A share step is the thank-you page of an action, so choose the step it should come after.");
+			buttonWrapper.querySelector('button').disabled = false;
+			buttonWrapper.querySelector('[data-wm-spinner]').hidden = true;
+			return;
+		}
+		var calls = [];
+		$form.find('.language-picker input:checked').each(function() {
+			var journeys = window.journeys[this.value] || [];
+			var pages = [];
+			for ( const journey of journeys ) {
+				pages.push( ...journey );
+			}
+			var page = pages.find((p) => p.multilingual_campaign == after_step);
+			if ( page ) {
+				calls.push(api('PATCH', `${page_type_for_action_type(page.type)}page/${page.id}`, {
+					fields: { disable_sharing: '' }
+				}));
+			}
+		});
+		$.when(...calls).done(
+			() => reload_dashboard(campaign.name)
+		);
 	}
 
 	async function createPage(action_type, page_name, language, mcamp, fields) {
