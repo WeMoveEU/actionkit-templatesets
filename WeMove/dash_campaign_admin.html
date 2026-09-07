@@ -40,7 +40,8 @@ CAMPAIGN ADMIN DASHBOARD — Object Model & Naming Conventions
 
 Pages are linked into ordered sequences per language via custom fields:
 - fields.next_step          — page name of next page (forward link)
-- fields.daisy_chain_action — page name for thanks/share redirect target
+- fields.daisy_chain_action — page whose content the share step shares; its
+                              after-action tab is what the share ✎ icon opens
 - followup.url              — AK's after-action redirect; /thanks/ → share or thanks step
 - fields.redir              — external redirect (terminates journey offsite)
 - fields.sharing_step       — marks a page as a sharing-type step
@@ -1023,22 +1024,24 @@ Inserting as first step:
 						page.share_toggle = sharing_off_by_url ? null : ( page.fields.disable_sharing ? 'off' : 'on' );
 						const daisy_action = page.fields.daisy_chain_action;
 						const daisy_page = daisy_action ? pages[lang].find( (p) => p.name == daisy_action ) : null;
-						const daisy_thanks = daisy_page ? daisy_page.name : page.name;
 						const daisy_id = daisy_page ? daisy_page.id : page.id;
-						// The thanks page rendered is the daisy chain page's, so its after-action
-						// tab is what a campaigner edits to change the share text.
+						// The share view is rendered by this page's own thanks page, so that is what
+						// the "share" link opens. The content it shares, though, is the daisy chain
+						// page's -- partial-share_standard.html points every share button at
+						// daisy_chain_action -- so the after-action tab a campaigner edits to change
+						// the share text is that page's, not this one's.
 						const followup_href = `/admin/core/pagefollowup/add_or_change/?page=${daisy_id}`;
 						// A thanks page the supporter is sent straight through -- sharing off, or
 						// a donation, where there is nothing left to ask for -- isn't worth a step
 						// of its own; it only earns one when the journey ends there.
 						const show_thanks_step = !linked_page && !isDonation(page);
 						if (action_type == "share" || show_thanks_step) {
-							page.next_step = { id: daisy_id, visit_key: `${page.id}-${action_type}`, type: page.type, name: page.name, action_label: action_type, view_href: `/thanks/${daisy_thanks}/?${action_type == "thanks" ? "done=1" : "share=1"}`, edit_href: followup_href, previous_step: page };
+							page.next_step = { id: daisy_id, visit_key: `${page.id}-${action_type}`, type: page.type, name: page.name, action_label: action_type, view_href: `/thanks/${page.name}/?${action_type == "thanks" ? "done=1" : "share=1"}`, edit_href: followup_href, previous_step: page };
 							if (linked_page) {
 								page.next_step.next_step = linked_page;
 								linked_page.previous_step = page.next_step;
 							} else if (action_type == "share" && show_thanks_step) {
-								page.next_step.next_step = { id: daisy_id, visit_key: `${page.id}-thanks`, type: page.type, name: page.name, action_label: "thanks", view_href: `/thanks/${daisy_thanks}/?done=1`, edit_href: followup_href, previous_step: page.next_step };
+								page.next_step.next_step = { id: daisy_id, visit_key: `${page.id}-thanks`, type: page.type, name: page.name, action_label: "thanks", view_href: `/thanks/${page.name}/?done=1`, edit_href: followup_href, previous_step: page.next_step };
 							}
 						} else if (linked_page) {
 							page.next_step = linked_page;
