@@ -1,0 +1,22 @@
+{% comment %}
+  Fires the share the supporter already picked on the page they came from.
+
+  A share step cannot read another page's followup text or custom fields, so rather than
+  copy that content it links here as ?share=<network> -- the page being shared renders
+  its own button, and this clicks it. The bundle's own handlers
+  (send-share-to-action-kit.js, taf-button.js) then do the tracking and the navigation,
+  so nothing here duplicates what they already do.
+
+  wm-scriptsLoaded fires at the end of initAkScripts(), after initShare() has bound those
+  handlers -- see wemove-main.js in pubstatic. This script is inline in the body, so the
+  listener is registered long before the event.
+{% endcomment %}
+<script>
+  document.addEventListener('wm-scriptsLoaded', () => {
+    const shareButton = document.querySelector('[data-wm-share-autofire]');
+
+    if (shareButton) {
+      shareButton.click();
+    }
+  }, { once: true });
+</script>
