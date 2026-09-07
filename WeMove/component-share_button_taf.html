@@ -1,4 +1,3 @@
-{% if page.followup.send_taf %}
 {% comment %}
   When this share step shares another page (pageName is that page, via
   daisy_chain_action), the e-mail belongs to that page: its subject and body live on its
@@ -6,39 +5,41 @@
   step and let it render its own mailto -- otherwise the supporter mails this page's text
   with the other page's tracking link in it.
 
-  Unlike the custom fields, followup values have no campaign-level fallback, so the gate
-  above is this page's send_taf standing in for the shared page's. If the shared page has
-  the e-mail share switched off, the supporter lands on its share step without this
-  button; if this page has it off, the button is missing here. Both leave the rest of the
-  share buttons working.
+  The hand-off is deliberately ungated. send_taf says whether THIS page offers e-mail
+  sharing, which tells us nothing about the page being shared, and gating the hand-off on
+  it hid the shared page's e-mail share whenever the two pages disagreed. followup values
+  have no campaign-level fallback either, so no field readable from here answers the right
+  question -- only the shared page can. If it has e-mail sharing switched off, the
+  supporter lands on its share step without this button, and every other share button
+  there still works.
 {% endcomment %}
-  {% if pageName != page.name %}
-    <a
-      class="mb-4 transition-all w-full text-center bg-wm-orange !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:bg-taf-hv"
-      href="/thanks/{{ pageName }}?share=taf&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.variation %}&variation={{ args.variation }}{% endif %}"
-      target="_blank"
-      {% if args.share == "taf" %}data-wm-share-autofire{% endif %}>
-      <span aria-hidden="true" class="h-6 w-6">
-        {% include "./icon-mail.html" %}
-      </span>
-      <span>{% filter ak_text:"thanks_shareEmail_button" %}Share by e-mail{% endfilter %}</span>
-    </a>
-  {% else %}
-    <button
-      type="button"
-      class="mb-4 transition-all w-full text-center bg-wm-orange !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:bg-taf-hv"
-      target="_blank"
-      data-wm-taf-button
-      {% if args.share == "taf" %}data-wm-share-autofire{% endif %}
-      data-wm-taf-button-mailto="mailto:?subject={{ page.followup.taf_subject|urlencode }}&body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"
-      data-wm-taf-track-url="/share/link?type=ot&source=taf{% if args.consent == "emailed" %}&page_name={{ pageName }}{% elif action %}&action_id={{ action.id }}{% else %}&page_name={{ pageName }}&akid={{ akid }}{% endif %}">
-      <span aria-hidden="true" class="h-6 w-6">
-        {% include "./icon-mail.html" %}
-      </span>
-      <span>{% filter ak_text:"thanks_shareEmail_button" %}Share by e-mail{% endfilter %}</span>
-    </button>
-  {% endif %}
-  {% if args.share == "taf" %}
-    {% include "./component-share_autofire.html" %}
-  {% endif %}
+{% if pageName != page.name %}
+  <a
+    class="mb-4 transition-all w-full text-center bg-wm-orange !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:bg-taf-hv"
+    href="/thanks/{{ pageName }}?share=taf&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.variation %}&variation={{ args.variation }}{% endif %}"
+    target="_blank"
+    {% if args.share == "taf" %}data-wm-share-autofire{% endif %}>
+    <span aria-hidden="true" class="h-6 w-6">
+      {% include "./icon-mail.html" %}
+    </span>
+    <span>{% filter ak_text:"thanks_shareEmail_button" %}Share by e-mail{% endfilter %}</span>
+  </a>
+{% elif page.followup.send_taf %}
+  <button
+    type="button"
+    class="mb-4 transition-all w-full text-center bg-wm-orange !text-white font-bold uppercase p-3 font-gilroy rounded flex items-center gap-2 justify-center hover:!no-underline hover:bg-taf-hv"
+    target="_blank"
+    data-wm-taf-button
+    {% if args.share == "taf" %}data-wm-share-autofire{% endif %}
+    data-wm-taf-button-mailto="mailto:?subject={{ page.followup.taf_subject|urlencode }}&body={% filter referring_akid:akid|tag_links:"source=mailto"|urlencode %}{% include_tmpl page.followup.taf_body unescaped %}{% endfilter %}"
+    data-wm-taf-track-url="/share/link?type=ot&source=taf{% if args.consent == "emailed" %}&page_name={{ pageName }}{% elif action %}&action_id={{ action.id }}{% else %}&page_name={{ pageName }}&akid={{ akid }}{% endif %}">
+    <span aria-hidden="true" class="h-6 w-6">
+      {% include "./icon-mail.html" %}
+    </span>
+    <span>{% filter ak_text:"thanks_shareEmail_button" %}Share by e-mail{% endfilter %}</span>
+  </button>
+{% endif %}
+
+{% if args.share == "taf" %}
+  {% include "./component-share_autofire.html" %}
 {% endif %}
