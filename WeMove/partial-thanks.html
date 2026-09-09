@@ -1,0 +1,236 @@
+{% comment %}
+  The after-action step: consent redirect, next-step escapes, and the share ask.
+  Shared by thanks.html (the /thanks/ page) and signup.html (a signup page acting
+  as another page's sharing_step). Keep it a plain partial -- including a template
+  that extends wrapper.html renders the whole wrapper again, nested.
+{% endcomment %}
+
+{% if actionkit_user %}
+  {% if recurring_update or recurring_cancel %}
+    <div class="px-4">
+      <p>
+        {% filter ak_text:"logged_in_as" %}You are logged in as{% endfilter %} <a href="/me/">{{ actionkit_user.name|escape }}</a>.
+
+        <a href="/logout">
+          {% filter ak_text:"logout" %}Click to log out.{% endfilter %}
+        </a>
+      </p>
+    </div>
+  {% endif %}
+{% endif %}
+
+{% if user.country == 'Germany' or user.country == 'Austria' or user.country|lower == 'de' or user.country|lower == 'at' %}
+  {% remember 1 as is_germanic %}
+{% endif %}
+
+{% if args.done %}
+  {# --- VIEW MODE "DONE" #}
+  <div class="font-bold">
+    {% if form.thank_you_text %}
+      {% include_tmpl form.thank_you_text %}
+    {% else %}
+      {% filter ak_text:"final_message" %}
+        Thank you for standing for democracy with us. It is only together that we can truly be a force to be reckoned with.
+      {% endfilter %}
+    {% endif %}
+
+    <div class="mt-4">
+      <a href="https://wemove.eu/{{ link_iso }}" class="text-wm-pink hover:underline transition-all font-normal">
+        {% filter ak_text:"returnToHomepage_link" %}Return to the homepage{% endfilter %}
+      </a>
+    </div>
+
+    {% include "./component-related_campaigns.html" %}
+  </div>
+
+{% else %}
+
+  <!--
+    Let AK know that we support sharing by always consistently including these two
+    substrings in our page source, but we don't actually use it here:
+      /share/link?type=fb
+      /share/link?type=tw
+  -->
+
+  {# --- WHERE THIS ACTION SENDS YOU NEXT (consent-return url, and the direct escape below when this action already declares its own destination) #}
+
+  {% comment %}
+    own_action: the action named by action_id belongs to THIS page, so its custom
+    fields describe this step. On the return leg from the consent flow, action is
+    the signup page's consent action instead -- its `continue` is that page's
+    already-spent destination, not ours to act on.
+  {% endcomment %}
+  {% if action and action.page.id == page.id %}
+    {% remember 1 as own_action %}
+  {% endif %}
+
+  {% store as destination %}{% filter strip %}
+    {% if own_action and action.custom_fields.continue %}
+      {{ action.custom_fields.continue|safe }}{% if "?" not in action.custom_fields.continue %}?{% else %}&{% endif %}
+    {% else %}
+      {% comment %}
+        share=1 even when sharing is off: this is where the consent page returns the
+        supporter to, and the disable_sharing escape below sends them onward from there.
+      {% endcomment %}
+      /thanks/{{ page.custom_fields.daisy_chain_action|default:page.name }}?share=1&
+    {% endif %}
+  {% endfilter %}{% endstore %}
+
+  {% store as next_step %}{% filter strip %}
+    {{ destination }}akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if action.custom_fields.utm_source %}&utm_source={{ action.custom_fields.utm_source }}{% endif %}{% if action.custom_fields.utm_medium %}&utm_medium={{ action.custom_fields.utm_medium }}{% endif %}{% if action.custom_fields.utm_campaign %}&utm_campaign={{ action.custom_fields.utm_campaign }}{% endif %}{% if action.custom_fields.utm_content %}&utm_content={{ action.custom_fields.utm_content }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}
+  {% endfilter %}{% endstore %}
+  <!-- Daisy Chain: {{ page.custom_fields.daisy_chain_action }} -->
+  <!-- Next Step: {{ next_step }} -->
+
+  {% if own_action and action.custom_fields.continue %}
+
+    {% comment %}
+      ESCAPE: this action already declares its own destination (e.g. the consent
+      page's own after-action render, sending you on after a double opt-in confirmation).
+    {% endcomment %}
+    <a href="{{ next_step }}">Please continue to the next step.</a>
+    <script>
+      window.location = '{{ next_step }}';
+    </script>
+
+  {% else %}
+
+    {# --- ESCAPE: germanic users we haven't yet asked to consent to being subscribed --- #}
+
+    {% comment %}
+      skip_consent stays unset only when we still owe this user a consent ask:
+      a not-yet-subscribed Germanic user, on a page that asks for consent,
+      who hasn't been asked before. Every other case sets a reason and falls
+      through to the share view below.
+    {% endcomment %}
+
+    <!-- Substatus: {{ user.subscription_status }} -->
+
+    {% if args.germanic %}
+      {# 0. You're already returning from the consent page, don't ask again. #}
+      {% remember "returning" as skip_consent %}
+
+    {% elif page.custom_fields.consent_version %}
+      {# 0B. Don't ask for consent after sending consent email. #}
+      {% remember "emailed" as skip_consent %}
+
+    {% elif not user %}
+      {# 1. We don't know who you are, so we can't deal with consents. #}
+      {% remember "anonymous" as skip_consent %}
+
+    {% elif not is_germanic %}
+      {# 1B. User isn't Germanic, so consent question was on action form. #}
+      {% remember "inline" as skip_consent %}
+
+    {% elif user.subscription_status == 'subscribed' %}
+      {# 2. You already subscribed, so don't ask again. #}
+      {% remember "already" as skip_consent %}
+
+    {% elif page.type == 'Unsubscribe' %}
+      {# 3. You're taking action on a page that doesn't require consents. #}
+      {% remember "bypass" as skip_consent %}
+
+    {% else %}
+
+      {% store as previous_consents %}{% report "previous_user_consent_for_list" with 1 as refresh user.id as user_id page.list_id as list_id %}{% endstore %}
+      <!-- Previous consents: {{ previous_consents }} -->
+
+      {% if previous_consents != "" and previous_consents != "0" %}
+        {# 4. You have already been asked to consent, so don't ask again. #}
+        {% remember "previous" as skip_consent %}
+      {% else %}
+
+        <!-- Lang ID: {{ user.lang_id }} -->
+        {% store as signup_page_name %}{% report "signup_page_for_list_language" with 1 as refresh page.list_id as list_id user.lang_id|default:100 as lang_id %}{% endstore %}
+        <!-- Signup Page: {{ signup_page_name }} -->
+        {% if not signup_page_name %}
+          {% comment %}
+            5. You should be asked to consent, but we don't have a consent page
+            for that list in your language, so don't ask.
+            (Perhaps this should change to using the English consent page?)
+          {% endcomment %}
+          {% remember "nolang" as skip_consent %}
+        {% else %}
+          {% store as consent_link %}/act/{{ signup_page_name }}?akid={{ akid }}{% if action %}&trigger_page={{ page.name }}&trigger_action={{ action.id }}{% endif %}&next_step={{ next_step|urlencode }}%26germanic=consent{% endstore %}
+        {% endif %}
+      {% endif %}
+
+    {% endif %}
+
+    {% comment %}
+      sharing_off: the campaigner turned the share ask off for this page. Only for a
+      supporter who has just acted (or come back from consent) though -- the share
+      buttons link back to this page as ?share=whatsapp and friends, which is how
+      another page's share step shares this one, and those must always render.
+    {% endcomment %}
+    {% if page.custom_fields.disable_sharing and not args.share %}
+      {% remember 1 as sharing_off %}
+    {% endif %}
+    {% if page.custom_fields.disable_sharing and args.share == "1" %}
+      {% remember 1 as sharing_off %}
+    {% endif %}
+
+    {% if not skip_consent %}
+
+      <script>
+        window.location = '{{ consent_link }}';
+      </script>
+
+    {% elif sharing_off and page.custom_fields.next_step %}
+
+      {% comment %}
+        ESCAPE: the campaigner turned the share ask off for this page, so there is
+        nothing to show here. The consent ask above has had its chance first, which is
+        why this is not simply a redirect on the action page's after-action URL.
+      {% endcomment %}
+      {% store as forward_link %}{% filter strip %}
+        /act/{{ page.custom_fields.next_step }}?akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.embed %}&embed={{ args.embed }}{% endif %}{% if args.css %}&css={{ args.css }}{% endif %}
+      {% endfilter %}{% endstore %}
+      <a href="{{ forward_link }}">
+        {% filter ak_text:"signup_continueToNextStep_link" %}Please continue to the next step.{% endfilter %}
+      </a>
+      <script>
+        window.location = '{{ forward_link }}';
+      </script>
+
+    {% else %}
+
+      {# --- DEFAULT: show the share ask --- #}
+      <form name="taf" method="POST" action="/update_action/" accept-charset="utf-8" class="ak-thanks ak-styled-fields">
+        <input type="hidden" name="page" value="{{ page.name }}" />
+
+        {% if page.SUPPRESS_SHARING or sharing_off or args.share == "0" %}
+
+          {# --- VIEW MODE "AFTER-ACTION, NO SHARING" #}
+          <div class="flex gap-4 items-center mb-4">
+            <img src="/media/modern/stance-supportive.svg" height="34" width="34" alt="Miscelanous" aria-hidden="true" />
+
+            <h2 class="text-wm-purple m-0">
+              {% filter ak_text:"noshare_thanks_banner" %}Thanks!{% endfilter %}
+            </h2>
+          </div>
+
+          {% include_tmpl form.thank_you_text %}
+
+          {% if not page.type == 'Unsubscribe' %}
+            <a href="{% if page.custom_fields.next_step %}/act/{{ page.custom_fields.next_step }}{% else %}/thanks/{{ page.name }}?done=1&amp;{% endif %}akid={{ akid }}{% if action %}&amp;action_id={{ action.id }}{% endif %}" class="skip btn btn-default">
+              {% filter ak_text:"skipStep_button" %}Skip this step{% endfilter %}
+            </a>
+          {% endif %}
+
+        {% else %}
+
+          {# --- VIEW MODE "SHARING" #}
+          {% if user and user.subscription_status == 'never' and is_germanic and not args.germanic %}
+            {% include "./partial-share_germanic.html" %}
+          {% else %}
+            {% include "./partial-share_standard.html" %}
+          {% endif %}
+        {% endif %}
+      </form>
+
+    {% endif %}
+
+  {% endif %}
+
+{% endif %}
