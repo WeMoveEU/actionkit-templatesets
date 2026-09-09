@@ -27,9 +27,8 @@
     </script>
   {% else %}
     {% remember "1" as share_mode %}
-    {% remember "1" as isEmbbeded %}
 
-    {% include "./thanks.html" %}
+    {% include "./partial-thanks.html" %}
 
     {% if page.custom_fields.next_step %}
     <script>
@@ -89,4 +88,16 @@
 
 {% endif %}
 
+{% endblock %}
+
+{% block below_form %}
+  {% if share_mode %}
+    <script>
+      actionkit.forms.contextRoot = '/context/';
+      actionkit.forms.initTafForm('taf');
+      actionkit.sharing.initShareTools();
+    </script>
+  {% else %}
+    {{ block.super }}
+  {% endif %}
 {% endblock %}
