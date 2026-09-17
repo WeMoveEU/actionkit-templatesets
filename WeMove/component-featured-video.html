@@ -24,9 +24,11 @@
   {% else %}
     {# Self-hosted (Strapi CDN) video: first-party, so no Cookiebot gate. #}
     <video
-      class="h-auto w-full"
+      class="h-auto w-full aspect-video bg-black"
+      style="object-fit: contain"
       src="{{featured_video}}"
       controls
+      autoplay
       playsinline
       preload="metadata">
     </video>
