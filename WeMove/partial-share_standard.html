@@ -1,16 +1,17 @@
 <section class="standard-share mx-auto max-w-96">
   <div class="text-wm-purple text-center">
+
+    {% if args.action_id %}
     <div class="w-full text-right mr-4 mb-4 mt-0">
       <span class="inline-flex font-libre-franklin items-center gap-1 rounded-xl bg-green-100 text-base px-2 py-1 font-bold text-green-700 border-[1px] border-green-600">
         <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
           <path fill-rule="evenodd" d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.5 7.6a1 1 0 0 1-1.42.006l-3.5-3.5a1 1 0 1 1 1.414-1.414l2.79 2.79 6.793-6.89a1 1 0 0 1 1.417-.006Z" clip-rule="evenodd"/>
         </svg>
 
-        {% if args.action_id %}
         {% filter ak_text:"youSignedBadge_msg" %}You signed!{% endfilter %}
-        {% endif %}
       </span>
     </div>
+    {% endif %}
 
     <p class="mb-1">
       {% filter ak_text:"sharePetition_msg" %}Share the petition with <strong>3 people</strong> to triple the impact today.{% endfilter %}
