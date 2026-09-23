@@ -28,7 +28,7 @@
       style="object-fit: contain"
       src="{{featured_video}}"
       controls
-      autoplay
+      {% if not args.share and args.share != "1" %}autoplay{% endif %}
       playsinline
       preload="metadata">
     </video>
