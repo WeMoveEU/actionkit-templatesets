@@ -1,0 +1,8 @@
+{% if page.id %}
+  {% store as custom_header %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "custom_header" as field_name %}{% endstore %}
+  {% if custom_header %}
+    {% autoescape off %}
+      {{ custom_header }}
+    {% endautoescape %}
+  {% endif %}
+{% endif %}
