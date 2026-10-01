@@ -37,7 +37,9 @@
     {# Variations: 144 and 145 #}
     {# TEST IN DEVELOPMENT!!! #}
     {% if tests and tests.38 and page.custom_fields.share_step_ab_test_s3 == "video" %}
-      const shareTextWithURL = encodeURIComponent(`{{ page.custom_fields.share_video_url }} ${title} ${URLToShare}&source=${socialType}`);
+      {# share_video_url is an /embed/ URL for the share-page iframe, but embed pages have no og:image, so WhatsApp would show no thumbnail. Share the youtu.be form instead. #}
+      const shareVideoURL = `{{ page.custom_fields.share_video_url }}`.replace(/^https?:\/\/(?:www\.)?youtube(?:-nocookie)?\.com\/embed\/([\w-]+).*$/, "https://youtu.be/$1");
+      const shareTextWithURL = encodeURIComponent(`${shareVideoURL} ${title} ${URLToShare}&source=${socialType}`);
     {% else %}
       const shareTextWithURL = encodeURIComponent(`${title} ${URLToShare}&source=${socialType}`);
     {% endif %}
