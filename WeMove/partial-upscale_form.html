@@ -1,0 +1,70 @@
+{% block content %}
+
+<article class="nav-md:grid grid-cols-donate-new mb-8">
+    <div class="nav-md:mr-32">
+        <h2>{{ page.title }}</h2>
+
+        {% if page.custom_fields.featured_image %}
+            <div>
+                <img class="ak-featured-img" src="{{page.custom_fields.featured_image}}" alt="main picture" />
+            </div>
+        {% endif %}
+
+        <div>
+            <p>
+                {% filter ak_text:"knownUser_Hello" %}Hello{% endfilter %} {{ logged_in_user.name }}{% filter ak_text:"!" %}!{% endfilter %}
+                {% filter ak_text:"knownUser_notYou_button" %}Not you?{% endfilter %}
+                <a href="/logout/">{% filter ak_text:"clickHere_button" %}click here{% endfilter %}</a>
+            </p>
+        </div>
+
+        <div style="display:none">{% comment %}actionkit.js wants this, but we don't{% endcomment %}
+            <p id="unknown_user"></p>
+            <div id="known_user"><span id="known_user_name"></span></div>
+        </div>
+
+
+        {% store as profile_details %}
+        {% report "recurring_profile" with cache_key as key args.profile as recurring_id logged_in_user.id as user_id %}
+        {% endstore %}
+
+        {% store as akid %}{% if args.akid %}{{args.akid}}{% else %}{{logged_in_user.token}}{% endif %}{% endstore %}
+
+        {% with profile_details|load_json as profile %}
+
+        {% if action %}
+            <h3>Update saved!</h3>
+            <div>{% include_tmpl form.thank_you_text %}</div>
+        {% else %}
+
+        <div class="recurring-update-about-text">
+            {% store as currency_name %} {% if profile.currency == 'PLN' %} złoty {% elif profile.currency == 'GBP' %} pounds {% else %} euros {% endif %} {% endstore %}
+            {% store as currency_sym %} {% if profile.currency == 'PLN' %} zł {% elif profile.currency == 'GBP' %} £ {% else %} € {% endif %} {% endstore %}
+
+            {% include_tmpl form.update_card_text %}
+        </div>
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    {% if not action %}
+    <section class="flex justify-center nav-md:justify-end">
+        {% store as upscale_config %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "upscale_config" as field_name %}{% endstore %}
+        <div
+            data-wm-donation-form
+            data-flow="upscale"
+            class="w-[384px]"
+            data-locale="{{ link_iso }}"
+            data-page="{{ page.name }}"
+            data-config="{{ request.GET.config|default:upscale_config }}"
+            ></div>
+        {% if "roboticdogs" in request.get_host %}
+            <script async src="https://stage.donations.wemove.eu/embed.js"></script>
+        {% else %}
+            <script async src="https://donations.wemove.eu/embed.js"></script>
+        {% endif %}
+    </section>
+    {% endif %}
+</article>
+
+{% endblock %}
