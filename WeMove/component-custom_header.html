@@ -1,6 +1,7 @@
 {% if page.id %}
   {% store as custom_header %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "custom_header" as field_name %}{% endstore %}
-  {% if custom_header %}
+  {% comment %}The report renders a missing field as the text "None".{% endcomment %}
+  {% if custom_header and custom_header != "None" %}
     {% include_tmpl custom_header %}
   {% endif %}
 {% endif %}

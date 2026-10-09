@@ -31,7 +31,7 @@ if (!window.wemove) {
 
 {% if page.id and cache_key %}
   {% store as wemove_custom_script %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "wemove_custom_script" as field_name %}{% endstore %}
-  {% if wemove_custom_script %}
+  {% if wemove_custom_script and wemove_custom_script != "None" %}
     {% autoescape off %}
       {{ wemove_custom_script }}
     {% endautoescape %}
@@ -40,7 +40,7 @@ if (!window.wemove) {
 
 {% if isEmbbeded %}
   {% store as partner_custom_script %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "partner_custom_script" as field_name %}{% endstore %}
-  {% if partner_custom_script %}
+  {% if partner_custom_script and partner_custom_script != "None" %}
     {% autoescape off %}
       {{ partner_custom_script }}
     {% endautoescape %}
