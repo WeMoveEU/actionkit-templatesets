@@ -190,6 +190,35 @@ Inserting as first step:
     display: inline-block;
   }
 
+	/* The option pickers have up to 20 choices: lay them out 4 to a row, and
+	   leave room between pickers so each reads as its own group. */
+	.language-picker,
+	.moment-picker,
+	.ask_type-picker,
+	.ask_details-picker,
+	.target-picker {
+    margin-bottom: 18px;
+  }
+
+	.language-picker .form-control.span_3_of_4,
+	.moment-picker .form-control.span_3_of_4,
+	.ask_type-picker .form-control.span_3_of_4,
+	.ask_details-picker .form-control.span_3_of_4,
+	.target-picker .form-control.span_3_of_4 {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(max-content, 160px));
+    column-gap: 1em;
+  }
+
+	.language-picker .form-control.span_3_of_4 label,
+	.moment-picker .form-control.span_3_of_4 label,
+	.ask_type-picker .form-control.span_3_of_4 label,
+	.ask_details-picker .form-control.span_3_of_4 label,
+	.target-picker .form-control.span_3_of_4 label {
+    margin: 0 0 8px;
+    white-space: nowrap;
+  }
+
 	.button-row {
 		margin-top: 0.5em;
 	}
