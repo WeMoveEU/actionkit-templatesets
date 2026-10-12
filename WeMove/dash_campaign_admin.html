@@ -183,8 +183,11 @@ Inserting as first step:
     pointer-events: none;
   }
 
-	.form-row-CheckboxInput .form-control label {
-    float: none
+	/* ActionKit's admin CSS sets `.span_3_of_4 label:not(.error) { display: block }`,
+	   which put every checkbox and radio option on its own line. Keep them in a row. */
+	.form-row-CheckboxInput .form-control.span_3_of_4 label {
+    float: none;
+    display: inline-block;
   }
 
 	.button-row {
