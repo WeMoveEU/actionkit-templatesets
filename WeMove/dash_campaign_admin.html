@@ -219,6 +219,12 @@ Inserting as first step:
     white-space: nowrap;
   }
 
+	/* ActionKit gives checkboxes in this column 6px above and 8px below, which
+	   spaced the language rows wider than the radio rows. */
+	.language-picker .form-control.span_3_of_4 input[type=checkbox] {
+    margin: 0;
+  }
+
 	.button-row {
 		margin-top: 0.5em;
 	}
