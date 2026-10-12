@@ -50,13 +50,14 @@
     {% if not action %}
     <section class="flex justify-center nav-md:justify-end">
         {% store as upscale_config %}{% report "custom_field_from_page_or_campaign" with cache_key as key page.id as page_id "upscale_config" as field_name %}{% endstore %}
+        {% comment %}The report renders a missing field as the text "None".{% endcomment %}
         <div
             data-wm-donation-form
             data-flow="upscale"
             class="w-[384px]"
             data-locale="{{ link_iso }}"
             data-page="{{ page.name }}"
-            data-config="{{ request.GET.config|default:upscale_config }}"
+            data-config="{% if request.GET.config %}{{ request.GET.config }}{% elif upscale_config and upscale_config != "None" %}{{ upscale_config }}{% endif %}"
             ></div>
         {% if "roboticdogs" in request.get_host %}
             <script async src="https://stage.donations.wemove.eu/embed.js"></script>

@@ -10,7 +10,8 @@ There are a couple ways to update a recurring donation:
  - Change the amount (upscaling). DONE.
  - Change the payment method.     TODO.
 
-The page custom field upscale_version picks the upscaling UI: "form" embeds
+The page custom field upscale_version picks the upscaling UI: "form" (any case,
+spaces ignored, so "Form" or "form " also match) embeds
 the donation form's upscale page (partial-upscale_form.html, configured by the
 upscale_config field); anything else keeps the fundraiser-api widget
 (partial-upscale_widget.html).
@@ -18,13 +19,13 @@ upscale_config field); anything else keeps the fundraiser-api widget
 {% endcomment %}
 
 {% block css_additions %}
-  {% if page.custom_fields.upscale_version != "form" %}
+  {% if page.custom_fields.upscale_version|lower|cut:" " != "form" %}
 <link rel="stylesheet" href="https://donate-ui.wemove.eu/donate-main.css" />
   {% endif %}
 {% endblock %}
 
 {% block content %}
-  {% if page.custom_fields.upscale_version == "form" %}
+  {% if page.custom_fields.upscale_version|lower|cut:" " == "form" %}
     {% include "./partial-upscale_form.html" %}
   {% else %}
     {% include "./partial-upscale_widget.html" %}
