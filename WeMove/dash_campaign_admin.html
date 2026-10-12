@@ -899,7 +899,7 @@ Inserting as first step:
 				Object.keys(page.fields).filter( (k) => ! skipped_field_names[k] ).join(", ") || 'None'
 			);
 			$('#campaign_output').show();
-			$('#open_edit').on('click', function() {
+			$('#open_edit').off('click.dash').on('click.dash', function() {
 				displayEditForm(page);
 				return false;
 			});
@@ -918,7 +918,7 @@ Inserting as first step:
 		$('#page_form input[name=action_type]').on('click', function() {
 			$('#page_form input[name=notes]').val(campaign.name + "-" + this.value);
 		});
-		$('#pages_output table').on('click', 'a.share-toggle', function(evt) {
+		$('#pages_output table').off('click.dash', 'a.share-toggle').on('click.dash', 'a.share-toggle', function(evt) {
 			evt.preventDefault();
 			var toggle = this;
 			if ( toggle.dataset.busy ) {
@@ -942,8 +942,8 @@ Inserting as first step:
 				toggle.classList.remove('is-busy');
 			});
 		});
-		$('#create_pages').on('click', createPages);
-		$('#add_step').on('click', function () {
+		$('#create_pages').off('click.dash').on('click.dash', createPages);
+		$('#add_step').off('click.dash').on('click.dash', function () {
 			$('#add_step').hide();
 			$('#page_form').show();
 		});
@@ -1168,8 +1168,8 @@ Inserting as first step:
     document.querySelector('#mailings_output table').innerHTML = tableContent;
     $('#mailing_form').data('campaign', campaign);
     $('#mailings_output').removeClass('is-loading');
-    $('#create_mailings').on('click', createMailings);
-    $('#add_mailing').on('click', () => {
+    $('#create_mailings').off('click.dash').on('click.dash', createMailings);
+    $('#add_mailing').off('click.dash').on('click.dash', () => {
       $('#add_mailing').hide();
       $('#mailing_form').show();
     });
@@ -1191,7 +1191,7 @@ Inserting as first step:
 		$('#title').val( page.title );
 		$('#campaign_form').data('campaign_id', page.id);
 		$('#campaign_form #name').val(page.name).attr('readonly', 'readonly');
-		$('#save_campaign').on('click', saveCampaignPage);
+		$('#save_campaign').off('click.dash').on('click.dash', saveCampaignPage);
 		$('#campaign_output').hide();
 		$('#campaign_form').show();
 	}
@@ -1214,7 +1214,7 @@ Inserting as first step:
 		readFieldValues('topic', 'page');
 		readFieldValues('campaign_type', 'page');
 		readCampaigners();
-		$('#save_campaign').on('click', saveCampaignPage);
+		$('#save_campaign').off('click.dash').on('click.dash', saveCampaignPage);
 		$('#campaign_form').show().find('#name').val(default_name);
 		$('#not_found').show();
 		$('#add_step').hide();
