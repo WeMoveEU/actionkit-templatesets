@@ -78,3 +78,13 @@
     </div>
   </section>
 {% endblock %}
+
+{% block below_form %}
+  {% comment %}A/B Test need a call to initForm() and a form, so give them one (same as partial-donation_widget.html). The wrapper calls actionkit.forms.initForm('act') on every page; without a form named "act" it returns at once and never requests /context/, which is where ActionKit counts the page view for an A/B test — in test 42 variation B showed 0 viewers for this reason.{% endcomment %}
+  <form style="display:none;" name="act">
+  <input type="hidden" name="page" value="{{ page.name }}" />
+  </form>
+  <script justification="A/B testing needs a call to initForm() and a form">
+  actionkit.forms.initForm('act');
+  </script>
+{% endblock %}
