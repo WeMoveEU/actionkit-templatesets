@@ -66,6 +66,32 @@
                   iDEAL
                   {% remember "iDEAL" as currentPaymentMethod %}
 
+                {% elif donation.account|lower == "wm-donations" %}
+                  {% comment %}
+                    donations-api rows. These rows are plain dicts (amount, created_at,
+                    recurring, order_id, transaction_id, account, amt), so the method
+                    comes from the saved report "stripe_payment_method_for_transaction":
+                    the stripe_payment_method_type action field of the order's donation
+                    action, looked up by transaction id.
+
+                    The inner {% with %} blanks the context variables whose text holds
+                    "€" (the donation lists and this row) while the report tag runs:
+                    AK's report tag reads the whole context and fails on "€" with
+                    "'ascii' codec can't encode character '€'" (checked 22-10-2026
+                    on /me/, every report, with and without `only` includes).
+                    `remember` survives the endwith; `store` does not.
+                  {% endcomment %}
+                  {% with tx=donation.transaction_id %}{% with donations="" recurring_donations="" donation="" upcoming_events="" past_events="" messages="" %}
+                    {% store as stripeMethod %}{% report "stripe_payment_method_for_transaction" with "1" as key tx as tx %}{% endstore %}
+                    {% remember stripeMethod|lower as currentPaymentMethod %}
+                  {% endwith %}{% endwith %}
+                  {% if currentPaymentMethod %}
+                    <span class="text-wm-pink">/</span>
+                    {% include "./component-account_stripe_payment_method.html" with stripe_method=currentPaymentMethod %}
+                  {% else %}
+                    {% remember "none" as currentPaymentMethod %}
+                  {% endif %}
+
                 {% else %}
                   {% remember "none" as currentPaymentMethod %}
                 {% endif %}
