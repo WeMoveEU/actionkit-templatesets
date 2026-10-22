@@ -1,0 +1,29 @@
+{% comment %}
+  Payment method label for a recurring donation created by donations-api
+  (account "WM-donations"). The profile itself carries no payment method
+  (card_num/exp_date are dummies, order.payment_method is always "cc"); the
+  real one is the custom action field `stripe_payment_method_type` on the
+  profile's donation action, written on signup and on every method swap.
+  Expects `donation` (an orderrecurring) in context.
+{% endcomment %}
+{% with donation.action.custom_fields.stripe_payment_method_type|lower as stripe_method %}
+  {% if stripe_method == "card" %}
+    {% filter ak_text:"paymentType_creditCard" %}Card{% endfilter %}
+  {% elif stripe_method == "sepa_debit" %}
+    SEPA
+  {% elif stripe_method == "paypal" %}
+    PayPal
+  {% elif stripe_method == "apple_pay" %}
+    Apple Pay
+  {% elif stripe_method == "google_pay" %}
+    Google Pay
+  {% elif stripe_method == "link" %}
+    Link
+  {% elif stripe_method == "ideal" %}
+    iDEAL
+  {% elif stripe_method == "bank_transfer" or stripe_method == "customer_balance" %}
+    {% filter ak_text:"paymentType_bankTransfer" %}Bank transfer{% endfilter %}
+  {% else %}
+    --
+  {% endif %}
+{% endwith %}

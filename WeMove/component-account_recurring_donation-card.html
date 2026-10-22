@@ -110,6 +110,7 @@
           <div class="text-center">
             <div class="mb-2">
               <h5 class="mb-0">
+                {{donation.action.custom_fields.stripe_payment_method_type}}
                 {% filter ak_text:"user_paymentMethod_title" %}Payment method{% endfilter %}
               </h5>
 
@@ -130,6 +131,8 @@
                   Apple Pay
                 {% elif donation.account|lower == "wm-ideal" %}
                   iDEAL
+                {% elif donation.account|lower == "wm-donations" %}
+                  {% include "./component-account_stripe_payment_method.html" with donation=donation %}
                 {% else %}
                   --
                 {% endif %}
