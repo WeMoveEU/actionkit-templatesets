@@ -31,6 +31,12 @@
         </p>
       </div>
 
+      <div hidden data-wm-cancel-recurring-donation-bank>
+        <p>
+          {% filter ak_text:"user_standingOrder_message" %}This donation is a standing order with your bank. To stop it, please cancel it at your bank. If you need help, write to <a class="text-wm-pink hover:underline" href="mailto:donate@wemove.eu">donate@wemove.eu</a>.{% endfilter %}
+        </p>
+      </div>
+
       <div data-wm-recurring-donation-card="{{ forloop.counter }}" class="rounded-xl p-4 border-[1px] border-wm-pink text-wm-purple w-full relative">
         <aside class="flex justify-between">
           <div class="flex items-center gap-1">
@@ -44,7 +50,7 @@
             </span>
           </div>
 
-          {% if donation.is_active %}
+          {% if donation.is_active and donation.recurring_id|slice:":9" != "standing_" %}
             <button
               type="button"
               data-wm-open-dialog-cta="data-wm-cancel-recurring-donation"
@@ -106,6 +112,12 @@
             {% endif %}
 
           </div>
+
+          {% if donation.recurring_id|slice:":9" == "standing_" %}
+            <p class="text-center text-sm mt-4 mb-2">
+              {% filter ak_text:"user_standingOrder_message" %}This donation is a standing order with your bank. To stop it, please cancel it at your bank. If you need help, write to <a class="text-wm-pink hover:underline" href="mailto:donate@wemove.eu">donate@wemove.eu</a>.{% endfilter %}
+            </p>
+          {% endif %}
 
           <div class="text-center">
             <div class="mb-2">
