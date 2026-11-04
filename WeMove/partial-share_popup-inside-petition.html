@@ -4,6 +4,12 @@
   {% remember page.name as pageName %}
 {% endif %}
 
+{% comment %}
+  shareLocation: where the supporter shared from, appended to every share_link source as
+  <platform>_<location> (popup, thanks, mailing). See docs/share-link-data-flow.md.
+{% endcomment %}
+{% remember "popup" as shareLocation %}
+
 <div data-wm-share-popup hidden>
   <div class="mx-auto md:max-w-[500px] text-wm-purple">
     <h3 class="text-3xl mb-2">

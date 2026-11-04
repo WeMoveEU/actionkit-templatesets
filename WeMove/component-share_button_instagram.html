@@ -14,7 +14,7 @@
 {% endcomment %}
 {% store as instagram_href %}{% filter strip %}
   {% if pageName != page.name %}
-    /thanks/{{ pageName }}?share=instagram&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.variation %}&variation={{ args.variation }}{% endif %}
+    /thanks/{{ pageName }}?share=instagram&share_location={{ shareLocation }}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}{% if args.variation %}&variation={{ args.variation }}{% endif %}
   {% else %}
     {{ instagram_share_link }}
   {% endif %}
@@ -24,7 +24,7 @@
   href="{{ instagram_href }}"
   target="_blank"
   {% if args.share == "instagram" %}data-wm-share-autofire{% endif %}
-  {% if pageName == page.name %}data-wm-send-share-to-action-kit="/share/link?type=ot&source=instagram&page_name={{ pageName }}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}"{% endif %}>
+  {% if pageName == page.name %}data-wm-send-share-to-action-kit="/share/link?type=ot&source=instagram_{{ shareLocation }}&page_name={{ pageName }}&akid={{ akid }}{% if action %}&action_id={{ action.id }}{% endif %}"{% endif %}>
   <span aria-hidden="true" class="h-4 w-4">
     {% include "./icon-instagram.html" %}
   </span>

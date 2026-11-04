@@ -46,6 +46,23 @@
     {% remember page.name as pageName %}
   {% endif %}
 
+  {% comment %}
+    shareLocation: where the supporter shared from, appended to every share_link source as
+    <platform>_<location>. See docs/share-link-data-flow.md.
+
+    Buttons that open this page in a new tab as ?share=<network> (WhatsApp, and e-mail or
+    Instagram handing off to another page) pass their own share_location along. A
+    ?share=<network> without one comes from a link in a mailing. Only known values are
+    accepted, so a hand-edited URL cannot invent a new source.
+  {% endcomment %}
+  {% if args.share_location == "popup" or args.share_location == "thanks" %}
+    {% remember args.share_location as shareLocation %}
+  {% elif args.share and args.share != "1" %}
+    {% remember "mailing" as shareLocation %}
+  {% else %}
+    {% remember "thanks" as shareLocation %}
+  {% endif %}
+
   <div data-wm-share-content class="[&_a]:shadow [&_button]:shadow">
     {% include "./component-share_button_whatsapp.html" %}
     {% include "./component-share_button_facebook.html" %}
