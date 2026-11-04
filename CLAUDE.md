@@ -28,3 +28,12 @@ The project supports seven languages:
 - `de` — German
 - `fr` — French
 - `it` — Italian
+
+## Donation and upscale pages: the form is the default
+
+Since 2026-11-04 `donate.html` and `recurring_update.html` render the donation form
+(donations.wemove.eu: `partial-donation_form.html` / `partial-upscale_form.html`) unless the
+page custom field (`donation_version` / `upscale_version`) is `widget`, which keeps the
+fundraiser-api widget partial. Before, the widget was the default and `form` opted in. The
+widget stays as the rollback until fundraiser-api's shutdown (donations-api
+`docs/fundraiser-api-shutdown.md`, H4): don't delete the widget partials before then.

@@ -1,7 +1,21 @@
 {% extends "./wrapper.html" %}
 
+{% comment %}
+
+Donation page
+=============
+
+The page custom field donation_version picks the donation UI. Since 2026-11-04
+the donation form (partial-donation_form.html, donations.wemove.eu) is the
+default: only "widget" (any case, spaces ignored) keeps the fundraiser-api
+widget (partial-donation_widget.html). Until then it was the other way round,
+the widget unless the field said "form". The seven donation model pages carry
+"form", so pages made from the campaign dashboard never needed the field.
+
+{% endcomment %}
+
 {% block css_additions %}
-  {% if page.custom_fields.donation_version != "form" %}
+  {% if page.custom_fields.donation_version|lower|cut:" " == "widget" %}
     {% if fundraiser_staging or args.staging == "1" %}
       {% load_css %}
       //donate-ui.wemove.support/donate-main.css
@@ -15,9 +29,9 @@
 {% endblock %}
 
 {% block content %}
-  {% if page.custom_fields.donation_version == "form" %}
-    {% include "./partial-donation_form.html" %}
-  {% else %}
+  {% if page.custom_fields.donation_version|lower|cut:" " == "widget" %}
     {% include "./partial-donation_widget.html" %}
+  {% else %}
+    {% include "./partial-donation_form.html" %}
   {% endif %}
 {% endblock %}

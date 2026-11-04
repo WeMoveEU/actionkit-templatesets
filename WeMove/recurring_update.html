@@ -10,24 +10,25 @@ There are a couple ways to update a recurring donation:
  - Change the amount (upscaling). DONE.
  - Change the payment method.     TODO.
 
-The page custom field upscale_version picks the upscaling UI: "form" (any case,
-spaces ignored, so "Form" or "form " also match) embeds
+The page custom field upscale_version picks the upscaling UI. Since 2026-11-04
 the donation form's upscale page (partial-upscale_form.html, which has no
-configurations); anything else keeps the fundraiser-api widget
-(partial-upscale_widget.html).
+configurations) is the default: only "widget" (any case, spaces ignored, so
+"Widget" or "widget " also match) keeps the fundraiser-api widget
+(partial-upscale_widget.html). Until then it was the other way round, the
+widget unless the field said "form".
 
 {% endcomment %}
 
 {% block css_additions %}
-  {% if page.custom_fields.upscale_version|lower|cut:" " != "form" %}
+  {% if page.custom_fields.upscale_version|lower|cut:" " == "widget" %}
 <link rel="stylesheet" href="https://donate-ui.wemove.eu/donate-main.css" />
   {% endif %}
 {% endblock %}
 
 {% block content %}
-  {% if page.custom_fields.upscale_version|lower|cut:" " == "form" %}
-    {% include "./partial-upscale_form.html" %}
-  {% else %}
+  {% if page.custom_fields.upscale_version|lower|cut:" " == "widget" %}
     {% include "./partial-upscale_widget.html" %}
+  {% else %}
+    {% include "./partial-upscale_form.html" %}
   {% endif %}
 {% endblock %}
