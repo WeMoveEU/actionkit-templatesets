@@ -98,13 +98,15 @@
               </span>
             </div>
 
-            <div class="text-xs text-wm-pink">{{ donation.created_at|date:"m/d/Y" }}</div>
+            <div class="text-xs text-wm-pink">{{ donation.created_at|date:"d/m/Y" }}</div>
           </div>
 
           {% comment %}
             One link for every account. akid + tx let wemove.eu/api/receipt read
             the payment method from Stripe; it ignores non-Stripe ids (PayPal,
             ActBlue) and keeps payment_method as the fallback (wemove.eu #118).
+            payment_date stays m/d/Y: the receipt route parses it with new Date()
+            and localises it itself. Only the date shown above is d/m/Y.
           {% endcomment %}
           <a
             alt="Download pdf of receipt"
