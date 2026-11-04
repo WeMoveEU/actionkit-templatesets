@@ -49,12 +49,12 @@ Depending on the button type, the click is handled differently:
 ## 3. Someone Clicks the Shared Link (Downstream)
 
 When a recipient clicks the shared URL containing the "s" AKID:
-- A row is written to the **`share_click`** table (`share_link_id`, `user_id`)
+- A row is written to the **`share_click`** table (`share_id`, `user_id`)
 
 ## 4. Recipient Takes Action
 
 If the recipient then completes an action on the page:
-- A row is written to the **`share_action`** table (`share_link_id`, `action_id`)
+- A row is written to the **`share_action`** table (`share_id`, `action_id`)
 - The `source` from the originating `share_link` record propagates to **`core_action.source`**
 - If no `source` was set on the `share_link`, the default source is `"share"`
 
@@ -64,7 +64,7 @@ If the recipient then completes an action on the page:
 share_type          share_link              share_click         share_action
 ---------           ----------              -----------         ------------
 id                  id                      id                  id
-name (fb/tw/bl/ot)  share_type_id -->       share_link_id -->   share_link_id -->
+name (fb/tw/bl/ot)  share_type_id -->       share_id -->   share_id -->
                     page_id                 user_id             action_id
                     user_id
                     action_id

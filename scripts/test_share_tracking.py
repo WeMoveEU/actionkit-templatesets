@@ -41,6 +41,9 @@ AK_BASE = "https://action.wemove.eu"
 API_BASE = f"{AK_BASE}/rest/v1"
 TEST_PAGE_NAME = "share-tracking-test"
 REPORT_SHORT_NAME = "share_tracking_test_report"
+# The Instagram button only renders when the page (or its campaign) has an
+# instagram_share_link, so setup gives the test page one.
+TEST_INSTAGRAM_LINK = "https://www.instagram.com/wemove.eu/"
 REPORT_SQL = """
 SELECT id, type, source, generation, created_at
 FROM share_link
@@ -157,6 +160,16 @@ def api_post(path, auth, data):
     return resp
 
 
+def api_patch(path, auth, data):
+    resp = requests.patch(f"{API_BASE}{path}", auth=auth, json=data,
+                          headers={"Content-Type": "application/json"})
+    if resp.status_code not in (200, 202, 204):
+        print(f"  PATCH {path} failed: {resp.status_code}")
+        print(f"  {resp.text[:500]}")
+        resp.raise_for_status()
+    return resp
+
+
 def api_delete(path, auth):
     return requests.delete(f"{API_BASE}{path}", auth=auth)
 
@@ -255,6 +268,10 @@ def setup(auth):
             "page": f"/rest/v1{page_uri}",
             "thank_you_text": "Share tracking test complete.",
         })
+
+    print(f"  Setting instagram_share_link: {TEST_INSTAGRAM_LINK}")
+    api_patch(location_to_path(page_uri), auth,
+              {"fields": {"instagram_share_link": TEST_INSTAGRAM_LINK}})
 
     # 2. Create report
     if find_report(auth):
@@ -516,7 +533,7 @@ def run_browser_tests(auth):
         # Block external navigations (Facebook, WhatsApp, Bluesky, etc.)
         context.route(
             re.compile(r"https?://(www\.)?(facebook|whatsapp|api\.whatsapp|"
-                       r"wa\.me|bsky\.app|twitter|x\.com)"),
+                       r"wa\.me|bsky\.app|twitter|x\.com|instagram)"),
             lambda route, _: route.abort(),
         )
 
@@ -605,9 +622,10 @@ def run_browser_tests(auth):
 
     # --- Phase 3: Verify database via report API ---
     print("--- Phase 3: Verify share_link rows in database ---\n")
-    # Poll the replica until data appears or we hit the timeout.
-    # ActionKit reports run against a read replica with variable lag.
-    max_wait = 300  # 5 minutes
+    # Poll the replica until every expected row appears or we hit the timeout.
+    # ActionKit reports run against a read replica with variable lag, which
+    # has been seen to exceed 5 minutes.
+    max_wait = 900  # 15 minutes
     poll_interval = 15
     elapsed = 0
     rows = []
@@ -620,10 +638,11 @@ def run_browser_tests(auth):
             rows = run_report(auth, action_id)
             if not isinstance(rows, list):
                 rows = []
-            if rows:
+            if len(rows) >= len(expectations):
                 print(f"  Data appeared after {elapsed}s")
                 break
-            print(f"  ... {elapsed}s, no data yet")
+            print(f"  ... {elapsed}s, {len(rows)}/{len(expectations)} "
+                  f"rows so far")
 
         print(f"  Query: action_id={action_id}")
         if not isinstance(rows, list):
