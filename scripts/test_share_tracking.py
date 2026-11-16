@@ -118,6 +118,10 @@ LOCATIONS = [
     {"name": "thanks", "scope": "[data-wm-share-content]"},
 ]
 
+# The share page opened from a share link in a mailing (/cms/thanks/PAGE) has no
+# action_id in its address, so the page labels those shares "mailing" as well.
+EMAIL_LINK_LOCATION = {"name": "mailing", "scope": "[data-wm-share-content]"}
+
 # A mailing links straight to /thanks/PAGE?share=<network>, which fires the
 # share on load. No location param, so the page must label it "mailing".
 MAILING_CASES = [
@@ -382,8 +386,9 @@ def open_share_popup(page, action_id, akid):
     """Open the petition page's share popup as if the supporter had just signed.
 
     Mirrors popup-share.js in pubstatic without submitting the form: open the
-    dialog, swap the popup's akid=None for the real action, then rebind the
-    share handlers. Returns how many akid=None placeholders were replaced.
+    dialog, point every akid in the popup's links at the real action (whatever
+    akid the page was opened with), then rebind the share handlers. Returns how
+    many akid parameters were replaced.
     """
     page.goto(f"{AK_BASE}/act/{TEST_PAGE_NAME}",
               wait_until="networkidle", timeout=30000)
@@ -394,9 +399,10 @@ def open_share_popup(page, action_id, akid):
         """([akid, actionId]) => new Promise((resolve) => {
           document.addEventListener("wm-dialogOpened::data-wm-share-popup", () => {
             const dialog = document.querySelector("[data-wm-dialog-content]");
-            const count = dialog.innerHTML.split("akid=None").length - 1;
-            dialog.innerHTML = dialog.innerHTML.replaceAll(
-              "akid=None", `akid=${akid}&amp;action_id=${actionId}`);
+            const pattern = /(\\?|&amp;|&)akid=[^&"'\\s<]*/g;
+            const count = (dialog.innerHTML.match(pattern) || []).length;
+            dialog.innerHTML = dialog.innerHTML.replace(
+              pattern, `$1akid=${akid}&amp;action_id=${actionId}`);
             wemove.triggerEvent("wm-initShare");
             resolve(count);
           }, { once: true });
@@ -563,7 +569,7 @@ def run_browser_tests(auth):
         for location in LOCATIONS:
             if location["name"] == "popup":
                 replaced = open_share_popup(page, action_id, akid)
-                print(f"  Popup opened, {replaced} akid=None links "
+                print(f"  Popup opened, {replaced} akid links "
                       f"pointed at the test action")
             else:
                 page.goto(thanks_url, wait_until="networkidle", timeout=30000)
@@ -598,6 +604,15 @@ def run_browser_tests(auth):
             passed, messages = validate_params(
                 name, share_urls[-1], mc["expect_type"], expect_source)
             results.append((name, passed, share_urls, messages))
+
+        # The share page as a mailing's share link opens it: no action_id.
+        # Checked on the URL only, because rows without an action_id can't be
+        # found by the action_id report in phase 3.
+        page.goto(f"{AK_BASE}/thanks/{TEST_PAGE_NAME}?akid={akid}",
+                  wait_until="networkidle", timeout=30000)
+        email_results, _ = click_share_buttons(
+            context, page, captured_urls, EMAIL_LINK_LOCATION)
+        results += email_results
 
         browser.close()
 

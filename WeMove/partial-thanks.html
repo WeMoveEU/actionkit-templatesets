@@ -106,7 +106,22 @@
 
     <!-- Substatus: {{ user.subscription_status }} -->
 
-    {% if args.germanic %}
+    {% comment %}
+      is_handoff: another tab sent the supporter here as ?share=whatsapp (or instagram,
+      taf, bluesky) only to fire that share. The consent ask belongs to the main journey,
+      which still reaches it when the pop-up closes. Asking here sent German and Austrian
+      signers who had not confirmed yet to the consent page or the "check your email"
+      page instead, and WhatsApp never opened.
+    {% endcomment %}
+    {% if args.share and args.share != "1" and args.share != "0" %}
+      {% remember 1 as is_handoff %}
+    {% endif %}
+
+    {% if is_handoff %}
+      {# 0. A share hand-off from another tab: fire the share, ask nothing else. #}
+      {% remember "handoff" as skip_consent %}
+
+    {% elif args.germanic %}
       {# 0. You're already returning from the consent page, don't ask again. #}
       {% remember "returning" as skip_consent %}
 
@@ -221,7 +236,7 @@
         {% else %}
 
           {# --- VIEW MODE "SHARING" #}
-          {% if user and user.subscription_status == 'never' and is_germanic and not args.germanic %}
+          {% if user and user.subscription_status == 'never' and is_germanic and not args.germanic and not is_handoff %}
             {% include "./partial-share_germanic.html" %}
           {% else %}
             {% include "./partial-share_standard.html" %}

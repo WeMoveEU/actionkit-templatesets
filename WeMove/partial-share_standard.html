@@ -52,12 +52,17 @@
 
     Buttons that open this page in a new tab as ?share=<network> (WhatsApp, and e-mail or
     Instagram handing off to another page) pass their own share_location along. A
-    ?share=<network> without one comes from a link in a mailing. Only known values are
-    accepted, so a hand-edited URL cannot invent a new source.
+    ?share=<network> without one comes from a link in a mailing. So does this page opened
+    without an action_id: right after an action the address always carries one, and the
+    share links in mailings (/cms/thanks/<page>) do not. Keeping the two apart lets
+    "thanks" mean the share step right after acting. Only known values are accepted, so
+    a hand-edited URL cannot invent a new source.
   {% endcomment %}
   {% if args.share_location == "popup" or args.share_location == "thanks" %}
     {% remember args.share_location as shareLocation %}
   {% elif args.share and args.share != "1" %}
+    {% remember "mailing" as shareLocation %}
+  {% elif not args.action_id %}
     {% remember "mailing" as shareLocation %}
   {% else %}
     {% remember "thanks" as shareLocation %}

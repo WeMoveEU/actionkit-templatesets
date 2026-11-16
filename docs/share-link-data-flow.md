@@ -96,8 +96,13 @@ Every share button in the share partials sends `source=<platform>_<location>`, s
 | Location | Meaning | Set by |
 |---|---|---|
 | `popup` | Share popup on the petition page, right after signing | `partial-share_popup-inside-petition.html` |
-| `thanks` | Share step on the thanks page | `partial-share_standard.html` (default) |
-| `mailing` | A `/thanks/PAGE?share=<network>` link from a mailing | `partial-share_standard.html`, when `?share=<network>` arrives without `share_location` |
+| `thanks` | Share step on the thanks page, right after an action (the address carries `action_id`) | `partial-share_standard.html` (default) |
+| `mailing` | The share page opened from a mailing: a `/thanks/PAGE?share=<network>` link, or a share link with no `action_id` (mailings link to `/cms/thanks/PAGE`) | `partial-share_standard.html`, when `?share=<network>` arrives without `share_location`, or the address has no `action_id` |
+| `quiz` | The isitscifiorisitreal quiz | the quiz's own share code in pubstatic |
+
+Until the November 2026 share review, a share-page visit from a mailing link was labelled
+`thanks`. From 5 to 15 November 2026 those visits brought about 8 in 10 of the `thanks`
+signatures, so compare `thanks` across that change with care.
 
 Each share partial sets the `shareLocation` template variable before including the
 buttons. Buttons that open the thanks page in a new tab (WhatsApp always; e-mail and
@@ -114,3 +119,23 @@ recipient attribution and stays platform-only. Event pages (`event_search.html`,
 
 `scripts/test_share_tracking.py` clicks every button in each location and checks the
 resulting `share_link.source`.
+
+## Whose share it is: the pop-up after signing
+
+The pop-up's links are rendered before the supporter signs, with whatever `akid` the page
+was opened with: `None` for a visitor we don't know, a member's own akid from a mailing, or
+the "s" akid of the share that brought them. After signing, `popup-share.js` (pubstatic)
+swaps that akid for the signer's own akid and `action_id`, taken from the signing
+response. Until November 2026 it swapped only `akid=None`, so shares by signers who came
+through a share link were stored with no user, as generation 2+ of the share that brought
+them (27 named against 4,957 signatures from nameless ones, 5 to 15 November 2026).
+
+## Share hand-offs skip the consent ask
+
+A button that opens the thanks page in a new tab as `?share=<network>` only fires that
+share. `partial-thanks.html` (`is_handoff`) never sends such a tab to the consent page or
+the German "check your email" page (`partial-share_germanic.html`): the consent ask stays
+in the main journey, which reaches it when the pop-up closes. Before November 2026 it
+did, so WhatsApp from the pop-up never opened for German and Austrian signers who had not
+confirmed yet (2 WhatsApp shares from 869 such signatures, against copy link at the usual
+rate).
