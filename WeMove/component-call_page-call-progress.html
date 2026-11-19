@@ -199,13 +199,16 @@ window.callProgressLabels = {
     terminated: "{% filter ak_text:"call_callTerminated" %}Call &amp; Connect me{% endfilter %}",
     error: "{% filter ak_text:"call_callError" %}Error &mdash; Try again{% endfilter %}",
     disconnected: "{% filter ak_text:"call_callDisconnected" %}Disconnected &mdash; Try again{% endfilter %}",
-    discdefaultonnected: "{% filter ak_text:"call_default" %}Call in progress{% endfilter %}",
+    noAnswer: "{% filter ak_text:"call_callNoAnswer" %}No answer{% endfilter %}",
+    busy: "{% filter ak_text:"call_callBusy" %}Line busy{% endfilter %}",
+    noInput: "{% filter ak_text:"call_callNoInput" %}You didn't press 1{% endfilter %}",
+    default: "{% filter ak_text:"call_default" %}Call in progress{% endfilter %}",
 };
 </script>
 
 <!-- <script src="https://static.wemove.eu/action-kit/js/call-scripts/step-sequence.js"></script> -->
-<script src="https://static.wemove.eu/action-kit/js/call-scripts/call-tracker.js"></script>
-<script src="https://static.wemove.eu/action-kit/js/call-scripts/actionkit-call-page.js"></script>
+<script src="https://static.wemove.eu/action-kit/js/call-scripts/call-tracker.js?v=2"></script>
+<script src="https://static.wemove.eu/action-kit/js/call-scripts/actionkit-call-page.js?v=2"></script>
 
 <script>
 window.actionkitFormReady = function () {
